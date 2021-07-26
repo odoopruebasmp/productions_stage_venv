@@ -436,8 +436,6 @@ class AccountInvoice(models.Model):
                         if not p_serv:
                             lvals_ref = ["ALO", inv.stock_picking_id.receipt_notice,
                                          str(inv.stock_picking_id.document_date)[:10]]
-                    if enc_9 == '03':
-                        lvals_ref = ['FTC', inv.number.replace('-', ''), inv.date_invoice]
                 elif tp == 'nc':
                     inv_n_oc = inv_n_oc or getattr(inv.invoice_out_refund_id, 'n_oc', None)
                     tp_name = 'NOTA CREDITO'
@@ -451,7 +449,7 @@ class AccountInvoice(models.Model):
                     if 'FE' in reference or 'SETT' in reference:
                         ref_1 = 'IV'
                         ref_3 = ref_3[0] if ref_3 else inv.date_invoice
-                        enc_21 = '20'
+                        enc_21 = '23' if ref_3 < company.ubl_upgrade_date else '20'
                     else:
                         ref_1 = 'RF1'
                         ref_3 = ref_3[0] if ref_3 else inv.date_invoice
@@ -470,7 +468,7 @@ class AccountInvoice(models.Model):
                     if 'FE' in reference or 'SETT' in reference:
                         ref_1 = 'IV'
                         ref_3 = ref_3[0] if ref_3 else inv.date_invoice
-                        enc_21 = '30'
+                        enc_21 = '33' if ref_3 < company.ubl_upgrade_date else '30'
                     else:
                         ref_1 = 'RF1'
                         ref_3 = ref_3[0] if ref_3 else inv.date_invoice
@@ -487,18 +485,9 @@ class AccountInvoice(models.Model):
                 currency_name = inv.currency_id.name
                 d_ovt = []
 
-                if tp == 'nc':
-                    enc_5_description = ': Nota Crédito de Factura Electrónica de Venta'
-                elif tp == 'nd':
-                    enc_5_description = ': Nota Débito de Factura Electrónica de Venta'
-                elif tp == 'ei':
-                    enc_5_description = ': Factura Electrónica de Venta'
-                else:
-                    enc_5_description = ''
-
                 # Informacion Cabecera
                 enc = ET.SubElement(invoice, "ENC")
-                lvals = [enc_1, co_partner.ref, inv_partner.ref, 'UBL 2.1', 'DIAN 2.1' + enc_5_description, number, inv.date_invoice, hora,
+                lvals = [enc_1, co_partner.ref, inv_partner.ref, 'UBL 2.1', 'DIAN 2.1', number, inv.date_invoice, hora,
                          enc_9, currency_name, "", "", "", "", str(len(inv.invoice_line)), inv.date_due, "", "",
                          "", enc_20, enc_21, ""]
                 self._add_sub_element(enc, 'ENC_', lvals)
@@ -513,7 +502,7 @@ class AccountInvoice(models.Model):
                 emi = ET.SubElement(invoice, "EMI")
                 f_typ = self._calc_partner_type(co_partner)
                 d_typ = co_partner.ref_type.code_dian
-                lvals = [f_typ, co_partner.ref, d_typ, 'No aplica', "", co_partner.name,
+                lvals = [f_typ, co_partner.ref, d_typ, '48', "", co_partner.name,
                          co_partner.name, "", "", co_partner.street, co_partner.state_id.code, "",
                          co_partner.city_id.name,
                          co_partner.zip or co_partner.state_id.code + co_partner.city_id.code, co_partner.country_id.code, "", "", "",
@@ -608,7 +597,7 @@ class AccountInvoice(models.Model):
                         inv.partner_invoice_id.ean_localizacion
                     )
                 lvals = [
-                    f_typ, inv_partner.ref, d_typ, 'No aplica', inv_partner.ref,
+                    f_typ, inv_partner.ref, d_typ, '48', inv_partner.ref,
                     inv_partner.name or '',
                     inv_partner.name or '',
                     (f_typ == '2' and _join_names(
@@ -628,13 +617,11 @@ class AccountInvoice(models.Model):
                     "", "",
                     adq_addr[6],
                     "",
-                    adq_addr[7], #21
+                    adq_addr[7],
                     str(inv_partner.dev_ref) if type(inv_partner.dev_ref)\
                         is not bool else '',
-                    adq_addr[5], inv_partner.ref,
-                    d_typ,
-                    str(inv_partner.dev_ref) if type(inv_partner.dev_ref) is not bool else ''
-                ]
+                    adq_addr[5], inv_partner.ref
+                ]  # TODO enviarlo si tiene nit, ajustar el dev_ref
                 self._add_sub_element(adq, 'ADQ_', lvals)
 
                 # Informacion Tributaria, Aduanera y Cambiaria - Adquiriente
@@ -679,10 +666,7 @@ class AccountInvoice(models.Model):
 
                 # Grupo de Detalles Tributarios del Adquiriente
                 gta = ET.SubElement(adq, "GTA")
-                lvals = (
-                    ["01", "IVA"] if adq_addr[3] in ('CO', '169')
-                    else ["ZZ", "No aplica"]
-                )
+                lvals = ["01", "IVA"]
                 self._add_sub_element(gta, 'GTA_', lvals)
 
                 ei_code_key = 0
@@ -789,19 +773,11 @@ class AccountInvoice(models.Model):
                     if self._is_withholding(ei_code):
                         continue
                     tim = ET.SubElement(invoice, "TIM")
-                    tim_1 = 'true' if self._is_withholding(ei_code) else 'false'
-                    tax_rounding = 0.0
-                    for sub_tax in tax:
-                        subtax = sub_tax[subtax_key]
-                        imp_amt = (subtax.amount / subtax.base) * 100
-                        if ei_code == '01':
-                            imp_amt = round(imp_amt)
-                        tax_rounding += (round(imp_amt, 2)/ 100) * subtax.base - abs(subtax.amount)
+                    tim_1 = 'true' if self._is_withholding(ei_code) else\
+                        'false'
                     lvals = [
                         tim_1,
                         total_amount_per_tax,
-                        currency_name,
-                        tax_rounding,
                         currency_name
                     ]
                     self._add_sub_element(tim, 'TIM_', lvals)
@@ -865,7 +841,7 @@ class AccountInvoice(models.Model):
                              journal.ei_end_invoice]
                 self._add_sub_element(drf, 'DRF_', lvals)
 
-                # Quien Factura -- Comentariado solicitud DIAN 26/07/2021--
+                # Quien Factura -- Comentariado solicitud DIAN 26/07/2021 --
                 # qfa = ET.SubElement(invoice, "QFA")
                 # d_typ = co_partner.ref_type.code_dian
                 # f_typ = self._calc_partner_type(co_partner)
@@ -874,33 +850,33 @@ class AccountInvoice(models.Model):
                 #          co_partner.state_id.country_id.code, "", "", f_typ]
                 # self._add_sub_element(qfa, 'QFA_', lvals)
 
-                # Informacion Tributaria, Aduanera y Cambiaria - Quien Factura
-                qta_1 = [x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)]
-                qta = ET.SubElement(qfa, "QTA")
-                lvals = [qta_1]
-                self._add_sub_element(qta, 'QTA_', lvals)
+                # Informacion Tributaria, Aduanera y Cambiaria - Quien Factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # qta_1 = [x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)]
+                # qta = ET.SubElement(qfa, "QTA")
+                # lvals = [qta_1]
+                # self._add_sub_element(qta, 'QTA_', lvals)
 
-                # A Quien se factura
-                aqf = ET.SubElement(invoice, "AQF")
-                f_typ = self._calc_partner_type(inv_partner)
-                d_typ = inv_partner.ref_type.code_dian
+                # A Quien se factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # aqf = ET.SubElement(invoice, "AQF")
+                # f_typ = self._calc_partner_type(inv_partner)
+                # d_typ = inv_partner.ref_type.code_dian
+                #
+                # lvals = [inv_partner.ref, d_typ, (f_typ == '1' and '2' or '0'),
+                #          (f_typ == '1' and inv_partner.name or ''), "", (f_typ == '2' and inv_partner.name or ''),
+                #          (f_typ == '2' and _join_names([inv_partner.primer_apellido, inv_partner.segundo_apellido]) or ''),
+                #          inv_partner.street, inv_partner.state_id.name, inv_partner.city_id.name,
+                #          inv_partner.city_id.name, "", inv_partner.state_id.country_id.code, "", "", f_typ]
+                # self._add_sub_element(aqf, 'AQF_', lvals)
 
-                lvals = [inv_partner.ref, d_typ, (f_typ == '1' and '2' or '0'),
-                         (f_typ == '1' and inv_partner.name or ''), "", (f_typ == '2' and inv_partner.name or ''),
-                         (f_typ == '2' and _join_names([inv_partner.primer_apellido, inv_partner.segundo_apellido]) or ''),
-                         inv_partner.street, inv_partner.state_id.name, inv_partner.city_id.name,
-                         inv_partner.city_id.name, "", inv_partner.state_id.country_id.code, "", "", f_typ]
-                self._add_sub_element(aqf, 'AQF_', lvals)
-
-                # Informacion Tributaria, Aduanera y Cambiaria - A Quien se Factura
-                ata = ET.SubElement(aqf, "ATA")
-                lr = []
-                for obl in inv_partner.tributary_obligations_ids:
-                    lr.append(obl.code)
-                for obl in inv_partner.customs_obligations_ids:
-                    lr.append(obl.code)
-                lvals = [lr or ['R-99-PN']]
-                self._add_sub_element(ata, 'ATA_', lvals)
+                # Informacion Tributaria, Aduanera y Cambiaria - A Quien se Factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # ata = ET.SubElement(aqf, "ATA")
+                # lr = []
+                # for obl in inv_partner.tributary_obligations_ids:
+                #     lr.append(obl.code)
+                # for obl in inv_partner.customs_obligations_ids:
+                #     lr.append(obl.code)
+                # lvals = [lr or ['R-99-PN']]
+                # self._add_sub_element(ata, 'ATA_', lvals)
 
                 # Notas de la factura
                 if tp == 'ei' and journal.invoice_resolution:
@@ -1003,18 +979,6 @@ class AccountInvoice(models.Model):
                 lvals = d_ovt
                 self._add_sub_element(ovt, 'OVT_', lvals)
 
-                if tp in ('nc', 'nd'):
-                    cdn = ET.SubElement(invoice, "CDN")
-                    if tp == 'nc':
-                        lvals = ["5", "Sin Observaciones"]
-                    else:
-                        lvals = ["4", "Sin Observaciones"]
-                    self._add_sub_element(cdn, 'CDN_', lvals)
-
-                    dcn = ET.SubElement(invoice, "DCN")
-                    lvals = ["Sin Observaciones"]
-                    self._add_sub_element(dcn, 'DCN_', lvals)
-
                 # Líneas de la factura
                 moves = []
                 for i, line in enumerate(inv.invoice_line):
@@ -1081,8 +1045,6 @@ class AccountInvoice(models.Model):
                         getattr(line.product_id, 'ean13', False) else '999'
                     iae = ET.SubElement(ite, "IAE")
                     lvals = [ref_code_val, ref_code, "", ""]
-                    if enc_9 == '02':
-                        lvals = [line.product_id.tariff_head or "0000000000", "020", "195", ""]
                     self._add_sub_element(iae, 'IAE_', lvals)
 
                     # Descuentos y cargos del item
@@ -1131,9 +1093,7 @@ class AccountInvoice(models.Model):
                         lvals = [
                             calc,
                             currency_name,
-                            'true' if self._is_withholding(ei_code) else 'false',
-                            abs(total_amount_per_tax) * line.price_subtotal - calc,
-                            currency_name
+                            'true' if self._is_withholding(ei_code) else 'false'
                         ]
                         self._add_sub_element(tii, 'TII_', lvals)
                         iim = ET.SubElement(tii, "IIM")
@@ -1161,7 +1121,7 @@ class AccountInvoice(models.Model):
                 ei_file = inv_num + datetime.now().strftime('_%d%m%Y%H%M%S%f')[:-3] + '.xml'
 
                 sftp, transport = self._sftp_connect(company, '', company.ei_write_folder)
-                xml_file.write(ei_file, encoding='utf-8', xml_declaration=True)
+                xml_file.write(ei_file, encoding='UTF-8', xml_declaration=True)
 
                 inv.ei_state = 'done'
                 so_f = []
