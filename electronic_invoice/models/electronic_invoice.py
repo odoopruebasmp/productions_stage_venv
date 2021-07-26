@@ -865,14 +865,14 @@ class AccountInvoice(models.Model):
                              journal.ei_end_invoice]
                 self._add_sub_element(drf, 'DRF_', lvals)
 
-                # Quien Factura
-                qfa = ET.SubElement(invoice, "QFA")
-                d_typ = co_partner.ref_type.code_dian
-                f_typ = self._calc_partner_type(co_partner)
-                lvals = [co_partner.ref, d_typ, "2", co_partner.name, "", "", "", co_partner.street,
-                         co_partner.state_id.name, co_partner.city_id.name, co_partner.city_id.name, co_partner.zip,
-                         co_partner.state_id.country_id.code, "", "", f_typ]
-                self._add_sub_element(qfa, 'QFA_', lvals)
+                # Quien Factura -- Comentariado solicitud DIAN 26/07/2021--
+                # qfa = ET.SubElement(invoice, "QFA")
+                # d_typ = co_partner.ref_type.code_dian
+                # f_typ = self._calc_partner_type(co_partner)
+                # lvals = [co_partner.ref, d_typ, "2", co_partner.name, "", "", "", co_partner.street,
+                #          co_partner.state_id.name, co_partner.city_id.name, co_partner.city_id.name, co_partner.zip,
+                #          co_partner.state_id.country_id.code, "", "", f_typ]
+                # self._add_sub_element(qfa, 'QFA_', lvals)
 
                 # Informacion Tributaria, Aduanera y Cambiaria - Quien Factura
                 qta_1 = [x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)]
