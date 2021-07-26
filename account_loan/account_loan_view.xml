@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		
+        <record id="view_partner_bank_obligaciones_form" model="ir.ui.view">
+            <field name="name">res.partner.bank.obligaciones</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="arch" type="xml">
+                <field name="bank" position="after">
+                    <field name="currency_id" />
+                    <field name="cupo_endeudamiento" />
+                    <field name="date_renovacion" />
+                    <field name="director_id" />
+                    <field name="oficina_nombre" />
+                </field>
+                <form position="inside">
+                    <notebook>
+                        <page string="Obligaciones financieras">
+                            <field name="obligaciones_financieras_ids" mode="tree" nolabel="1">
+                                <tree string="Obligaciones Financieras" >
+                                    <field name="loan_no" />
+                                    <field name="loan_var_type" />
+                                    <field name="loan_type"/>
+                                    <field name="partner_id"/>
+                                    <field name="first_payment" />
+                                    <field name="intrest_per_period"/>
+                                    <field name="balance_debt" />
+                                    <field name="start_period" />
+                                    <field name="periods_to_pay"/>
+                                    <field name="remain_period"/>
+                                    <field name="final_payment" />
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+		<record id="view_account_loan_tree" model="ir.ui.view">
+            <field name="name">account.loan.tree</field>
+            <field name="model">account.loan</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            	<tree string="Obligacion Financiera Descripcion" >
+                    <field name="loan_no" />
+                    <field name="loan_var_type" />
+                    <field name="loan_type"/>
+                    <field name="partner_id"/>
+                    <field name="currency_id"/>
+                    <field name="balance_debt" />
+                    <field name="remain_period"/>
+                    <field name="intrest_per_period"/>
+                    <field name="final_payment" />
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_account_loan_search" model="ir.ui.view">
+            <field name="name">account.loan.search</field>
+            <field name="model">account.loan</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Obligaciones Financieras">
+                    <field name="loan_no" />
+                    <field name="loan_var_type" />
+                    <field name="loan_type"/>
+                    <field name="partner_id"/>
+                    <field name="currency_id"/>
+                    <field name="balance_debt" />
+                    <field name="remain_period"/>
+                    <field name="intrest_per_period"/>
+                    <field name="final_payment" />
+                    <field name="state"/>
+                    <newline />
+                    <group col="8" colspan="4" expand="0" string="Agrupar por...">
+                        <filter string="Tercero" icon="terp-personal" name="partner_id" context="{'group_by':'partner_id'}" />
+                        <filter string="Moneda" icon="terp-personal" name="currency_id" context="{'group_by':'currency_id'}" />
+                        <filter string="Modalidad" icon="terp-personal" name="loan_var_type" context="{'group_by':'loan_var_type'}" />
+                        <filter string="Tipo" icon="terp-personal" name="loan_type" context="{'group_by':'loan_type'}" />
+                        <filter string="Estado" icon="terp-personal" name="state" context="{'group_by':'state'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+          
+        <record id="view_account_loan_form" model="ir.ui.view">
+            <field name="name">account.loan.form</field>
+            <field name="model">account.loan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Obligacion Financiera Descripcion" version="7.0">
+                    <header>
+                        <button name="in_progress" states="new,done" string="En Ejecucion" class="oe_highlight" />
+                        <button name="done" states="in_progress" string="Terminado" class="oe_highlight" />
+                        <button name="cancel" states="in_progress,new" string="Cancelado" class="oe_highlight" />
+                        <button name="borrador" states="cancel" string="Volver a Borrador" class="oe_highlight" />
+                        <field name="state"  widget="statusbar" statusbar_visible="new,in_progress,done,cancel" statusbar_colors='{"new":"red","in_progress":"blue"}'/>
+                    </header>
+                    <group col="4">
+                        <field name="loan_no" />
+                        <field name="loan_var_type" />
+                        <field name="dec_type" />
+                        <field name="partner_id" />
+                        <field name="loan_type" />
+                        <field name="currency_id"/>
+                        <field name="intrest_per_period"/>                       
+                        <field name="period_no" />
+                        <field name="periods_to_pay"/>
+                        <field name="remain_period"/>
+                        <field name="final_payment" attrs="{'invisible': [('loan_var_type', '!=','leasing')]}"/>
+                        <field name="start_period" />
+                        <field name="balance" />
+                        <field name="payment_date" />
+                        <field name="first_payment" />
+                        <field name="balance_debt"/>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Pago Fiscal">
+                            <field name="loan_move_line_ids" mode="tree" colspan="4">
+                                <tree string="Tabla Fiscal" editable="Bottom" delete="false">
+                                    <field name="period" readonly="1"/>
+                                    <field name="date" />
+                                    <field sum="Total" name="initial_value" readonly="1"/>
+                                    <field name="prepaid_id" />
+                                    <field sum="Total" name="core_adjust" />
+                                    <field sum="Total" name="val_to_capital" />
+                                    <field sum="Total" name="payment" />
+                                    <field sum="Total" name="capital_payment" />
+                                    <field sum="Total" name="interest" />
+                                    <field sum="Total" name="cote" readonly="1"/>
+                                    <field name="final_bal" readonly="1"/>
+                                    <field sum="Total" name="penality_interest" />
+                                    <field sum="Total" name="bank_charges" />
+                                    <field name="total_payment" />
+                                    <field name="move_id" />
+                                    <field name="state" invisible="1"/>
+                                    <field name="paid" invisible="1"/>
+                                    <button name="create_move" icon="gtk-execute" string="Create Move" type="object" attrs="{'invisible': ['|',('state', 'in',['confirm']),('prepaid_id', '!=',False)]}"/>
+                                    <button name="cancel_move" icon="gtk-cancel" string="Cancel Move" type="object" attrs="{'invisible': ['|','|',('state', 'in',['close', 'new']),('prepaid_id', '!=',False),('paid', '=',True)]}"/>
+                                    <button name="new" attrs="{'invisible': [('paid', '=',False)]}" string="Pagado" icon="gtk-apply.png"/>
+                                </tree>
+                            </field>
+                        <button type="object" name="compute_loan_board" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','=','close')]}"/>
+                        </page>
+                        <page string="Configuracion de Contabilidad">
+                            <group col="4">
+                                <form string="Configuracion de Contabilidad">
+                                    <field name="capital_id"/>
+                                    <field name="intereses_id" />
+                                    <field name="inter_de_mora_id" />
+                                    <field name="gastos_bancarios_id"/>
+                                    <field name="tes_oreria_id" /> 
+                                    <field name="loan_journal_id" />
+                                    <field name="bank_journal_id" />
+                                    <field name="partner_bank_id" />
+                                </form>
+                            </group>
+                        </page>
+                        <page string="Centros de Costo">
+                            <field name="analytic_account_ids" colspan="4" nolabel="1">
+                                <tree string="Distribucion Centros de Costo" editable="top">
+                                    <field name="account_analytic_id"/>
+                                    <field name="rate" sum="Total Porcentaje"/>
+                                    <field name="name"/>
+                                </tree> 
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_account_loan_no1" model="ir.actions.act_window" >
+            <field name="name">Obligaciones Financieras</field>
+            <field name="res_model">account.loan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_loan_tree"/>
+		</record> 
+		
+		<menuitem id="menu_account_detail_no1" name="Obligaciones Financieras" parent="account.menu_finance" sequence="2" />
+        <menuitem id="menu_account_detail_no2" name="Obligaciones Financieras" parent="menu_account_detail_no1" action="action_account_loan_no1" sequence="1"/>
+        
+        <!-- WORKFLOW -->
+        
+        <!-- Workflow definition 
+            1. new->in_progress
+            2. in_progress->done
+            3. done->in_progress 
+            4. new->cancel 
+            5. in_progress->cancel
+            6. cancel->new
+        -->
+
+        <record model="workflow" id="wkf_obligacion_financieras">
+            <field name="name">wkf.obligaciones.financieras</field>
+            <field name="osv">account.loan</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_act_new"> <!-- new -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras" />
+            <field name="flow_start">True</field>
+            <field name="name">new</field>
+            <field name="action">new()</field>
+            <field name="kind">function</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_act_in_progress"> <!-- in_progress -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras" />
+            <field name="name">in_progress</field>
+            <field name="kind">function</field>
+            <field name="action">in_progress()</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_act_done"> <!-- done -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">done()</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_act_cancel"> <!-- cancel -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">cancel()</field>
+        </record>
+        
+        <!--
+            workflow transition
+        -->
+
+        <record model="workflow.transition" id="obligacion_financieras_new2in_progress">  <!-- 1. new->in_progress -->
+            <field name="act_from" ref="obligacion_financieras_act_new" />
+            <field name="act_to" ref="obligacion_financieras_act_in_progress" />
+            <field name="signal">in_progress</field>
+        </record>
+
+        <record model="workflow.transition" id="obligacion_financieras_in_progress2act_done"> <!-- 2. in_progress->done   -->
+            <field name="act_from" ref="obligacion_financieras_act_in_progress" />
+            <field name="act_to" ref="obligacion_financieras_act_done" />
+            <field name="signal">done</field>
+        </record>
+
+        <record model="workflow.transition" id="obligacion_financieras_confirm2refuse"> <!-- 3. done->in_progress  -->
+            <field name="act_from" ref="obligacion_financieras_act_done" />
+            <field name="act_to" ref="obligacion_financieras_act_in_progress" />
+            <field name="signal">in_progress</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_new2cancel"> <!-- 4. new->cancel -->
+            <field name="act_from" ref="obligacion_financieras_act_new" />
+            <field name="act_to" ref="obligacion_financieras_act_cancel" />
+            <field name="signal">cancel</field>
+        </record>
+
+        <record model="workflow.transition" id="obligacion_financieras_in_progress2cancel"> <!-- 5. in_progress->cancel -->
+            <field name="act_from" ref="obligacion_financieras_act_in_progress" />
+            <field name="act_to" ref="obligacion_financieras_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_cancel2new"> <!-- 6. cancel->new -->
+            <field name="act_from" ref="obligacion_financieras_act_cancel" />
+            <field name="act_to" ref="obligacion_financieras_act_new" />
+            <field name="signal">new</field>
+        </record>
+        
+        
+    </data>
+</openerp>          
+		
+		          

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_estado_resultados_nat_data_nat_data" model="fpa.financial.reports">
+            <field name="name">ESTADO DE RESULTADOS INTEGRALES POR NATURALEZA</field>
+            <field name="categ">fi</field>
+            <field name="action">action_fpa_pyg</field>
+            <field name="model_wzr">fpa.pyg.wizard</field>
+            <field name="model">fpa.pyg.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="tree">view_fpa_pyg_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">D</field>
+            <field name="porc">E</field>
+            <field name="sign">True</field>
+            <field name="type">con</field>
+            <field name="partner_filter">True</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('account_id','!=',False),('financial_id','=',%s)]</field>
+            <field name="template">financial_reports.template_report_pyg</field>
+            <field name="view">wizard_fpa_pyg_view</field>
+            <field name="title">Concepto,Codigo,Cuenta,Saldo Final</field>
+            <field name="fields">account_id,amount_final</field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="consulta">select fbpl.id 
+                        from fpa_pyg_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            inner join fpa_pyg fbp on fbp.id = fbpl.encabezado_id
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id}
+                            ORDER BY aa.code asc</field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name), aa.code, COALESCE(it.value,aa.name) as cuenta, COALESCE(fbpl.amount_final,0), fbpl.bold from fpa_pyg_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                            inner join fpa_pyg fbp on fbp.id = fbpl.encabezado_id
+                            left join fpa_financial_reports_concepts ffrc on ffrc.id = fbpl.concepts_id
+                            left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id = ffrc.id AND itc.lang = '{lang}'
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id} ORDER BY ffrc.sequence,  aa.code NULLS FIRST, aa.code asc</field>
+        </record>
+        <record id="er_nat_niveles_99" model="fpa.niveles">
+            <field name="code">99</field>
+            <field name="name">Auxiliares</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_estado_resultados_nat_data_nat_data')" />
+            <field name="help">Muestra totales por Auxiliares</field>
+        </record>
+        <record id="er_nat_niveles_100" model="fpa.niveles">
+            <field name="code">100</field>
+            <field name="name">Total por concepto</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_estado_resultados_nat_data_nat_data')" />
+            <field name="help">Muestra totales por concepto</field>
+        </record>
+
+        <record id="fpa_estado_resultados_nat_data_nat_en_US" model="ir.translation">
+            <field name="source">ESTADO DE RESULTADOS INTEGRALES POR NATURALEZA</field>
+            <field name="value">STATEMENT OF INTEGRAL RESULTS BY NATURE</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.fpa_estado_resultados_nat_data_nat_data')" />
+            <field name="name">fpa.financial.reports,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+        <record id="fpa_estado_resultados_nat_data_nat_fields_en_US" model="ir.translation">
+            <field name="source">Concepto,Codigo,Cuenta,Saldo Final</field>
+            <field name="value">Concept,Code,Account,Beginning balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.fpa_estado_resultados_nat_data_nat_data')" />
+            <field name="name">fpa.financial.reports,title</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+        <record id="er_niveles_99_en_US" model="ir.translation">
+            <field name="source">Auxiliares</field>
+            <field name="value">Auxiliaries</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.er_nat_niveles_99')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="er_niveles_99_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por Auxiliares</field>
+            <field name="value">Show total by Auxiliary</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.er_nat_niveles_99')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="er_niveles_100_en_US" model="ir.translation">
+            <field name="source">Total por concepto</field>
+            <field name="value">Total for concept</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.er_nat_niveles_100')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="er_niveles_100_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por Auxiliares</field>
+            <field name="value">Show totals by concept</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.er_nat_niveles_100')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+        
+        <record id="fpa_estado_resultados_nat_data_concepts_en_US" model="ir.translation">
+            <field name="source">CONCEPTOS</field>
+            <field name="value">Concepts</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+
+        <record id="fpa_estado_resultados_nat_data_account_en_US" model="ir.translation">
+            <field name="source">CUENTA</field>
+            <field name="value">Account</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+
+         <record id="fpa_estado_resultados_nat_data_si_en_US" model="ir.translation">
+            <field name="source">SALDO FINAL</field>
+            <field name="value">Final balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="fpa_estado_resultados_nat_data_sf_en_US" model="ir.translation">
+            <field name="source">Saldo final</field>
+            <field name="value">Final balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+
+         <record id="fpa_estado_resultados_nat_data_dform_en_US" model="ir.translation">
+            <field name="source">Desde:</field>
+            <field name="value">Date from:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="fpa_estado_resultados_nat_data_dto_en_US" model="ir.translation">
+            <field name="source">Hasta:</field>
+            <field name="value">Date to:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="fpa_estado_resultados_nat_data_fg_en_US" model="ir.translation">
+            <field name="source">Fecha de Generacion:</field>
+            <field name="value">Generation date:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_pyg')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+    </data>
+</openerp>

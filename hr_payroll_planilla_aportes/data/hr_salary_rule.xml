@@ -1,0 +1,1958 @@
+<openerp>
+    <data>
+        <record model="hr.salary.rule" id="hr_salary_rule_vacotrper">
+            <field name="name">VACACIONES OTROS PERIODOS</field>
+            <field name="code">IBC_LINEVACOP</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">0</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, quantity = 0, 0
+c=0
+if contract.slip_ids:
+  aniop = int(payslip.payslip_period_id.end_date[0:4])
+  monthp = int(payslip.payslip_period_id.end_date[5:7])
+  #date = int(payslip.payslip_period_id.end_date[0:7].replace('-',''))
+  if int(monthp) == 1:
+    monthp = 12
+    aniop = int(aniop)-1
+  else:
+    monthp=int(monthp)-1
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code =='Vacaciones'):
+    anio = int(pays.payslip_period_id.end_date[0:4])
+    month = int(pays.payslip_period_id.end_date[5:7])
+    if aniop+monthp == anio+month:
+      for lines in pays.leave_ids:
+        if lines.holiday_status_id.code == 'VAC':
+          quantity+=lines.number_of_days_in_payslip
+      for lines in pays.line_ids:
+        if lines.code == 'VAC':
+          result+=lines.total
+
+result = result / (quantity or 1 )
+
+if contract.type_id.clase =='integral':
+  result_rate=70</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_dias">
+            <field name="name">DIAS</field>
+            <field name="code">DIAS_LINEA0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1000</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = DIAS_TRAB if rules.DIAS_TRAB else 0.0, 1, 100
+arl = APORTESARL if rules.APORTESARL else 0.0
+pension = DEDPENSION if rules.DEDPENSION else 0.0
+eps = DEDEPS if rules.DEDEPS else 0.0
+ccf = CCF if rules.CCF else 0.0
+if eps == 0:
+  eps = APORTESEPS if rules.APORTESEPS else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'DIAS_TRAB':
+        result+=abs(lines.total)
+      if lines.code == 'DEDPENSION':
+        pension+=1
+      if lines.code in ('DEDEPS','APORTESEPS'):
+        eps+=1
+      if lines.code == 'APORTESARL':
+        arl+=1
+      if lines.code == 'CCF':
+        ccf+=1
+
+if result>30:
+  result=30
+
+pension = str(int(result)).rjust(2,'0') if pension>0 else ''.rjust(2,'0')
+eps = str(int(result)).rjust(2,'0') if eps>0 else ''.rjust(2,'0')
+arl = str(int(result)).rjust(2,'0') if arl>0 else ''.rjust(2,'0')
+ccf = str(int(result)).rjust(2,'0') if ccf>0 else ''.rjust(2,'0')
+
+result=float('1'+pension+eps+arl+ccf)</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_diassln">
+            <field name="name">DIAS SLN</field>
+            <field name="code">DIAS_SLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1000</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result=False
+days = 0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.worked_days_line_ids:
+      if lines.code in ('LICENCIA_NO_REMUNERADA1','SUSPENSION1'):
+        days+=lines.number_of_days
+
+if days&gt;0 and (int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'):
+  result,result_qty, result_rate = True,1, 100</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">ccf = CCF if rules.CCF else 0.0
+days_ccf = ''
+if int(days)>30:
+  days=30
+if ccf:
+  days_ccf=str(int(days))
+days_total = str(int(days)).rjust(2,'0')*3+days_ccf.rjust(2,'0')
+result=float('1'+days_total)</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_diasige">
+            <field name="name">DIAS IGE</field>
+            <field name="code">DIAS_IGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1001</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result=False
+days = 0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.worked_days_line_ids:
+      if lines.code in ('INCAPACIDAD_ENF_GENERAL1','PRORROGA_INCAPACIDAD_ENF_GENERAL1','INCAPACIDADMENOR90'):
+        days+=lines.number_of_days
+
+if days&gt;0 and (int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'):
+  result,result_qty, result_rate = True,1, 100</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">ccf = CCF if rules.CCF else 0.0
+days_ccf = ''
+if int(days)>30:
+  days=30
+if ccf:
+  days_ccf=str(int(days))
+days_total = str(int(days)).rjust(2,'0')*3+days_ccf.rjust(2,'0')
+result=float('1'+days_total)</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_diasirl">
+            <field name="name">DIAS IRL</field>
+            <field name="code">DIAS_IRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1001</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result=False
+days = 0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.worked_days_line_ids:
+      if lines.code in ('AT/EP1'):
+        days+=lines.number_of_days
+
+if days&gt;0 and (int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'):
+  result,result_qty, result_rate = True,1, 100</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">ccf = CCF if rules.CCF else 0.0
+days_ccf = ''
+if int(days)>30:
+  days=30
+if ccf:
+  days_ccf=str(int(days))
+days_total = str(int(days)).rjust(2,'0')*3+days_ccf.rjust(2,'0')
+result=float('1'+days_total)</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_diasvac">
+            <field name="name">DIAS VACACIONES</field>
+            <field name="code">DIAS_VACACIONES</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1001</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">days = 0
+result,result_qty, result_rate = 0,1, 100
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code == 'Vacaciones' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for detalle in pays.leave_ids:
+      if detalle.holiday_status_id.code in ('VAC'):
+        for line in detalle.line_ids:
+          if line.name[0:7] == payslip.payslip_period_id.end_date[0:7]:
+            days += line.days_payslip
+
+if contract.slip_ids and not days:
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code == 'Nomina' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for detalle in pays.leave_days_ids:
+      if detalle.holiday_status_id.code  in ('VAC'):
+        days += detalle.days_payslip
+
+if int(days)>30:
+  days=30
+result=float('1'+str(int(days)).rjust(2,'0')*4)</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_pensionline0">
+            <field name="name">IBC PENSION LINEA 0</field>
+            <field name="code">IBC_LINEPEN0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1002</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = (int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion')  and int(contract.fiscal_type_id.code) not in (12,19)</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBCSS if rules.IBCSS else 0.0
+pension = DEDPENSION if rules.DEDPENSION else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'DEDPENSION':
+        pension+=lines.total
+      if lines.code in ('VAC','INCAPACIDAD_ENF_GENERAL'):
+        result-=lines.total
+days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[1:3])
+
+days2 = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+
+if float(days2) &lt;= 100000000:
+  result=0
+else:
+  #topes
+  salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+  if result&lt;salminimo and result&gt;0:
+    result = salminimo / 30 * days
+    diff = float(result)-int(result)
+    if diff&gt;0.000:
+      result = int(result)+1
+  elif result&gt;25*salminimo:
+    result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_lineeps0">
+            <field name="name">IBC EPS LINEA 0</field>
+            <field name="code">IBC_LINEEPS0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1002</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBCSS if rules.IBCSS else 0.0
+eps = DEDEPS if rules.DEDEPS else 0.0
+if not eps:
+  eps = APORTESEPS if rules. APORTESEPS else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('DEDEPS','APORTESEPS'):
+        eps+=1
+      if lines.code in ('VAC','INCAPACIDAD_ENF_GENERAL'):
+        result-=lines.total
+
+days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+days2 = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+
+if float(days2) &lt;= 100000000:
+  result=0
+else:
+  #topes
+  salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+  if result&lt;salminimo and result&gt;0:
+    result = salminimo / 30 * days
+    diff = float(result)-int(result)
+    if diff&gt;0.00000000:
+      result = int(result)+1
+  elif result&gt;25*salminimo:
+    result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linearl0">
+            <field name="name">IBC ARL LINEA 0</field>
+            <field name="code">IBC_LINEARL0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1002</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBCSS if rules.IBCSS else 0.0
+arl = APORTESARL if rules.APORTESARL else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'APORTESARL':
+        arl+=1
+      if lines.code in ('VAC','INCAPACIDAD_ENF_GENERAL'):
+        result-=lines.total
+
+days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[5:7])
+
+days2 = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+
+if float(days2) &lt;= 100000000:
+  result=0
+else:
+  #topes
+  salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+  if result&lt;salminimo and result&gt;0:
+    result = salminimo / 30 * days
+    diff = float(result)-int(result)
+    if diff&gt;0:
+      result = int(result)+1
+  elif result&gt;25*salminimo:
+    result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linepenirl">
+            <field name="name">IBC PENSION IRL</field>
+            <field name="code">IBC_LINEPENIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+
+result = INCAPACIDAD_ATEP_ARL if rules.INCAPACIDAD_ATEP_ARL else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ATEP_ARL'):
+        result+=lines.total
+
+
+
+days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[1:3])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+  diff = float(result)-int(result)
+  if diff&gt;0:
+    result = int(result)+1
+elif result&gt;25*salminimo:
+  result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linepenige">
+            <field name="name">IBC PENSION IGE</field>
+            <field name="code">IBC_LINEPENIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+result = INCAPACIDAD_ENF_GENERAL if rules.INCAPACIDAD_ENF_GENERAL else 0.0
+result += PRORROGA_INCAPACIDAD_ENF_GENERAL1 if rules.PRORROGA_INCAPACIDAD_ENF_GENERAL1 else 0.0
+result += INCAPACIDADMENOR90 if rules.INCAPACIDADMENOR90 else 0.0
+result += INCAPACIDADMAYOR180 if rules.INCAPACIDADMAYOR180 else 0.0
+result += INCAPACIDADMENOR180 if rules.INCAPACIDADMENOR180 else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ENF_GENERAL','PRORROGA_INCAPACIDAD_ENF_GENERAL1','INCAPACIDADMENOR90','INCAPACIDADMAYOR180','INCAPACIDADMENOR180'):
+        result+=lines.total
+
+days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[1:3])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result>25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_lineepsirl">
+            <field name="name">IBC SALUD IRL</field>
+            <field name="code">IBC_LINEEPSIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+
+result = INCAPACIDAD_ATEP_ARL if rules. INCAPACIDAD_ATEP_ARL else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ATEP_ARL'):
+        result+=lines.total
+
+days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+  diff = float(result)-int(result)
+  if diff&gt;0:
+    result = int(result)+1
+elif result&gt;25*salminimo:
+  result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_lineepsige">
+            <field name="name">IBC SALUD IGE</field>
+            <field name="code">IBC_LINEEPSIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+
+result = INCAPACIDAD_ENF_GENERAL if rules.INCAPACIDAD_ENF_GENERAL else 0.0
+result += PRORROGA_INCAPACIDAD_ENF_GENERAL1 if rules.PRORROGA_INCAPACIDAD_ENF_GENERAL1 else 0.0
+result += INCAPACIDADMENOR90 if rules.INCAPACIDADMENOR90 else 0.0
+result += INCAPACIDADMAYOR180 if rules.INCAPACIDADMAYOR180 else 0.0
+result += INCAPACIDADMENOR180 if rules.INCAPACIDADMENOR180 else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ENF_GENERAL','PRORROGA_INCAPACIDAD_ENF_GENERAL1','INCAPACIDADMENOR90','INCAPACIDADMENOR180','INCAPACIDADMAYOR180'):
+        result+=lines.total
+
+days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linearlirl">
+            <field name="name">IBC ARL IRL</field>
+            <field name="code">IBC_LINEARLIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0, 1, 100
+arl = APORTESARL if rules.APORTESARL else 0.0
+
+result = INCAPACIDAD_ATEP_ARL if rules.INCAPACIDAD_ATEP_ARL else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ATEP_ARL'):
+        result+=lines.total
+
+days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[5:7])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+  diff = float(result)-int(result)
+  if diff&gt;0:
+    result = int(result)+1
+elif result&gt;25*salminimo:
+  result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linearlige">
+            <field name="name">IBC ARL IGE</field>
+            <field name="code">IBC_LINEARLIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1006</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0, 1, 100
+arl = APORTESARL if rules.APORTESARL else 0.0
+
+result = INCAPACIDAD_ENF_GENERAL if rules.INCAPACIDAD_ENF_GENERAL else 0.0
+result += PRORROGA_INCAPACIDAD_ENF_GENERAL1 if rules.PRORROGA_INCAPACIDAD_ENF_GENERAL1 else 0.0
+result += INCAPACIDADMENOR90 if rules.INCAPACIDADMENOR90 else 0.0
+result += INCAPACIDADMAYOR180 if rules.INCAPACIDADMAYOR180 else 0.0
+result+=INCAPACIDADMENOR180 if rules.INCAPACIDADMENOR180 else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('INCAPACIDAD_ENF_GENERAL','PRORROGA_INCAPACIDAD_ENF_GENERAL1','INCAPACIDADMENOR90','INCAPACIDADMENOR180','INCAPACIDADMAYOR180'):
+        result+=lines.total
+
+days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[5:7])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff>0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linepenvac">
+            <field name="name">IBC PENSION VACACIONES</field>
+            <field name="code">IBC_LINEPENVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1007</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">days, result, result_qty, result_rate = 0, 0, 1, 100
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code == 'Vacaciones' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'VAC':
+        result+=lines.total
+
+days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[1:3])
+
+result = result
+if result == 0:
+  value = IBC_LINEVACOP if rules.IBC_LINEVACOP else 0.0
+  result = value * days
+
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30* days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_lineepsvac">
+            <field name="name">IBC EPS VACACIONES</field>
+            <field name="code">IBC_LINEEPSVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1007</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">days, result, result_qty, result_rate = 0, 0, 1, 100
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code=='Vacaciones' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'VAC':
+        result+=lines.total
+
+days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[3:5])
+#result = result / 30 * days
+if result == 0:
+  value = IBC_LINEVACOP if rules.IBC_LINEVACOP else 0.0
+  result = value * days
+
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30*days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_linearlvac">
+            <field name="name">IBC ARL VACACIONES</field>
+            <field name="code">IBC_LINEARLVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1007</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">days,result, result_qty, result_rate = 0,0, 1, 100
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'VAC':
+        result+=lines.total
+
+days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[5:7])
+
+#result = result / 30 * days
+if result == 0:
+  value = IBC_LINEVACOP if rules.IBC_LINEVACOP else 0.0
+  result = value * days
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30*days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+if result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_exonerado">
+            <field name="name">EXONERADO</field>
+            <field name="code">EXON</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1008</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">salminimo, result_qty, result_rate = SAL_MINIMO if rules.SAL_MINIMO else 0.0, 1, 100
+ibcss = IBC_LINEEPS0 if rules.IBC_LINEEPS0 else 0.0
+ibcssvac = IBC_LINEEPSVAC if rules.IBC_LINEEPSVAC else 0.0
+ibcssige = IBC_LINEEPSIGE if rules.IBC_LINEEPSIGE else 0.0
+ibc = ibcss + ibcssvac + ibcssige
+result=0
+tope = 10*salminimo
+if ibc &lt;= tope and int(contract.fiscal_type_id.code) in (1, 2, 18, 20, 22, 30, 32, 55):
+  result=1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcpensln">
+            <field name="name">IBC PENSION SLN</field>
+            <field name="code">IBC_LINEPENSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('LICENCIA_NO_REMUNERADA','SUSPENSION'):
+        result+=lines.total
+
+
+days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[1:3])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcepssln">
+            <field name="name">IBC SALUD SLN</field>
+            <field name="code">IBC_LINEEPSSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('LICENCIA_NO_REMUNERADA','SUSPENSION'):
+        result+=lines.total
+
+days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcccfvac">
+            <field name="name">IBC CCF VACACIONES</field>
+            <field name="code">IBC_LINECCFVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ccf = CCF if rules.CCF else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'CCF':
+        ccf+=lines.total
+
+if ccf:
+  days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+  if days:
+    days = int(str(days)[7:9])
+  if contract.slip_ids:
+    for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+      for lines in pays.line_ids:
+        if lines.code == 'VAC':
+          result+=lines.total
+  if not result:
+    result = IBC_LINEVACOP if rules.IBC_LINEVACOP else 0.0
+  else:
+    result=result/days
+
+ex = EXON if rules.EXON else 0.0
+if contract.type_id.clase == 'integral' and ex!=1:
+  result_rate=70
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30
+if result&lt;salminimo and result&gt;0:
+  result = salminimo*days
+else:
+  result*=days</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcccfsln">
+            <field name="name">IBC CCF SLN</field>
+            <field name="code">IBC_LINECCFSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+ccf = CCF if rules.CCF else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'CCF':
+        ccf+=lines.total
+
+if ccf:
+  result = IBCCCF if rules.IBCCCF else 0.0
+
+days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+result = result / 30  * days
+ex = EXON if rules.EXON else 0.0
+if contract.type_id.clase == 'integral' and ex!=1:
+  result_rate=70
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30*days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcccfirl">
+            <field name="name">IBC CCF IRL</field>
+            <field name="code">IBC_LINECCFIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+ccf = CCF if rules.CCF else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'CCF':
+        ccf+=lines.total
+
+if ccf:
+  result = IBCCCF if rules.IBCCCF else 0.0
+
+days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+result = result / 30  * days
+ex = EXON if rules.EXON else 0.0
+if contract.type_id.clase == 'integral' and ex!=1:
+  result_rate=70
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30*days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+  diff = float(result)-int(result)
+  if diff&gt;0:
+    result = int(result)+1
+elif result&gt;25*salminimo:
+  result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcccfige">
+            <field name="name">IBC CCF IGE</field>
+            <field name="code">IBC_LINECCFIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0,1, 100
+ccf = CCF if rules.CCF else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'CCF':
+        ccf+=lines.total
+
+if ccf:
+  result = IBCCCF if rules.IBCCCF else 0.0
+
+days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[3:5])
+
+result = result / 30  * days
+ex = EXON if rules.EXON else 0.0
+if contract.type_id.clase == 'integral' and ex!=1:
+  result_rate=70
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo/30*days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+  diff = float(result)-int(result)
+  if diff&gt;0:
+    result = int(result)+1
+elif result&gt;25*salminimo:
+  result=25*salminimo</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcccfline0">
+            <field name="name">IBC CCF LINEA 0</field>
+            <field name="code">IBC_LINECCF0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+ccf = CCF if rules.CCF else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('CCF'):
+        ccf+=lines.total
+
+if ccf:
+  result = IBCPF if rules.IBCPF else 0.0
+
+days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[7:9])
+
+ex = EXON if rules.EXON else 0.0
+if contract.type_id.clase == 'integral' and ex!=1:
+  result_rate=70
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30
+if (result/(days or 1))&lt;salminimo and result&gt;0:
+  result = salminimo * days
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_ibcarlsln">
+            <field name="name">IBC ARL SLN</field>
+            <field name="code">IBC_LINEARLSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">1009</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result,result_qty, result_rate = 0, 1, 100
+#arl = APORTESARL if rules.APORTESARL else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code in ('LICENCIA_NO_REMUNERADA','SUSPENSION'):
+        result+=lines.total
+
+days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[5:7])
+
+#topes
+salminimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+salminimo = salminimo / 30 * days
+if result&lt;salminimo and result&gt;0:
+  result = salminimo
+elif result&gt;25*salminimo:
+  result=25*salminimo
+
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_basefonsub">
+            <field name="name">BASE FONDO SUBSISTENCIA</field>
+            <field name="code">BASE_FONSUB</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">9999</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">ibc = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+sal_minimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+if ibc &lt;= 4*sal_minimo:
+  result = 0
+else:
+  rate = 0.5
+  if ibc &gt;=16*sal_minimo and ibc&lt;17*sal_minimo:
+    rate += 0.2
+  elif ibc &gt;=17*sal_minimo and ibc&lt;18*sal_minimo:
+    rate += 0.4
+  elif ibc &gt;=18*sal_minimo and ibc&lt;19*sal_minimo:
+    rate += 0.6
+  elif ibc &gt;=19*sal_minimo and ibc&lt;20*sal_minimo:
+    rate += 0.8
+  elif ibc &gt;20*sal_minimo:
+    rate += 1
+  result = ibc * rate/100
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_basefonsol">
+            <field name="name">BASE FONDO SOLIDARIDAD PENSIONAL</field>
+            <field name="code">BASE_FONSOL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">9999</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">ibc = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+sal_minimo = SAL_MINIMO if rules.SAL_MINIMO else 0.0
+if ibc &lt;= 4*sal_minimo:
+  result = 0
+else:
+  result = ibc  * 0.5/100
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_tarpen">
+            <field name="name">TARIFA PENSION</field>
+            <field name="code">TARPEN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10010</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+result+= DEDPENSION if rules.DEDPENSION else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids.filtered(lambda x: x.code in ('DEDPENSION')):
+      result+=lines.total
+
+if result&gt;0 or int(contract.fiscal_type_id.code) in [1]:
+  result = 16</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotpen0">
+            <field name="name">COTIZACION PENSION LINEA 0</field>
+            <field name="code">COT_LINEPEN0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10011</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[1:3])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+result_rate = TARPEN if rules.TARPEN else 0.0
+result = result*result_rate/100
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotpenvac">
+            <field name="name">COTIZACION PENSION VACACIONES</field>
+            <field name="code">COT_PENVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10012</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[1:3])
+result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and days&gt;0 and (payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion')</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEPENVAC if rules. IBC_LINEPENVAC else 0.0
+result_rate = TARPEN if rules.TARPEN else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotpensln">
+            <field name="name">COTIZACION PENSION SLN</field>
+            <field name="code">COT_PENSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10012</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[1:3])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEPENSLN if rules. IBC_LINEPENSLN else 0.0
+result_rate = TARPEN if rules.TARPEN else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotpenirl">
+            <field name="name">COTIZACION PENSION IRL</field>
+            <field name="code">COT_PENIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10012</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[1:3])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEPENIRL if rules. IBC_LINEPENIRL else 0.0
+result_rate = TARPEN if rules.TARPEN else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotpenige">
+            <field name="name">COTIZACION PENSION IGE</field>
+            <field name="code">COT_PENIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10012</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[1:3])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEPENIGE if rules. IBC_LINEPENIGE else 0.0
+result_rate = TARPEN if rules.TARPEN else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotfonsubige">
+            <field name="name">COTIZACION FONDO SUBSISTENCIA IGE</field>
+            <field name="code">COT_FONSUBIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10013</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSUB if rules.BASE_FONSUB else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff>0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotfonsolvac">
+            <field name="name">COTIZACION FONDO SOLIDARIDAD VACACIONES</field>
+            <field name="code">COT_FONSOLVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10013</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSOL if rules.BASE_FONSOL else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotfonsolsln">
+            <field name="name">COTIZACION FONDO SOLIDARIDAD SLN</field>
+            <field name="code">COT_FONSOLSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10013</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate, ibc = 0, 1, 100, 0
+ibco = IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc += IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc+= ibco
+base = BASE_FONSOL if rules.BASE_FONSOL else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotfonsolige">
+            <field name="name">COTIZACION FONDO SOLIDARIDAD IGE</field>
+            <field name="code">COT_FONSOLIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10013</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSOL if rules.BASE_FONSOL else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotfonsol">
+            <field name="name">COTIZACION FONDO SOLIDARIDAD</field>
+            <field name="code">COT_FONSOL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10013</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSOL if rules.BASE_FONSOL else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff&gt;0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotsubvac">
+            <field name="name">COTIZACION FONDO SUBSISTENCIA VACACIONES</field>
+            <field name="code">COT_FONSUBVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10014</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSUB if rules.BASE_FONSUB else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff>0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotsubsln">
+            <field name="name">COTIZACION FONDO SUBSISTENCIA SLN</field>
+            <field name="code">COT_FONSUBSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10014</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc+=ibco
+base = BASE_FONSUB if rules.BASE_FONSUB else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff>0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotsub">
+            <field name="name">COTIZACION FONDO SUBSISTENCIA</field>
+            <field name="code">COT_FONSUB</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10014</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+ibco = IBC_LINEPEN0 if rules.IBC_LINEPEN0 else 0.0
+ibc = IBC_LINEPENIGE if rules.IBC_LINEPENIGE else 0.0
+ibc += IBC_LINEPENVAC if rules.IBC_LINEPENVAC else 0.0
+ibc += IBC_LINEPENSLN if rules.IBC_LINEPENSLN else 0.0
+ibc+=ibco
+base = BASE_FONSUB if rules.BASE_FONSUB else 0.0
+result=0
+if base:
+  result = float(ibco) / ibc * base
+
+diff = float(result)-int(result)
+if diff>0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_tareps">
+            <field name="name">TARIFA SALUD</field>
+            <field name="code">TAREPS</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10015</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+dedeps= DEDEPS if rules.DEDEPS else 0.0
+apeps= APORTESEPS if rules.APORTESEPS else 0.0
+exonerado = EXON if rules.EXON else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'DEDEPS':
+        dedeps+= lines.total
+      if lines.code == 'APORTESEPS':
+        apeps+= lines.total
+
+if not apeps and not exonerado:
+  result+=85
+if dedeps&gt;0:
+  result+=40
+if apeps&gt;0:
+  if dedeps&gt;0:
+    result+=85
+  else:
+    result=125
+
+result = 40 if exonerado&gt;0 else result</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_coteps">
+            <field name="name">COTIZACION SALUD</field>
+            <field name="code">COT_LINEEPS0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPS0 if rules.IBC_LINEEPS0 else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result=result*result_rate/1000
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotepsvac">
+            <field name="name">COTIZACION EPS VACACIONES</field>
+            <field name="code">COT_EPSVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPSVAC if rules.IBC_LINEEPSVAC else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result_rate = result_rate/1000
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotepssln">
+            <field name="name">COTIZACION EPS SLN</field>
+            <field name="code">COT_EPSSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPSSLN if rules.IBC_LINEEPSSLN else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result_rate = result_rate/1000
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotepsirl">
+            <field name="name">COTIZACION EPS IRL</field>
+            <field name="code">COT_EPSIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPSIRL if rules.IBC_LINEEPSIRL else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result_rate = result_rate/1000
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotepsirl">
+            <field name="name">COTIZACION EPS IRL</field>
+            <field name="code">COT_EPSIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPSIGE if rules.IBC_LINEEPSIGE else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result_rate = result_rate/1000
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotepsige">
+            <field name="name">COTIZACION EPS IGE</field>
+            <field name="code">COT_EPSIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10016</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[3:5])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days>0
+</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEEPSIGE if rules.IBC_LINEEPSIGE else 0.0
+result_rate = TAREPS if rules.TAREPS else 0.0
+result_rate = result_rate/1000
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_tararl">
+            <field name="name">TARIFA ARL</field>
+            <field name="code">TARARL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10017</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+irl = DIAS_IRL if rules.DIAS_IRL else 0.0
+result = contract.riesgo.pct_risk*1000</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotarlril">
+            <field name="name">COTIZACION ARL IRL</field>
+            <field name="code">COT_ARLIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10018</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[5:7])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEARLIRL if rules.IBC_LINEARLIRL else 0.0
+result_rate = TARARL if rules.TARARL else 0.0
+result_rate = result_rate/1000
+result=result*result_rate/100
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotarl">
+            <field name="name">COTIZACION ARL</field>
+            <field name="code">COT_ARL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10018</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[5:7])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINEARL0 if rules.IBC_LINEARL0 else 0.0
+result_rate = TARARL if rules.TARARL else 0.0
+result_rate = result_rate/1000
+result=result*result_rate/100
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_tarccf">
+            <field name="name">TARIFA CCF</field>
+            <field name="code">TARCCF</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10019</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion'</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+result = CCF if rules.CCF else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'CCF':
+        result+= lines.total
+
+result = 40 if result&gt;0 else 0</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotccf">
+            <field name="name">COTIZACION CCF</field>
+            <field name="code">COT_LINECCF0</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10020</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_LINEA0 if rules.DIAS_LINEA0 else 0.0
+if days:
+  days = int(str(days)[7:9])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+result = IBC_LINECCF0 if rules.IBC_LINECCF0 else 0.0
+result_rate = TARCCF if rules.TARCCF else 0.0
+result_rate = result_rate/10
+result = result*result_rate/100
+result_rate=100
+diff = float(result)-int(result)
+if diff &gt; 0:
+  result = int(result)+1</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_tarsena">
+            <field name="name">TARIFA SENA</field>
+            <field name="code">TARSENA</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10021</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+result = SENA if rules.SENA else 0.0
+exonerado = EXON if rules.EXON else 0.0
+
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'SENA':
+        result+= lines.total
+
+result = 2 if result&gt;0 else 0
+result = 0 if exonerado&gt;0 else result</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotccfvac">
+            <field name="name">COTIZACION CCF VACACIONES</field>
+            <field name="code">COT_CCFVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10021</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_VACACIONES if rules.DIAS_VACACIONES else 0.0
+if days:
+  days = int(str(days)[7:9])
+result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and days&gt;0 and (payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion')</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINECCFVAC if rules.IBC_LINECCFVAC else 0.0
+result_rate = TARCCF if rules.TARCCF else 0.0
+result=result*result_rate/1000
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotccfsln">
+            <field name="name">COTIZACION CCF SLN</field>
+            <field name="code">COT_CCFSLN</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10021</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_SLN if rules.DIAS_SLN else 0.0
+if days:
+  days = int(str(days)[7:9])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINECCFSLN if rules.IBC_LINECCFSLN else 0.0
+result_rate = TARCCF if rules.TARCCF else 0.0
+result=result*result_rate/1000
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotccfirl">
+            <field name="name">COTIZACION CCF IRL</field>
+            <field name="code">COT_CCFIRL</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10021</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IRL if rules.DIAS_IRL else 0.0
+if days:
+  days = int(str(days)[7:9])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINECCFIRL if rules.IBC_LINECCFIRL else 0.0
+result_rate = TARCCF if rules.TARCCF else 0.0
+result=result*result_rate/1000
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotccfige">
+            <field name="name">COTIZACION CCF IGE</field>
+            <field name="code">COT_CCFIGE</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10021</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">days = DIAS_IGE if rules.DIAS_IGE else 0.0
+if days:
+  days = int(str(days)[7:9])
+result = ((int(payslip.payslip_period_id.end_date[8:10]) &gt; 15  and payslip.tipo_nomina.code== 'Nomina') or payslip.tipo_nomina.code == 'Liquidacion') and days&gt;0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+
+result = IBC_LINECCFIGE if rules.IBC_LINECCFIGE else 0.0
+result_rate = TARCCF if rules.TARCCF else 0.0
+result=result*result_rate/1000
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotsenavac">
+            <field name="name">COTIZACION SENA VACACIONES</field>
+            <field name="code">COTSENAVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10022</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+result = IBC_LINECCFVAC if rules.IBC_LINECCFVAC else 0.0
+result_rate = TARSENA if rules.TARSENA else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_cotsena">
+            <field name="name">COTIZACION SENA</field>
+            <field name="code">COTSENA</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10022</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+result = IBC_LINECCF0 if rules.IBC_LINECCF0 else 0.0
+result_rate = TARSENA if rules.TARSENA else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_taricbf">
+            <field name="name">TARIFA ICBF</field>
+            <field name="code">TARICBF</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10023</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+result = ICBF if rules.ICBF else 0.0
+exonerado = EXON if rules.EXON else 0.0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.code == 'ICBF':
+        result+= lines.total
+
+result = 3 if result&gt;0 else 0
+result = 0 if exonerado&gt;0 else result</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_coticbfvac">
+            <field name="name">COTIZACION ICBF VACACIONES</field>
+            <field name="code">COTICBFVAC</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10024</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+result = IBC_LINECCFVAC if rules.IBC_LINECCFVAC else 0.0
+result_rate = TARICBF if rules.TARICBF else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_coticbf">
+            <field name="name">COTIZACION ICBF</field>
+            <field name="code">COTICBF</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10024</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate = 0, 1, 100
+result = IBC_LINECCF0 if rules.IBC_LINECCF0 else 0.0
+result_rate = TARICBF if rules.TARICBF else 0.0
+result_rate = result_rate/100
+result=result*result_rate
+result_rate=100</field>
+        </record>
+
+        <record model="hr.salary.rule" id="hr_salary_rule_horlab">
+            <field name="name">HORAS LABORADAS</field>
+            <field name="code">HORLAB</field>
+            <field name='category_id' ref='hr_salary_rule_category_pila'/>
+            <field name="sequence">10025</field>
+            <field name="active">True</field>
+            <field name="appears_on_payslip">False</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = int(payslip.payslip_period_id.end_date[8:10]) &gt; 15 and payslip.tipo_nomina.code== 'Nomina' or payslip.tipo_nomina.code == 'Liquidacion' </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result, result_qty, result_rate =0, 1, 100
+if contract.slip_ids and int(contract.fiscal_type_id) in (1,2,18,22,30,51,55):
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.worked_days_line_ids:
+      if lines.code == 'WORK102':
+        result+= lines.number_of_hours
+
+if result&gt;300:
+  result=300</field>
+        </record>
+
+        <!-- dev = categories.DEVENGADO or 0
+vac = categories.DESREM or 0
+dev += categories.INGCOM
+dev += categories.OTRDER
+dayst,daysp=0,0
+if contract.slip_ids:
+  for pays in contract.slip_ids.filtered(lambda x: x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for lines in pays.line_ids:
+      if lines.category_id.code in ('DEVENGADO','INGCOM'):
+        dev+=lines.total
+      elif lines.category_id.code in ('DESREM','OTRDER'):
+        vac+=lines.total
+
+  #obtener dias en periodo
+  for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code == 'Vacaciones' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+    for detalle in pays.leave_ids:
+      if detalle.holiday_status_id.code in ('VAC'):
+        dayst += detalle.number_of_days_in_payslip
+        for line in detalle.line_ids:
+          if line.name[0:7] == payslip.payslip_period_id.end_date[0:7]:
+            daysp += line.days_payslip
+
+  if not daysp:
+    for pays in contract.slip_ids.filtered(lambda x: x.tipo_nomina.code == 'Nomina' and x.payslip_period_id.end_date[0:7] == payslip.payslip_period_id.end_date[0:7]):
+      for detalle in pays.leave_days_ids:
+        if detalle.holiday_status_id.code  in ('VAC'):
+          dayst = detalle.holiday_id.number_of_days_in_payslip
+          daysp += detalle.days_payslip
+
+if daysp>0:
+  total = IBC_LINEVACOP if rules.IBC_LINEVACOP else 0.0
+  if total==0:
+    total = vac
+  dev += total * daysp
+
+
+result = dev
+result_qty = 1
+result_rate = 100-->
+    </data>
+</openerp>

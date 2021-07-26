@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="hr_payslip_type_extended_view_form" model="ir.ui.view">
+            <field name="name">hr.payslip.type.form.extended</field>
+            <field name="model">hr.payslip.type</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.view_hr_planilla_type_form"/>
+            <field name="arch" type="xml">
+                <form string="Tipo de planilla" position="replace">
+                    <form string="Tipo de planilla">
+                        <group string="Tipo de planilla">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="base"/>
+                            <field name="holiday_status_id"/>
+                        </group>
+                    </form>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_payslip_payslip_extended_view_form5" model="ir.ui.view">
+            <field name="name">hr.payslip.payslip.view.form</field>
+            <field name="model">hr.payslip</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <group string="Miscellaneous" position="after">
+                    <group string="Retroactivas/Reliquidación">
+                        <field name="base" invisible="1"/>
+                        <field name="payslip_id"
+                               attrs="{'invisible': [('base','=', False)]}"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <record id="hr_payslip_run_extended_view_form5" model="ir.ui.view">
+            <field name="name">hr.payslip.run.extended.view.form</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_payroll_run_view_form4"/>
+            <field name="arch" type="xml">
+                <field name="bank_id" position="after">
+                    <field name="group_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                </field>
+                <button name="draft_payslip_run" position="before">
+                   <button name="view_payslip" string="Ver nóminas" type="object"/>
+               </button>
+            </field>
+        </record>
+
+        <record id="hr_job_risk_form" model="ir.ui.view">
+            <field name="name">hr.job.risk</field>
+            <field name="model">hr.job</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <field name="department_id" position="before">
+                    <field name="risk_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

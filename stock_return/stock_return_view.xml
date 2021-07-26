@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_stock_location_requisition_form" model="ir.ui.view">
+            <field name="name">stock.location.requisition.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock_extended.view_stock_location_form_extended"/>
+            <field name="arch" type="xml">
+                <field name="user_owners_ids" position="after">
+                    <group string="Aplica para:" colspan="6" col="6">                    
+                        <field name="purchase_ok"/>
+                        <field name="sale_ok"/>
+                        <field name="return_ok"/>                        
+                    </group>
+                </field>
+            </field>
+        </record>
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--             WORKFLOW             -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="wkf_return_order" model="workflow">
+            <field name="name">return.order.basic</field>
+            <field name="osv">return.order</field>
+            <field name="on_create">True</field>
+        </record>
+        
+        <!-- Activity -->        
+        <record id="act_borrador" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_return_order"/>
+            <field name="flow_start">True</field>
+            <field name="name">Borrador</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+       <record id="act_confirmado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_return_order"/>
+            <field name="name">Confirmado</field>
+            <field name="kind">function</field>
+            <field name="action">confirmado()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_aprobado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_return_order"/>
+            <field name="name">Aprobado</field>
+            <field name="kind">function</field>
+            <field name="action">aprobado()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+                
+        <record id="act_terminado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_return_order"/>
+            <field name="name">Terminado</field>
+            <field name="kind">function</field>
+            <field name="action">terminado()</field>
+            <field name="split_mode">XOR</field>
+            <field name="flow_stop">True</field>
+        </record>
+        
+        <record id="act_cancelado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_return_order"/>
+            <field name="name">Cancelado</field>
+            <field name="kind">function</field>
+            <field name="action">cancelado()</field>
+            <field name="split_mode">XOR</field>
+            <field name="flow_stop">True</field>
+        </record>
+        
+        <!-- Transistion -->
+        <record id="trans_borrador_confirmado" model="workflow.transition">
+            <field name="act_from" ref="act_borrador"/>
+            <field name="act_to" ref="act_confirmado"/>
+            <field name="signal">confirmar</field>
+        </record>       
+        
+        <record id="trans_borrador_cancelado" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_cancelado"/>
+            <field name="signal">cancelar</field>
+        </record>
+                        
+        <record id="trans_ejecucion_aprobado" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_aprobado"/>
+            <field name="signal">aprobar</field>
+        </record>
+        
+        <record id="trans_aprobado_terminado" model="workflow.transition">
+            <field name="act_from" ref="act_aprobado"/>
+            <field name="act_to" ref="act_terminado"/>
+            <field name="signal">terminar</field>
+        </record>
+        
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--              FOLOWERS            -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="mt_borrador" model="mail.message.subtype">
+            <field name="name">Devolucion Nueva</field>
+            <field name="res_model">return.order</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Solicitud de Devolucion Nueva</field>
+        </record>
+        <record id="mt_confirmado" model="mail.message.subtype">
+            <field name="name">Devolucion Confirmada</field>
+            <field name="res_model">return.order</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Solicitud de Devolucion Confirmada</field>
+        </record>        
+        <record id="mt_terminado" model="mail.message.subtype">
+            <field name="name">Devolucion Terminada</field>
+            <field name="res_model">return.order</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Solicitud de Devolucion Terminada</field>
+        </record>
+        <record id="mt_aprobado" model="mail.message.subtype">
+            <field name="name">Devolucion Aprobada</field>
+            <field name="res_model">return.order</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Solicitud de Devolucion Aprobada</field>
+        </record>
+        <record id="mt_cancelado" model="mail.message.subtype">
+            <field name="name">Devolucion Cancelada</field>
+            <field name="res_model">return.order</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Solicitud de Devolucion Cancelada</field>
+        </record>
+        
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--              VISTAS              -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="return_order_causal_view_tree" model="ir.ui.view">
+            <field name="name">return.order.causal.tree</field>
+            <field name="model">return.order.causal</field>
+            <field name="arch" type="xml">
+                <tree string="Causal Devoluciones" editable="bottom">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+         </record>
+         
+         <record id="open_return_order_causal" model="ir.actions.act_window">
+            <field name="name">Causal Devoluciones</field>
+            <field name="res_model">return.order.causal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+         </record>
+         
+        <record id="return_order_view_tree" model="ir.ui.view">
+            <field name="name">return.order.tree</field>
+            <field name="model">return.order</field>
+            <field name="arch" type="xml">
+                <tree string="Gestion Devoluciones">
+                    <field name="name"/>
+                    <field name="causal"/>
+                    <field name="partner_id"/>
+                    <field name="partner_shipping_id"/>
+                    <field name="date"/>
+                    <field name="location_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+         </record>
+        
+      
+         <record id="return_order_view_form" model="ir.ui.view">
+            <field name="name">return.order.form</field>
+            <field name="model">return.order</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Gestion Devoluciones" version="7.0">
+                    <header>
+                        <button string="Confirmar" name="confirmar" states="borrador"/>
+                        <button string="Aprobar" name="aprobar" states="confirmado"/>
+                        <!--<button string="Terminar" name="terminar" states="aprobado"/>-->
+                        <button string="Cancelar" name="cancelar" states="confirmado"/>
+                        <!--<button name="view_picking" string="Pickings" type="object" attrs="{'invisible': [('state','not in', ['aprobado','terminado'])]}" class="oe_highlight"/>
+                        <button name="view_invoice" string="Invoices" type="object" attrs="{'invisible': [('state','not in', ['aprobado','terminado'])]}" class="oe_highlight"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,confirmado,aprobado,terminado" states="borrador,confirmado,aprobado,terminado"/>
+                    </header>
+                    <sheet string="Gestion Devoluciones">
+                        <group>
+                            <h1>
+                                <field name="name"/>
+                                
+                            </h1>
+                            <div class="oe_right">
+                                <button class="oe_inline oe_stat_button" name="view_invoice" type="object" 
+                                    icon="fa-bar-chart-o">
+                                    <field string="Invoices" name="invoice_count" widget="statinfo"/>
+                                </button>
+                                <button class="oe_inline oe_stat_button" name="view_picking" type="object" 
+                                    icon="fa-truck">
+                                    <field string="Pickings" name="picking_count" widget="statinfo"/>
+                                </button>
+                            </div>
+                        </group>
+                        <group col="4" string="Informacion General">                            
+                            <field name="partner_id"/>
+                            <field name="partner_shipping_id"/>
+                            <field name="location_id"/>
+                            <field name="date" attrs="{'readonly':[('state','in',['aprobado','terminado','cancelado'])]}"/>
+                            <field name="causal" options="{'no_create': True}"/>
+                            <field name="bultos"/>
+                            <field name="remesa"/>
+                            <field name="amount_declarado"/>
+                        </group>
+                        <notebook position="inside" colspan="4">
+                            <page string="Productos">
+                                <group>
+                                    <field name="line_ids" nolabel="1"  options="{'no_create': True}">
+                                        <tree editable="bottom">
+                                            <field name="product_id"/>
+                                            <field name="product_uom_id"/>
+                                            <field name="product_qty"/>
+                                        </tree>
+                                    </field>
+                                </group>  
+                            </page>
+                            <!--<page string="Pickings" attrs="{'invisible':[('state','not in',['terminado','aprobado'])]}">
+                                <group>
+                                    <field name="picking_ids" nolabel="1"/>
+                                </group>  
+                            </page>
+                            <page string="Movimientos" attrs="{'invisible':[('state','not in',['terminado','aprobado'])]}">
+                                <group>
+                                    <field name="move_ids" nolabel="1"/>
+                                </group>  
+                            </page>
+                            <page string="Facturas" attrs="{'invisible':[('state','not in',['terminado','aprobado'])]}">
+                                <group>
+                                    <field name="invoice_ids" nolabel="1"/>
+                                </group>  
+                            </page>-->
+                            <page string="Observaciones">
+                                <field name="observaciones" nolabel="1" attrs="{'readonly':[('state','in',['aprobado','terminado','cancelado'])]}"/>
+                            </page>
+                            <page string="Trazabilidad">
+                                <group>
+                                    <group string="Creacion">
+                                        <field name="create_uid"/>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group string="Confirmacion">
+                                        <field name="user_confirm"/>
+                                        <field name="date_confirm"/>
+                                    </group>
+                                    <group string="Aprobacion">
+                                        <field name="user_aprobacion"/>
+                                        <field name="date_aprobacion"/>
+                                    </group>
+                                    <group string="Transferencia">
+                                        <field name="user_transfer"/>
+                                        <field name="date_transfer"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+         
+                  
+         <record id="return_order_view_search" model="ir.ui.view">
+            <field name='name'>return.order.search</field>
+            <field name='model'>return.order</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Gestion Devoluciones">
+                    <field name="name"/>
+                    <field name="causal"/>
+                    <field name="partner_id"/>
+                    <field name="partner_shipping_id"/>
+                    <field name="date"/>
+                    <field name="location_id"/>
+                    <field name="state"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_partner_id" string="Cliente" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="group_partner_shipping_id" string="Sucursal" icon="terp-partner" domain="[]" context="{'group_by':'partner_shipping_id'}"/>
+                        <filter name="group_location_id" string="Ubicacion" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                        <filter name="group_state" string="Estado" icon="terp-partner" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+       
+         <record id="open_return_order" model="ir.actions.act_window">
+            <field name="name">Gestion Devoluciones</field>
+            <field name="res_model">return.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+         </record>
+        
+         <menuitem id="menu_return_order" parent="stock.menu_stock_root" name="Devoluciones" sequence="1" groups="stock_return.group_user_devolution"/>
+         <menuitem action="open_return_order" id="menu_open_return_order" name="Devoluciones" parent="menu_return_order" sequence="1" groups="stock_return.group_user_devolution"/>
+         <menuitem action="open_return_order_causal" id="menu_open_return_order_causal" name="Causales" parent="menu_return_order" sequence="2" groups="stock_return.group_coordinador_devolution"/>
+
+        
+        <record id="view_product_property_return_form" model="ir.ui.view">
+            <field name="name">product.template.property.return.form.</field>
+            <field name="model">product.template</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="inventory_account.view_product_product_cogs_form_inventory_dos"/>
+            <field name="arch" type="xml">
+                <field name="transit_accout_id" position="after" >
+                    <field name="account_return_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_stock_picking_return_form" model="ir.ui.view">
+            <field name="name">stock_picking.return.form.</field>
+            <field name="model">stock.picking</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after" >
+                    <field name="sucursal_id" attrs="{'invisible':[('picking_type_code','!=','return')]}"/>
+                </field>
+                <field name="origin" position="after" >
+                    <field name="return_dap" attrs="{'invisible':[('picking_type_code','!=','return')]}"/>
+                    <field name="return_guia" attrs="{'invisible':[('picking_type_code','!=','return')]}"/>
+                    <field name="return_mpp" attrs="{'invisible':[('picking_type_code','!=','return')]}"/>
+                </field>
+                <field name="date" position="after" >
+                    <field name="date_dev" attrs="{'invisible':[('picking_type_code','!=','return')]}"/>
+                </field>                
+            </field>
+        </record>
+        
+        <record id="view_account_invoice_return_form" model="ir.ui.view">
+            <field name="name">account.invoice.return.form.</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <notebook colspan="4">
+                    <page string="Info. Devolucion" attrs="{'invisible':[('type','!=','out_refund')]}">
+                        <group>
+                            <field name="sucursal_id"/>
+                            <field name="return_dap"/>
+                            <field name="return_guia"/>
+                            <field name="return_mpp"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+    </data>
+    
+    <data>
+        <record id="seq_stock_return_picking_type" model="ir.sequence.type">
+            <field name="name">Picking Devolucion</field>
+            <field name="code">return.order.number.picking</field>
+        </record>
+        <record id="seq_stock_picking_return_number" model="ir.sequence">
+            <field name="name">Picking Devolucion</field>
+            <field name="code">return.order.number.picking</field>
+            <field name="prefix">DEVOLUCION-</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+        
+    <data noupdate="1">
+        <record id="seq_stock_return_type" model="ir.sequence.type">
+            <field name="name">Solicitud de Devolucion</field>
+            <field name="code">return.order.number</field>
+        </record>
+        <record id="seq_stock_return_number" model="ir.sequence">
+            <field name="name">Solicitud de Devolucion</field>
+            <field name="code">return.order.number</field>
+            <field name="prefix">DO-</field>
+            <field name="padding">5</field>
+        </record>
+        
+        <!-- Secuencias -->
+        <record id="seq_stock_picking_type_number" model="ir.sequence">
+            <field name="name">stock.picking.type.return</field>
+            <field name="prefix">DEV-</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+        </record>
+        
+        <!-- Stock Picking Type -->        
+        <!--<record id="stock_picking_return" model="stock.picking.type">
+            <field name="name">Devoluciones</field>
+            <field name="code">return</field>
+            <field name="warehouse_id">1</field>
+            <field name="sequence_id" eval="seq_stock_picking_type_number"/>            
+        </record>-->        
+        
+    </data>
+</openerp>

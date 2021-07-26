@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="stock_service_report">
+            <t t-call="report.html_container">                
+                <!-- encabezado del documento -->
+                <div class="header">                
+                    <div class="col-xs-3">
+                        <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 100px;"/>
+                        <span>NIT. </span><span t-field="res_company.partner_id.ref"/>-4<span t-field="res_company.partner_id.dev_ref"/>
+                    </div>
+                    <div class="row">
+                        <div class="text-center" style="font-size:12px">
+                            <p><ul>FORMATO DE SERVICIO DE GARANTIA</ul></p>
+                            <p><ul>Carrera 72 N° 95 -51 Bodega 13</ul></p>
+                            <p><ul >Bogota - Colombia</ul></p>
+                        </div>
+                    </div>
+                </div>
+                
+            
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">                        
+                        <div class="page" style="font-size:12px">
+                            <br></br>
+                            <style>
+                                th.intro {
+                                    text-align: center;
+                                }
+
+                                .important1 {                                    
+                                    background-color: #D8D8D8;
+                                }
+                                .important2 {
+                                    text-align: center;
+                                    background-color: #F2F2F2;
+                                }
+                            </style>
+                            <table class="table" style="font-size:9px">    
+                                <tr colspan="4">
+                                    <td colspan="1"><strong>No. Orden</strong></td>
+                                    <td colspan="2"><span t-field="o.name"/></td>
+                                    <td colspan="2"><strong>No. Reclamacion</strong></td>
+                                    <td colspan="1"><span t-field="o.code"/></td>                                    
+                                </tr>
+                                <tr colspan="6">
+                                    <td><strong>F. Reclamacion</strong></td>
+                                    <td><span t-field="o.date_reclamacion"/></td>
+                                    <td><strong>F. Recepcion</strong></td>
+                                    <td><span t-field="o.date_recepcion"/></td>
+                                    <td><strong>F. Entrega</strong></td>
+                                    <td><span t-field="o.date_limit_close"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="table table-hover" style="font-size:9px">
+                                <tr>
+                                    <td colspan="6" class="intro important2" ><strong>Cliente</strong></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td><strong>Nombre</strong></td>
+                                    <td><span t-field="o.partner_id.name"/></td>
+                                    <td><strong>Telefono</strong></td>
+                                    <td><span t-field="o.partner_id.mobile"/></td>
+                                    <td><strong>Email</strong></td>
+                                    <td><span t-field="o.partner_id.email"/></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td colspan="6" class="intro important2" ><strong>Sucursal</strong></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td><strong>Nombre</strong></td>
+                                    <td><span t-field="o.partner_sucursal_id.name"/></td>
+                                    <td><strong>Telefono</strong></td>
+                                    <td><span t-field="o.partner_sucursal_id.mobile"/></td>
+                                    <td><strong>Email</strong></td>
+                                    <td><span t-field="o.partner_sucursal_id.email"/></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td colspan="6" class="intro important2" ><strong>Contacto</strong></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td><strong>Nombre</strong></td>
+                                    <td><span t-field="o.contact_id.name"/></td>
+                                    <td><strong>Telefono</strong></td>
+                                    <td><span t-field="o.contact_id.phone"/></td>
+                                    <td><strong>Email</strong></td>
+                                    <td><span t-field="o.contact_id.email"/></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table class="table table-hover" style="font-size:9px">
+                                <tr class="intro important1">
+                                    <th class="intro">PLU</th>
+                                    <th class="intro">PRODUCTO</th>
+                                    <th class="intro">REFERENCIA</th>
+                                    <th class="intro">CANTIDAD</th>
+                                    <th class="intro">FALLA DEL PRODUCTO</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><span t-field="o.plu"/></td>
+                                    <td class="text-center"><span t-field="o.product_id.name"/></td>
+                                    <td class="text-center"><span t-field="o.product_id.default_code"/></td>
+                                    <td class="text-center"><span t-field="o.product_qty"/></td>
+                                    <td><span t-field="o.summary"/></td>
+                                </tr>
+                            </table>                            
+                            <tr>
+                                <strong>Observación:</strong>
+                                <td class="text-center"><span t-field="o.observaciones_recepcion"/></td>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <strong>Diagnostico:</strong>
+                                <td class="text-center"><span t-field="o.resultado_tecnico"/></td>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <strong>Trabajos realizados:</strong>
+                                <td class="text-center"><span t-field="o.trabajos_tecnico"/></td>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <strong>Recomendaciones:</strong>
+                                <td class="text-center"><span t-field="o.observaciones_tecnico"/></td>
+                            </tr>
+                            <br/>                            
+                            <br/>
+                            <table class="table table-hover" style="font-size:12px">
+                                <tr>
+                                    <center>
+                                        <img t-if="res_company.logo_service" t-att-src="'data:image/png;base64,%s' % res_company.logo_service" style="max-height: 100px;"/>
+                                    </center>
+                                    <!--<td align='center' width="50%" style="border-top-width:thin;"><span style="margin-left:2mm">Jefe Laboratorio</span></td>-->
+                                </tr>
+                            </table>
+                        </div>
+                    <div>
+                    <div class="footer">
+                        <div align='center'><span>Servicio Tecnico - PBX + 57 1 8237625 Ext: 7 - Cel: 3134301004 - Email: laboratorio@moreproducts.com.co</span></div>
+                            <div align='center'></div>
+                        </div>
+                    </div>
+                    </t>
+                </t>
+            </t>
+
+        </template>
+    </data>
+</openerp>
+

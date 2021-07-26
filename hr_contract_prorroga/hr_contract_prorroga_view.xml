@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+		<!-- HR CONTRACT INHERITED FORM -->
+	    
+	   <record model="ir.ui.view" id="hr_contract_extended_view">
+		<field name="name">hr.contract.extended.view</field>
+		<field name="model">hr.contract</field>
+		<field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		    <field name="trial_date_end" position="after">
+			<group>
+			    <field name="proroga_1_date" attrs="{'invisible':[('type_fijo','!=',True)]}"/>
+			    <field name="proroga_2_date" attrs="{'invisible':[('type_fijo','!=',True)]}"/>
+			    <field name="proroga_3_date" attrs="{'invisible':[('type_fijo','!=',True)]}"/>
+			</group>
+		    </field>
+		    <field name="name" position="after">
+			<field name="type_fijo" invisible="True"/>
+		    </field>
+		    <field name="type_id" position="attributes">
+			<attribute name="on_change">onchange_type(type_id)</attribute>
+		    </field>
+		</field>
+	    </record>
+
+	    <record model="ir.ui.view" id="hr_contract_type_extended_view">
+		<field name="name">hr.contract.type.extended.view</field>
+		<field name="model">hr.contract.type</field>
+		<field name="inherit_id" ref="hr_contract.hr_contract_type_view_form"/>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+		    <field name="name" position="after">
+			<field name="type_fijo"/>
+		    </field>
+		</field>
+	    </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="ITAX_16" model="account.tax.template">
+      <field name="chart_template_id" ref="co_chart_template"/>
+      <field name="name">IVA 16% Venta</field>
+      <field name="amount">0.160000</field>
+      <field name="type">percent</field>
+      <field name="type_tax_use">sale</field>
+      <field name="account_collected_id" ref="2408"/>
+      <field name="account_paid_id" ref="2408"/>
+      <field name="base_code_id" ref="vat_code_base_sale"/>
+      <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+      <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+      <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+    </record>
+
+    <record id="OTAX_16" model="account.tax.template">
+      <field name="chart_template_id" ref="co_chart_template"/>
+      <field name="name">IVA 16% Compra</field>
+      <field name="amount">0.160000</field>
+      <field name="type">percent</field>
+      <field name="type_tax_use">purchase</field>
+      <field name="account_collected_id" ref="2408"/>
+      <field name="account_paid_id" ref="2408"/>
+      <field name="base_code_id" ref="vat_code_base_purchase"/>
+      <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+      <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+      <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+    </record>
+
+      <record id="ITAX_14" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 14% Venta</field>
+          <field name="amount">0.140000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">sale</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_sale"/>
+          <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+          <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+      </record>
+      
+      <record id="OTAX_14" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 14% Compra</field>
+          <field name="amount">0.140000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">purchase</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_purchase"/>
+          <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+          <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+      </record>
+
+      <record id="ITAX_20" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 20% Venta</field>
+          <field name="amount">0.200000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">sale</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_sale"/>
+          <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+          <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+      </record>
+      
+      <record id="OTAX_20" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 20% Compra</field>
+          <field name="amount">0.200000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">purchase</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_purchase"/>
+          <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+          <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+      </record>
+      
+      <record id="ITAX_25" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 25% Venta</field>
+          <field name="amount">0.250000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">sale</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_sale"/>
+          <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+          <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+      </record>
+      
+      <record id="OTAX_25" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 25% Compra</field>
+          <field name="amount">0.250000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">purchase</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_purchase"/>
+          <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+          <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+      </record>
+      
+      <record id="ITAX_35" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 35% Venta</field>
+          <field name="amount">0.350000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">sale</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_sale"/>
+          <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+          <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+      </record>
+      
+      <record id="OTAX_35" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 35% Compra</field>
+          <field name="amount">0.350000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">purchase</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_purchase"/>
+          <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+          <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+      </record>
+
+      <record id="ITAX_016" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 1.6% Venta</field>
+          <field name="amount">0.0160000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">sale</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_sale"/>
+          <field name="tax_code_id" ref="vat_code_IVA_receive"/>
+          <field name="ref_base_code_id" ref="vat_code_base_sale"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_receive"/>
+      </record>
+      
+      <record id="OTAX_016" model="account.tax.template">
+          <field name="chart_template_id" ref="co_chart_template"/>
+          <field name="name">IVA 1.6% Compra</field>
+          <field name="amount">0.0160000</field>
+          <field name="type">percent</field>
+          <field name="type_tax_use">purchase</field>
+          <field name="account_collected_id" ref="2408"/>
+          <field name="account_paid_id" ref="2408"/>
+          <field name="base_code_id" ref="vat_code_base_purchase"/>
+          <field name="tax_code_id" ref="vat_code_IVA_pay"/>
+          <field name="ref_base_code_id" ref="vat_code_base_purchase"/>
+          <field name="ref_tax_code_id" ref="vat_code_IVA_pay"/>
+      </record>
+
+
+  </data>
+</openerp>

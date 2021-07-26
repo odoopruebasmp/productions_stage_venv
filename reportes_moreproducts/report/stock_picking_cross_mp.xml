@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="stock_picking_mp4">
+            <t t-call="report.html_container">                
+                <!-- encabezado del documento -->
+                <div class="header">                
+                    <div class="col-xs-3">
+                        <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 97px;"/>
+                        <span>NIT. </span><span t-field="res_company.partner_id.ref"/>-4<span t-field="res_company.partner_id.dev_ref"/>
+                    </div>
+                    <div class="row">
+                        <div class="text-center" style="font-size:10px">
+                            <H4><strong>REMISIÓN ENTREGA DE MERCANCÍA</strong></H4>
+                            <H4><ul>Parque empresarial los lagartos (Bogota - Colombia)</ul></H4>
+                            <H4><ul>Carrera 72 N° 95 -51 Bodega 13</ul></H4>                            
+                            <H4><ul>PBX: 6 13 8444 - 6 13 6955</ul></H4>
+                        </div>
+                    </div>
+                </div>
+                
+                <t t-set="total" t-value="0" />            
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <br> </br>
+                            <style>
+                                th.intro {
+                                    text-align: center;
+                                }
+
+                                .important1 {
+                                    background-color: #D8D8D8;
+                                }
+                                .important2 {
+                                    background-color: #F2F2F2;
+                                }
+                            </style>
+                            
+                            <table class="table important1" style="font-size:12px">    
+                                <tr>
+                                    <td class="intro important2"><strong>Referencia No.</strong></td>
+                                    <td class="intro important2"><span t-field="o.origin"/></td>
+                                    <td class="intro important2"><strong>O. de compra No.</strong></td>
+                                    <td class="intro important2"><span t-field="o.n_oc"/></td>
+                                    <td class="intro important2"><strong>Remisión No.</strong></td>
+                                    <td class="intro important2"><span t-field="o.name"/></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="6" class="intro important1">INFORMACION PROVEEDOR</th>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>Proveedor</strong></td>
+                                    <td colspan="2" class="intro important2"><span t-field="res_company.partner_id.name"/></td>
+                                    <td class="intro important2" ><strong>Teléfono</strong></td>
+                                    <td colspan="2" class="intro important2"><span t-field="res_company.partner_id.mobile"/><span>  </span><span t-field="res_company.partner_id.phone"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>Dirección Proveedor</strong></td>
+                                    <td colspan="5" class="intro important2"><span t-field="res_company.partner_id.street"/></td>
+                                </tr>
+                            </table>
+                            
+                            <table class="table table-bordered" style="font-size:12px">
+                                <tr>
+                                    <td class="intro important2" ><strong>Fecha</strong></td>
+                                    <td ><span t-field="o.date_done"/></td>
+                                    <td class="intro important2" ><strong>No. Nota Pedido</strong></td>
+                                    <td><span t-field="o.partner_id.mobile"/><span> - </span><span t-field="o.partner_id.phone"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>Nombre del cliente</strong></td>
+                                    <td colspan="3"><span t-field="o.partner_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>No. de cédula cliente</strong></td>
+                                    <td><span t-field="o.partner_id.ref"/></td>
+                                    <td class="intro important2" ><strong>Ciudad</strong></td>
+                                    <td><span t-field="o.partner_id.city_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>Dirección de entrega</strong></td>
+                                    <td colspan="3"><span t-field="o.partner_id.street"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important2" ><strong>Teléfono fijo cliente</strong></td>
+                                    <td><span t-field="o.partner_id.phone"/></td>
+                                    <td class="intro important2" ><strong>Celular</strong></td>
+                                    <td><span t-field="o.partner_id.mobile"/></td>
+                                </tr>
+                                <!--<tr t-if="o.sale_id and o.sale_id.punto_de_venta">
+                                    <td class="intro important2" ><strong>Punto de venta</strong></td>
+                                    <td><span t-field="o.sale_id.punto_de_venta"/></td>
+                                </tr>-->
+                            </table>
+                            <table class="table table-hover" style="font-size:12px">
+                                <tr>
+                                    <th colspan="6" class="intro important1">INFORMACION DEL PEDIDO</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="intro">Cantidad</th>
+                                    <th colspan="2" class="intro">Referencia</th>
+                                    <th colspan="2" class="intro">Descripción</th>
+                                    <th colspan="1" class="intro">CODIGO BARRAS</th>
+                                </tr>
+                                <tr t-foreach="o.move_lines" t-as="l">
+                                    <td colspan="1" class="text-center"><span t-field="l.product_uom_qty"/></td>
+                                    <td colspan="2" class="text-center"><span t-field="l.product_id.default_code"/></td>
+                                    <td colspan="2" class="text-center"><span t-field="l.product_id.name"/></td>
+                                    <td colspan="1" class="text-center"><span t-field="l.product_id.ean_codigo"/></td>
+                                    <t t-set="total" t-value="total+l.product_uom_qty" />
+                                </tr>
+                            </table>
+                            <h3> <t t-esc="total" /></h3>
+                            <table class="table table-hover" style="font-size:12px">
+                                <tr>
+                                    <th colspan="6" class="intro important1">CROSS DOCKING</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" class="intro">Cantidad</th>
+                                    <th colspan="1" class="intro">Referencia</th>
+                                    <th colspan="2" class="intro">Descripción</th>
+                                    <th colspan="1" class="intro">Sucursal</th>
+                                    <th colspan="1" class="intro">EAN Sucursal</th>
+                                </tr>
+                                <tr t-foreach="o.move_lines" t-as="l">
+                                    <tr t-foreach="l.pos_extra_ids" t-as="x">
+                                        <td colspan="1" class="text-center"><span t-field="x.cantidad_pto_vta"/></td>
+                                        <td colspan="1" class="text-center"><span t-field="l.product_id.default_code"/></td>
+                                        <td colspan="2" ><span t-field="l.product_id.name"/></td>
+                                        <td colspan="1" ><span t-field="x.nombre_punto_de_venta"/></td>
+                                        <td colspan="1" ><span t-field="x.ean_punto_de_venta"/></td>
+                                        <!--<t t-set="total" t-value="total+x.cantidad_pto_vta" />-->
+                                    </tr>
+                                    <br/>
+                                </tr>
+                            </table>   
+                            <t>
+                                <strong>Observación:</strong>
+                                <span t-field="o.carrier_coment"/>
+                            </t>
+                            <br/><br/>
+                            <br/><br/>
+                            <style>
+                                p{ 
+                                    width: 300px;
+                                    text-align: center;
+                                    border-top-width:thin;
+                                    border-top-style:solid;
+                                    border-top-color:black;                                    
+                                }
+                            </style>
+                            <table class="table table-hover" style="font-size:13px">                                
+                                <tr>
+                                    <th style="margin-left: 25 mm"> 
+                                        <p> Firma del cliente </p>
+                                    </th>
+                                    <th style="margin-left: 85 mm">
+                                        <p> Firma del transportador </p>
+                                    </th>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <div class="text-center">
+                                <ul class="list-inline">
+                                    <li>Nombre</li>
+                                    <li>______________________________________</li>
+                                    <li>Cédula</li>
+                                    <li>__________________</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+
+        </template>
+    </data>
+</openerp>
+

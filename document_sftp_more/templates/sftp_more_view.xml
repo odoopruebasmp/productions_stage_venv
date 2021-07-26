@@ -1,0 +1,95 @@
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="action_sftp_more">
+            <field name="name">Blue Logistics</field>
+            <field name="res_model">sftp.more</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Lee o escribe los movimientos de inventario</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_parent_sftp_more" parent="stock.menu_stock_root" name="SFTP Moreproducts"/>
+
+        <menuitem id="menu_sftp_more" parent="menu_parent_sftp_more" name="SFTP Moreproducts"
+                  action="action_sftp_more"/>
+
+        <record model="ir.ui.view" id="sftp_more_tree">
+            <field name="name">sftp.more.tree</field>
+            <field name="model">sftp.more</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <tree string="Idea list">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="date"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sftp_more_form">
+            <field name="name">sftp.more.form</field>
+            <field name="model">sftp.more</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <form string="Idea Form">
+                    <header>
+                        <button string="Confirmar" type="object" name="action_confirm"
+                                states="draft" class="oe_highlight" />
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Nombre" />
+                            <h1><field name="name" /></h1>
+                        </div>
+                        <separator string="General" colspan="2" />
+                        <group>
+                            <group name="main_grp" colspan="2">
+                                <group name="main_grp_col1">
+                                    <field name="user_id"/>
+                                    <field name="date"/>
+                                </group>
+                                <group name="main_grp_col2">
+                                    <field name="type"
+                                           attrs="{'required': True,
+                                           'readonly': [('state','=','done')]}"/>
+                                    <field name="filter"
+                                           attrs="{'invisible': [('type','=','receive')],
+                                           'required': [('type','=','send')],
+                                           'readonly': [('state','=','done')]}"/>
+                                    <field name="filter2"
+                                           attrs="{'invisible': [('type','=','receive')],
+                                           'required': [('type','=','send')],
+                                           'readonly': [('state','=','done')]}"/>
+                                </group>
+                            </group>
+                            <group name="reads_grp" string="Pickings Recibidos" colspan="4">
+                                <field name="picking_receives" nolabel="1"/>
+                            </group>
+                            <group name="writes_grp" string="Pickings Enviados" colspan="4">
+                                <field name="picking_sends" nolabel="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sftp_more_search">
+            <field name="name">sftp.more.search</field>
+            <field name="model">sftp.more</field>
+            <field name="priority" eval="16"/>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="user_id"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                </search>
+            </field>
+        </record>
+    </data>
+</openerp>

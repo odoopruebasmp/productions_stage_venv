@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_capacitaciones_user,hr.employee.capacitaciones.user,model_hr_capacitaciones,base.group_hr_user,1,1,1,1
+access_hr_employee_referencias_user,hr.employee.referencias.user,model_hr_referencias,base.group_hr_user,1,1,1,1
+access_hr_employee_familiar_user,hr.employee.familiar.user,model_hr_familiar,base.group_hr_user,1,1,1,1
+access_hr_employee_dotacion_user,hr.employee.dotacion.user,model_hr_dotacion,base.group_hr_user,1,1,1,1

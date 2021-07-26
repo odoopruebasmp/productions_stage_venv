@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- ACCOUNT MOVE LINE INHERITED -->
+        <record model="ir.ui.view" id="view_res_partner_bank_extended_form">
+            <field name="name">res.partner.bank.extended</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="acc_number" position="after">
+                    <field name="city_code"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- ACCOUNT MOVE LINE INHERITED -->
+        <record model="ir.ui.view" id="view_account_move_line_filter_order_extended">
+            <field name="name">Journal Items Bank</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="bank"/>
+                    <field name="default_bank_id"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- SUPPLIER PAYMENT INHERITED FORM -->
+        <record model="ir.ui.view" id="account_payment_order_extended_view">
+            <field name="name">account.payment.order.extended.form.view</field>
+            <field name="model">payment.order</field>
+            <field name="inherit_id" ref="account_payment.view_payment_order_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <button name="cancel" position="replace">
+                    <button name="cancel" states="draft,open,done" string="Cancel Payments"/>
+                </button>
+                <field name="mode" position="after">
+                    <field name="period_id"/>
+                    <field name="type_payment"/>
+                    <field name="payment_order_date"/>
+                    <field name="move_id" attrs="{'invisible':[('move_id','=',False)]}"/>
+                    <field name="cheque"/>
+                    <field name="time_of_process" attrs="{'invisible':[('file_name','=',False)]}"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="file_text" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                    <field name="total"/>
+                </field>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='bank_id']" position="before">
+                    <field name="bank"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/form/notebook/page/group/field[@name='move_line_id']"
+                       position="after">
+                    <field name="numero_cheque"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/form/notebook/page/group/field[@name='partner_id']"
+                       position="after">
+                    <field name="other_partner_id" on_change="onchange_other_partner_id(other_partner_id, context)"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/form/notebook/page/group/field[@name='bank_id']"
+                       position="attributes">
+                    <attribute name="domain">[('partner_id','=',other_partner_id)]</attribute>
+                    <attribute name="required">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='bank_id']" position="attributes">
+                    <attribute name="domain">[('partner_id','=',other_partner_id)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='partner_id']" position="after">
+                    <field name="other_partner_id"/>
+                </xpath>
+                <sheet position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </sheet>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_account_voucher_extended_dos">
+            <field name="name">account.voucher.extended.dos</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="other_partner_id" attrs="{'invisible':[('type_payment','!=', 'payment')]}"/>
+                </field>
+                <field name="journal_id" position="replace">
+                    <field name="journal_id" domain="[('type','in',['bank', 'cash']),('recaudo','=',True)]"
+                           widget="selection"
+                           on_change="onchange_journal(journal_id, line_cr_ids, False, partner_id, date, amount, type, company_id, context)"
+                           string="Payment Method" attrs="{'invisible':[('type_payment','=', 'payment')]}"/>
+                    <field name="mode" on_change="onchange_mode(mode, context)"
+                           attrs="{'invisible':[('type_payment','!=', 'payment')], 'required':[('type_payment','=', 'payment')]}"/>
+                    <field name="bank_account_id" domain="[('partner_id','=',other_partner_id)]"
+                           attrs="{'invisible':[('transacciones','!=', True)],'required':[('transacciones','=', True)]}"/>
+                    <field name="numero_cheque" attrs="{'required':[('cheque','=', True)]}"/>
+                    <field name="efectivo" invisible="1"/>
+                    <field name="cheque" invisible="1"/>
+                    <field name="transacciones" invisible="1"/>
+                    <field name="type_payment" invisible="1"/>
+                </field>
+                <field name="mode" position="attributes">
+                    <attribute name="on_change">onchange_mode(mode, context)</attribute>
+                </field>
+                <!--<field name="journal_id" position="attributes">
+                    <attribute name="invisible">[('type_payment','!=','receipt')]</attribute>
+                    <attribute name="required">[('type_payment','!=','receipt')]</attribute>
+                </field>-->
+            </field>
+        </record>
+
+        <!-- SUPPLIER PAYMENT INHERITED FORM -->
+        <record model="ir.ui.view" id="view_vendor_payment_form_payment_extended">
+            <field name="name">account.voucher.inherit.view</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_vendor_payment_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="time_of_process" attrs="{'invisible':[('file_name','=',False)]}"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="file_text" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                </field>
+                <field name="journal_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="journal_id" position="before">
+                    <field name="mode" on_change="onchange_mode(mode, context)" required="1"/>
+                    <field name="bank_account_id" domain="[('partner_id','=',other_partner_id)]"
+                           attrs="{'invisible':[('transacciones','!=', True)],'required':[('transacciones','=', True)]}"/>
+                    <field name="numero_cheque" attrs="{'required':[('cheque','=', True)]}"/>
+                    <field name="efectivo" invisible="1"/>
+                    <field name="cheque" invisible="1"/>
+                    <field name="transacciones" invisible="1"/>
+                </field>
+                <field name="date" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- SUPPLIER PAYMENT INHERITED FORM -->
+        <record model="ir.ui.view" id="view_vendor_receipt_cheque_form">
+            <field name="name">account.voucher.cheque.inherit.view</field>
+            <field name="model">account.voucher</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="before">
+                    <field name="numero_cheque"/>
+                    <field name="cheque" invisible="1"/>
+                </field>
+                <field name="date" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- ACCOUNT JOURNAL INHERITED FORM -->
+        <record model="ir.ui.view" id="account_journal_extended_view">
+            <field name="name">account.journal.extended.view</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="group_invoice_lines" position="after">
+                    <field name="summarized_payment"/>
+                    <field name="efectivo"/>
+                    <field name="cheque"/>
+                    <field name="transacciones"/>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="cheque_seq" attrs="{'invisible': [('cheque','=',False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- SUPPLIER -->
+        <record model="ir.ui.view" id="purchase_advance_supplier_form_view_bank">
+            <field name="name">purchase.advance.supplier.form.bank</field>
+            <field name="model">purchase.advance.supplier</field>
+            <field name="inherit_id" ref="advance_supplier.purchase_advance_supplier_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="move_id" position="after">
+                    <field name="time_of_process" attrs="{'invisible':[('file_name','=',False)]}"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="file_text" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                </field>
+                <field name="journal_bank_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="journal_bank_id" position="before">
+                    <field name="mode" on_change="onchange_mode(mode, context)"
+                           attrs="{'required':[('state','=', 'validated')]}"/>
+                    <field name="reference" attrs="{'invisible':[('mode','=',False)]}"/>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="on_change">onchange_partner_id(partner_id, context)</attribute>
+                </field>
+                <field name="partner_id" position="after">
+                    <field name="other_partner_id" colspan="4"
+                           on_change="onchange_other_partner_id(other_partner_id, context)"/>
+                    <field name="bank_account_id" domain="[('partner_id','=',other_partner_id)]"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Invoice -->
+        <record id="invoice_tree3" model="ir.ui.view">
+            <field name="name">account.invoice.tree3</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_analytic_avancys.invoice_tree2"/>
+            <field name="arch" type="xml">
+                <field name="print_date" position="after">
+                    <field name="supplier_invoice"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_filter_avancys" model="ir.ui.view">
+            <field name="name">account.invoice.select.avancys</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="number" position="after">
+                    <field name="supplier_invoice"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="account_payment_file_config_treee" model="ir.ui.view">
+            <field name="name">account.payment.file.config.tree</field>
+            <field name="model">account.payment.file.config</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="bank_id"/>
+                    <field name="state"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="account_payment_file_config_form" model="ir.ui.view">
+            <field name="name">account.payment.file.config.form</field>
+            <field name="model">account.payment.file.config</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" clickable="True"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="bank_id"/>
+                            <field name="footer"/>
+                        </group>
+                        <notebook>
+                            <page string="Encabezado/Pie">
+                                <field name="header_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="size" required="True"/>
+                                        <field name="align" required="True"/>
+                                        <field name="fill" required="True"/>
+                                        <field name="content_type" required="True"/>
+                                        <field name="content" required="True"/>
+                                        <field name="advance_content"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Detalle">
+                                <field name="detail_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="size" required="True"/>
+                                        <field name="adjust"/>
+                                        <field name="align" required="True"/>
+                                        <field name="fill" required="True"/>
+                                        <field name="content_type" required="True"/>
+                                        <field name="content" required="True"/>
+                                        <field name="advance_content"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="container" style="padding-top: 20px;">
+                        <h2>Convenciones de configuracion</h2>
+                        <p>Utilize las siguientes convenciones para configurar su archivo de dispersion:</p>
+                        <a type="button" class="btn btn-default" data-toggle="collapse" data-target="#convenciones">
+                            Mostrar convenciones
+                        </a>
+                        <br/>
+                        <div id="convenciones" class="collapse" style="padding-top: 20px;">
+                            <h3>Variables python disponibles:</h3>
+                            <br/>
+                            Utilice estas variables para acceder a la informacion que requiera utilizando sintaxis
+                            python.
+                            <br/>
+                            <li>
+                                <b>payment:</b>
+                                Objeto del pago (payment.order)
+                            </li>
+                            <li>
+                                <b>payment_line:</b>
+                                Objeto linea de pago (payment.order.line)
+                            </li>
+                            <li>
+                                <b>line_amount:</b>
+                                Valor consolidado a pagar agrupado por tercero/banco (diferente al valor a pagar por
+                                linea)
+                            </li>
+                            <hr/>
+                            <h3>Variables de contexto</h3>
+
+
+                            <table class="table table-striped table-hover">
+                                <thead style="background-color: #7c7bad; color: white;">
+                                    <tr>
+                                        <th>Convencion</th>
+                                        <th>Retorna</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>company_name</td>
+                                        <td>Nombre de la compañia</td>
+                                    </tr>
+                                    <tr>
+                                        <td>company_nit</td>
+                                        <td>Nit de la compañia sin digito de verificacion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>company_nitdv</td>
+                                        <td>Nit de la compañia con digito de verificacion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>payment_date</td>
+                                        <td>Fecha de pago (formateable)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>transmision_date</td>
+                                        <td>Fecha de transmision (formateable)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>total_amount</td>
+                                        <td>Total transferido</td>
+                                    </tr>
+                                    <tr>
+                                        <td>lines</td>
+                                        <td>Cantidad de lineas o registros de pago</td>
+                                    </tr>
+                                    <tr>
+                                        <td>debit_bank_account</td>
+                                        <td>Cuenta bancaria a debitar</td>
+                                    </tr>
+                                    <tr>
+                                        <td>benef_nit</td>
+                                        <td>Nit beneficiario sin digito de verificacion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>benef_nitdv</td>
+                                        <td>Nit beneficiario con digito de verificacion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>benef_name</td>
+                                        <td>Nombre del beneficiario</td>
+                                    </tr>
+                                    <tr>
+                                        <td>benef_bank_account</td>
+                                        <td>Numero de cuenta beneficiario</td>
+                                    </tr>
+                                    <tr>
+                                        <td>benef_bank_account_bic</td>
+                                        <td>Codigo de identificacion de banco del beneficiario</td>
+                                    </tr>
+                                    <tr>
+                                        <td>amount</td>
+                                        <td>Valor de transaccion linea</td>
+                                    </tr>
+                                    <tr>
+                                        <td>communication</td>
+                                        <td>Descripcion de la transaccion dada en las lineas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>communication2</td>
+                                        <td>Descripcion 2 de la transaccion dada en las lineas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ref</td>
+                                        <td>Referencia de la transaccion dada en las lineas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>seq</td>
+                                        <td>Secuencia de linea</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p>
+                                Para utilizar estas variables seleccione en el campo de tipo de contenido "Contexto" y
+                                escriba
+                                en el campo de contenido el nombre de la convencion exacto.
+                                <br/>
+                                Si la convencion es una fecha formateable escriba una "," seguido del formato python de
+                                fecha
+                                <br/>
+                                <b>Ejemplo:</b>
+                                payment_date,%y%m%d retorna la fecha de pago en formato AAMMDD
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_payment_file_config_action" model="ir.actions.act_window">
+            <field name="name">account.payment.file.config.action</field>
+            <field name="res_model">account.payment.file.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem name="Archivos pago"
+                  id="menu_payment_file_config"
+                  parent="account.menu_configuration_misc"
+                  action="account_payment_file_config_action"
+                  sequence="20"/>
+    </data>
+</openerp>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_loan,account.loan,model_account_loan,account.group_account_user,1,1,1,1
+access_loan_move_line,loan.move.line,model_loan_move_line,account.group_account_user,1,1,1,1
+access_account_loan_prepaid,account.loan.prepaid,model_account_loan_prepaid,account.group_account_user,1,1,1,1
+access_account_loan_distribution,account.loan.distribution,model_account_loan_distribution,account.group_account_user,1,1,1,1
+

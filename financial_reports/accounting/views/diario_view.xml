@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_fpa_diario_view" model="ir.ui.view">
+            <field name="name">Diario</field>
+            <field name="model">fpa.diario.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Opciones del informe" version="7.0">
+                    <label string=""/>
+                    <group col="4">
+                        <field name="chart_account_id" widget="selection"/>
+                        <field invisible="1" name="company_id"/>
+                        <field invisible="True" name="account_filter"/>
+                        <field invisible="True" name="journal_filter"/>
+                    </group>
+                    <notebook colspan="4" tabpos="up">
+                        <page string="Filtros Principales">
+                            <group string="Fechas">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group string="Niveles">
+                                <field name="niveles" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            </group>
+                            <group string="Estado">
+                                <field name="estado"/>
+                            </group>
+                        </page>
+                        <page string="Filtros Opcionales">
+                            <group string="Cuentas">
+                                <field name="account_ids"/>
+                            </group>
+                            <group string="Diarios">
+                                <field name="journal_ids"/>
+                            </group>
+                            <group string="Periodos">
+                                <field name="sp_periods"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button class="oe_highlight" default_focus="1" name="generar" string="Generar" type="object"/>o
+                    
+                        
+                        <button class="oe_link" special="cancel" string="Cancelar"/></footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_fpa_diario" model="ir.actions.act_window">
+            <field name="name">Asistente para generar Diario</field>
+            <field name="res_model">fpa.diario.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_fpa_diario_view"/>
+            <field name="target">new</field>
+        </record>
+        <record id="view_fpa_diario_line_tree" model="ir.ui.view">
+            <field name="name">fpa.diario.line.tree</field>
+            <field name="model">fpa.diario.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree default_order="fecha,cuenta,nivel asc" colors="blue:nivel in (1,2,3,4,5,6,7,8,101,102,103,104,105,106,107,108);gray:nivel in (-1,-2,-3)">
+                    <field name="nivel" invisible="True"/>
+                    <field name="fecha"/>
+                    <field name="account_id"/>
+                    <field name="journal_id"/>                 
+                    <field name="debit"/>
+                    <field name="credit"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_diario" model="ir.actions.act_window">
+            <field name="name">Diario</field>
+            <field name="res_model">fpa.diario.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="view_id" ref="view_fpa_diario_line_tree"/>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="target">current</field>
+        </record>
+        <record id="view_fpa_diario_line_graph" model="ir.ui.view">
+            <field name="name">fpa.diario.line.graph</field>
+            <field name="model">fpa.diario.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph stacked="True" string="Informe Diario" type="pivot">
+                    <field name="account_id"/>
+                    <field name="debit" type="measure"/>
+                    <field name="credit" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record id="fpa_diario_line" model="ir.ui.view">
+            <field name="name">fpa.diario.line.search</field>
+            <field name="model">fpa.diario.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar">
+                    <field name="account_id"/>
+                    <field name="fecha"/>
+                    <field name="journal_id"/>
+                    <filter name="nivel" string="PUC" domain="[('nivel','=',0)]"/>
+                    <filter name="nivel_1" string="Total cuenta y dia - Nivel 1" domain="[('nivel','=',1)]"/>
+                    <filter name="nivel_2" string="Total cuenta y dia - Nivel 2" domain="[('nivel','=',2)]"/>
+                    <filter name="nivel_3" string="Total cuenta y dia - Nivel 3" domain="[('nivel','=',3)]"/>
+                    <filter name="nivel_4" string="Total cuenta y dia - Nivel 4" domain="[('nivel','=',4)]"/>
+                    <filter name="nivel_5" string="Total cuenta y dia - Nivel 5" domain="[('nivel','=',5)]"/>
+                    <filter name="nivel_6" string="Total cuenta y dia - Nivel 6" domain="[('nivel','=',6)]"/>
+                    <filter name="nivel_7" string="Total cuenta y dia - Nivel 7" domain="[('nivel','=',7)]"/>
+                    <filter name="nivel_8" string="Total cuenta y dia - Nivel 8" domain="[('nivel','=',8)]"/>
+                    <filter name="nivel_94" string="Totales por diario, cuenta y día - Movimientos" domain="[('nivel','=',94)]"/>
+                    <filter name="nivel_95" string="Totales por diario - Movimientos" domain="[('nivel','=',95)]"/>
+                    <filter name="nivel_96" string="Totales por cuenta - Movimientos" domain="[('nivel','=',96)]"/>
+                    <filter name="nivel_97" string="Totales por dia" domain="[('nivel','=',97)]"/>         
+                    <filter name="nivel_99" string="Movimientos" domain="[('nivel','=',99)]"/>           
+                    <filter name="nivel_m3" string="Totales por dia y diario" domain="[('nivel','=',-3)]"/>
+                    <filter name="nivel_101" string="Total cuenta, diario y dia - Nivel 1" domain="[('nivel','=',101)]"/>
+                    <filter name="nivel_102" string="Total cuenta, diario y dia - Nivel 2" domain="[('nivel','=',102)]"/>
+                    <filter name="nivel_103" string="Total cuenta, diario y dia - Nivel 3" domain="[('nivel','=',103)]"/>
+                    <filter name="nivel_104" string="Total cuenta, diario y dia - Nivel 4" domain="[('nivel','=',104)]"/>
+                    <filter name="nivel_105" string="Total cuenta, diario y dia - Nivel 5" domain="[('nivel','=',105)]"/>
+                    <filter name="nivel_106" string="Total cuenta, diario y dia - Nivel 6" domain="[('nivel','=',106)]"/>
+                    <filter name="nivel_107" string="Total cuenta, diario y dia - Nivel 7" domain="[('nivel','=',107)]"/>
+                    <filter name="nivel_108" string="Total cuenta, diario y dia - Nivel 8" domain="[('nivel','=',108)]"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'fecha:day'}" name="group_fecha" string="Fecha (dia)"/>
+                        <filter context="{'group_by':'account_id'}" name="group_account_id" string="Cuenta"/>
+                        <filter context="{'group_by':'journal_id'}" name="group_journal_id" string="Diario"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="banking_conciliation_report">
+            <t t-call="report.html_container">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 45px;"/>
+                        </div>
+                    </div>
+                    <div class="row zero_min_height">
+                        <div class="col-xs-12">
+                            <div style="border-bottom: 1px solid black;"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div t-field="res_company.partner_id"/>
+                            <div>Regimen Común</div>
+                            <div t-field="res_company.street"/>
+                            <div t-field="res_company.phone"/>
+                            <div t-field="res_company.email" style="border-bottom: 1px solid black;"/>
+                        </div>
+                    </div>
+                </div>
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <style>
+                                h1 {
+                                    font-size: 28px;
+                                    text-align: center;
+                                }
+                                h2 {
+                                    font-size: 13px;
+                                    text-align: right;
+                                }
+                                table, tr, td, th, tbody, thead, tfoot {
+                                    page-break-inside: avoid !important;
+                                }
+                            </style>
+                            <div>
+                                <br/>
+                                <h1>Informe Detalle Conciliación</h1>
+                                <h2>Fecha Impresión: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></h2>
+                            </div>
+                            <div style="margin-top: 0mm">
+                                <table style="width: 90mm; line-height:5mm; font-size: 14px;">
+                                    <tr>
+                                        <td>Periodo:</td>
+                                        <td><span t-field="o.period_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fecha Informe:</td>
+                                        <td><span t-field="o.date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cuenta Efectivo:</td>
+                                        <td><span t-field="o.journal_id.default_debit_account_id.code"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nombre Banco:</td>
+                                        <td><span t-field="o.line_ids[0].bank_account_id.bank.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Num. Cuenta Bancaria:</td>
+                                        <td><span t-field="o.line_ids[0].bank_account_id.acc_number"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Divisa:</td>
+                                        <td><span t-field="o.line_ids[0].bank_account_id.currency_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <br/>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>SALDO CUENTA EFECTIVO GENERAL LIBRO MAYOR</strong></td>
+                                        <td style="text-align:right;"><span t-field="o.balance_account"/></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>INGRESOS PENDIENTES DE CONTABILIZAR</td>
+                                        <td style="text-align:right;"><span t-field="o.pending_consing"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CHEQUES GIRADOS Y NO COBRADOS</td>
+                                        <td style="text-align:right;"><span t-field="o.rotated_check"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>PAGOS Y GASTOS BANCARIOS PENDIENTES DE CONTABILIZAR</td>
+                                        <td style="text-align:right;"><span t-field="o.payment_pending"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>NOTAS DÉBITO NO REFLEJADAS EN EXTRACTO</td>
+                                        <td style="text-align:right;"><span t-field="o.nd_not_account"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>NOTAS CRÉDITO NO REFLEJADAS EN EXTRACTO</td>
+                                        <td style="text-align:right;"><span t-field="o.nc_not_account"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SALDO</td>
+                                        <td style="text-align:right"><t t-set="saldo" t-value="o.balance_account+o.pending_consing+o.rotated_check-o.payment_pending+o.nd_not_account-o.nc_not_account"/>
+                                            <t t-esc="'{0:,.2f}'.format(saldo)"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>POSICION EXTRACTO BANCARIO</b></td>
+                                        <td style="text-align:right;"><span t-field="o.balance_end_real"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="right" style="text-align:right;"><b>DIFERENCIA: </b>
+                                            <t t-set="difer" t-value="saldo-o.balance_end_real"/>
+                                            <t t-esc="'{0:,.2f}'.format(difer)"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <table class="table table-condensed">
+                                <caption>INGRESOS PENDIENTES DE CONTABILIZAR</caption>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">
+                                            <strong>NOMBRE</strong>
+                                        </th>
+                                        <th style="text-align:left;">
+                                            <strong>REFERENCIA</strong>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <strong>FECHA</strong>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <strong>CUENTA BANCARIA</strong>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <strong>CUENTA</strong>
+                                        </th>
+                                        <th style="text-align:center;">
+                                            <strong>MONTO</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total" t-value="0"/>
+                                    <tr t-foreach="o.line_ids" t-as="line">
+                                        <t t-if="line.state != 'confirmed'">
+                                            <t t-if="line.amount &gt; 0.0">
+                                                <td style="text-align:left;">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                                <td style="text-align:left;">
+                                                    <span t-field="line.ref"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.date"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.account_id.code"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.bank_account_id.acc_number"/>
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    <span t-field="line.amount"/>
+                                                    <t t-set="total" t-value="total+line.amount"/>
+                                                </td>
+                                            </t>
+                                        </t>
+                                    </tr>
+                                    <tr t-foreach="o.pending_transaction" t-as="line">
+                                        <t t-if="line.state != 'confirmed'">
+                                            <t t-if="line.amount &gt; 0.0">
+                                                <td style="text-align:left;">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                                <td style="text-align:left;">
+                                                    <span t-field="line.ref"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.date"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.account_id.code"/>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <span t-field="line.bank_account_id.acc_number"/>
+                                                </td>
+                                                <td style="text-align:right;">
+                                                    <span t-field="line.amount"/>
+                                                    <t t-set="total" t-value="total+line.amount"/>
+                                                </td>
+                                            </t>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" align="right">
+                                            <b>Total: </b><t t-esc="'${0:,.2f}'.format(total)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <br/>
+                            <br/>
+
+                            <div>
+                                <table class="table table-condensed">
+                                    <caption>CHEQUES GIRADOS Y NO COBRADOS</caption>
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;">
+                                                <strong>COMPROBANTE</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>PERIODO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>FECHA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REFERENCIA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REF2</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>TERCERO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>ASIENTO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>MONTO</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="total" t-value="0"/>
+                                        <tr t-foreach="o.unfind_move_ids" t-as="line">
+                                            <t t-if="line.ref2">
+                                                <t t-if="line.ref2 != 'ref2'">
+                                                    <t t-if="line.debit == 0.0">
+                                                        <td style="text-align:left;">
+                                                            <span t-field="line.journal_id.display_name"/>
+                                                        </td>
+                                                        <td style="text-align:center;">
+                                                            <span t-field="line.period_id.name"/>
+                                                        </td>
+                                                        <td style="text-align:center;">
+                                                            <span t-field="line.date"/>
+                                                        </td>
+                                                        <td style="text-align:left;">
+                                                            <span t-field="line.ref"/>
+                                                        </td>
+                                                        <td style="text-align:left;">
+                                                            <span t-field="line.ref2"/>
+                                                        </td>
+                                                        <td style="text-align:left;">
+                                                            <span t-field="line.partner_id.display_name"/>
+                                                        </td>
+                                                        <td style="text-align:left;">
+                                                            <span t-field="line.move_id.ref"/>
+                                                        </td>
+                                                        <td style="text-align:right;">
+                                                            <span t-field="line.credit"/>
+                                                            <t t-set="total" t-value="total+line.credit"/>
+                                                        </td>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8" align="right">
+                                                <b>Total: </b><t t-esc="'${0:,.2f}'.format(total)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br/>
+                            <br/>
+
+                            <div>
+                                <table class="table table-condensed">
+                                    <caption>PAGOS Y GASTOS BANCARIOS PENDIENTES DE CONTABILIZAR</caption>
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;">
+                                                <strong>NOMBRE</strong>
+                                            </th>
+                                            <th style="text-align:left;">
+                                                <strong>REFERENCIA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>FECHA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>CUENTA BANCARIA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>CUENTA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>MONTO</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="total" t-value="0"/>
+                                        <tr t-foreach="o.line_ids" t-as="line">
+                                            <t t-if="line.state != 'confirmed'">
+                                                <t t-if="line.amount &lt; 0.0">
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.name"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.date"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.account_id.code"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.bank_account_id.acc_number"/>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <span t-field="line.amount"/>
+                                                        <t t-set="total" t-value="total+line.amount"/>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                        <tr t-foreach="o.pending_transaction" t-as="line">
+                                            <t t-if="line.state != 'confirmed'">
+                                                <t t-if="line.amount &lt; 0.0">
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.name"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.date"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.account_id.code"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.bank_account_id.acc_number"/>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <span t-field="line.amount"/>
+                                                        <t t-set="total" t-value="total+line.amount"/>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" align="right">
+                                                <b>Total: </b><t t-esc="'${0:,.2f}'.format(total)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br/>
+                            <br/>
+
+                            <div>
+                                <table class="table table-condensed">
+                                    <caption>NOTAS DÉBITO NO REFLEJADAS EN EL EXTRACTO</caption>
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;">
+                                                <strong>COMPROBANTE</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>PERIODO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>FECHA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REFERENCIA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REF2</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>TERCERO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>ASIENTO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>MONTO</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="total" t-value="0"/>
+                                        <tr t-foreach="o.unfind_move_ids" t-as="line">
+                                            <t t-if="not line.ref2 or line.ref2 == 'ref2'">
+                                                <t t-if="line.debit &gt; 0.0">
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.journal_id.display_name"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.period_id.name"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.date"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref2"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.partner_id.display_name"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.move_id.ref"/>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <t t-set="amount" t-value="line.debit"/>
+                                                        <t t-esc="'${0:,.2f}'.format(amount)"/>
+                                                        <t t-set="total" t-value="total+amount"/>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8" align="right">
+                                                <b>Total: </b><t t-esc="'${0:,.2f}'.format(total)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br/>
+                            <br/>
+
+                            <div>
+                                <table class="table table-condensed">
+                                    <caption>NOTAS CRÉDITO NO REFLEJADAS EN EL EXTRACTO</caption>
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:center;">
+                                                <strong>COMPROBANTE</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>PERIODO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>FECHA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REFERENCIA</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>REF2</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>TERCERO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>ASIENTO</strong>
+                                            </th>
+                                            <th style="text-align:center;">
+                                                <strong>MONTO</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="total" t-value="0"/>
+                                        <tr t-foreach="o.unfind_move_ids" t-as="line">
+                                            <t t-if="not line.ref2 or line.ref2 == 'ref2'">
+                                                <t t-if="line.credit &gt; 0.0">
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.journal_id.display_name"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.period_id.name"/>
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        <span t-field="line.date"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.ref2"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.partner_id.display_name"/>
+                                                    </td>
+                                                    <td style="text-align:left;">
+                                                        <span t-field="line.move_id.ref"/>
+                                                    </td>
+                                                    <td style="text-align:right;">
+                                                        <t t-set="amount" t-value="line.credit"/>
+                                                        <t t-esc="'${0:,.2f}'.format(amount)"/>
+                                                        <t t-set="total" t-value="total+amount"/>
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="8" align="right">
+                                                <b>Total: </b><t t-esc="'${0:,.2f}'.format(total)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

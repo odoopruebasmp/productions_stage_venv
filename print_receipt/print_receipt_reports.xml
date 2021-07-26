@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+   	<!-- New Reports -->
+        <report 
+        auto="False" 
+        id="account_voucher" 
+        model="account.voucher" 
+        name="account_voucher" 
+        rml="print_receipt/reports/account_voucher.rml" 
+        string="Comprobante de egreso"/>
+
+        <report
+        auto="False"
+        id="account_receipt"
+        model="account.voucher"
+        name="account_receipt"
+        rml="print_receipt/reports/account_receipt.rml"
+        string="Recibo de caja"/>
+
+
+        <report
+        auto="False"
+        id="account_cheque_bancolombia"
+        model="account.voucher"
+        name="account_cheque_bancolombia"
+        rml="print_receipt/reports/account_cheque_bancolombia.rml"
+        string="Cheque Bancolombia"/>
+
+        <report
+        auto="False"
+        id="account_cheque_occidente"
+        model="account.voucher"
+        name="account_cheque_occidente"
+        rml="print_receipt/reports/account_cheque_occidente.rml"
+        string="Cheque Occidente"/>
+
+        <report
+        auto="False"
+        id="account_cheque_davivienda"
+        model="account.voucher"
+        name="account_cheque_davivienda"
+        rml="print_receipt/reports/account_cheque_davivienda.rml"
+        string="Cheque Davivienda"/>
+
+
+        <report
+        auto="False"
+        id="account_cheque_hsbc"
+        model="account.voucher"
+        name="account_cheque_hsbc"
+        rml="print_receipt/reports/account_cheque_hsbc.rml"
+        string="Cheque HSBC"/>
+
+
+    </data>
+</openerp>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<record id="wizard_fpa_auxiliar_fc_view" model="ir.ui.view">
+			<field name="name">Auxiliar Moneda Extranjera</field>
+			<field name="model">fpa.auxiliar.fc.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Opciones del informe" version="7.0">
+					<label string=""/>
+					<group col="4">
+						<field name="chart_account_id" widget="selection"/>
+						<field invisible="True" name="account_filter"/>
+						<field invisible="True" name="partner_filter"/>
+						<field invisible="True" name="journal_filter"/>
+					</group>
+					<notebook colspan="4" tabpos="up">
+						<page string="Parametros Principales">
+							<group string="Fechas">
+								<field name="date_from"/>
+								<field name="date_to"/>
+							</group>
+                            <group string="Niveles">
+                                <field name="niveles" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            </group>
+							<group string="Filtros">
+								<field name="estado"/>
+								<field name="sp_periods"/>
+							</group>
+						</page>
+						<page string="Parametros Opcionales">
+                            <group string="Monedas">
+                                <field name="currency_ids"/>
+                            </group>
+							<group attrs="{'invisible':[('account_filter', '!=', True)]}" string="Cuentas">
+								<field name="account_ids"/>
+							</group>
+							<group attrs="{'invisible':[('partner_filter', '!=', True)]}" string="Terceros">
+								<field name="partner_ids"/>
+							</group>
+							<group attrs="{'invisible':[('journal_filter', '!=', True)]}" string="Diarios">
+								<field name="journal_ids"/>
+							</group>
+						</page>
+					</notebook>
+					<footer>
+						<button class="oe_highlight" default_focus="1" name="generar" string="Generar" type="object"/>o
+
+						<button class="oe_link" special="cancel" string="Cancelar"/></footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_fpa_auxiliar_fc" model="ir.actions.act_window">
+			<field name="name">Asistente para generar Auxiliar Moneda Extranjera</field>
+			<field name="res_model">fpa.auxiliar.fc.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="wizard_fpa_auxiliar_fc_view"/>
+			<field name="target">new</field>
+		</record>
+
+		<record id="view_fpa_auxiliar_fc_line_tree" model="ir.ui.view">
+			<field name="name">fpa.auxiliar.fc.line.tree</field>
+			<field name="model">fpa.auxiliar.fc.line</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				 <tree default_order="cuenta,nivel,fecha,partner_id" colors="blue:nivel in (0,1,2,3,4,5,6,7,8,97)">
+                     <field name="nivel" invisible="True"/>
+					 <field name="account_id"/>
+					 <field name="partner_id"/>
+					 <field name="asiento"/>
+					 <field name="linea"/>
+					 <field name="fecha"/>
+					 <field name="account_analytic_id"/>
+                     <field name="amount_inicial"/>
+					 <field name="debit"/>
+					 <field name="credit"/>
+					 <field name="amount_final"/>
+					 <field name="ai_fc"/>
+					 <field name="mv_fc"/>
+					 <field name="af_fc"/>
+                     <field name="currency_id"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_auxiliar_fc" model="ir.actions.act_window">
+			<field name="name">Auxiliar Moneda Extranjera</field>
+			<field name="res_model">fpa.auxiliar.fc.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,graph</field>
+			<field name="view_id" ref="view_fpa_auxiliar_fc_line_tree"/>
+			<field name="domain">[('user_id', '=', uid)]</field>
+			<field name="target">current</field>
+		</record>
+
+		<record id="view_fpa_auxiliar_fc_line_graph" model="ir.ui.view">
+			<field name="name">fpa.auxiliar.fc.line.graph</field>
+			<field name="model">fpa.auxiliar.fc.line</field>
+			<field name="type">graph</field>
+			<field name="arch" type="xml">
+				<graph stacked="True" string="Informe Balance de Prueba" type="pivot">
+                    <field name="debit" type="measure"/>
+					<field name="credit" type="measure"/>
+					<field name="mv_fc" type="measure"/>
+					<field name="amount_final" type="measure"/>
+					<field name="af_fc" type="measure"/>
+				</graph>
+			</field>
+		</record>
+
+		<record id="fpa_auxiliar_fc_line" model="ir.ui.view">
+			<field name="name">fpa.auxiliar.fc.line.search</field>
+			<field name="model">fpa.auxiliar.fc.line</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Buscar">
+					<field name="account_id"/>
+					<field name="partner_id"/>
+					<filter domain="[('nivel','=',0)]" name="nivel_0" string="Nivel 0"/>
+					<filter domain="[('nivel','=',1)]" name="nivel_1" string="Nivel 1"/>
+					<filter domain="[('nivel','=',2)]" name="nivel_2" string="Nivel 2"/>
+					<filter domain="[('nivel','=',3)]" name="nivel_3" string="Nivel 3"/>
+					<filter domain="[('nivel','=',4)]" name="nivel_4" string="Nivel 4"/>
+					<filter domain="[('nivel','=',5)]" name="nivel_5" string="Nivel 5"/>
+					<filter domain="[('nivel','=',6)]" name="nivel_6" string="Nivel 6"/>
+					<filter domain="[('nivel','=',7)]" name="nivel_7" string="Nivel 7"/>
+					<filter domain="[('nivel','=',8)]" name="nivel_8" string="Nivel 8"/>
+					<filter domain="[('nivel','=',97)]" name="auxiliar" string="Auxiliares"/>
+					<filter domain="[('nivel','=',99)]" name="terceros" string="Terceros"/>
+					<group expand="0" string="Group By">
+					    <filter context="{'group_by':'account_id'}" string="Cuentas"/>
+					    <filter context="{'group_by':'partner_id'}" string="Tercero"/>
+					    <filter context="{'group_by':'fecha'}" string="Fecha"/>
+					    <filter context="{'group_by':'account_analytic_id'}" string="Cuenta analitica"/>
+					</group>
+				</search>
+			</field>
+		</record>
+
+	</data>
+</openerp>

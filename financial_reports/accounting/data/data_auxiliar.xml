@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_auxiliar_data" model="fpa.financial.reports">
+            <field name="name">LIBRO AUXILIAR</field>
+            <field name="categ">co</field>
+            <field name="action">action_fpa_auxiliar</field>
+            <field name="model_wzr">fpa.auxiliar.wizard</field>
+            <field name="model">fpa.auxiliar.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="template">financial_reports.template_report_auxiliar</field>
+            <field name="tree">view_fpa_auxiliar_line_tree</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('account_id','!=',False),('financial_id','=',%s)]</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">I,J,K,L</field>
+            <field name="sign">True</field>
+            <field name="type">sco</field>
+            <field name="view">wizard_fpa_auxiliar_view</field>
+            <field name="title">Codigo,Cuenta,Referencia,Tercero,Asiento,Linea,Cuenta analitica, Fecha,Saldo inicial,Debito,Credito,Saldo Final</field>
+            <!-- <field name="fields">account_id,partner_id,debit,credit,amount_final</field> -->
+            <field name="consulta">select id from fpa_auxiliar_line al 
+                    WHERE user_id = {user_id} AND company_id = {company_id}  AND al.financial_id={financial_id}
+                    ORDER BY cuenta asc, partner_id asc NULLS FIRST
+                </field>
+            <field name="consulta_xlsx">select aa.code, COALESCE(it.value,aa.name) as cuenta, rp.ref, rp.name,al.asiento, al.linea ,aaa.name as analytic, fecha,al.amount_inicial,al.debit, al.credit, al.amount_final, al.bold
+                from fpa_auxiliar_line al 
+                left join account_account aa on aa.id = al.account_id
+                left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                inner join fpa_auxiliar a on a.id = al.encabezado_id 
+                left join account_analytic_account aaa on aaa.id = al.account_analytic_id
+                left join res_partner rp on rp.id = al.partner_id 
+                WHERE a.user_id = {user_id} AND a.company_id = {company_id}  AND al.financial_id = {financial_id}
+                ORDER BY aa.code asc NULLS FIRST, al.nivel, al.fecha, al.partner_id 
+                </field>
+        </record>
+
+        <record id="ax_niveles_99" model="fpa.niveles">
+            <field name="code">99</field>
+            <field name="name">Terceros</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra Terceros</field>
+        </record>
+        <record id="ax_niveles_97" model="fpa.niveles">
+            <field name="code">97</field>
+            <field name="name">Saldo inicial por cuenta</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra Saldo inicial por cuenta</field>
+        </record>
+        <record id="ax_niveles_0" model="fpa.niveles">
+            <field name="code">0</field>
+            <field name="name">Nivel 0</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 0</field>
+        </record>
+        <record id="ax_niveles_1" model="fpa.niveles">
+            <field name="code">1</field>
+            <field name="name">Nivel 1</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 1</field>
+        </record>
+        <record id="ax_niveles_2" model="fpa.niveles">
+            <field name="code">2</field>
+            <field name="name">Nivel 2</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 2</field>
+        </record>
+        <record id="ax_niveles_3" model="fpa.niveles">
+            <field name="code">3</field>
+            <field name="name">Nivel 3</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 3</field>
+        </record>
+        <record id="ax_niveles_4" model="fpa.niveles">
+            <field name="code">4</field>
+            <field name="name">Nivel 4</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 4</field>
+        </record>
+        <record id="ax_niveles_5" model="fpa.niveles">
+            <field name="code">5</field>
+            <field name="name">Nivel 5</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 5</field>
+        </record>
+        <record id="ax_niveles_6" model="fpa.niveles">
+            <field name="code">6</field>
+            <field name="name">Nivel 6</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 6</field>
+        </record>
+        <record id="ax_niveles_7" model="fpa.niveles">
+            <field name="code">7</field>
+            <field name="name">Nivel 7</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 7</field>
+        </record>
+        <record id="ax_niveles_8" model="fpa.niveles">
+            <field name="code">8</field>
+            <field name="name">Nivel 8</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_auxiliar_data')" /> 
+            <field name="help">Muestra totales por nivel 8</field>
+        </record>
+
+       <!-- TRADUCCION -->
+        <record id="fpa_balance_auxiliar_en_US" model="ir.translation">
+            <field name="source">LIBRO AUXILIAR</field>
+            <field name="value">AUXILIARY BOOK</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.fpa_auxiliar_data')" />
+            <field name="name">fpa.financial.reports,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="fpa_balance_auxiliar_fields2_en_US" model="ir.translation">
+            <field name="source">Codigo,Cuenta,Referencia,Tercero,Asiento,Cuenta analitica,Fecha,Saldo inicial,Debito,Credito,Saldo Final</field>
+            <field name="value">Code,Account,Reference,Partner,Move,Analytic account,Date,Beginning balance,Debit,Credit,Final balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.fpa_auxiliar_data')" />
+            <field name="name">fpa.financial.reports,title</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_99_en_US" model="ir.translation">
+            <field name="source">Terceros</field>
+            <field name="value">Partners</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_99')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_99_help_en_US" model="ir.translation">
+            <field name="source">Muestra Terceros</field>
+            <field name="value">Show partners</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_99')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+            <record id="ax_niveles_97_en_US" model="ir.translation">
+            <field name="source">Saldo inicial por cuenta</field>
+            <field name="value">Opening balance per account</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_97')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_97_help_en_US" model="ir.translation">
+            <field name="source">Muestra Saldo inicial por cuenta</field>
+            <field name="value">Show initial balance per account</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_97')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_0_en_US" model="ir.translation">
+            <field name="source">Nivel 0</field>
+            <field name="value">Level 0</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_0')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_0_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 0</field>
+            <field name="value">Show total by level 0</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_0')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_1_en_US" model="ir.translation">
+            <field name="source">Nivel 1</field>
+            <field name="value">Level 1</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_1')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_1_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 1</field>
+            <field name="value">Show total by level 1</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_1')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_2_en_US" model="ir.translation">
+            <field name="source">Nivel 2</field>
+            <field name="value">Level 2</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_2')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_2_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 2</field>
+            <field name="value">Show total by level 2</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_2')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_3_en_US" model="ir.translation">
+            <field name="source">Nivel 3</field>
+            <field name="value">Level 3</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_3')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_3_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 3</field>
+            <field name="value">Show total by level 3</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_3')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_4_en_US" model="ir.translation">
+            <field name="source">Nivel 4</field>
+            <field name="value">Level 4</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_4')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_4_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 4</field>
+            <field name="value">Show total by level 4</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_4')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_5_en_US" model="ir.translation">
+            <field name="source">Nivel 5</field>
+            <field name="value">Level 5</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_5')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_5_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 5</field>
+            <field name="value">Show total by level 5</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_5')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_6_en_US" model="ir.translation">
+            <field name="source">Nivel 6</field>
+            <field name="value">Level 6</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_6')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_6_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 6</field>
+            <field name="value">Show total by level 6</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_6')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_7_en_US" model="ir.translation">
+            <field name="source">Nivel 7</field>
+            <field name="value">Level 7</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_7')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_7_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 7</field>
+            <field name="value">Show total by level 7</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_7')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_8_en_US" model="ir.translation">
+            <field name="source">Nivel 8</field>
+            <field name="value">Level 8</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_8')" />
+            <field name="name">fpa.niveles,name</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="ax_niveles_8_help_en_US" model="ir.translation">
+            <field name="source">Muestra totales por nivel 8</field>
+            <field name="value">Show total by level 8</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.ax_niveles_8')" />
+            <field name="name">fpa.niveles,help</field>
+            <field name="lang">en_US</field>
+            <field name="type">model</field>
+        </record>
+
+        <record id="template_report_auxiliar_partner_en_US" model="ir.translation">
+            <field name="source">Tercero</field>
+            <field name="value">Partner</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+
+        <record id="template_report_auxiliar_account_en_US" model="ir.translation">
+            <field name="source">Cuenta</field>
+            <field name="value">Account</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+
+        <record id="template_report_auxiliar_move_en_US" model="ir.translation">
+            <field name="source">Asiento</field>
+            <field name="value">Move</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_date_en_US" model="ir.translation">
+            <field name="source">Fecha</field>
+            <field name="value">Date</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_si_en_US" model="ir.translation">
+            <field name="source">Saldo inicial</field>
+            <field name="value">Beginning balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_debit_en_US" model="ir.translation">
+            <field name="source">Débito</field>
+            <field name="value">Debit</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_credit_en_US" model="ir.translation">
+            <field name="source">Crédito</field>
+            <field name="value">Credit</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_sf_en_US" model="ir.translation">
+            <field name="source">Saldo final</field>
+            <field name="value">Final balance</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_anacc_en_US" model="ir.translation">
+            <field name="source">Cuenta analitica</field>
+            <field name="value">Analytic account</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_libaux_en_US" model="ir.translation">
+            <field name="source">Libro Auxiliar.</field>
+            <field name="value">Auxiliary book</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_dform_en_US" model="ir.translation">
+            <field name="source">Desde:</field>
+            <field name="value">Date from:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_dto_en_US" model="ir.translation">
+            <field name="source">Hasta:</field>
+            <field name="value">Date to:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+        <record id="template_report_auxiliar_fg_en_US" model="ir.translation">
+            <field name="source">Fecha de Generacion:</field>
+            <field name="value">Generation date:</field>
+            <field name="module">financial_reports</field>
+            <field name="res_id" eval="ref('financial_reports.template_report_auxiliar')" />
+            <field name="name">website</field>
+            <field name="lang">en_US</field>
+            <field name="type">view</field>
+        </record>
+    </data>
+</openerp>

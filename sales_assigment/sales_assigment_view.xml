@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+        <data>
+
+
+        <!--<record id="sales_assigment_sale_order_form_view_inherited2" model="ir.ui.view">
+            <field name="name">sales.assigment.sale.order.form.view.inherited2</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref='sale.view_order_line_form2' />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom']" position='after'>
+                    <field name='qty_availble' />
+                    <field name='proposed_qty' />
+                </xpath>
+            </field>
+        </record>
+
+        
+        <record id="sale_assignment_view_order_line_search" model="ir.ui.view">
+            <field name="name">sale.assignment.line.search</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <search string="Detalle de pedidos">
+                    <field name="product_id" />
+                    <field name="order_id" />
+                    <field name="order_partner_id" />
+                    <field name="name" />
+                    <field name='qty_availble' />
+                    <field name='proposed_qty' />
+                    <field name="product_uom_qty"  />
+                    <field name="product_uom" />
+                    <field name="salesman_id" />
+                    <field name="price_subtotal"/>
+                    <field name="state" />
+                    <field name="order_state" />
+                    <field name="invoiced" />
+                    <group expand="1" string="Group By...">
+                        <filter name="product_id_group" context="{'group_by' : 'product_id'}" string="Product"/>
+                        <filter name="order_id_group" context="{'group_by' : 'order_id'}" string="Order"/>
+                        <filter name="order_partner_id_group" context="{'group_by' : 'order_partner_id'}" string="Partner"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+
+        <record id="sale_assignment_view_order_line_tree" model="ir.ui.view">
+            <field name="name">sale.assignment.line.tree</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="Detalle de pedidos" editable='top'>
+                    <field name="order_id" />
+                    <field name="order_partner_id" />
+                    <field name="product_id" />
+                    <field name="name" />
+                    <field name='qty_availble' />
+                    <field name="product_uom_qty" string="Qty" operator="+" />
+                    <field name='proposed_qty' />
+                    <field name="product_uom" string="Unit of Measure" groups="product.group_uom" />
+                    <field name="salesman_id" />
+                    <field name="price_subtotal" sum="Total" />
+                    <field name="order_state" invisible='1'/>
+                    <field name="state" />
+                    <field name="invoiced" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="sale_assignment_order_line_action" model="ir.actions.act_window">
+            <field name="name">Detalle de pedidos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_product_id_group':1,'search_default_order_id_group': 1, 'search_default_order_partner_id_group': 1, 'search_default_order_state':'draft'}</field>
+            <field name="view_id" ref="sale_assignment_view_order_line_tree" />
+            <field name="search_view_id" ref="sale_assignment_view_order_line_search"/>
+        </record>
+
+        
+        <menuitem name="Detalle de pedidos" id="menu_sale_order_line_import" parent="base.menu_sales" action="sale_assignment_order_line_action"/>
+
+        <act_window id="wizard_assign_proposed_qty"
+                name="Asignacion disponible"
+                res_model="sale.order.line"
+                src_model='sale.order.line'
+                view_mode="form"
+                view_type="form"/>-->
+
+    </data>
+</openerp>

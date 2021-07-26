@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--backend-->
+
+        <template id="avancys_css_backend" name="avancys_css_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/avancys_css/static/src/css/avancys_css.css"/>
+                <script type="text/javascript" src="/avancys_css/static/src/js/avancys_css.js"/>
+            </xpath>
+        </template>
+
+        <template id="assets_backend3" name="avancys_css_backend"  inherit_id="web.menu">
+             <xpath expr="//ul[@class='nav navbar-nav navbar-right oe_systray']" position="inside">
+                 <a type="button" class="btn" id="avancys_help_button" onclick="ToogleLeftBar()"><span class="glyphicon glyphicon-fullscreen" style="color:white"></span></a>
+            </xpath>
+        </template>
+        <template id="avancys_css_structure" name="avancys_css_structure"  inherit_id="web.webclient_bootstrap">
+            <xpath expr="//td[@class='oe_application']" position="inside">
+                <a style="position:absolute;bottom:12px;right:20px;margin:0;padding:5px 3px;z-index:1000;font-size:11px"
+                   id="erpversion" href="#" onMouseOver="showVer()" onMouseOut="showErp()" onclick="OpenVerModal()"
+                   data-toggle="modal" data-target="#versionmodal">AVANCYS ERP</a>
+            </xpath>
+            <xpath expr="//div[@class='openerp openerp_webclient_container']" position="inside">
+             <div class="modal fade" id="versionmodal" role="dialog">
+                    <div class="modal-dialog">
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                              <div class="modal-body">
+                                  <p>Informacion General</p>
+                                  <p id="modalVersionline">Version:</p>
+                                  <p id="modalDatabaseline">Base de datos:</p>
+
+                              </div>
+                              <div class="modal-footer">
+                                  <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+        </xpath>
+        </template>
+
+
+
+
+
+    </data>
+</openerp>

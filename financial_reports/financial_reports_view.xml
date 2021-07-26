@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_fpa_financial_reports_tree" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.tree</field>
+            <field name="model">fpa.financial.reports</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree create="false" import="false" order="categ,name asc">
+                    <field name="categ"/>
+                    <field name="name"/>
+                    <field name="export" invisible="True"/>
+                    <button name="generate" string="Generar" type="object" icon="gtk-execute"
+                            attrs="{'invisible': [('export','=',True)]}"/>
+                    <button name="view_function" string="Ver" type="object" icon="terp-tools"
+                            attrs="{'invisible': [('export','=',True)]}"/>
+                    <button name="popup_wizard" string="Imprimir" type="object" icon="gtk-print"/>
+                </tree>
+            </field>
+        </record>
+        <record id="fpa_financial_reports_form_view" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.form</field>
+            <field name="model">fpa.financial.reports</field>
+            <field name="arch" type="xml">
+                <form groups="financial_reports.group_conf_report_accounting_reports" string="Informes financieros">
+                    <sheet>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <notebook>
+                            <page string="Conceptos" attrs="{'invisible': [('type','=','sco')]}">
+                                <group string="Generador de Conceptos" col="4" attrs="{'invisible': [('export','=',True)]}">
+                                    <field name="nivel"/>
+                                    <field name="indentacion"/>
+                                    <field name="account_ids" widget="many2many_tags"
+                                           domain="[('type','=','view'),('level','=',1)]"/>
+                                    <field name="detalle"/>
+                                    <field name="codigo"/>
+                                    <field name="accumulated"/>
+                                    <button icon="gtk-convert" name="create_concepts" type="object"/>
+                                </group>
+                                <field name="concepts_ids" attrs="{'invisible': [('export','=',True)]}">
+                                    <tree default_order="sequence" string="Conceptos">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="detail"/>
+                                        <field name="before"/>
+                                        <field name="accumulated"/>
+                                        <field name="cierre"/>
+                                        <field name="before" attrs="{'invisible': [('detail','=',False)]}"/>
+                                    </tree>
+                                    <form string="Conceptos">
+                                        <group>
+                                            <group>
+                                                <field name="code"/>
+                                                <field name="name"/>
+                                                <field name="sequence"/>
+                                                <field name="account_ids"/>
+                                                <field name="detail"/>
+                                                <field name="before"/>
+                                                <field name="accumulated"/>
+                                                <field name="cierre"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                                <group>
+                                    <field name="tope_min" attrs="{'invisible': [('export','=',False)]}"/>
+                                </group>
+                                <field name="columns_ids" attrs="{'invisible': [('export','=',False)]}" context="{'default_application_type': application_type}">
+                                    <tree string="Columnas (medios)">
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                    </tree>
+                                    <form string="Conceptos (medios)">
+                                        <group>
+                                            <field name="code"/>
+                                            <field name="name"/>
+                                            <field name="application_type" invisible="1"/>
+                                            <field name="line_ids" context="{'default_application_type': application_type}">
+                                                <tree string="Detalle">
+                                                    <field name="name"/>
+                                                    <field name="col"/>
+                                                    <field name="type"/>
+                                                </tree>
+                                                <form string="Detalle">
+                                                    <group>
+                                                        <field name="name"/>
+                                                        <field name="col"/>
+                                                        <field name="type"/>
+                                                        <field name="application_type" invisible="1"/>
+                                                        <field name="account_ids" attrs="{'invisible': [('application_type','!=','account')]}"/>
+                                                        <field name="concept_ids" attrs="{'invisible': [('application_type','!=','hr')]}">
+                                                            <tree  editable="bottom" string="Líneas de Conceptos">
+                                                                <field name="code"/>
+                                                                <field name="name"/>
+                                                            </tree>
+                                                        </field>
+                                                    </group>
+                                                </form>
+                                            </field>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Niveles" attrs="{'invisible': [('export','=',True)]}">
+                                <field name="niveles_ids">
+                                    <tree string="Niveles">
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                        <field name="help"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Filtros adicionales" attrs="{'invisible': [('export','=',True)]}">
+                                <group string="Filtros adicionales">
+                                    <field name="account_filter"/>
+                                    <field name="partner_filter"/>
+                                    <field name="journal_filter"/>
+                                    <field name="analytic_filter"/>
+                                </group>
+                            </page>
+                            <page string="Formatos" groups="financial_reports.group_conf_advance_report_accounting_reports">
+                                <group string="Formatos">
+                                    <field name="view_color"/>
+                                    <field name="title_color"/>
+                                    <field name="format_money"/>
+                                    <field name="numeric"/>
+                                    <field name="unidades"/>
+                                    <field name="porc"/>
+                                </group>
+                            </page>
+                            <page string="Querys" groups="financial_reports.group_conf_advance_report_accounting_reports">
+                                <group string="Querys">
+                                    <field name="title"/>
+                                    <field name="consulta" attrs="{'invisible': [('export','=',True)]}"/>
+                                    <field name="consulta_xlsx" attrs="{'invisible': [('export','=',True)]}"/>
+                                </group>
+                            </page>
+                            <page string="Otros">
+                                <group>
+                                    <field name="categ" attrs="{'invisible': [('export','=',True)]}"/>
+                                    <field name="analyze"/>
+                                    <field name="sign"/>
+                                    <field name="sum_column"/>
+                                    <field name="type"/>
+                                    <field name="export_type_date"/>
+                                    <field name="application_type" attrs="{'invisible': [('type','!=','ex')]}"/>
+                                </group>
+                            </page>
+                            <page string="Medios" groups="financial_reports.group_conf_advance_report_accounting_reports">
+                                <group>
+                                    <field name="export"/>
+                                    <field name="query" attrs="{'invisible': [('export','=',False)]}"/>
+                                </group>
+                                <separator/>
+                                <group string='Leyenda'>
+                                    <label string="- Use like '51@porc' para like '51%'"/>
+                                    <label string="- Use '@min' para 'menor'"/>
+                                    <label string="- Use '@may' para 'mayor'"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_financial_reports" model="ir.actions.act_window">
+            <field name="name">Informes</field>
+            <field name="res_model">fpa.financial.reports</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_fpa_financial_reports_tree"/>
+            <field name="context">{'search_default_group_categ': 1}</field>
+            <field name="target">current</field>
+        </record>
+        <record id="fpa_export_wizard_view_ept" model="ir.ui.view">
+            <field name="name">Imprimir</field>
+            <field name="model">fpa.export.wizard.ept</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Imprimir" version="7.0">
+                    <group>
+                        <label class="oe_inline" for="format_report" string="Formato"/>
+                        <field class="oe_inline" name="format_report" nolabel="1"/>
+                    </group>
+                    <field name="export" invisible="True"/>
+                    <field name="export_type_date" invisible="True"/>
+                    <group string='Rango de fechas' attrs="{'invisible': ['|',('export','=',False),('export_type_date','!=','range')]}">
+                        <field name="date_from" attrs="{'required': [('export','=',True),('export_type_date','=','range')]}"/>
+                        <field name="date_to" attrs="{'required': [('export','=',True),('export_type_date','=','range')]}"/>
+                    </group>
+                    <group string='Fecha de Corte' attrs="{'invisible': ['|',('export','=',False),('export_type_date','!=','cut')]}">
+                        <field name="date_cut" attrs="{'required': [('export','=',True),('export_type_date','=','cut')]}"/>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" name="download_file" string="Descargar" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="view_account_structure_form" model="ir.ui.view">
+            <field name="name">account.account.extended.tree</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='note']" position="after">
+                    <label string="Estructura de la cuenta para informes"/>
+                    <field name="structure_id">
+                        <tree editable="bottom" string="Estructura cuenta">
+                            <field name="digits"/>
+                            <field name="sequence"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        <record id="fpa_financial_reports_search" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.search</field>
+            <field name="model">fpa.financial.reports</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar">
+                    <field name="categ"/>
+                    <field name="name"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'categ'}" name="group_categ" string="Categoría"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="view_fpa_financial_reports_period_range_tree" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.period_range.tree</field>
+            <field name="model">fpa.financial.reports.period_range</field>
+            <field name="arch" type="xml">
+                <tree order="name">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_fpa_financial_reports_period_range_form" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.period_range.form</field>
+            <field name="model">fpa.financial.reports.period_range</field>
+            <field name="arch" type="xml">
+                <form string="Rango de periodos">
+                    <sheet string="Informes financieros">
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <notebook>
+                            <page string="Periodos">
+                                <field name="period_ids">
+                                    <tree order="name">
+                                        <field name="name"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_financial_reports_period_range" model="ir.actions.act_window">
+            <field name="name">Rango de periodos</field>
+            <field name="res_model">fpa.financial.reports.period_range</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="view_fpa_financial_reports_period_tree" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.period.tree</field>
+            <field name="model">fpa.financial.reports.period</field>
+            <field name="arch" type="xml">
+                <tree order="name" editable="buttom">
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_financial_reports_period" model="ir.actions.act_window">
+            <field name="name">Periodos</field>
+            <field name="res_model">fpa.financial.reports.period</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+    </data>
+</openerp>

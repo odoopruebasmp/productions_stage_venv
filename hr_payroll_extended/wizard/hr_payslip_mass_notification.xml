@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+           <record model="ir.ui.view" id="hr_leave_payslip_notification_form_view">
+                <field name="name">hr.payslip.mass.notification.form</field>
+                <field name="model">hr.payslip.mass.notification</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Notificacion Masiva">
+                        <label string="Notificacion Masiva"/>
+                        <separator colspan="4"/>
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Notificacion Masiva" name="notification_mass_leave" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <!-- <act_window id="action_payslip_mass_notification"
+            key2="client_action_multi" name="Notificacion Masiva"
+            res_model="hr.payslip.mass.notification" src_model="hr.payslip"
+            view_mode="form" target="new" view_type="form" /> -->
+    
+    </data>
+</openerp>

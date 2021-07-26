@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_update_product_cost_wiz" model="ir.ui.view">
+            <field name="name">update.product.cost.wiz</field>
+            <field name="model">update.product.cost</field>
+            <field name="arch" type="xml">
+                <form string="Update Product Cost" version="7.0">
+                    <group>
+                        <field name="file" required='1' />
+                    </group>
+                    <footer>
+                        <button name="update_cost" string="Import" type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_update_product_cost_wiz" model="ir.actions.act_window">
+            <field name="name">Update Product Cost</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">update.product.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_update_product_cost_wiz" />
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        
+        
+        <record id="view_deterioro_semielaborados_wiz_wizard" model="ir.ui.view">
+            <field name="name">Proceso Deterioro</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Productos Semi-elaborados">
+                    <H4><FONT COLOR="Gray">Con este asistente el sistema busca todos los productos terminados asociados en los cuales el producto es un componente, y toma como referencia el producto con menor valor neto realizable</FONT></H4>
+                    <footer>
+                        <button name="update_semielaborados" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_product_process_niif_deterioro_wizard" model="ir.actions.act_window">
+            <field name="name">Producto Semi-elaborado</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_semielaborados_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_product_process" action="action_product_process_niif_deterioro_wizard" name="Producto Semi-elaborado" parent="menu_inventory_niif" sequence="9"/>
+        
+        
+        <record id="view_deterioro_deterioro_wiz_wizard" model="ir.ui.view">
+            <field name="name">Proceso Deterioro</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Proceso Deterioro">
+                    <H4><FONT COLOR="Gray">Con este asistente usted podra calcular el deterioro del inventario.</FONT></H4>
+                    <group col="4" colspan="4">
+                        <field name="date" required="1" string="Fecha Contabilizacion"/>
+                        <field name="journal_id" required="1" string="Diario"/>
+                        <field name="company_id" required="1" string="Compañia"/>
+                    </group>
+                    <footer>
+                        <button name="deterioro" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_reporte_niif_deterioro_wizard" model="ir.actions.act_window">
+            <field name="name">Proceso de Deterioro</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_deterioro_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_deterioro_end" action="action_reporte_niif_deterioro_wizard" name="Proceso de Deterioro" parent="menu_inventory_niif" sequence="10"/>
+        
+        
+        <record id="view_deterioro_update_qty_wiz_wizard" model="ir.ui.view">
+            <field name="name">Calculo Costo y Cantidad</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Calculo Costo y Cantidad">
+                    <H4><FONT COLOR="Gray">Con este asistente usted podra actualizar la Cantidad y el Costo del inventario a una fecha determinada.</FONT></H4>
+                    <group col="4" colspan="4">
+                        <field name="date" required="1"/>
+                    </group>
+                    <group string="Productos">
+                        <field name="product_ids" nolabel="1"/>
+                    </group>
+                    <group string="Ubicaciones">
+                        <field name="location_ids" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button name="update_qty" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_reporte_niif_update_qty_wizard" model="ir.actions.act_window">
+            <field name="name">Actualizacion Costo y Cantidad</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_update_qty_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_cost_qty_end" action="action_reporte_niif_update_qty_wizard" name="Actualizacion Costo y Cantidad" parent="menu_inventory_niif" sequence="5"/>
+        
+        
+        <record id="view_deterioro_update_cost_expense_wiz_wizard" model="ir.ui.view">
+            <field name="name">Calculo Costo/gasto Estimado Venta</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Calculo Costo/gasto Estimado Venta">
+                    <H4><FONT COLOR="Gray">Con este asistente usted podra actualizar el costo estimado de ventas para el Producto Terminado, segun el prorrateo de Costos/Gastos referenciados en las cuentas contables, dentro de las fechas establecidas, donde el sistema tienen en cuenta el costo total del inventario por producto, y proporciona los Costos/gastos segun su porcentaje de representacion en el valorizado de la compania.</FONT></H4>
+                    <group col="4" colspan="4">
+                        <field name="date_start" required="1"/>
+                        <field name="date_end" required="1"/>
+                    </group>
+                    <group string="Cuentas">
+                        <field name="account_ids" required="1" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button name="update_cost_expense" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_reporte_niif_update_cost_expense_wizard" model="ir.actions.act_window">
+            <field name="name">Actualizacion Costo/gasto Estimado Venta</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_update_cost_expense_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_cost_expense" action="action_reporte_niif_update_cost_expense_wizard" name="Actualizacion Costo/gasto Estimado Venta" parent="menu_inventory_niif" sequence="7"/>
+        
+        
+        <record id="view_deterioro_update_price_wiz_wizard" model="ir.ui.view">
+            <field name="name">Calculo del Precio de Producto Masivo</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Calculo del Precio de Producto Masivo">
+                    <H4><FONT COLOR="Gray">Con este asistente usted podra calcular el Precio de producto tipo Producto Terminado, donde el sistema actualiza el precio delista configurado en el producto en el momento degenerar el proceso.</FONT></H4>
+                    <footer>
+                        <button name="update_price" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_reporte_niif_update_price_wizard" model="ir.actions.act_window">
+            <field name="name">Actualizacion Precio</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_update_price_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_price" action="action_reporte_niif_update_price_wizard" name="Actualizacion Precio" parent="menu_inventory_niif" sequence="6"/>
+        
+        
+        <record id="view_deterioro_update_valor_reposicion_wiz_wizard" model="ir.ui.view">
+            <field name="name">Calculo del Valor de Reposicion Masivo</field>
+            <field name="model">deterioro.product.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Calculo del Valor de Reposicion Masivo">
+                    <H4><FONT COLOR="Gray">Con este asistente usted podra calcular el valor de reposicion de productos de tipo Materias Primas, donde el sistema busca el ultimo precio de compra y lo actualiza, si el producto no registra ningun valor, el sistema establece un valor 0.0 paraun posterior control y validacion por parte del area encargada.</FONT></H4>
+                    <footer>
+                        <button name="update_valor_de_reposicion" string="Calcular" type="object" class="oe_highlight"  />
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_reporte_niif_update_valor_reposicion_wizard" model="ir.actions.act_window">
+            <field name="name">Actualizacion Valor Reposicion</field>
+            <field name="res_model">deterioro.product.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_deterioro_update_valor_reposicion_wiz_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+         </record>
+        
+        <menuitem id="menu_wizard_update_valor_reposicion" action="action_reporte_niif_update_valor_reposicion_wizard" name="Actualizacion Valor Reposicion" parent="menu_inventory_niif" sequence="8"/>
+        
+    </data>
+</openerp>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_fpa_balance_general_view" model="ir.ui.view">
+            <field name="name">Balance General</field>
+            <field name="model">fpa.balance.general.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Opciones del informe" version="7.0">
+                    <label string=""/>
+                    <group col="4">
+                        <field name="chart_account_id" widget="selection"/>
+                        <field invisible="1" name="company_id"/>
+                        <field name="account_filter" invisible="True"/>
+                        <field name="partner_filter" invisible="True"/>
+                        <field name="journal_filter" invisible="True"/>
+                    </group>
+                    <notebook colspan="4" tabpos="up">
+                        <page string="Parametros Principales">
+                            <group string="Fechas">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <group string="Niveles">
+                                <field name="niveles" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            </group>
+                            <group string="Filtros">
+                                <field name="estado"/>
+                            </group>
+                        </page>
+                        <page string="Parametros Opcionales">
+                            <group string="Cuentas" attrs="{'invisible':[('account_filter', '!=', True)]}">
+                                <field name="account_ids"/>
+                            </group>
+                            <group string="Diarios" attrs="{'invisible':[('journal_filter', '!=', True)]}">
+                                <field name="journal_ids"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button class="oe_highlight" default_focus="1" name="generar" string="Generar" type="object"/>o
+
+
+                        <button class="oe_link" special="cancel" string="Cancelar"/></footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fpa_balance_general" model="ir.actions.act_window">
+            <field name="name">Asistente para generar Balance General</field>
+            <field name="res_model">fpa.balance.general.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_fpa_balance_general_view"/>
+            <field name="target">new</field>
+        </record>
+        <record id="view_fpa_balance_general_line_tree" model="ir.ui.view">
+            <field name="name">fpa.balance.general.line.tree</field>
+            <field name="model">fpa.balance.general.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree default_order="concepts_id, account_id" colors="blue:nivel == 100">
+                    <field name="nivel" invisible="True"/>
+                    <field name="concepts_id"/>
+                    <field name="account_id"/>
+                    <field name="amount_final"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_balance_general" model="ir.actions.act_window">
+            <field name="name">Balance General</field>
+            <field name="res_model">fpa.balance.general.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="view_id" ref="view_fpa_balance_general_line_tree"/>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="target">current</field>
+        </record>
+        <record id="view_fpa_balance_general_line_graph" model="ir.ui.view">
+            <field name="name">fpa.balance.general.line.graph</field>
+            <field name="model">fpa.balance.general.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph stacked="True" string="Informe Balance de Prueba" type="pivot">
+                    <field name="amount_final" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record id="fpa_balance_general_line" model="ir.ui.view">
+            <field name="name">fpa.balance.general.line.search</field>
+            <field name="model">fpa.balance.general.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar">
+                    <field name="account_id"/>
+                    <filter string="Sin Cuenta" name="sin_cuenta" icon="terp-personal" domain="[('account_id','=',False)]" />
+                    <group expand="0" string="Group By">
+			            <filter context="{'group_by':'concepts_id'}" name="group_concepts_id" string="Concepto"/>
+                        <filter context="{'group_by':'account_id'}" string="Cuenta"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</openerp>

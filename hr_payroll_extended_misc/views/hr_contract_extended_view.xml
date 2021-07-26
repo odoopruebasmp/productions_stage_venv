@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- DESPIDOS MASIVOS -->
+        <record id="dismissal_massive_wizard_view" model="ir.ui.view">
+            <field name="name">dismissal.massive.wizard.view</field>
+            <field name="model">dismissal.massive.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Despido masivo" version="7.0">
+                    <group colspan="3">
+                        <field name="date_end"/>
+                        <field name="journal_id"/>
+                        <field name="separation_type"/>
+                        <field name="payslip_period_id"/>
+                    </group>
+                    <footer>
+                        <button name="dismissal_massive" string="Liquidar contratos" type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_dismissal_massive" model="ir.actions.act_window">
+            <field name="name">Despido masivo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="res_model">dismissal.massive.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="dismissal_massive_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="act_dismissal_massive_wizard">
+            <field name="name">Despido masivo</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('act_dismissal_massive'))"/>
+            <field name="key">action</field>
+            <field name="model">hr.contract</field>
+        </record>
+
+        <!-- GRUPO DE CONTRATOS -->
+
+        <record id="hr_contract_group_tree" model="ir.ui.view">
+            <field name="name">hr.contract.group.tree</field>
+            <field name="model">hr.contract.group</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Grupos de contratos" editable="buttom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_contract_group" model="ir.actions.act_window">
+            <field name="name">Grupo de contratos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="context">{}</field>
+            <field name="res_model">hr.contract.group</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem action="act_contract_group" id="menu_contract_group" name="Grupo de contratos"
+                  parent="hr_contract.next_id_56"
+                  sequence="10"/>
+
+        <record id="hr_payslip_type_extended_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.form.extended</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_contract_view_payslips_form"/>
+            <field name="arch" type="xml">
+                <field name="cuidad_desempeno" position="after">
+                    <field name="group_id"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="hr_employee_depends_extended_view_form" model="ir.ui.view">
+            <field name="name">hr.employee.depends.form.extended</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_agroz.hr_employee_extended_agroz_view"/>
+            <field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="depends"/>
+                    <field name="handicapped"/>
+                </field>
+            </field>
+        </record>
+
+
+         <record id="hr_deductible_form_view" model="ir.ui.view">
+            <field name="name">hr.type.deductible.view</field>
+            <field name="model">hr.type.deductible</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de Deducibles" editable="buttom">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="tope_amount"/>
+                    <field name="tope_uvt"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="act_hr_deductible_type" model="ir.actions.act_window">
+            <field name="name">Tipo de deducibles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="context">{}</field>
+            <field name="res_model">hr.type.deductible</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem action="act_hr_deductible_type" id="mn_deductible_type" name="Tipo de deducibles"
+                  parent="hr.menu_hr_configuration" sequence="10"/>
+
+        <!-- PAYSLIP.EMPLOYEE -->
+        <record id="view_hr_payslip_by_employees_contract" model="ir.ui.view">
+            <field name="name">hr.payroll.payslip.employees.contract</field>
+            <field name="model">hr.payslip.employees</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_by_employees"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[@string='Payslips by Employees']" position="replace">
+                    <form>
+                        <group>
+                            <label colspan="4" nolabel="1" string="This wizard will generate payslips for all selected employee(s) based on the dates and credit note specified on Payslips Run." />
+                        </group>
+                        <group colspan="4" >
+                            <separator string="Contratos" colspan="4"/>
+                            <newline/>
+                            <field name="contract_ids" nolabel="1"/>
+                        </group>
+                        <footer>
+                            <button name="reckon_employee_run" string="Calcular Nóminas" type="object" class="oe_highlight avancys-btn-purple"/>
+                            o
+                            <button string="Cancelar" class="oe_link" special="cancel" />
+                        </footer>
+                    </form>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

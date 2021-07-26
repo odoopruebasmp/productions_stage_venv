@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--WIZARD-WIZARD-WIZARD-WIZARD-->
+        
+        <record id="stock_report_sql_wizard_lot_view" model="ir.ui.view">
+            <field name="name">Informe de Inventario Seriales/Lotes</field>
+            <field name="model">stock.report.sql.wizard.lot</field>
+            <field name="arch" type="xml">
+            <form string="Report Options">
+                <label string=""/>
+                <group col="4">
+                    <field name="report_option"/>
+                </group>
+                <notebook>
+                    <page string="Options">
+                        <group col="6">
+                            <field name="group_product_ids"/>
+                            <field name="group_location_ids" attrs="{'invisible': [('report_option','!=','location')]}"/>
+                            <field name="warehouse_id" attrs="{'invisible': [('report_option','!=','warehouse')]}"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="calcular_report" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_stock_report_sql_wizard_lot" model="ir.actions.act_window">
+            <field name="name">Analisis de Inventarios Seriales/Lotes</field>
+            <field name="res_model">stock.report.sql.wizard.lot</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="stock_report_sql_wizard_lot_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="Valorizado Serial/Lote" id="menu_stock_report_sql_lot" parent="report_odoo_extended.menu_report_avancys_stock" action="action_stock_report_sql_wizard_lot" sequence="5" groups="report_odoo_extended.group_user_report_avancys_stock"/>
+         
+        <record id="stock_report_sql_group_product_view_lot" model="ir.ui.view">
+            <field name="name">Agrupacion de Productos</field>
+            <field name="model">stock.report.sql.group.product.lot</field>
+            <field name="arch" type="xml">
+            <form string="Grupo de Productos">
+                <group>
+                   <field name="name"/>
+                </group>
+                <notebook>
+                    <page string="Productos">                 
+                        <field name="product_ids" domain="[('type','=','product')]"/>
+                    </page>
+                </notebook>
+            </form>
+            </field>
+        </record>
+        
+        <record id="stock_report_sql_group_location_view_lot" model="ir.ui.view">
+            <field name="name">Agrupacion de Ubicaciones</field>
+            <field name="model">stock.report.sql.group.location.lot</field>
+            <field name="arch" type="xml">
+            <form string="Grupo de Ubicaciones">
+                <group>
+                   <field name="name"/>
+                </group>
+                <notebook>
+                    <page string="Ubicaciones">                 
+                        <field name="location_ids" domain="[('usage','=','internal')]"/>
+                    </page>
+                </notebook>
+            </form>
+            </field>
+        </record>
+        
+        
+        <record id="view_stock_report_sql_line_lot_tree" model="ir.ui.view">
+            <field name="name">stock.report.sql.line.lot.tree</field>
+            <field name="model">stock.report.sql.line.lot</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Informe Inventarios">
+                    <field name="product_id"/>
+                    <field name="product_category"/>
+                    <field name="warehouse_id"/>
+                    <field name="location_id"/>
+                    <field name="product_qty_end"/>
+                    <field name="company_id" invisible='1'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_report_sql_line_filter_lot" model="ir.ui.view">
+            <field name="name">account.report.balance.avancys.line.filter.lot.dos</field>
+            <field name="model">stock.report.sql.line.lot</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Informe Inventarios">
+                    <field name="product_id"/>
+                    <field name="product_ref"/>
+                    <field name="product_category"/>
+                    <field name="location_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="company_id"/>
+                    <field name="lot_id"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product_id" string="Nombre Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="group_product_ref" string="Referencia Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_ref'}"/>
+                        <filter name="group_product_category" string="Linea" icon="terp-partner" domain="[]" context="{'group_by':'product_category'}"/>
+                        <filter name="group_lot_id" string="Serial/Lote" icon="terp-partner" domain="[]" context="{'group_by':'lot_id'}"/>
+                        <separator orientation="horizontal"/>
+                        <filter name="group_warehouse_id" string="Bodega" icon="terp-partner" domain="[]" context="{'group_by':'warehouse_id'}"/>
+                        <filter name="group_location_id" string="Ubicacion" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                        <filter name="group_company_id" string="Compañia" icon="terp-partner" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>        
+        
+        
+        <record id="view_stock_report_sql_line_lot_graph" model="ir.ui.view">
+            <field name="name">stock.report.sql.line.lot.graph</field>
+            <field name="model">stock.report.sql.line.lot</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Inventarios" type="pivot" stacked="True">
+                    <field name="warehouse_id"/>
+                    <field name="product_qty_end" type="measure"/>
+                    <field name="cost_total_end" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+
+        <record id="action_stock_report_sql_line_lot" model="ir.actions.act_window">
+            <field name="name">Analisis de Inventarios Serial/Lote</field>
+            <field name="res_model">stock.report.sql.line.lot</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        
+    </data>
+</openerp>

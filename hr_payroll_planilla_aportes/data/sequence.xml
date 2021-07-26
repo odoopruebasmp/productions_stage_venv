@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="code_hr_payroll_pila" model="ir.sequence.type">
+            <field name="code">hr.payroll.pila</field>
+            <field name="name">Codigo PILA</field>
+        </record>
+        <record id="sequence_hr_payroll_pila" model="ir.sequence">
+            <field name="name">Secuencia PILA</field>
+            <field name="code">hr.payroll.pila</field>
+            <field name="active">True</field>
+            <field name="prefix">PILA/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="number_next_actual">1</field>
+            <field name="implementation">standard</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="purchase_advance_order_form" model="ir.ui.view">
+            <field name="name">purchase.advance.order.form.2</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="currency_tarifa_manual.purchase_order_form_inherit12"/>
+            <field name="arch" type="xml">
+                <field name="payment_term_id" position="replace"/>
+                <notebook position="inside">
+                    <page string='Anticipos'>
+                        <group>
+                            <field name="payment_term_id" invisible="1"/>
+                        </group>
+                        <field name="advance_payment_id" domain="[('state','!=',cancelled)]" context="{'default_partner_id': partner_id, 'default_other_partner_id': partner_id, 'default_purchase_order_id': active_id}"> 
+                            <tree string='Purchase Advance Supplier'>
+                                <field name="name"/>
+                                <field name="planned_date" />
+                                <field name="amount" sum="Total"/>
+                                <field name="total_local" sum="Total local"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_payment_term_form_advance" model="ir.ui.view">
+            <field name="name">account.payment.term.form.advance</field>
+            <field name="model">account.payment.term</field>
+            <field name="inherit_id" ref="account.view_payment_term_form" />
+            <field name="arch" type="xml">
+                <field name='line_ids' position="inside">
+                    <tree>
+                        <field name="value"/>
+                        <field name="days"/>
+                        <field name="days2"/>
+                        <field name="value_amount"/>
+                        <field name='advance'/>
+                    </tree>
+                </field>
+			</field>
+		</record>
+    
+		<record id="view_payment_term_line_form_advance" model="ir.ui.view">
+			<field name="name">account.payment.term.line.form.advance</field>
+			<field name="model">account.payment.term.line</field>
+            <field name="inherit_id" ref="account.view_payment_term_line_form" />
+			<field name="arch" type="xml">
+                <field name='days2' position="after">
+                    <field name='advance'/>
+                </field>
+			</field>
+		</record>
+        
+        <record id="view_partner_property_form_advance" model="ir.ui.view">
+            <field name="name">res.partner.property.form.inherit.advance</field>
+            <field name="model">res.partner</field>
+            <field name="priority">2</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_account_receivable" position="after" >
+                    <field name="property_account_receivable_advance" groups="account.group_account_invoice" />
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="purchase_advance_supplier_form_view">
+            <field name="name">purchase.advance.supplier.form</field>
+            <field name="model">purchase.advance.supplier</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Anticipos Empleado" version="7.0">
+                    <header>
+                        <button string="Cambiar a borrador" name="back_to_draft" states="refused"/>
+                        <button string="Mandar a aprobar" name="draft_send_for_approval" states="draft"/>
+                        <button string="Aprobar" name="approval_accept" states="waiting_approval"/>
+                        <button string="Rechazar" name="refuse" states="waiting_approval"/>
+                        <button string="Contabilizar" name="progress" states="validated"/>
+                        <button string="Cancelar" name="cancel" states="validated"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval,validated,progress,done" />
+                    </header>
+                    <sheet string="Anticipos Proveedor">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colspan="4">
+                            <field name="user_id" colspan="4"/>
+                            <field name="partner_id" colspan="4"/>
+                            <field name="currency_id" on_change="onchange_currency_id(currency_id, company_id, request_date, pay_date, state, context)"/>
+                            <field name="tasa_cambio" attrs="{'invisible': [('multicurrency','=', False)]}"/>
+                            <field name="amount"/>
+                            <field name="total_local" attrs="{'invisible': [('multicurrency','=', False)]}"/>
+                            <field name="multicurrency" invisible="True"/>
+                            <field name="company_id" groups="base.group_multi_company" on_change="onchange_currency_id(currency_id, company_id, request_date, pay_date, state, context)"/>
+                            <field name="request_date" />
+                            <field name="pay_date"/>
+                            <field name="planned_date"/>
+                            <field name="purchase_order_id" domain="[('partner_id','=',partner_id)]"/>
+                            <field name="remaining"/>
+                            <field name="account_analytic_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Descripcion">
+                                <field name="description" colspan="4" nolabel="True"/>
+                            </page>
+                            <page string="Contabilidad" groups="account.group_account_invoice">
+                                <group>
+                                    <field name="journal_bank_id"/>
+                                    <field name="move_id"/>
+                                    <field name="reconcile_id" attrs="{'invisible': [('reconcile_id','=', False)]}"/>
+                                    <field name="reconcile_partial_id" attrs="{'invisible': [('reconcile_partial_id','=', False)]}" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="purchase_anticipos_tree_view">
+            <field name="name">purchase.advance.supplier.tree</field>
+            <field name="model">purchase.advance.supplier</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Anticipos Proveedor">
+                    <field name="name" />
+                    <field name="move_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <field name="request_date"/>
+                    <field name="amount"/>
+                    <field name="currency_id"/>
+                    <field name="moneda_local"/>
+                    <field name="pay_date" />
+                    <field name="state"/>
+                    <field name="journal_bank_id" invisible="True"/>
+                    <field name="tasa_cambio" invisible="True"/>
+                    <field name="description" invisible="True"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="purchase_advance_search" model="ir.ui.view">
+            <field name='name'>purchase.advance.supplier.search</field>
+            <field name='model'>purchase.advance.supplier</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Anticipos Proveedor">
+                    <field name="name" filter_domain="[('name','ilike',self)]"/>
+                    <field name="description" filter_domain="[('description','ilike',self)]"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <field name="currency_id"/>
+                    <field name="amount"/>
+                    <field name="remaining"/>
+                    <field name="tasa_cambio"/>
+                    <field name="moneda_local"/>
+                    <field name="journal_bank_id" />
+                    <field name="request_date"/>
+                    <field name="pay_date" />
+                    <field name="reconcile_id"/>
+                    <field name="reconcile_partial_id"/>
+                    <field name="state"/>
+                    
+                    <filter string="Mis Anticipos" domain="[('user_id','=',uid)]" icon="terp-personal"/>
+                    <filter name="borrador" string="Borrador" domain="[('state','=','draft')]" icon="terp-camera_test"/>
+                    <filter name="waiting_approval" string="Espera de Aprobacion" domain="[('state','=','waiting_approval')]"/>
+                    <filter name="validado" string="Validado" domain="[('state','=','validated')]"/>
+                    <filter name="progress" string="Contabilizado" domain="[('state','=','progress')]"/>
+                    <filter name="done" string="Realizado" domain="[('state','=','done')]"/>
+                    <filter name="cancelado" string="Cancelado" domain="[('state','=','cancelled')]"/>
+                    <filter name="rechazado" string="Rechazado" domain="[('state','=','refused')]"/>
+                    
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Estado" name="group_state" context="{'group_by': 'state'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Moneda" name="group_currency" context="{'group_by': 'currency_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Diario Banco" name="group_journal" context="{'group_by': 'journal_bank_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Usuario" name="group_user" context="{'group_by': 'user_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Tercero" name="group_partner" context="{'group_by': 'partner_id'}" icon="terp-stock_effects-object-colorize"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_advance_supplier_view">
+            <field name="name">Anticipos Proveedor</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <record id="purchase_advance_menu" model="ir.ui.menu">
+            <field name="name">Anticipos Proveedor</field>
+            <field name="parent_id" ref="account.menu_finance_payables"/>
+            <field name="action" ref="action_purchase_advance_supplier_view"/>
+            <field name="sequence">50</field>
+        </record>
+        
+        <record id="mt_advance_new" model="mail.message.subtype">
+            <field name="name">Nuevo Anticipo</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Anticipo Creado</field>
+        </record>
+        <record id="mt_advance_waiting_approval" model="mail.message.subtype">
+            <field name="name">Anticipo esperando aprobacion de director</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Anticipo esperando aprobacion de director</field>
+        </record>
+        <record id="mt_advance_waiting_financial_approval" model="mail.message.subtype">
+            <field name="name">Anticipo esperando aprobacion de financiero</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Anticipo esperando aprobacion de financiero</field>
+        </record>
+        <record id="mt_advance_validated" model="mail.message.subtype">
+            <field name="name">Anticipo Validado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Anticipo Validado</field>
+        </record>
+        <record id="mt_advance_refused" model="mail.message.subtype">
+            <field name="name">Anticipo Rechazado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Anticipo Rechazado</field>
+        </record>
+        <record id="mt_to_pay_cancelled" model="mail.message.subtype">
+            <field name="name">Anticipo Cancelado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="6"/>
+            <field name="description">Anticipo Cancelado</field>
+        </record>
+        <record id="mt_advance_paid" model="mail.message.subtype">
+            <field name="name">Anticipo Legalizado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="description">Anticipo Legalizado</field>
+        </record>
+        <record id="mt_to_pay_validated" model="mail.message.subtype">
+            <field name="name">Anticipo Por Legalizar</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="8"/>
+            <field name="description">Anticipo Por Legalizar</field>
+        </record>
+        <record id="mt_to_pay_reembolso" model="mail.message.subtype">
+            <field name="name">Anticipo Por Reembolsar</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="9"/>
+            <field name="description">Anticipo Por Reembolsar</field>
+        </record>
+        <record id="mt_advance_expired" model="mail.message.subtype">
+            <field name="name">Anticipo Expirado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="10"/>
+            <field name="description">Anticipo Expirado</field>
+        </record>
+        <record id="mt_advance_to_discount" model="mail.message.subtype">
+            <field name="name">Anticipo Para Descontar de Nomina</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="11"/>
+            <field name="description">Anticipo Para Descontar de Nomina</field>
+        </record>
+        <record id="mt_advance_discount" model="mail.message.subtype">
+            <field name="name">Anticipo Descontado de nomina</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="12"/>
+            <field name="description">Anticipo Descontado de nomina</field>
+        </record>
+        
+    </data>
+    
+    <data noupdate="1">
+        <!-- secuencia -->
+        
+        <record id="seq_purchase_advance_number_type" model="ir.sequence.type">
+            <field name="name">Numero Anticipo</field>
+            <field name="code">purchase.advance.number</field>
+        </record>
+        <record id="seq_purchase_advance_number" model="ir.sequence">
+            <field name="name">Numero Anticipo</field>
+            <field name="code">purchase.advance.number</field>
+            <field name="prefix">ADV-</field>
+            <field name="padding">10</field>
+        </record>
+        
+        <!-- follower mail subtype -->
+        
+        <record id="mt_advance_new" model="mail.message.subtype">
+            <field name="name">Nuevo Anticipo</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Anticipo Creado</field>
+        </record>
+        <record id="mt_advance_waiting_approval" model="mail.message.subtype">
+            <field name="name">Anticipo Espera de Aprobacion</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Anticipo en Espera de Aprobacion</field>
+        </record>
+        <record id="mt_advance_refused" model="mail.message.subtype">
+            <field name="name">Anticipo Rechazado</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Anticipo Rechazado</field>
+        </record>
+        <record id="mt_advance_validated" model="mail.message.subtype">
+            <field name="name">Anticipo Validado</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Anticipo Validado</field>
+        </record>
+        <record id="mt_advance_cancelled" model="mail.message.subtype">
+            <field name="name">Anticipo Cancelado</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Anticipo Cancelado</field>
+        </record>
+        <record id="mt_advance_progress" model="mail.message.subtype">
+            <field name="name">Anticipo Contabilizado</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="6"/>
+            <field name="description">Anticipo Contabilizado</field>
+        </record>
+        <record id="mt_advance_done" model="mail.message.subtype">
+            <field name="name">Anticipo Realizdo</field>
+            <field name="res_model">purchase.advance.supplier</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="description">Anticipo Realizado</field>
+        </record>
+
+    </data>
+</openerp>

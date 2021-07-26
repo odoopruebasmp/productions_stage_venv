@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+           <record model="ir.ui.view" id="purchase_quotation_to_order_form_view">
+                <field name="name">quotation.to.order.wizard.form</field>
+                <field name="model">quotation.to.order.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Convertir a orden de compra">
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="confirm_quotation" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_quotation_to_order"
+            key2="client_action_multi" name="Convertir a orden de compra"
+            res_model="quotation.to.order.wizard" src_model="purchase.quotation.supplier.line"
+            view_mode="form" target="new" view_type="form" view_id="purchase_quotation_to_order_form_view" />
+            
+            <record model="ir.ui.view" id="purchase_quotation_set_seleccionada_view">
+                <field name="name">quotation.to.order.wizard.form</field>
+                <field name="model">quotation.to.order.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Marcar lineas como seleccionadas">
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="set_seleccionada" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_quotation_set_seleccionada"
+            key2="client_action_multi" name="Marcar lineas como seleccionadas"
+            res_model="quotation.to.order.wizard" src_model="purchase.quotation.supplier.line"
+            view_mode="form" target="new" view_type="form" view_id="purchase_quotation_set_seleccionada_view" />
+            
+            <record model="ir.ui.view" id="purchase_quotation_set_validar_view">
+                <field name="name">quotation.to.order.wizard.form</field>
+                <field name="model">quotation.to.order.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Validadar">
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="set_validar" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_quotation_set_validate"
+            key2="client_action_multi" name="Validadar"
+            res_model="quotation.to.order.wizard" src_model="purchase.quotation.supplier.line"
+            view_mode="form" target="new" view_type="form" view_id="purchase_quotation_set_validar_view" />
+            
+            <record model="ir.ui.view" id="purchase_quotation_set_rechazada_view">
+                <field name="name">quotation.to.order.wizard.form</field>
+                <field name="model">quotation.to.order.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Rechazar">
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="set_rechazada" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_quotation_set_rechazada"
+            key2="client_action_multi" name="Rechazar"
+            res_model="quotation.to.order.wizard" src_model="purchase.quotation.supplier.line"
+            view_mode="form" target="new" view_type="form" view_id="purchase_quotation_set_rechazada_view" />
+            
+            <record model="ir.ui.view" id="purchase_quotation_undo_seleccion_view">
+                <field name="name">quotation.to.order.wizard.form</field>
+                <field name="model">quotation.to.order.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Reiniciar Seleccion">
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="undo_seleccion" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_quotation_undo_seleccion"
+            key2="client_action_multi" name="Reiniciar Seleccion"
+            res_model="quotation.to.order.wizard" src_model="purchase.quotation.supplier.line"
+            view_mode="form" target="new" view_type="form" view_id="purchase_quotation_undo_seleccion_view" />
+
+    
+    </data>
+</openerp>

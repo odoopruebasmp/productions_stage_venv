@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+                
+        <record id="view_purchase_order_extended_form2" model="ir.ui.view">
+            <field name="name">purchase.order.extended.form2</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="date_origen" attrs="{'required':[('import_id','!=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+                        
+                
+        <record id="view_purchase_order_search" model="ir.ui.view">
+            <field name="name">purchase.order.search</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name='date_origen'/>
+                </field>
+            </field>
+        </record>
+                
+                
+        <record id="view_invoice_import" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.import</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_term" position="after">
+                    <field name='import_id'/>
+                    <field name='import_id2' string="Importacion (Arancel)"/>                    
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_tax_form_arancel" model="ir.ui.view">
+            <field name="name">account.tax.form</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <field name="sequence" position="after">
+                    <field name='arancel'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="product_normal_form_arancel_7" model="ir.ui.view">
+            <field name="name">product.normal.form.arancel.inherit</field>
+            <field name="model">product.template</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="product_category_taxes.view_product_account_purchase_ok_form5"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='supplier_taxes_id_1']" position="after">
+                    <field name='arancel_ids'>
+                        <tree editable="bottom">
+                            <field name='country_id' />
+                            <field name='arancel_id' />
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="bl_doc_tree" model="ir.ui.view">
+            <field name="name">bl.doc.tree</field>
+            <field name="model">bl.doc</field>
+            <field name="arch" type="xml">
+                <tree string='Bill Of Landing'>
+                    <field name='doc' />
+                    <field name='name' />
+                    <field name='shipment_date' />
+                    <field name='arrival_date' />
+                    <field name='crtn' />
+                    <field name='klgr' />
+                    <field name='m3' />
+                    <field name='transcribing_imp' />
+                    <field name='policy_no' />
+                    <field name='comment' />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="bl_doc_form" model="ir.ui.view">
+            <field name="name">bl.doc.form</field>
+            <field name="model">bl.doc</field>
+            <field name="arch" type="xml">
+                <form string='Bill Of Landing' version='7.0'>
+                    <sheet>
+                    <h1>
+                        <field name='name' />
+                    </h1>
+                    <group col='4'>
+                        <group colspan='2'>
+                            <field name='crtn' />
+                            <field name='klgr' />
+                            <field name='m3' />
+                            <field name='transcribing_imp' />
+                            <field name='policy_no' />
+                        </group>
+                        <group colspan='2'>
+                            <field name='doc' />
+                            <field name='shipment_date' required='1' />
+                            <field name='arrival_date' required='1' />
+                        </group>
+                    </group>
+                    <field name='comment' />
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="purchase_import_tree" model="ir.ui.view">
+            <field name="name">purchase.import.tree</field>
+            <field name="model">purchase.import</field>
+            <field name="arch" type="xml">
+                <tree string='Purchase Import List'>
+                    <field name='name' />
+                    <field name='trading_id' />
+                    <field name="date_origin"/>
+                    <field name='date_cerrar'/>
+                    <field name='state' />
+                </tree>
+            </field>
+        </record>
+        
+        <record id="purchase_import_search" model="ir.ui.view">
+            <field name="name">purchase.import.search</field>
+            <field name="model">purchase.import</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name='name'/>
+                    <field name='number'/>
+                    <field name='date_out_realy'/>
+                    <field name='date_out_origin'/>
+                    <field name='dates'/>
+                    <field name='trading_id'/>
+                    <field name='origin'/>
+                    <field name='destination'/>
+                    <filter string="Borrador" name="draft_filter" domain="[('state','=','draft')]" />
+                    <filter string="Progreso" name="cancel_filter" domain="[('state','=','progress')]" />
+                    <filter string="Cerradas" name="done_filter"  domain="[('state','=','finished')]" />
+                    <filter string="Recepcionada" name="committed_filter"  domain="[('state','=','committed')]" />
+                    <group expand="0" string="Group By...">
+                        <filter string="Supplier" icon="terp-personal" domain="[]" context="{'group_by':'supplier_id'}" />
+                        <filter string="Trading" icon="terp-personal" domain="[]"  context="{'group_by':'trading_id'}" />
+                        <filter string="Origin" icon="terp-personal" domain="[]"   context="{'group_by':'origin'}" />
+                        <filter string="Destination" icon="terp-personal" domain="[]" context="{'group_by':'destination'}" />
+                        <filter string="State" icon="terp-personal" domain="[]" context="{'group_by':'state'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="purchase_order_transport_form_extended_import" model="ir.ui.view">
+            <field name="name">purchase.order.transport.form.import</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="stock_transport.purchase_order_transport_form_extended"/>
+            <field name="arch" type="xml">
+                <field name='transport_stock_move_ids' position="attributes">
+                    <attribute name="domain">[('state','in',['waiting','confirmed','assigned']),('transport_id','=',False),('location_id','=',origin_id),('location_dest_id','=',location_id)]</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="purchase_import_form" model="ir.ui.view">
+        <field name="name">purchase.import.form</field>
+        <field name="model">purchase.import</field>
+        <field name="arch" type="xml">
+            <form string='Purchase Import' version='7.0' >
+            <header>
+                <button name='to_confirmed' string='Confirmar' class="oe_highlight" states='draft'/>
+                <button name='to_progress' string='En Progreso' class="oe_highlight" states='confirmed,finished'/>
+                <button name='to_finished' string='Cerrar' class="oe_highlight" states='progress'/>
+                <button name='to_finished' string='No Entregado' class="oe_highlight" states='committed'/>
+                <button name='to_committed' string='Entregado' class="oe_highlight" states='finished'/>
+                <button name='to_cancel' string='Cancelar' class="oe_highlight" states='confirmed,progress'/>
+                <button name='to_draft' string='Cambiar a Borrador' class="oe_highlight" states='cancel'/>    
+                <button name='compute_cost' type='object' states='confirmed,progress' class="oe_highlight" 
+                groups="base.group_user" string='Calcular Costos'/>
+                <field name='state' widget="statusbar" />
+            </header>
+            <sheet>
+                <group>
+                    <h1>
+                        <field name="name"/>                        
+                    </h1>
+                    <div name='buttons' class="oe_right">                    
+                    </div>
+                </group>
+                <group colspan="6" col="6" string="Informacion General">
+                    <field name='trading_id' />
+                    <field name='supplier_importation_num'/>
+                    <field name="date_cerrar" attrs="{'invisible':[('state','!=','finished')]}"/>
+                </group>
+                <group col='6'>
+                    <group colspan='2' string="Fechas Puerto Int.">
+                        <field name='date_origin'/>                            
+                        <field name='date_realy'/>
+                    </group>
+                    <group colspan='2' string="Fechas Puerto Nac.">                            
+                        <field name='date_out_origin'/>                            
+                        <field name='date_out_realy'/>
+                    </group>
+                    <group colspan='2' string="Fechas Almacen">
+                        <field name='dates'/>
+                        <field name='dates_realy'/>
+                    </group>
+                </group>
+                <separator colspan="4"/>
+                <group col='4'>
+                    <group colspan='2' string="Informacion de Compra">
+                        <field name='calculate_method'/>
+                        <field name='incoterm_id'/>
+                        <field name='company_id' groups="base.group_multi_company"/>
+                    </group>
+                    <group colspan='2'>
+                        <field name='origin' />
+                        <field name='destination'/>
+                        <field name='caricom' />
+                        <field name='value_flete'/>
+                        <field name='flete_currency'/>
+                    </group>
+                    <group colspan='2' string="Seguro">
+                        <field name='type_seguro' attrs="{'required':[('state','in',['progress','finished'])]}"/>
+                        <field name='value_seguro' attrs="{'invisible':[('type_seguro','!=','porce')]}"/>
+                        <field name='value_seguro_dos' attrs="{'invisible':[('type_seguro','!=','price')]}"/>
+                    </group>
+                    <separator string="Totales" colspan='4'/>
+                    <group colspan='2'>
+                        <field name="currency_id"/>
+                        <field name="date_cost" attrs="{'required':[('state','=','progress')]}"/>
+                        <field name="currency_rate" attrs="{'required':[('state','=','progress')]}" context="{'date': date_cost}"/>
+                        
+                    </group>
+                    <group colspan='2'>
+                        <field name='amount_total_weight'/>
+                        <!--<field name='amount_products'/>-->
+                        <field name='amount_total_products'/>
+                        <field name='amount_total_products_aduana'/>
+                        <field name='amount_total_transport'/>
+                        <field name='amount_total_expenses'/>
+                        <field name='amount_total_aranceles'/>
+                        <field name='amount_total_importation'/>
+                    </group>
+                </group>
+                <newline />
+                <notebook>
+                    <page string='Ordenes de Compra'>
+                        <field name='purchase_order_ids' widget="many2many" domain="[('import_id', '=', False)]">
+                            <tree>
+                                <field name='name' />
+                                <field name='partner_id' />
+                                <field name='date_order' />
+                                <field name='pricelist_id' />
+                                <field name='amount_untaxed' sum="Total"/>
+                                <field name='total_moneda_local' sum="Total Moneda Local"/>
+                                <field name='products_value' sum="Total Productos"/>
+                                <field name="state" invisible='1' />
+                            </tree>
+                        </field>
+                    </page>
+                    <page string='Productos'>
+                        <field name='transport_stock_move_ids'>
+                            <tree>
+                                <field name='origin' />
+                                <field name='product_id' />
+                                <field name='product_uom_qty' />
+                                <field name='product_uom' string="Unidad de Compra"/>
+                                <field name='product_qty' />
+                                <field name='product_uos' string="Unidad de Stock"/>
+                                <!--<field name='weight' sum="Total Weight"/>
+                                <field name='price_unit_total' sum="Total Price"/>-->
+                                <field name='cost_product_import' sum="Total Price" groups="purchase_import.group_manager_import"/>
+                                <field name='transport_cost' sum="Total Transport Cost" groups="purchase_import.group_manager_import"/>
+                                <field name='seguro_cost' sum="Total Seguro" groups="purchase_import.group_manager_import"/>
+                                <field name='flete_cost' sum="Total Flete" groups="purchase_import.group_manager_import"/>
+                                <field name='aduana_cost' sum="Total Aduana" groups="purchase_import.group_manager_import"/>
+                                <field name='arancel_id'/>
+                                <field name='arancel_cost' sum="Total Arancel" groups="purchase_import.group_manager_import"/>
+                                <field name='import_cost' string="Costos adicionales" sum="Total Costo adicionales" groups="purchase_import.group_manager_import"/>
+                                <field name='total_cost' sum="Total Costo" groups="purchase_import.group_manager_import"/>
+                                <field name='cost' groups="purchase_import.group_manager_import"/>
+                                <field name='state'/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string='Transportes'>
+                        <field name='transport_order_line_ids'>
+                            <tree>
+                                <field name='product_id' />
+                                <field name='name' />
+                                <field name='date_planned' />
+                                <field name='order_currency_id' />
+                                <field name='price_unit' />
+                                <field name='taxes_id' />
+                                <field name='price_subtotal' sum="Total"/>
+                                <field name='local_subtotal' sum="Total Local"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string='Costos Adicionales'>
+                        <group string="Gastos de Importacion">
+                            <field name='invoices_ids' context="{'form_view_ref': 'account.invoice_supplier_form', 'default_type': 'in_invoice', 'default_journal_type': 'purchase'}" readonly="1" nolabel="1">
+                                <tree>
+                                    <field name="number" />
+                                    <field name="partner_id" groups="base.group_user" />
+                                    <field name="date_invoice" />
+                                    <field name="currency_id" />
+                                    <field name="amount_untaxed_moneda_local" sum="Subtotal" />
+                                    <field name="amount_tax_moneda_local" sum="Impuestos" />
+                                    <field name="total_moneda_local" sum="Total" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Notas credito de gastos">
+                            <field name='refund_ids' context="{'form_view_ref': 'account.invoice_supplier_form', 'default_type': 'in_refund', 'default_journal_type': 'purchase'}" readonly="1" nolabel="1">
+                                <tree>
+                                    <field name="number" />
+                                    <field name="partner_id" groups="base.group_user" />
+                                    <field name="date_invoice" />
+                                    <field name="currency_id" />
+                                    <field name="amount_untaxed_moneda_local" sum="Subtotal" />
+                                    <field name="amount_tax_moneda_local" sum="Impuestos" />
+                                    <field name="total_moneda_local" sum="Total" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group string="Facturas de Arancel">
+                            <field name='invoices_arancel_ids'  context="{'form_view_ref': 'account.invoice_supplier_form', 'default_type': 'in_invoice', 'default_journal_type': 'purchase'}" readonly="1" nolabel="1">
+                                <tree>
+                                    <field name="number" />
+                                    <field name="partner_id" groups="base.group_user" />
+                                    <field name="date_invoice" />
+                                    <field name="currency_id" />
+                                    <field name="amount_untaxed_moneda_local" sum="Subtotal" />
+                                    <field name="amount_tax_moneda_local" sum="Impuestos" />
+                                    <field name="total_moneda_local" sum="Total" />
+                                    <field name="state" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string='BL/Docs'>
+                        <field name='bl_doc_ids' />
+                    </page>
+                </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+            </form>
+        </field>
+        </record>
+
+        <record id="purchase_import_order_form" model="ir.ui.view">
+            <field name="name">purchase.import.order.form.2</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="advance_supplier.purchase_advance_order_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="import_id" context="{'default_incoterm_id': incoterm_id}" groups="purchase_import.group_user_import"/>
+                    <field name="event_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="action_purchase_import" model="ir.actions.act_window">
+            <field name="name">Purchase Import</field>
+            <field name="res_model">purchase.import</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id='menu_purchase_import' name='Orden de Importacion' action='action_purchase_import' parent='purchase.menu_procurement_management' groups="purchase_import.group_user_import"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="avancys_group_form_view">
+            <field name="name">avancys.form</field>
+            <field name="model">avancys.group</field>
+            <field name="arch" type="xml">
+                <form string="Formulario de groupas">
+                    <sheet>
+                        <group string='Datos Generales'>
+    	                        <field name="name"/>
+                        </group>
+                        <group>
+                            <notebook>
+                                <page string="Personas">
+                                    <field name="users_ids">
+                                        <field name="name"/>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="avancys_group_tree_view">
+            <field name="name">avancys.tree</field>
+            <field name="model">avancys.group</field>
+            <field name="arch" type="xml">
+                <tree string="Lista de grupos">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="avancys_group_list_action">
+            <field name="name">Grupos</field>
+            <field name="res_model">avancys.group</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crea el primer grupo
+                </p>
+            </field>
+        </record>
+    </data>
+</openerp>

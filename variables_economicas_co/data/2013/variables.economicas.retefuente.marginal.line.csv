@@ -1,0 +1,5 @@
+id,valor_desde,valor_hasta,tarifa,ajuste,retefuente_id:id
+retefuente_marginal1,0,95,0,0,variables_economicas_co.variables_economicas_retefuente_tabla
+retefuente_marginal2,95,150,19,0,variables_economicas_co.variables_economicas_retefuente_tabla
+retefuente_marginal3,150,360,28,10,variables_economicas_co.variables_economicas_retefuente_tabla
+retefuente_marginal4,360,0,33,69,variables_economicas_co.variables_economicas_retefuente_tabla

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        
+        <record id="view_company_service_costumer_form" model="ir.ui.view">
+            <field name="name">res.company.service.costumer.invoice.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Servicio al Cliente">
+                        <group>
+                            <field name="logo_service"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+                
+        <record id="service_costumer_view_tree" model="ir.ui.view">
+            <field name="name">service.costumer.tree</field>
+            <field name="model">service.costumer</field>
+            <field name="arch" type="xml">
+                <tree string="Ordenes de Servicio">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="product_ref"/>
+                    <field name="categ_id"/>
+                    <field name="summary"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="contact_id"/>
+                    <field name="prioridad_id"/>
+                    <!--<field name="category_id"/>-->   
+                    <field name="date_reclamacion"/>   
+                    <field name="state"/>
+                </tree>
+            </field>
+         </record>
+        
+      
+         <record id="service_costumer_view_form" model="ir.ui.view">
+            <field name="name">service.costumer.form</field>
+            <field name="model">service.costumer</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Ordenes de Servicio" version="7.0">
+                    <header>
+                        <button string="Confirmar" name="confirmar" states="draft" groups="service_costumer.group_user_service"/>
+                        <button string="Recepcionar" name="recepcionar" states="confirm" groups="service_costumer.group_user_service"/>
+                        <button string="Revisar" name="selection" states="recept" groups="service_costumer.group_user_service"/>
+                        <button string="Diagnosticar" name="diagnosticar" states="open" groups="service_costumer.group_user_service"/>
+                        <button string="Despachar" name="despachar" states="diagnostico" groups="service_costumer.group_user_service"/>
+                        <button string="Cerrar" name="close" states="despachado" groups="service_costumer.group_tecnico_mantenimiento"/>
+                        <field name="state" widget="statusbar" states="draft,confirm,recept,open,diagnostico,despachado,close"/>
+                    </header>
+                    <sheet string="Ordenes de Servicio">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="2" string="Informacion General">     
+                            <field name="summary"/>                            
+                        </group>
+                        <group col="4" colspan="4">
+                            <field name="product_id"/>
+                            <field name="plu"/>                            
+                            <field name="product_qty"/>
+                            <field name="product_ref"/>
+                            <field name="categ_id"/>
+                            <field name="product_description"/> 
+                            <field name="product_serial"/> 
+                            <field name="code"/>
+                            <field name="importacion"/>
+                            <field name="guia"/>
+                            <field name="guia_end" attrs="{'readonly':[('state','not in',['diagnostico'])], 'invisible':[('state','not in',['diagnostico','despachado','close'])]}"/>
+                            <field name="date_purchase"/>
+                            <field name="date_reclamacion"/> 
+                            <field name="responsable_id" attrs="{'invisible':[('state','=','draft')], 'required':[('state','=','confirm')]}"/>
+                            <field name="prioridad_id" attrs="{'invisible':[('state','=','draft')], 'required':[('state','=','confirm')]}"/>
+                            <field name="referencia"  attrs="{'required':[('resultado_tecnico','=','notacredito'),('state','=','despachado')], 'invisible':[('resultado_tecnico','=',False)]}"/>
+                            <field name="date_limit_open" attrs="{'invisible':[('state','=','draft')], 'required':[('state','=','confirm')]}"/>
+                            <field name="date_limit_close" attrs="{'required':[('state','in',['diagnostico'])], 'invisible':[('state','not in',['diagnostico','despachado','close'])]}"/>
+                        </group>                        
+                        <group col="2" string="Informacion Garantia" attrs="{'invisible':[('date_purchase','=',False),('date_reclamacion','=',False)]}">     
+                            <field name="garantia"/>                            
+                        </group>   
+                        <notebook position="inside" colspan="4">
+                            <page string="Informacion del Reclamante">
+                                <group col="2">     
+                                    <field name="partner_id"/>
+                                </group>                        
+                                <group col="4">
+                                    <field name="partner_phone"/>
+                                    <field name="partner_email"/>
+                                </group>                        
+                                <group col="2">
+                                    <field name="partner_sucursal_id"/>
+                                </group>                        
+                                <group col="4">
+                                    <field name="partner_sucursal_phone"/>
+                                    <field name="partner_sucursal_email"/>
+                                </group>                        
+                                <group col="2">
+                                    <field name="contact_id"/>
+                                </group>                        
+                                <group col="4">
+                                    <field name="contact_phone"/>
+                                    <field name="contact_email"/>
+                                </group>
+                            </page>
+                            <page string="Programacion" attrs="{'invisible':[('state','in',['draft','confirm'])]}">
+                                <group col="4" >
+                                    <field name="tecnico_id2" attrs="{'required':[('state','=','recept')]}"/>
+                                </group>
+                                <group col="2" attrs="{'invisible':[('state','in',['confirm','recept'])]}" string="Resultado">
+                                    <field name="resultado_tecnico" attrs="{'required':[('state','=','open')]}"/>
+                                </group>
+                                <group col="2" attrs="{'invisible':[('state','in',['confirm','recept'])]}" string="Trabajos realizados">
+                                    <field name="trabajos_tecnico" attrs="{'required':[('state','=','open')]}"/>
+                                </group>
+                                <group col="2" attrs="{'invisible':[('state','in',['confirm','recept'])]}" string="Observaciones">
+                                    <field name="observaciones_tecnico"/>
+                                </group>
+                            </page>  
+                            <page string="Trazabilidad">
+                                <group colspan="4" col="4">
+                                    <group string="Envio" colspan="2" col="2">
+                                        <field name="create_uid" readonly="1" string="Creado por:" attrs="{'invisible':[('state','in',['draft'])]}"/> 
+                                        <field name="create_date" readonly="1" string="Fecha:" attrs="{'invisible':[('state','in',['draft'])]}"/>
+                                        <field name="observaciones" nolabel="1" colspan="2"/> 
+                                    </group>
+                                    <group string="Recepcion" colspan="2" col="2" attrs="{'invisible':[('state','in',['draft'])]}">
+                                        <field name="user_recepcion_id"/> 
+                                        <field name="date_recepcion" attrs="{'required':[('state','=','confirm')]}"/>
+                                        <field name="observaciones_recepcion" attrs="{'invisible':[('state','=','draft')], 'required':[('state','=','confirm')]}" nolabel="1" colspan="2"/>
+                                    </group>
+                                </group>
+                            </page>                        
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+         
+                  
+         <record id="service_costumer_view_search" model="ir.ui.view">
+            <field name="name">service.costumer.search</field>
+            <field name="model">service.costumer</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Ordenes de Servicio">
+                    <field name="name"/>
+                    <field name="plu"/>
+                    <field name="product_id"/>
+                    <field name="responsable_id"/>
+                    <field name="tecnico_id2"/>
+                    <field name="product_ref"/>
+                    <field name="categ_id"/>
+                    <field name="summary"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="partner_sucursal_id"/>
+                    <field name="contact_id"/>
+                    <field name="prioridad_id"/>
+                    <!--<field name="category_id"/>-->
+                    <field name="resultado_tecnico"/>
+                    <field name="state"/>
+                    <field name="date_reclamacion"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product_id" string="Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="group_product_ref" string="Referencia Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_ref'}"/>
+                        <filter name="group_partner_id" string="Cliente" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="group_partner_sucursal_id" string="Sucursal" icon="terp-partner" domain="[]" context="{'group_by':'partner_sucursal_id'}"/>
+                        <filter name="group_contact_id" string="Contactos" icon="terp-partner" domain="[]" context="{'group_by':'contact_id'}"/>
+                        <filter name="group_state" string="Estado" icon="terp-partner" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="group_prioridad_id" string="Prioridad" icon="terp-partner" domain="[]" context="{'group_by':'prioridad_id'}"/>
+                        <!--<filter name="group_category_id" string="Categoria" icon="terp-partner" domain="[]" context="{'group_by':'category_id'}"/>-->
+                        <filter name="group_date_reclamacion" string="Fecha Reclamacion" icon="terp-partner" domain="[]" context="{'group_by':'date_reclamacion'}"/>
+                        <filter name="group_resultado_tecnico" string="Resultado" icon="terp-partner" domain="[]" context="{'group_by':'resultado_tecnico'}"/>
+                        <filter name="group_tecnico_id" string="Tecnico" icon="terp-partner" domain="[]" context="{'group_by':'tecnico_id2'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+       
+         <record id="action_service_costumer" model="ir.actions.act_window">
+            <field name="name">Servicio al Cliente</field>
+            <field name="res_model">service.costumer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+         </record>
+        
+        <menuitem id="main_service_costumer" name="Servicio al Cliente" sequence="210" groups="service_costumer.group_user_service"/>
+        <menuitem id="sub_main_service" name="Reclamaciones" parent="main_service_costumer"/>
+        <menuitem id="sub_main_service_costumer" action="action_service_costumer" name="Ordenes de Servicio" parent="sub_main_service" sequence="10"/>
+        
+        <report
+            id="stock_service_report_customer"
+            model="service.costumer"
+            string="SERVICIO AL CLIENTE"
+            report_type="qweb-pdf"
+            name="service_costumer.stock_service_report" 
+            file="service_costumer.stock_service_report"
+            />
+                 
+    </data>
+    
+    <data noupdate="1">
+        <record id="seq_service_number_type" model="ir.sequence.type">
+            <field name="name">Solicitud de Servicio</field>
+            <field name="code">service.costumer.number</field>
+        </record>
+        <record id="seq_service_number" model="ir.sequence">
+            <field name="name">Numero de Solicitud de Servicio</field>
+            <field name="code">service.costumer.number</field>
+            <field name="prefix">SERVICE-</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+    
+    
+</openerp>

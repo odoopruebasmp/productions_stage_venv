@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <menuitem id="main_avancys_idea_menu" sequence="1" name="Ideas"/>
+
+        <menuitem id="avancys_idea_menu_conf" sequence="100" name="Configuración" parent="main_avancys_idea_menu"/>
+
+        <menuitem id="avancys_idea_menu_proc" sequence="10" name="Votaciones" parent="main_avancys_idea_menu"/>
+
+        <menuitem id="avancys_idea_menu" sequence="110" name="Idea" parent="avancys_idea_menu_conf" action="avancys_idea_list_action"/>
+
+        <menuitem id="avancys_group_idea_menu" sequence="120" name="Grupo de Ideas" parent="avancys_idea_menu_conf" action="avancys_group_idea_list_action"/>
+
+        <menuitem id="avancys_votes_menu" sequence="15" name="Votos" parent="avancys_idea_menu_proc" action="avancys_votes_list_action"/>
+
+        <menuitem id="avancys_group_menu" sequence="130" name="Grupo de personas" parent="avancys_idea_menu_conf" action="avancys_group_list_action"/>
+
+        <menuitem id="avancys_graph_menu" sequence="25" name="Promedio vs votos" parent="avancys_idea_menu_proc" action="avancys_graph_list_action"/>
+    </data>
+</openerp>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="fpa_medios_2276" model="fpa.financial.reports">
+            <field name="name">2276 - Información de rentas de trabajo y pensiones</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB</field>
+            <field name="type">ex</field>
+            <field name="export_type_date">range</field>
+            <field name="application_type">hr</field>
+            <field name="title">Tipo de documento del beneficiario,Numero de identificación del beneficiario,Primer Apellido del beneficiario,Segundo Apellido del beneficiario,Primer nombre del beneficiario,Otros nombres del beneficiario,Dirección del beneficiario,Departamento del beneficiario,Municipio del beneficiario,Pais del beneficiario,Pagos por salarios,Pagos por emolumentos eclesiásticos,Pagos por honorarios,Pagos por servicios,Pagos por comisiones,Pagos por prestaciones sociales,Pagos por viáticos,Pagos por gastos de representación,Pagos por compensaciones de trabajo asociado cooperativa,Otros pagos,Pagos realizados con bonos electrónicos efectivamente pagadas consignadas o reconocidas en el periodo,Cesantias e intereses de cesantias efectivamente pagadas consignadas o reconocidas en el periodo,Pensiones de jubilación vejez o invalidez,Aportes obligatorios por Salud,Aportes obligatorios a fondos de pensiones y solidaridad pensional y Aportes voluntarios al - RAIS,Aportes voluntarios a fondo pensiones,Aportes a cuentas AFC,Valor de las retenciones en la fuente por pagos de rentas de trabajo o pensiones</field>
+            <field name="query">
+                SELECT code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,street,rcs_code,
+                       rc_code,rco_code,SUM(K),SUM(L),SUM(M),SUM(N),SUM(O),SUM(P),SUM(Q),SUM(R),SUM(S),SUM(T),SUM(U),
+                       SUM(V),SUM(W),SUM(X),SUM(Y),SUM(Z),SUM(AA),SUM(AB)
+                FROM (
+                    SELECT rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,rp.otros_nombres,
+                           rp.name,rp.street,rcs.code as rcs_code,rc.code as rc_code,rco.code as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='K' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) K,
+                        COALESCE((CASE WHEN ffrccl.col='L' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) L,
+                        COALESCE((CASE WHEN ffrccl.col='M' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) M,
+                        COALESCE((CASE WHEN ffrccl.col='N' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) N,
+                        COALESCE((CASE WHEN ffrccl.col='O' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) O,
+                        COALESCE((CASE WHEN ffrccl.col='P' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) P,
+                        COALESCE((CASE WHEN ffrccl.col='Q' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) Q,
+                        COALESCE((CASE WHEN ffrccl.col='R' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) R,
+                        COALESCE((CASE WHEN ffrccl.col='S' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) S,
+                        COALESCE((CASE WHEN ffrccl.col='T' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) T,
+                        COALESCE((CASE WHEN ffrccl.col='U' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) U,
+                        COALESCE((CASE WHEN ffrccl.col='V' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) V,
+                        COALESCE((CASE WHEN ffrccl.col='W' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) W,
+                        COALESCE((CASE WHEN ffrccl.col='X' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) X,
+                        COALESCE((CASE WHEN ffrccl.col='Y' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) Y,
+                        COALESCE((CASE WHEN ffrccl.col='Z' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) Z,
+                        COALESCE((CASE WHEN ffrccl.col='AA' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) AA,
+                        COALESCE((CASE WHEN ffrccl.col='AB' AND ffrccl.type='t' THEN ROUND(SUM(hpc.total)) ELSE 0 END), 0) AB
+                    FROM hr_payslip_concept hpc
+                        INNER JOIN hr_payslip_concepts_code hpcc ON hpcc.code = hpc.code --conceptos
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrccl.id = hpcc.column_line_id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        LEFT JOIN hr_employee he ON he.id = hpc.employee_id
+                        LEFT JOIN res_partner rp ON rp.employee_id = he.id
+                        LEFT JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE hpc.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id}
+                    GROUP BY rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,rco.code,ffrccl.col,ffrccl.type
+                    HAVING ROUND(SUM(hpc.total)) != 0
+                )
+                as datos
+                GROUP BY code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,street,rcs_code,rc_code,rco_code
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_2276_NA" model="fpa.financial.reports.concepts.columns">
+            <field name="name">N/A</field>
+            <field name="code">NA</field>
+            <field name="application_type">hr</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_2276')" />
+        </record>
+
+    </data>
+</openerp>

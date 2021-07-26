@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+     
+
+
+
+        <record id="view_generate_payment_customer_masive_wizard_form" model="ir.ui.view">
+        <field name="name">Generar Recibos de Clientes</field>
+        <field name="model">generated.payment.customer.masive</field>
+        <field name="arch" type="xml">
+            <form string="Generar Recibos de Clientes">
+                <group col="2">
+                    <!--<field name="required_lines_default" />-->
+                    <field name="count" invisible="1"/>
+                    <field name="journal_id" options="{'no_create':True,'no_quick_create':True,'no_create_edit':True,'no_open': True,}"  width="10%"/>
+                 </group>
+                 <group>
+                    <field name="period_id" options="{'no_create':True,'no_quick_create':True,'no_create_edit':True,'no_open': True,}" width="10%"/>
+                </group>
+                <group >
+                    <field name="search_t_ids" widget="one2many_list" nolabel="1" readonly="1">
+                        <tree>
+                            <field name="customer_id"/>
+                            <!--<field name="picking_order_id"/>-->
+                            <field name="invoice_id"/>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_total"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="generate_data" string="Generar" type="object" class="btn-primary"/>                        
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_generate_payment_customer_masive" model="ir.actions.act_window">
+        <field name="name">Generar Recibos de Clientes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">generated.payment.customer.masive</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- TODO: check if we need this -->
+        
+    </record>
+
+
+    <act_window id="action_account_invoice_generate_paymet"
+            multi="True"
+            key2="client_action_multi" name="Generar Recibos"
+            res_model="generated.payment.customer.masive" src_model="account.invoice"
+            view_mode="form" target="new" view_type="form" />-->
+
+
+    </data>
+</openerp>
+

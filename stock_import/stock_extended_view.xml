@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+		<menuitem id='menu_stock_import' name='Start Inventory' action='action_stock_import_wiz' parent='stock.menu_stock_inventory_control' sequence='31'/>
+		<menuitem id='menu_update_product_cost' name='Update Product Cost' action='action_update_product_cost_wiz' parent='stock.menu_stock_inventory_control' sequence='32'/>
+	</data>
+</openerp>	

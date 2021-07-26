@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <template id="cheque_bogota">
+            <style>
+            H4 {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 2mm;
+            margin-left: 20mm;
+            margin-right: 0mm;
+            text-align : left;
+            font-style: arial;
+            text-transform: uppercase;
+            line-height:6mm;
+            }
+            </style>
+
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <!-- cuerpo del documento -->
+                    <div class="page">
+                        <!-- Datos y valores del cheque -->
+                        <p style="line-height:0.5mm;color:white;">Cheque Bancolombia</p>
+                        <div class="border-test">
+                            <H4><span style="margin-top:55mm;margin-left:70mm; letter-spacing: 2.7mm" t-field="o.date" t-field-options="{&quot;format&quot;: &quot;yyyyMMdd&quot;}"/><span style="margin-left:12mm; font-size: 12px; letter-spacing: 1mm" t-field="o.amount"/></H4>
+                            <H4 style="margin-top:5mm;letter-spacing: 1.4mm;line-height:5mm" t-field="o.other_partner_id.name"/>
+                            <H4 style="letter-spacing: 0.1mm"><span style="margin-top:4mm;margin-left: 0mm; line-height:8mm" t-esc="o.amount" t-esc-options="{&quot;widget&quot;: &quot;num2words&quot;}"/> PESOS MCTE</H4>
+                        </div>
+
+                        <!-- Datos del comprobante -->
+                        <H4 style="margin-bottom: 80mm"> </H4>
+                        <table class="table" style="font-size:12px" WIDTH="100%" t-foreach="o.line_dr_ids" t-as="l">
+                            <tr t-if="l.amount &gt; 0">
+                                <td style="line-height:2mm" align="left" colspan="2"><span t-field="l.move_line_id.ref"/></td>
+                                <td style="line-height:2mm" align="center" colspan="2"><span t-field="l.account_id"/></td>
+                                <td style="line-height:2mm" align="right" colspan="2"><span t-field="l.amount"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- Datos de facturas rectificativas o anticipos -->
+                        <table class="table" t-foreach="o.line_cr_ids" t-as="l" style="font-size:12px" WIDTH="100%">
+                            <tr t-if="l.amount &gt; 0">
+                                <td style="line-height:2mm" align="left" colspan="2"><span t-field="l.move_line_id.ref"/></td>
+                                <td style="line-height:2mm" align="center" colspan="2"><span t-field="l.account_id"/></td>
+                                <td style="line-height:2mm" align="right" colspan="2"><span t-field="l.amount"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

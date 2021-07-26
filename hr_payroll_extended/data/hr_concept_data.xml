@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record model="hr.concept" id="hc_basico">
+        <field name="name">SUELDO BASICO</field>
+        <field name="code">BASICO</field>
+        <field name="category">earnings</field>
+        <field name="documentation">
+            Valor de salario asignado en el contrato y depende de los dias trabajados en el periodo &lt; br/&gt;
+            Varia el nombre del concepto dependiendo del tipo de contrato y el rate cambia unicamente cuando es tipo
+            aprendiz lectivo.
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_aux_trans">
+        <field name="name">SUBSIDIO DE TRANSPORTE</field>
+        <field name="code">AUX_TRANS</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+            "Valor de auxilio de transporte definido en variables economicas por los dias trabajados en
+            el mes o periodo. &lt;br/&gt;
+            Tambien omite el calculo si en el contrato está marcada la opcion skip_aux_trans
+            Si el valor de la categoria de devengados supera el valor de dos salarios minimos se omite el pago."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_eg_b2">
+        <field name="name">INC ENFGENERAL 1-2</field>
+        <field name="code">EG_B2</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo enfermedad general que tengan entre 1 y 2 dias y se paga por el rate
+            definido en el tipo de ausencia."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_eg_b90">
+        <field name="name">INC ENFGENERAL 3-90</field>
+        <field name="code">EG_B90</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo enfermedad general que tengan entre 3 y 90 dias y se paga por el rate
+            definido en el tipo de ausencia."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_eg_b180">
+        <field name="name">INC ENFGENERAL 90-180</field>
+        <field name="code">EG_B180</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo enfermedad general que tengan entre 91 y 180 dias y se paga por el rate
+            definido en el tipo de ausencia."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_eg_a180">
+        <field name="name">INC ENFGENERAL 180+</field>
+        <field name="code">EG_A180</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo enfermedad general que tengan mas de 180 dias y se paga por el rate
+            definido en el tipo de ausencia."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_atep">
+        <field name="name">INC ATEP 1er DIA</field>
+        <field name="code">ATEP</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo ATEP por el primer dia"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_atep_p2">
+        <field name="name">INC ATEP 2 O MAS</field>
+        <field name="code">ATEP_P2</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo ATEP desde el segundo dia"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_mat_lic">
+        <field name="name">LICENCIA DE MATERNIDAD</field>
+        <field name="code">MAT_LIC</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo licencia de maternidad"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_pat_lic">
+        <field name="name">LICENCIA DE PATERNIDAD</field>
+        <field name="code">PAT_LIC</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor a pagar por ausencias de tipo licencia de paternidad"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_vac_disf">
+        <field name="name">VACACIONES DISFRUTADAS</field>
+        <field name="code">VAC_DISF</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor de vacaciones disfrutadas correspondiente a los dias de la ausencia por los devengos promedio
+            del ultimo año, no se debe tener en cuenta el auxilio de transporte y se deben incluir las horas de
+            recargo nocturno. Se deben tener en cuenta para pago unicamente si está en estado validado. y se pagan TODOS los
+            dias de la ausencia indiferente de si se extienden hasta otro periodo"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_vac_pag">
+        <field name="name">VACACIONES EN DINERO</field>
+        <field name="code">VAC_PAG</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            "Valor de vacaciones pagadas en dinero correspondiente a los dias solicitados por el promedio de ingresos
+            del ultimo año, no se debe tener en cuenta el auxilio de transporte y se deben incluir las horas de
+            recargo nocturno y horas extra. Se deben tener en cuenta para pago unicamente si está en estado validado.
+            y se pagan TODOS los dias de la ausencia indiferente de si se extienden hasta otro periodo"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prima">
+        <field name="name">PRIMA LEGAL</field>
+        <field name="code">PRIMA</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            Prima legal de servicios
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_indem">
+        <field name="name">INDEMNIZACION</field>
+        <field name="code">INDEM</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_cesly">
+        <field name="name">CESANTIAS AÑO ANTERIOR</field>
+        <field name="code">CESLY</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_icesly">
+        <field name="name">INTERESES CESANTIAS AÑO ANTERIOR</field>
+        <field name="code">ICESLY</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ces">
+        <field name="name">CESANTIAS</field>
+        <field name="code">CES</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ices">
+        <field name="name">INTERESES DE CESANTIAS</field>
+        <field name="code">ICES</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ces_part">
+        <field name="name">CESANTIAS PARCIALES</field>
+        <field name="code">CES_PART</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ices_part">
+        <field name="name">INTERESES DE CESANTIAS PARCIALES</field>
+        <field name="code">ICES_PART</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_vac_liq">
+        <field name="name">VACACIONES LIQUIDACION</field>
+        <field name="code">VAC_LIQ</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+            Valor calculado similar a las vacaciones en dinero, obteniendo el promedio desde inicio a fin de contrato
+            y liquidando el numero de dias directamente desde el libro de vacaciones del contrato.
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ces_liq">
+        <field name="name">CESANTIAS LIQUIDACION</field>
+        <field name="code">CES_LIQ</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ices_liq">
+        <field name="name">INTERESES CESANTIAS LIQUIDACION</field>
+        <field name="code">ICES_LIQ</field>
+        <field name="category">non_taxed_earnings</field>
+        <field name="documentation">
+
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prim_liq">
+        <field name="name">PRIMA LIQUIDACION</field>
+        <field name="code">PRIM_LIQ</field>
+        <field name="category">o_rights</field>
+        <field name="documentation">
+
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ibd">
+        <field name="name">INGRESO BASE DEDUCCIONES</field>
+        <field name="code">IBD</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor de ingresos que constituyen la base para las deducciones. Tiene en cuenta el tope del 40%
+            de los ingresos no salariales que al sobre pasarlos harian parte de los ingresos base salariales."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ibl">
+        <field name="name">INGRESO BASE LABORADO</field>
+        <field name="code">IBL</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor de ingresos percibidos por dias laborados unicamente, concepto necesario para PILA"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ibs">
+        <field name="name">INGRESO BASE SEGURIDAD SOCIAL</field>
+        <field name="code">IBS</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor resultante de tomar el IBD y validar que no se encuentre por debajo del salario minimo o medio salario
+            si el periodo corresponde a la primera quincena."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ibp">
+        <field name="name">INGRESO BASE PARAFISCALES</field>
+        <field name="code">IBP</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor de los ingresos excluyendo los otros derechos y sumando el valor de las licencias de maternidad y paternidad
+            para tipos de contrato regulares, en caso de ser tipo integral se toma sobre el 70%"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ibr">
+        <field name="name">INGRESO BASE RIESGOS</field>
+        <field name="code">IBR</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor de los ingresos excluyendo los otros derechos. considerando el tope de ingresos no salariales al 40%
+            y el tope de 25% slmv. &lt;br/&gt;
+            Si es tipo integral lo limita al 70% y si es aprendiz lectivo lo omite."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ded_pens">
+        <field name="name">DEDUCCION PENSION</field>
+        <field name="code">DED_PENS</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+            "Valor a deducir correspondiente a pensión basado en el IBS Valida si el subtipo de cotizante
+            corresponde al de pensionado para omitir el calculo"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ded_eps">
+        <field name="name">DEDUCCION SALUD</field>
+        <field name="code">DED_EPS</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+            "Valor a deducir correspondiente a salud basado en el IBS"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_fond_sol">
+        <field name="name">FONDO DE SOLIDARIDAD</field>
+        <field name="code">FOND_SOL</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+            "Valor basado en el IBS Valida si el subtipo de cotizante corresponde al de pensionado para omitir el calculo.
+            Corresponde al 1% si la base supera los 4 salarios minimos"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_fond_sub">
+        <field name="name">FONDO DE SUBSISTENCIA</field>
+        <field name="code">FOND_SUB</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+            "Valor basado en el IBS Valida si el subtipo de cotizante corresponde al de pensionado para omitir el calculo.
+            Corresponde a un porcentaje desde los 16 salarios minimos."
+        </field>
+    </record>
+
+     <record model="hr.concept" id="hc_ant">
+        <field name="name">ANTICIPOS VENCIDOS</field>
+        <field name="code">ANT</field>
+        <field name="category">deductions</field>
+    </record>
+
+    <record model="hr.concept" id="hc_brtf">
+        <field name="name">BASE RETENCION EN LA FUENTE</field>
+        <field name="code">BRTF</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor calculado de la siguiente manera: &lt;br/&gt;
+            &lt;b&gt;Ingresos: &lt;/b&gt;Suma de ingresos correspondientes a las categorias [Devengos, Otros devengos,
+            Otros ingresos salariales, Ingresos complementarios, Otros derechos.]  &lt;br/&gt;
+            &lt;b&gt;Ingresos no constitutivos: &lt;/b&gt;Correspondiente a las deducciones de salud, pension y fondos de
+            solidaridad y de subsistencia.  &lt;br/&gt;
+            &lt;hr/&gt;
+            &lt;b&gt;Esto nos generaria los ingresos netos.&lt;/b&gt;
+            &lt;hr/&gt;
+            &lt;b&gt;Deducibles: &lt;/b&gt; Correspondiente a los parametros dados en el contrato como deducibles por dependientes,
+            medicina prepagada e intereses de vivienda. &lt;br/&gt;
+            &lt;b&gt;Aportes voluntarios: &lt;/b&gt; Valor de aportes voluntarios con el tope del 20% de los ingresos netos  &lt;br/&gt;
+            &lt;b&gt;Deduccion del 25% por ley: &lt;/b&gt; La base deducible es luego de tomar los ingresos netos menos las deducciones
+            con un tope de 240 uvt.
+            &lt;hr/&gt;
+            &lt;b&gt;Rentas exentas: &lt;/b&gt; Valor tope de 40% de los ingresos sumando los deducibles, aportes voluntarios y el tope 25
+            &lt;hr/&gt;
+            &lt;b&gt;Finalmente retorna el valor de los ingresos netos menos las rentas exentas&lt;/b&gt;"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_rtefte">
+        <field name="name">RETENCION EN LA FUENTE</field>
+        <field name="code">RTEFTE</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+            "Realiza la conversion de la base de retencion a UVT para hacer la comparacion con una tabla de valores
+            para obtener un porcentaje. &lt;br/&gt;
+            Luego realiza nuevamente una conversion restando los UVT del escalon de la tabla y lo multiplica por el porcentaje.
+            Finalmente vuelve a multiplicar por el valor del UVT para calcular con la base el % aplicado."
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_rtf_prima">
+        <field name="name">RETENCION EN LA FUENTE PRIMA</field>
+        <field name="code">RTF_PRIMA</field>
+        <field name="category">deductions</field>
+    </record>
+
+    <record model="hr.concept" id="hc_rtf_indem">
+        <field name="name">RETENCION EN LA FUENTE INDEMNIZACION</field>
+        <field name="code">RTF_INDEM</field>
+        <field name="category">deductions</field>
+        <field name="documentation">
+
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_neto">
+        <field name="name">NETO A PAGAR</field>
+        <field name="code">NETO</field>
+        <field name="category">subtotals</field>
+        <field name="documentation">
+            "Valor correspondiente a restarle a todos los devengos el valor de las deducciones.
+            Este valor es el que recibe el empleado finalmente"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_tot_dev">
+        <field name="name">TOTAL DEVENGADO</field>
+        <field name="code">TOT_DEV</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_tot_ded">
+        <field name="name">TOTAL DEDUCCIONES</field>
+        <field name="code">TOT_DED</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_neto_ces">
+        <field name="name">NETO A PAGAR CESANTIAS</field>
+        <field name="code">NETO_CES</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_neto_liq">
+        <field name="name">NETO A PAGAR LIQUIDACION</field>
+        <field name="code">NETO_LIQ</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_pens">
+        <field name="name">APORTES PENSION</field>
+        <field name="code">AP_PENS</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de pension"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_eps">
+        <field name="name">APORTES EPS</field>
+        <field name="code">AP_EPS</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de EPS"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_ccf">
+        <field name="name">APORTES CCF</field>
+        <field name="code">AP_CCF</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de caja de compensacion"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_arl">
+        <field name="name">APORTES ARL</field>
+        <field name="code">AP_ARL</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de ARL. No se paga si el empleado es de tipo aprendiz lectivo"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_sena">
+        <field name="name">APORTES SENA</field>
+        <field name="code">AP_SENA</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de SENA. Si el empleado supera los 10 slmmv"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ap_icbf">
+        <field name="name">APORTES ICBF</field>
+        <field name="code">AP_ICBF</field>
+        <field name="category">contributions</field>
+        <field name="documentation">
+            "Valor aportado por la empresa por concepto de ICBF. Si el empleado supera los 10 slmmv"
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prv_ces">
+        <field name="name">PROVISIONES CESANTIAS</field>
+        <field name="code">PRV_CES</field>
+        <field name="category">provisions</field>
+        <field name="documentation">
+            Valor provisionado para censantias
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prv_ices">
+        <field name="name">PROVISIONES INTERESES CESANTIAS</field>
+        <field name="code">PRV_ICES</field>
+        <field name="category">provisions</field>
+        <field name="documentation">
+            Valor provisionado para intereses de censantias
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prv_prim">
+        <field name="name">PROVISIONES PRIMA</field>
+        <field name="code">PRV_PRIM</field>
+        <field name="category">provisions</field>
+        <field name="documentation">
+            Valor provisionado para prima
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_prv_vac">
+        <field name="name">PROVISIONES VACACIONES</field>
+        <field name="code">PRV_VAC</field>
+        <field name="category">provisions</field>
+        <field name="documentation">
+            Valor provisionado para vacaciones
+        </field>
+    </record>
+
+    <record model="hr.concept" id="hc_ret_ctg_afc">
+        <field name="name">RETENCION CONTINGENTE AFC</field>
+        <field name="code">RET_CTG_AFC</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_ret_ctg_dif_afc">
+        <field name="name">DIFERENCIA POR RETENCION CONTINGENTE AFC</field>
+        <field name="code">RET_CTG_DIF_AFC</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_ret_ctg_fvp">
+        <field name="name">RETENCION CONTINGENTE FVP</field>
+        <field name="code">RET_CTG_FVP</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_ret_ctg_dif_fvp">
+        <field name="name">DIFERENCIA POR RETENCION CONTINGENTE FVP</field>
+        <field name="code">RET_CTG_DIF_FVP</field>
+        <field name="category">subtotals</field>
+    </record>
+
+    <record model="hr.concept" id="hc_cost">
+        <field name="name">COSTO NOMINA</field>
+        <field name="code">COSTO</field>
+        <field name="category">subtotals</field>
+    </record>
+
+</data>
+</openerp>

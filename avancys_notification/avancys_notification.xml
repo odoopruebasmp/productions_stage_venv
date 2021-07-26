@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <template id="assets_backend" name="avancys_notification_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/avancys_notification/static/src/js/avancys_notification.js"/>
+                <link rel="stylesheet" href="/avancys_notification/static/src/css/style.css"/>
+            </xpath>
+        </template>
+
+        <record id="action_notification_home_page" model="ir.actions.client">
+            <field name="name">Notificaciones Avancys</field>
+            <field name="tag">avancys_notification.homepage</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_avancys_notification">
+            <field name="name">Notificaciones</field>
+            <field name="res_model">avancys.notification</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_avancys_notification_settings">
+            <field name="name">Desktop Notifications</field>
+            <field name="res_model">notification.constructor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <record id="view_avancys_notification_settings_tree" model="ir.ui.view">
+            <field name='name'>view.avancys.notification.settings.tree</field>
+            <field name='model'>notification.constructor</field>
+            <field name='type'>tree</field>
+            <field name='arch' type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="table"/>
+                    <field name="field_user"/>
+                    <field name="tittle"/>
+                    <field name="field_notification"/>
+                    <field name="url"/>
+                    <field name="grouped"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_avancys_notification_settings_form" model="ir.ui.view">
+            <field name='name'>view.avancys.notification.settings.form</field>
+            <field name='model'>notification.constructor</field>
+            <field name='type'>form</field>
+            <field name='arch' type="xml">
+                <form>
+                    <head><button name="create_notifications" string="Generar" type="object" class="oe_highlight"/></head>
+                    <sheet>
+                        <group string="Configuracion de regla" class="avancys_table">
+                            <group>
+                                <field name="name"/>
+                                <field name="table"/>
+                                <field name="field_user"/>
+                                <field name="user_from"/>
+                                <field name="is_partner"/>
+                                <field name="persistent"/>
+                            </group>
+                            <group>
+                                <field name="tittle"/>
+                                <field name="field_notification"/>
+                                <field name="notification_html"/>
+                                <field name="grouped"/>
+                                <field name="url_id"/>
+                                <field name="url"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string = "Condiciones">
+                                <field name="condition_ids">
+                                    <tree editable="Top">
+                                        <field name="c1"/>
+                                        <field name="operator"/>
+                                        <field name="c2"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_avancys_notification_tree" model="ir.ui.view">
+            <field name='name'>view.avancys.notification.tree</field>
+            <field name='model'>avancys.notification</field>
+            <field name='type'>tree</field>
+            <field name='arch' type="xml">
+                <tree editable="Top">
+                    <field name="user_id"/>
+                    <field name="tittle"/>
+                    <field name="notification"/>
+                    <field name="persistent"/>
+                    <field name="url"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="notifications_menu" name="Notificaciones" parent="mail.mail_feeds"
+            action="action_avancys_notification" sequence="30"/>
+        <menuitem id="notifications_settings_menu" name="Desktop Notifications" parent="base.menu_email"
+            action="action_avancys_notification_settings" sequence="35"/>
+    </data>
+
+    <data>
+        <record model="ir.cron" id="avancys_notification_cron">
+            <field name="name">Notificaciones de escritorio</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'notification.constructor'"/>
+            <field name="function" eval="'get_notification'"/>
+            <field name="args">([])</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+           <record model="ir.ui.view" id="purchase_requisition_quotation_form_view">
+                <field name="name">purchase.requisition.quotation.wizard.form</field>
+                <field name="model">purchase.requisition.quotation.wizard</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Cotizar">
+                        <group colspan="4" col="4">
+                            <label for="suppliers" colspan="4"/>
+                            <field name="suppliers" context="{'default_customer':0,'search_default_supplier':1,'default_supplier':1}" colspan="4" nolabel="1"/>
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Continuar" name="confirm_quotation" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_purchase_requisition_quotation"
+            key2="client_action_multi" name="Cotizar"
+            res_model="purchase.requisition.quotation.wizard" src_model="purchase.requisition.line"
+            view_mode="form" target="new" view_type="form" />
+    
+    </data>
+</openerp>

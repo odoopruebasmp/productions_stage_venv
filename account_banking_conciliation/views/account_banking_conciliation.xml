@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+     <record id="account_banking_conciliation_statement_form" model="ir.ui.view">
+            <field name="name">account_banking_conciliation_statement.form</field>
+            <field name="model">account.bank.statement</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Bank Statement">
+                <header>
+                    <button name="find2" states="draft" string="Calcular" type="object"/>
+                    <button name="button_cancel" states="confirm" string="Cancel Statement" type="object"/>
+                    <button name="close_statement" states="draft" string="Cerrar extracto" type="object" class="oe_highlight avancys-btn-purple"/>
+                    <button name="print_concil" string="Detalle Conciliación" type="object" class="oe_highlight avancys-btn-light-blue" icon="gtk-print"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_right oe_button_box" name="import_buttons">
+                        <button name="open_journal_wizard" states="draft" string='Comprobante' class="oe_inline oe_stat_button" type='object' widget="statinfo" icon="fa-pencil-square-o"/>
+                    </div>
+                    <label for="name" class="oe_edit_only"/>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="journal_id" domain="[('type', '=', 'bank')]" widget="selection"/>
+                            <label for="date" string="Date / Period"/>
+                            <div>
+                                <field name="date" on_change="onchange_date(date, company_id)" class="oe_inline"/> -
+                                <field name="period_id" class="oe_inline"/>
+                            </div>
+                            <field name="bank_account_id"/>
+                            <field name="file_name" invisible="1" />
+                            <field name="file" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                            <field name='company_id' widget="selection" groups="base.group_multi_company" />
+                            <field name="currency" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="balance_start" widget="monetary" options='{"currency_field" : "currency"}'/>
+                            <field name="balance_end_real" widget="monetary" options='{"currency_field" : "currency"}'/>
+                            <field name="trans_balance" readonly="1" widget="monetary" options='{"currency_field" : "currency"}'/>
+                            <button name="calculate_balance_end" states="draft" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                    </group>
+                    </group>
+                    <group>
+                        <header>
+                            <button name="view_transactions" string="Transacciones" type="object" class="oe_highlight avancys-btn"/>
+                            <button name="view_unfind_move_ids" string="Movimientos sin conciliar" type="object" class="oe_highlight avancys-btn"/>
+                            <button name="view_multi_match" states="draft" string="Multiples coincidencias" type="object" class="oe_highlight avancys-btn"/>
+                            <button name="view_undone_match" states="draft" string="Transacciones No encontradas" type="object" class="oe_highlight avancys-btn"/>
+                            <button name="view_move_ids" string="Comprobantes generados" type="object" class="oe_highlight avancys-btn"/>
+                        </header>
+                    </group>
+                    <notebook>
+                        <page string="Configuraciones">
+                            <group cols="2">
+                                <group colspan="1" string="Dominio de busqueda">
+                                    <field name="match_dom"/>
+                                    <field name="match_cheque"/>
+                                    <field name="simple_ref"/>
+                                </group>
+                                <group colspan="1" string="Dominio para coincidencias multiples">
+                                    <field name="value_multi_get"/>
+                                    <field name="date_multi_get"/>
+                                </group>
+                            </group>
+                            <group>
+
+                            </group>
+                        </page>
+                        <page string="Transacciones pendientes">
+                            <field name="pending_transaction" nolabel="1">
+                            <tree>
+                                <field name="statement_origin_id"/>
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="ref"/>
+                                <field name="account_id"/>
+                                <field name="amount"/>
+                                <button name="attach" string="Agregar" icon="STOCK_REVERT_TO_SAVED" type="object"/>
+                            </tree>
+                        </field>
+                        </page>
+                    </notebook>
+
+                    <div class="oe_clear"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+    <record id="account_banking_conciliation_unfind_moves" model="ir.ui.view">
+        <field name="name">account_banking_conciliation_unfind_moves.form</field>
+        <field name="model">account.bank.statement</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="view_back" string="Volver" type="object"/>
+                    <button name="update_unfind" string="Refrescar" type="object"/>
+
+                </header>
+                    <notebook>
+                        <page string="Movimientos sin conciliar">
+                            <field name="unfind_move_ids" nolabel="True"/>
+                        </page>
+                    </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_banking_conciliation_multi_form" model="ir.ui.view">
+        <field name="name">account_banking_conciliation_multi.form</field>
+        <field name="model">account.bank.statement</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="get_multi" states="draft" string="Coincidencias Multiples" type="object"/>
+                    <button name="get_undone" states="draft" string="Transacciones no encontradas" type="object"/>
+                    <button name="get_multi_dif" states="draft" string="Validar diferencia" type="object"/>
+                    <button name="conciliate" states="draft" string="Conciliar" type="object" class="oe_highlight"/>
+                    <button name="view_back" string="Volver" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <group cols="2">
+                    <group colspan="1">
+                        <field name="value_multi_get"/>
+                    </group>
+                    <group colspan="1" >
+                        <field name="date_multi_get"/>
+                    </group>
+                </group>
+                 <group cols="2">
+                    <group colspan="1">
+                        <field name="multi_trans_amount" readonly="1"/>
+                    </group>
+                    <group colspan="1">
+                          <field name="multi_move_amount" readonly="1"/>
+                    </group>
+                </group>
+                <group cols="2">
+                    <group colspan="1" string="Transacciones">
+                        <field name="multi_trans_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="selected"/>
+                                <field name="transaction_id" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group colspan="1" string="Movimientos">
+                        <field name="multi_move_line_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="selected"/>
+                                <field name="move_line_id" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                                <field name="debit" readonly="1"/>
+                                <field name="credit" readonly="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="account_banking_conciliation_statement_tree" model="ir.ui.view">
+        <field name="name">account_banking_conciliation_statement.tree</field>
+        <field name="model">account.bank.statement</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree colors="blue:state=='draft';black:state == 'open'" string="Statement">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="period_id"/>
+                    <field name="journal_id"/>
+                    <field name="balance_start"/>
+                    <field name="balance_end_real"/>
+                    <field name="balance_end" invisible="1"/>
+                    <field name="state"/>
+                </tree>
+        </field>
+    </record>
+
+        <record id="account_bank_statement_line_tree" model="ir.ui.view">
+            <field name='name'>account.bank.statement.line.tree</field>
+            <field name='model'>account.bank.statement.line</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Buscar Lineas" colors="blue:state=='manual';red:state=='draft';darkmagenta:state=='multiple';green:state=='confirmed'">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="account_id"/>
+                    <field name="amount"/>
+                    <field name="account_move_line_ids"/>
+                    <field name="state" />
+                    <field name="bank_account_id"/>
+                    <field name="state"/>
+                    <button name="find2" states="draft,manual,multiple" string="Buscar" icon="STOCK_FIND" type="object" />
+                    <button name="manual" states="draft,multiple" string="Manual" icon="STOCK_INDEX" type="object" />
+                    <button name="pending" states="draft,manual,multiple" string="Pendiente" icon="STOCK_QUIT" type="object" />
+                    <button name="confirm" states="manual" string="Confirmar" icon="kanban-apply" type="object" />
+                    <button name="cancel" states="confirmed,pending" string="Cancelar" icon="gtk-cancel" type="object" />
+                </tree>
+            </field>
+        </record>
+
+         <record id="account_bank_statement_line_search" model="ir.ui.view">
+            <field name='name'>account.bank.statement.line.search</field>
+            <field name='model'>account.bank.statement.line</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Lineas">
+                    <field name="statement_id"/>
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="account_id"/>
+                    <field name="amount"/>
+                    <group expand="0" string="Agrupar Por...">
+                        <filter name="statement_id" string="Extracto" icon="terp-partner" domain="[]" context="{'group_by':'statement_id'}"/>
+                        <filter name="state" string="Estado" icon="terp-partner" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="date"  string="Fecha" icon="terp-personal" domain="[]"  context="{'group_by':'date'}"/>
+                        <filter name="account_id"  string="Cuenta" icon="terp-folder-orange" domain="[]" context="{'group_by':'account_id'}"/>
+                        <filter name="name"  string="OBI" icon="terp-folder-orange" domain="[]" context="{'group_by':'name'}"/>
+                        <filter name="ref"  string="Referencia" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'ref'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record id="account_bank_statement_line_form" model="ir.ui.view">
+            <field name="name">statement_line.form</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Detalle de linea de extracto">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <group colspan="2">
+                        <group cols="1">
+                            <field name="name"/>
+                            <field name="ref"/>
+                            <field name="account_id"/>
+                        </group>
+                        <group cols="1">
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="bank_account_id"/>
+                        </group>
+                    </group>
+                    <field name="account_move_line_ids">
+                        <tree>
+                            <field name="journal_id"/>
+                            <field name="move_id"/>
+                            <field name="period_id"/>
+                            <field name="date"/>
+                            <field name="ref"/>
+                            <field name="ref1"/>
+                            <field name="ref2"/>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="debit" sum="Suma Debitos"/>
+                            <field name="credit" sum="Suma Creditos"/>
+
+                        </tree>
+                    </field>
+
+                </form>
+
+            </field>
+        </record>
+
+
+
+    <record id="account_banking_conciliation_action" model="ir.actions.act_window">
+        <field name="name">Extractos Bancarios</field>
+        <field name="res_model">account.bank.statement</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'sequence': 1, 'view_id': ref('account_banking_conciliation_statement_tree')}),
+            (0, 0, {'view_mode': 'form', 'sequence': 2, 'view_id': ref('account_banking_conciliation_statement_form')})
+            ]"/>
+
+    </record>
+
+    <menuitem id="account_banking_conciliation_menu" action="account_banking_conciliation_action"
+              parent="account.menu_finance_bank_and_cash" name="Extractos Bancarios" sequence="1" />
+
+    <!--Haciendo invisible el menu anterior-->
+    <record id="make_invisible" model="res.groups">
+        <field name="name">Invisible</field>
+     </record>
+
+     <record model="ir.ui.menu" id="account.menu_bank_statement_tree">
+        <field name="name">Bank Statements</field>
+        <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+    </record>
+
+</data>
+
+</openerp>

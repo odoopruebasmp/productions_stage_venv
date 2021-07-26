@@ -1,0 +1,21 @@
+
+INSERT INTO "account_move" ("id", "name", "company_id", "journal_id", "state", "period_id", "date", "ref", "to_check", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('account_move_id_seq'), 'NIIF / AF00368 / 2017-10-28', 1, 102, 'draft', 37, '2017-10-28', '481/22', false, 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+
+INSERT INTO "account_journal_period" ("id", "active", "state", "period_id", "name", "journal_id", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('account_journal_period_id_seq'), true, 'draft', 37, 'ANIIF:10/2017', 102, 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+
+INSERT INTO "account_move_line" ("id", "company_id", "account_id", "credit", "centralisation", "ref", "journal_id", "name", "currency_id", "account_niif_id", "state", "date_created", "period_id", "debit", "date", "amount_currency", "cartera_ok", "partner_id", "move_id", "blocked", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('account_move_line_id_seq'), 1, 59767, '75984.0200', 'normal', '481/22', 102, 'NIIF / AF00368 / 2017-10-28', NULL, 59767, 'draft', '2017-03-03', 37, '0.0000', '2017-10-28', '0.0000', false, NULL, 15038, false, 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+
+INSERT INTO "account_move_line" ("id", "journal_id", "currency_id", "partner_id", "blocked", "analytic_account_id", "centralisation", "company_id", "state", "debit", "ref", "asset_id", "account_id", "account_niif_id", "period_id", "amount_currency", "date", "move_id", "name", "cartera_ok", "credit", "date_created", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('account_move_line_id_seq'), 102, NULL, NULL, false, 36964, 'normal', 1, 'draft', '75984.0200', '481/22', 481, 60235, 60235, 37, '0.0000', '2017-10-28', 15038, 'NIIF / AF00368 / 2017-10-28', false, '0.0000', '2017-03-03', 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+
+INSERT INTO "account_analytic_line" ("id", "user_id", "account_id", "general_account_id", "product_uom_id", "journal_id", "company_id", "amount", "unit_amount", "date", "ref", "name", "move_id", "product_id", "create_uid", "write_uid", "create_date", "write_date") VALUES(nextval('account_analytic_line_id_seq'), 1, 36964, 60235, NULL, 6, 1, '-75984.0200', 0.0, '2017-10-28', '481/22', 'NIIF / AF00368 / 2017-10-28', 359908, NULL, 1, 1, (now() at time zone 'UTC'), (now() at time zone 'UTC')) RETURNING id
+
+UPDATE "account_move_line" SET "ref"='481/22' WHERE id = 359907
+
+UPDATE "account_move_line" SET "ref"='481/22' WHERE id = 359908
+
+UPDATE "account_move_line" SET "state"='valid',"write_uid"=1,"write_date"=(now() at time zone 'UTC') WHERE id IN (359907, 359908)
+
+
+UPDATE "account_asset_depreciation_line" SET "move_id"=15038,"write_uid"=1,"write_date"=(now() at time zone 'UTC') WHERE id IN (939873)
+
+UPDATE "account_asset_depreciation_line" SET "move_check"=true WHERE id = 939873

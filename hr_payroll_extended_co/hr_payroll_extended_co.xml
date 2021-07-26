@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        
+        <record id="hr_payroll_run_view_form5" model="ir.ui.view">
+            <field name="name">hr.payslip.run.view.form.5</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_payroll_run_view_form4"/>
+            <field name="arch" type="xml">                
+                <field name="analytic_account_id" position="after">                    
+                    <field name="city_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                </field>                
+            </field>
+        </record>
+                
+        
+        <record id="search_payment_human_resources" model="ir.ui.view">
+            <field name="name">Payment Human Resources</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">  
+                    <filter string="EPS" help="EPS para pagos" name="eps" domain="[('partner_id.eps','=',True)]"/>
+                    <filter string="ARL" help="ARL para pagos" name="arl" domain="[('partner_id.arl','=',True)]"/>
+                    <filter string="AFP" help="AFP para pagos" name="afp" domain="[('partner_id.afp','=',True)]"/>
+                    <filter string="Caja de Compensación" help="Caja de Compensación para pagos" name="cajacomp" domain="[('partner_id.cajacomp','=',True)]"/>
+                    <filter string="Empleados" help="Empleados para pagos" name="employee" domain="[('partner_id.employee_id','!=',False)]"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="hr_contract_view_reform_form" model="ir.ui.view">
+            <field name="name">hr.contract.view.reform.form</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <field name="type_id" position="after">
+                    <field name="reform"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_company_form_hr_co" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_company_form_avancys"/>
+            <field name="arch" type="xml">
+                <group name="hr_grp" string="Recursos humanos" position="inside">
+                    <field name="arl_id"/>
+                </group>
+            </field>
+        </record>
+        
+        <record id="edit_holiday_new_extended_co_2" model="ir.ui.view">
+            <field name="name">view.holiday.form.payroll_extended.2</field>
+            <field name="model">hr.holidays</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.edit_holiday_new_extended" />
+            <field name="arch" type="xml">
+                <field name="contract_id" position="after">
+                    <field name="no_incapacidad"/>
+                    <field name="incapacity"/>
+                    <field name="at_date" required="True"/>
+                </field>
+            </field> 
+        </record>
+        
+        <record id="view_partner_form_payroll_extended" model="ir.ui.view">
+            <field name="name">view.partner.form.payroll_extended</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.view_partner_form_payroll_extended" />
+            <field name="arch" type="xml">
+                <group name="empleado" position="after" >
+                    <group colspan="4" col="4" name="codigos_co">
+                        <field name="eps" attrs="{'invisible': [('is_company','=', False)]}"/>
+                        <field name="codigo_eps" attrs="{'invisible': [('eps','=', False)],'required': [('eps','=', True)]}" />
+                        <field name="arl" attrs="{'invisible': [('is_company','=', False)]}"/>
+                        <field name="codigo_arl" attrs="{'invisible': [('arl','=', False)],'required': [('arl','=', True)]}" />
+                        <field name="afp" attrs="{'invisible': [('is_company','=', False)]}"/>
+                        <field name="codigo_afp" attrs="{'invisible': [('afp','=', False)],'required': [('afp','=', True)]}" />
+                        <field name="cajacomp" attrs="{'invisible': [('is_company','=', False)]}"/>
+                        <field name="codigo_ccf" attrs="{'invisible': [('cajacomp','=', False)],'required': [('cajacomp','=', True)]}" />
+                    </group>
+                </group> 
+            </field> 
+        </record>
+        
+        <record id="hr_contract_view_payslips_form_co" model="ir.ui.view">
+            <field name="name">Hr Contract Payslips</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_contract_view_payslips_form"/>
+            <field name="arch" type="xml">
+                <field name="type_id" position="after">
+                    <field name="eps"/>
+                    <field name="pensiones"/>
+                    <field name="cesantias"/>
+                    <field name="cajacomp"/>
+                    <field name="arl"/>
+                </field>
+                <field name="employee_id" position="after">
+                    <field name="riesgo"/>
+                    <field name="pct_arp" readonly="1"/>
+                </field>
+                <field name="fiscal_type_id" position="after">
+                    <field name="fiscal_subtype_id"/>
+                    <field name="bono"/>
+                    <field name="declarante"/>
+                </field>
+                <field name="wage_historic_ids" position="after">
+                    <label for="eps_historic_ids"/>
+                    <field name="eps_historic_ids" nolabel="1" colspan="4">
+                        <tree string="Control de Cambios" editable="top">
+                            <field name="eps"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </tree>
+                    </field>
+                    <label for="pensiones_historic_ids"/>
+                    <field name="pensiones_historic_ids" nolabel="1" colspan="4">
+                        <tree string="Control de Cambios" editable="top">
+                            <field name="pensiones"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </tree>
+                    </field>
+                    <label for="cesantias_historic_ids"/>
+                    <field name="cesantias_historic_ids" nolabel="1" colspan="4">
+                        <tree string="Control de Cambios" editable="top">
+                            <field name="cesantias"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </tree>
+                    </field>
+                    <label for="analytic_log"/>
+                    <field name="analytic_log" nolabel="1" colspan="4" readonly="1">
+                        <tree string="Cambios centro de costo">
+                            <field name="prev_analytic_id"/>
+                            <field name="analytic_account_id"/>
+                            <field name="date"/>
+                            <field name="create_uid"/>
+                        </tree>
+                    </field>
+                </field>
+                
+                <page name="registro_dias" position="inside">
+                    <group>
+                        <separator string="Dias Vacaciones"/>
+                        <field name="leave_ids" domain="['|',('state','=','validated'),('state','=','paid'),('holiday_status_id.vacaciones','=',True)]" nolabel="1" colspan="4">
+                            <tree string="Dias Vacaciones">
+                                <field name="name"/>
+                                <field name="number_of_days"/>
+                                <field name="approve_date"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="dias_vacaciones_pendientes" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </group>
+                </page>
+                
+                <notebook position="inside">
+                    <page string="Retencion en la Fuente P2">
+                        <group>
+                            <field name="p2"/>
+                            <field name="rtf_rate"/>
+                            <button name="compute_rtf2" states="in_progress" string="Calcular" type="object" class="oe_highlight avancys-btn"/>
+                        </group>
+                        <group string="Detalle de calculo">
+                            <field name="rtf_log">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </notebook>
+                
+                
+            </field>
+        </record>
+
+        <record id="action_compute_rtf" model="ir.actions.server">
+            <field name="name">Calcular porcentaje RTF2</field>
+            <field name="model_id" ref="model_hr_contract"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_model') == 'hr.contract' and context.get('active_ids'):
+                    self.compute_rtf2(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_compute_rtf2" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.contract'" name="model"/>
+            <field name="name">Calcular porcentaje RTF2</field>
+            <field eval="'ir.actions.server,%d'%action_compute_rtf" name="value"/>
+        </record>
+        
+        <record id="hr_salary_rule_form6" model="ir.ui.view">
+            <field name="name">hr.salary.rule.form</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form" />
+            <field name="arch" type="xml">
+                <field name="sequence" position="after" >
+                    <field name="tipo_tercero" />
+                    <field name="partner_contable_id" attrs="{'invisible': [('tipo_tercero','!=', 'otros')], 'required': [('tipo_tercero','=', 'otros')]}"/>
+                </field>
+                <field name="amount_select" position="after">
+                    <field name="tipo_retefuente"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id = "action_hr_holidays_status_incapacity_tree" model="ir.actions.act_window">
+           <field name="name">Diagnostico</field>
+           <field name="res_model">hr.holidays.status.incapacity</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="hr_holidays_status_incapacity" parent="hr_payroll.payroll_configure" action="action_hr_holidays_status_incapacity_tree" name="Diagnostico"/>
+        
+        <record id="view_eps_change_tree" model="ir.ui.view">
+            <field name="name">hr.contract.eps.change.tree</field>
+            <field name="model">hr.contract.eps.change</field>
+            <field name="arch" type="xml">
+                <tree string="Cambio EPS">
+                    <field name="contract_id"/>
+                    <field name="eps"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_eps_change_tree" model="ir.actions.act_window">
+            <field name="name">Cambio EPS</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.eps.change</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem action="action_eps_change_tree" id="hr_menu_eps_change_tree" parent="hr_contract.next_id_56" sequence="9"/>
+        
+        <record id="view_pensiones_change_tree" model="ir.ui.view">
+            <field name="name">hr.contract.pensiones.change.tree</field>
+            <field name="model">hr.contract.pensiones.change</field>
+            <field name="arch" type="xml">
+                <tree string="Cambio Fondo Pensiones">
+                    <field name="contract_id"/>
+                    <field name="pensiones"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_pensiones_change_tree" model="ir.actions.act_window">
+            <field name="name">Cambio Fondo Pensiones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.pensiones.change</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem action="action_pensiones_change_tree" id="hr_menu_pensiones_change_tree" parent="hr_contract.next_id_56" sequence="10"/>
+        
+        <record id="view_cesantias_change_tree" model="ir.ui.view">
+            <field name="name">hr.contract.cesantias.change.tree</field>
+            <field name="model">hr.contract.cesantias.change</field>
+            <field name="arch" type="xml">
+                <tree string="Cambio Fondo Cesantias">
+                    <field name="contract_id"/>
+                    <field name="cesantias"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_cesantias_change_tree" model="ir.actions.act_window">
+            <field name="name">Cambio Fondo Cesantias</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.cesantias.change</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem action="action_cesantias_change_tree" id="hr_menu_cesantias_change_tree" parent="hr_contract.next_id_56" sequence="11"/>
+        
+    </data>
+</openerp>

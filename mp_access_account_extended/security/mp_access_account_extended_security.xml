@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+       <record id="group_account_manager_mp_extended" model="res.groups">
+            <field name="name">Consulta Operaciones de Facturas</field>
+            <field name="category_id" ref="base.module_category_accounting_and_finance"/>
+        </record>
+            </data>
+</openerp>

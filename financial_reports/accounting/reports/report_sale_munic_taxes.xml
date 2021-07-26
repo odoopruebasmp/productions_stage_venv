@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report file="financial_reports.template_report_sale_munic_taxes"
+                id="report_sale_munic_taxes"
+                model="fpa.sale.munic.taxes.line"
+                name="financial_reports.template_report_sale_munic_taxes"
+                report_type="qweb-pdf"
+                string="Impuestos por Municipio"/>
+
+        <record id="report_sale_munic_taxes" model="ir.actions.report.xml">
+            <field name="paperformat_id"
+                   ref="paperformat_horizontal_reports"/>
+        </record>
+
+        <template id="template_report_sale_munic_taxes" name="template_report_sale_munic_taxes">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page" style="font-size:10px;">
+                        <div>
+                            <strong>
+                                <div align="center">
+                                    <h1>
+                                        Ventas y Devoluciones por Municipio.
+                                    </h1>
+                                </div>
+                                <div align="left">
+                                    <h3>Desde:
+                                        <span t-field="docs[0].header_id.date_from"/>
+                                    </h3>
+                                </div>
+                                <div align="left">
+                                    <h3>Hasta:
+                                        <span t-field="docs[0].header_id.date_to"/>
+                                    </h3>
+                                </div>
+                                <div align="right">
+                                    <h4>Fecha de Generacion:
+                                        <span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+                                    </h4>
+                                </div>
+
+                                <div align="left">
+                                    <h4>
+                                        <span t-esc="docs[0].financial_id._get_unidades()"/>
+                                    </h4>
+                                </div>
+                            </strong>
+                        </div>
+                        <br/>
+
+                        <table class="table table-condensed" style="width: 100%">
+                            <caption><b>VENTAS</b></caption>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">
+                                        <strong>Núm. Factura</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Fecha</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cuenta Analítica</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cód. Municipio</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Municipio</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Tipo Acción</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>NIT Cliente</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cliente</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Valor</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>IVA</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Auto RETE</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-as="o" t-foreach="docs">
+                                    <tr t-if="o.tipo_doc == 'out_invoice'">
+                                        <td align="center">
+                                            <span t-field="o.invoice_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_date"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.analytic_acc_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.munic_cod"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.munic_id"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.tipo_acc"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.partner_nit"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.partner_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_value"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_tax"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_auto"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="9" align="right">
+                                        <b>Total:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_value_f"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10" align="right">
+                                        <b>Total IVA:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_iva_f"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="11" align="right">
+                                        <b>Total RETE:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_auto_f"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <table class="table table-condensed" style="width: 100%">
+                            <caption><b>DEVOLUCIONES</b></caption>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">
+                                        <strong>Núm. N.C.</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Fecha</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cuenta Analítica</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cód. Municipio</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Municipio</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Tipo Acción</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>NIT Cliente</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Cliente</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Valor</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>IVA</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Auto RETE</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-as="o" t-foreach="docs">
+                                    <tr t-if="o.tipo_doc == 'out_refund'">
+                                        <td align="center">
+                                            <span t-field="o.invoice_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_date"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.analytic_acc_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.munic_cod"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.munic_id"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.tipo_acc"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.partner_nit"/>
+                                        </td>
+                                        <td align="left">
+                                            <span t-field="o.partner_id"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_value"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_tax"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="o.invoice_auto"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="9" align="right">
+                                        <b>Total:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_value_n"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10" align="right">
+                                        <b>Total IVA:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_iva_n"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="11" align="right">
+                                        <b>Total RETE:</b>
+                                        <t t-set="val" t-value="docs[0].header_id.tot_auto_n"/>
+                                        <t t-esc="'${0:,.2f}'.format(val)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

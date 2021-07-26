@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.module.category" id="mod_mp_sale_extended">
+            <field name="name">Integracion Ventas Yuju E-commerce</field>
+        </record>
+        <record model="res.groups" id="group_user_mp_sale_extended">
+            <field name="name">Usuario</field>
+            <field name="category_id" ref="mod_mp_sale_extended"/>
+        </record>
+      
+         <record model="res.groups" id="group_manager_mp_sale_extended">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="mod_mp_sale_extended"/>
+        </record>
+    </data>
+</openerp>

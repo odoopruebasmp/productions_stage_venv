@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="wkf_import" model="workflow">
+            <field name="name">purchase.import.basic</field>
+            <field name="osv">purchase.import</field>
+            <field name="on_create">True</field>
+        </record>
+        
+        <!-- Activity -->
+        <record id="act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">wf_draft()</field>
+        </record>
+        
+        <record id="act_confirmed" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="name">confirmed</field>
+            <field name="kind">function</field>
+            <field name="action">wf_confirmed()</field>
+        </record>
+        
+        <record id="act_progress" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="name">progress</field>
+            <field name="kind">function</field>
+            <field name="action">wf_progress()</field>
+        </record>
+        
+        <record id="act_finished" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="name">finished</field>
+            <field name="kind">function</field>
+            <field name="action">wf_finished()</field>
+        </record>
+        
+        <record id="act_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">wf_cancel()</field>
+        </record>
+        
+        <record id="act_committed" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_import"/>
+            <field name="name">committed</field>
+            <field name="kind">function</field>
+            <field name="action">wf_committed()</field>
+        </record>
+        
+        <!-- Transactions -->
+        
+        <record id="trans_draft_confirmed" model="workflow.transition">
+            <field name="act_from" ref="act_draft"/>
+            <field name="act_to" ref="act_confirmed"/>
+            <field name="signal">to_confirmed</field>
+        </record>
+        
+        <record id="trans_confirmed_progress" model="workflow.transition">
+            <field name="act_from" ref="act_confirmed"/>
+            <field name="act_to" ref="act_progress"/>
+            <field name="signal">to_progress</field>
+        </record>
+        
+        <record id="trans_progress_confirmed" model="workflow.transition">
+            <field name="act_from" ref="act_progress"/>
+            <field name="act_to" ref="act_confirmed"/>
+            <field name="signal">to_confirmed</field>
+        </record>
+        
+        <record id="trans_progress_committed" model="workflow.transition">
+            <field name="act_from" ref="act_progress"/>
+            <field name="act_to" ref="act_finished"/>
+            <field name="signal">to_finished</field>
+        </record>
+        
+        <record id="trans_committed_progress" model="workflow.transition">
+            <field name="act_from" ref="act_finished"/>
+            <field name="act_to" ref="act_progress"/>
+            <field name="signal">to_progress</field>
+        </record>
+        
+        <record id="trans_committed_finished" model="workflow.transition">
+            <field name="act_from" ref="act_committed"/>
+            <field name="act_to" ref="act_finished"/>
+            <field name="signal">to_finished</field>
+        </record>
+        
+        <record id="trans_finished_committed" model="workflow.transition">
+            <field name="act_from" ref="act_finished"/>
+            <field name="act_to" ref="act_committed"/>
+            <field name="signal">to_committed</field>
+        </record>
+        
+        <record id="trans_confirmed_cancel" model="workflow.transition">
+            <field name="act_from" ref="act_confirmed"/>
+            <field name="act_to" ref="act_cancel"/>
+            <field name="signal">to_cancel</field>
+        </record>
+        
+        <record id="trans_progress_cancel" model="workflow.transition">
+            <field name="act_from" ref="act_progress"/>
+            <field name="act_to" ref="act_cancel"/>
+            <field name="signal">to_cancel</field>
+        </record>
+        
+        <record id="trans_cancel_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cancel"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">to_draft</field>
+        </record>
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--              FOLOWERS            -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="mt_draft" model="mail.message.subtype">
+            <field name="name">Nueva</field>
+            <field name="res_model">purchase.import</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Importacion nueva, pendiente de revision por el area de compras internacionales.</field>
+        </record>
+        <record id="mt_confirmed" model="mail.message.subtype">
+            <field name="name">Confirmada</field>
+            <field name="res_model">purchase.import</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Se confirma la necesidad y ejecuccion de la importacion.</field>
+        </record>        
+        <record id="mt_progress" model="mail.message.subtype">
+            <field name="name">Progreso</field>
+            <field name="res_model">purchase.import</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">En Progreso, lista para añadir costos de importacion.</field>
+        </record>
+        <record id="mt_finished" model="mail.message.subtype">
+            <field name="name">Cerrada</field>
+            <field name="res_model">purchase.import</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Se valido toda la informacion de liquidacion y se cerro la importacion.</field>
+        </record>
+        <record id="mt_cancel" model="mail.message.subtype">
+            <field name="name">Cancelada</field>
+            <field name="res_model">purchase.import</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Se realizo la cancelacion de la importacion.</field>
+        </record>
+        
+    </data>
+</openerp>

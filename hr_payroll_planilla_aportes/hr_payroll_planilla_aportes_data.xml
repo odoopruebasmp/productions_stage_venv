@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+        <!--hr.planilla.type-->
+        <record id="payroll_planilla_type_E" model="hr.planilla.type">
+            <field name="name">Planilla Empleados Empresas</field>
+            <field name="code">E</field>
+        </record>
+        <record id="payroll_planilla_type_Y" model="hr.planilla.type">
+            <field name="name">Planilla Independientes Empresas</field>
+            <field name="code">Y</field>
+        </record>
+        <record id="payroll_planilla_type_A" model="hr.planilla.type">
+            <field name="name">Planilla Empleados Adicionales</field>
+            <field name="code">A</field>
+        </record>
+        <record id="payroll_planilla_type_I" model="hr.planilla.type">
+            <field name="name">Planilla Independientes</field>
+            <field name="code">I</field>
+        </record>
+        <record id="payroll_planilla_type_S" model="hr.planilla.type">
+            <field name="name">Planilla Empleados de Independientes</field>
+            <field name="code">S</field>
+        </record>
+        <record id="payroll_planilla_type_M" model="hr.planilla.type">
+            <field name="name">Planilla Mora</field>
+            <field name="code">M</field>
+        </record>
+        <record id="payroll_planilla_type_H" model="hr.planilla.type">
+            <field name="name">Planilla Madres Comunitarias</field>
+            <field name="code">H</field>
+        </record>
+        <record id="payroll_planilla_type_T" model="hr.planilla.type">
+            <field name="name">Planilla Empleados entidad beneficiaria del Sistema General de Participaciones</field>
+            <field name="code">T</field>
+        </record>
+        <record id="payroll_planilla_type_F" model="hr.planilla.type">
+            <field name="name">Planilla pago aporte patronal faltante, de una entidad beneficiaria del Sistema General de Participaciones</field>
+            <field name="code">F</field>
+        </record>
+        <record id="payroll_planilla_type_J" model="hr.planilla.type">
+            <field name="name">Planilla para pago de seguridad social en cumplimiento de sentencia judicial</field>
+            <field name="code">J</field>
+        </record>
+        <record id="payroll_planilla_type_X" model="hr.planilla.type">
+            <field name="name">Planilla para el pago empresa liquidada</field>
+            <field name="code">X</field>
+        </record>
+    </data>
+</openerp>

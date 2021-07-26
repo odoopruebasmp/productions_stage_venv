@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_wizard_report_diario_avancys_sql_report" model="ir.ui.view">
+            <field name="name">Libro diario</field>
+            <field name="model">wizard.report.diario.avancys.sql.report</field>
+            <field name="arch" type="xml">
+                <form string="Libro Diario">
+                    <group>
+                        <field name="nivel"/>
+                    </group>
+                    <footer>
+                        <button name="imprimir_ld_pdf" string="PDF" type="object" class="oe_highlight"  />
+                        <button name="imprimir_calc" string="Imprimir" type="object" class="oe_highlight"  />
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_imprimir_diario_diarios" model="ir.actions.act_window">
+            <field name="name">Imprimir Libro diario</field>
+            <field name="res_model">wizard.report.diario.avancys.sql.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <!-- <menuitem name="Libro Diario" action="action_imprimir_diario_diarios" id="menu_action_imprimir_diario_diarios" parent="menu_report_avancys_report" sequence="10" groups="report_odoo_extended.group_user_report_avancys_contable"/> -->
+
+        <report
+            id="reporte_diario"
+            model="account.report.diario.avancys.line.sql"
+            string="Libro Diario"
+            report_type="qweb-pdf"
+            name="report_odoo_extended.template_reporte_diario"
+            file="report_odoo_extended.template_reporte_diario"
+        />
+        
+        <template id="template_reporte_diario">
+            <div class="header">
+                    <div align='center'><h3><span t-esc="res_company.name"/></h3></div>
+                    <div align='center'><h2><span t-esc="res_company.vat"/></h2></div>
+                    <div align='center'><h3><span>LIBRO DIARIO</span></h3></div>
+                    <div align='left'><h4>Desde:<span t-field="docs[0].encabezado_id.date_from" /></h4></div>
+		<div align='left'><h4>Hasta:<span t-field="docs[0].encabezado_id.date_to"/></h4></div>
+                    <div align='right'><h5>Fecha de Generacion:<span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/></h5></div>
+                    <div align='center'> </div>
+            </div> 
+            <div class="page">
+                <span>&#160;</span>
+                <table style="border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Codigo</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Nombre</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Diario</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Debito</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Credito</span></td>
+                        </tr>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <td><span t-field="o.code" /></td>
+                                <td><span t-field="o.name" /></td>
+                                <td><span t-field="o.journal_name" /></td>
+                                <td><span t-field="o.debit" /><span>$ </span></td>
+                                <td><span t-field="o.credit" /><span>$ </span></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table> 
+            </div>    
+        </template>
+        
+        <record model='ir.actions.report.xml' id='reporte_diario_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>diario de diario</field>
+          <field name='report_rml'>report_odoo_extended/reporte_diario.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_diario_aeroo</field>
+          <field name='model'>account.report.diario.avancys.line.sql</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record model="ir.ui.view" id="view_account_voucher_vendor_notification_form_inherit_extended">
+            <field name="name">account.voucher.vendor.notification.form.inherit.extended</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
+            <field name="arch" type="xml">
+                <button name="cancel_voucher" position="after">
+                    <button name="action_send" string="Notificacion Pago" type="object" default_focus="1" class="oe_highlight" states="posted"/>
+                </button>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_voucher_sale_notification_form_inherit_extended">
+            <field name="name">account.voucher.sale.notification.form.inherit.extended</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+                <button name="cancel_voucher" position="after">
+                    <button name="action_send" string="Notificacion Pago" type="object" default_focus="1" class="oe_highlight" states="posted"/>
+                </button>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="view_payment_order_notification_form_inherit">
+            <field name="name">payment.order.notification.form.inherit</field>
+            <field name="model">payment.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_payment.view_payment_order_form"/>
+            <field name="arch" type="xml">
+                <button name="cancel" position="after">
+                    <button name="action_send" string="Notificacion Pago" type="object" default_focus="1" class="oe_highlight" states="done"/>
+                </button>
+            </field>
+        </record>
+
+        
+    </data>
+</openerp>

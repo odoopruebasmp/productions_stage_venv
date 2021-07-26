@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        
+        <!--ANALISIS DE INVENTARIO EN TRANSITO-->
+        <record id="view_stock_move_transit_report_graph" model="ir.ui.view">
+            <field name="name">stock.move.report.transit.graph</field>
+            <field name="model">stock.move</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Inventario en Transito" type="pivot" stacked="True">
+                    <field name="location_dest_id"/>
+                    <field name="product_id"/>
+                    <field name="product_qty" type="measure"/>
+                    <field name="cost" type="measure"/>
+                    <field name="total_cost" type="measure"/>
+                </graph>
+            </field>
+        </record>    
+        
+        
+        <record id="view_company_form_stock_extended" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="sale.view_company_inherit_form2"/>
+            <field name="arch" type="xml">
+                <field name="sale_note" position="before">
+                    <group>
+                        <field name="block_sale_warehouse"/>
+                        <field name="zero_cost_moves_incomes"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+        
+        <!--PERMISOS PARA EL COSTO DE UN PRODUCTO-->
+        
+        <record id="view_stock_extend_product_costform" model="ir.ui.view">
+            <field name="name">product.template.cost.extend.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock_account.view_template_property_form"/>
+            <field name="arch" type="xml">
+                <label string="Cost Price" for="standard_price" position="attributes">
+                    <attribute name="groups">account_analytic_avancys.group_manager_margin_cost</attribute>
+                </label>
+                <field name="standard_price" position="attributes">
+                    <attribute name="groups">account_analytic_avancys.group_manager_margin_cost</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <menuitem id="menu_kardex" name="Informes Almacen" parent="stock.menu_stock_root" sequence="2"/>
+        
+        
+        <record id="view_stock_location_form_extended" model="ir.ui.view">
+            <field name="name">stock.location.form.extended</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name='user_owners_ids' widget='many2many_tags'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="product_template_only_form_view_stock_extended" model="ir.ui.view">
+            <field name="name">product.template.form.stock.extended</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.view_template_property_form" />
+            <field name="arch" type="xml">
+                <field name="track_all" position="before">
+                    <field name='lot_sequence_id'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_production_lot_form_extended" model="ir.ui.view">
+            <field name="name">stock.production.lot.form.extended</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="stock.view_production_lot_form" />
+            <field name="arch" type="xml">
+                <field name="ref" position="after">
+                    <field name='stock_available'/>
+                </field>
+                <field name="name" position="replace">
+                    <field name='name' required='False'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_stock_transction_type_tree" model="ir.ui.view">
+            <field name="name">stock.transction.type.tree</field>
+            <field name="model">stock.transaction.type</field>
+            <field name="arch" type="xml">
+                <tree string='Stock Transaction Type'>
+                    <field name='name' />
+                    <field name='debit_account' />
+                    <field name='credit_account' />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_transction_type_form" model="ir.ui.view">
+            <field name="name">stock.transction.type.form</field>
+            <field name="model">stock.transaction.type</field>
+            <field name="arch" type="xml">
+                <form string='Stock Transaction Type' version='7.0'>
+                    <sheet>
+                        <group>
+                            <field name='name' />
+                            <field name='debit_account' domain="[('type', '!=', 'view' )]"/>
+                            <field name='credit_account' domain="[('type', '!=', 'view' )]" />
+                            <field name='cost_update' />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_stock_transction_type" model="ir.actions.act_window">
+            <field name="name">Stock Transaction Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.transaction.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+                                
+        <record id="view_stock_move_extend_tree" model="ir.ui.view">
+            <field name="name">stock.move.extend.tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree" />
+            <field name="arch" type="xml">
+                <field name="location_dest_id" position="before">
+                    <field name='location_id'/>                                                 
+                </field>
+            </field>
+        </record>
+
+        <record id="view_stock_picking_extend_form" model="ir.ui.view">
+            <field name="name">stock.picking.extend.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='min_date']" position="replace">
+                    <field name="max_date" string='Scheduled Time' />
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_stock_account_picking_extend_form" model="ir.ui.view">
+            <field name="name">stock.picking.extend.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock_account.view_picking_inherit_form2"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name='source_location'  attrs="{'invisible': [('state', 'in', ['done','cancel'])]}"/> 
+                    <field name='dest_location' attrs="{'invisible': [('state', 'in', ['done','cancel'])]}"/> 
+                </field>
+                <field name="move_lines" position="attributes">
+                    <attribute name="context">{'s_loc':source_location, 'd_loc':dest_location,'default_invoice_state': invoice_state, 'address_in_id': partner_id, 'form_view_ref':'stock.view_move_picking_form', 'tree_view_ref':'stock.view_move_picking_tree', 'default_picking_type_id': picking_type_id,'default_picking_id': active_id}</attribute> 
+                </field>
+                <field name="origin" position="after">
+                    <field name='picking_invoice_id' attrs="{'invisible': [('picking_invoice_id', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_picking_withcarrier_out_form_extended" model="ir.ui.view">
+            <field name="name">delivery.stock.picking_withcarrier.form.view.extended</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+            <field name="arch" type="xml">
+                <field name="carrier_tracking_ref" position="after">
+                    <field name='carrier_cedula'/>
+                    <field name='carrier_placa'/>
+                    <field name='carrier_coment'/>
+                </field>
+            </field>
+        </record>
+
+        <record id="account_journal_extended_form" model="ir.ui.view">
+            <field name="name">account.journal.extended.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form" />
+            <field name="arch" type="xml">
+                <field name="group_invoice_lines" position='after'>
+                    <field name="stock_journal" />
+                    <field name="no_agrupar" attrs="{'invisible': [('stock_journal', '=', False)]}"/>
+                </field>
+            </field>
+        </record>
+                                
+        <record id="view_move_form_transaction" model="ir.ui.view">
+            <field name="name">stock.move.form.transaction</field>
+            <field name="model">stock.move</field>
+            <field name='inherit_id' ref='stock.view_move_form'/>
+            <field name="arch" type="xml">
+                <field name="product_id" position='after'>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </field>
+                <button name="force_assign" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <field name="date_expected" position="after">
+                    <field name="restrict_lot_id" string="Lote Especifico" domain="[('product_id', '=', product_id )]"/>
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <sheet position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </sheet>
+            </field>
+        </record>
+        
+        <record id="view_move_picking_form_extended" model="ir.ui.view">
+            <field name="name">stock.move.form.extended</field>
+            <field name="model">stock.move</field>
+            <field name='inherit_id' ref='stock.view_move_picking_form'/>
+            <field name="arch" type="xml">
+                <button name="force_assign" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                
+            </field>
+        </record>
+        
+        <record id="view_picking_stock_extended_tree_2" model="ir.ui.view">
+            <field name="name">picking.stock.tree_2</field>
+            <field name="model">stock.picking</field>
+            <field name='priority'>10</field>
+            <field name="inherit_id" ref="stock.vpicktree" />
+            <field name="arch" type="xml">
+                <field name="location_dest_id" position="before">
+                    <field name='location_id'/>
+                </field>
+            </field>
+        </record>
+                                 
+        <record id="view_picking_stock_extended_search_2" model="ir.ui.view">
+            <field name="name">picking.stock.extended.search_2.stock_extended</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search" />
+            <field name="arch" type="xml">
+                <field name="name" position='after'>
+                    <field name='location_id'/>
+                    <field name='location_dest_id'/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="quant_search_view_extended" model="ir.ui.view">
+            <field name="name">stock.quant.search.extended</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.quant_search_view" />
+            <field name="arch" type="xml">
+                <filter name="internal_loc" position='after'>
+                    <filter name="not_owner_id" string="Propios" domain="[('owner_id','=', False)]"/>
+                    <filter name='reservation_con' string="De Reserva" domain="[('reservation_id','!=', False)]"/>
+                    <filter name='reservation_sin' string="No Reservados" domain="[('reservation_id','=', False)]"/>
+                </filter>
+            </field>
+        </record>
+        
+        <record id="view_stock_quant_tree_extended" model="ir.ui.view">
+            <field name="name">stock.quant.tree.extended</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree" />
+            <field name="arch" type="xml">
+                <field name="inventory_value" position='before'>
+                    <field name="reservation_id"/>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="cost_total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </field>
+                <field name="inventory_value" position='attributes'>
+                    <attribute name="groups">account_analytic_avancys.group_manager_margin_cost</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_stock_quant_form_extended" model="ir.ui.view">
+            <field name="name">stock.quant.form.extended</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_form" />
+            <field name="arch" type="xml">
+                <field name="inventory_value" position='before'>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="cost_total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </field>
+                <field name="inventory_value" position='attributes'>
+                    <attribute name="groups">account_analytic_avancys.group_manager_margin_cost</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

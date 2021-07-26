@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--<record id="assign_proposed_qty_view_id" model="ir.ui.view">
+            <field name="name">wizard.assign.proposed.form</field>
+            <field name="model">wizard.assign.proposed</field>
+            <field name="arch" type="xml">
+                <form string="Asignacion del disponible" version='7.0'>
+                    <footer>
+                        <button name='assign_proposed' type='object' string='Assign' />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+                    
+        <record id="wizard_assign_proposed_qty" model="ir.actions.act_window">
+            <field name="name">Asignacion del disponible</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.assign.proposed</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Asignacion del disponible" id="menu_assign_proposed_qty_id" parent="base.menu_sales" action="wizard_assign_proposed_qty"/>-->
+
+    </data>
+</openerp>

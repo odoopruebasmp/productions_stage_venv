@@ -1,0 +1,6 @@
+import hr_payroll_compute_wiz
+import leave_allocation_compute_wiz
+import import_pay_slip
+import hr_payslip_mass_approve
+import hr_leave_mass_approve
+import hr_payslip_mass_notification

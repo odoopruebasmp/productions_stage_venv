@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="fpa_data_detalle_contable" model="fpa.financial.reports">
+            <field name="name">DETALLE REGISTROS CONTABLES</field>
+            <field name="categ">au</field>
+            <field name="export">TRUE</field>
+            <field name="formato">xlsx</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">O,P</field>
+            <field name="type">sco</field>
+            <field name="title">NOMBRE ASIENTO,REFERENCIA ASIENTO,FECHA ASIENTO,NOMBRE COMPROBANTE,CODIGO COMPROBANTE,TIPO COMPROBANTE,NOMBRE MOVIMIENTO,REFERENCIA MOVIMIENTO,EMPRESA/CLIENTE,NIT,CUENTA LOCAL, NOMBRE CUENTA LOCAL,CUENTA NIIF,NOMBRE CUENTA NIIF,DEBITO,CREDITO,CREADO POR,MODIFICADO POR</field>
+            <field name="query">SELECT am.name, am.ref, am.date,
+                                    aj.name, aj.code, aj.type,
+                                    aml.name, aml.ref,
+                                    rp.name, rp.ref,
+                                    aa.code, aa.name,
+                                    aan.code, aan.name,
+                                    aml.debit, aml.credit,
+                                    rpc.name,rpw.name
+                                    FROM account_move_line aml
+                                    INNER JOIN account_move am ON am.id = aml.move_id
+                                    LEFT JOIN account_account aa ON aa.id = aml.account_id
+                                    LEFT JOIN account_account aan ON aan.id = aml.account_niif_id
+                                    LEFT JOIN account_journal aj ON aj.id = aml.journal_id
+                                    LEFT JOIN res_partner rp ON rp.id = aml.partner_id
+                                    LEFT JOIN res_users ruc ON ruc.id = aml.create_uid
+                                    LEFT JOIN res_partner rpc ON rpc.id = ruc.partner_id
+                                    LEFT JOIN res_users ruw ON ruw.id = aml.write_uid
+                                    LEFT JOIN res_partner rpw ON rpw.id = ruw.partner_id
+                                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}'
+                                    ORDER BY am.date
+            </field>
+        </record>
+
+    </data>
+</openerp>

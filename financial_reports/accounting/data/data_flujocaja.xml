@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+        <record id="fpa_flujocaja_data" model="fpa.financial.reports">
+            <field name="name">FLUJO DE CAJA (ANUAL)</field>
+            <field name="categ">fi</field>
+            <field name="action">action_fpa_flujocaja</field>
+            <field name="model_wzr">fpa.flujocaja.wizard</field>
+            <field name="model">fpa.flujocaja.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="tree">view_fpa_flujocaja_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">D,E,F,G,H,I,J,K,L,M,N,O,P</field>
+            <field name="sign">False</field>
+            <field name="type">con</field>
+            <field name="partner_filter">True</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('account_id','!=',False),('financial_id','=',%s)]</field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="template">financial_reports.template_report_flujocaja</field>
+            <field name="view">wizard_fpa_flujocaja_view</field>
+            <field name="title">Concepto,Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre,Total</field>
+            <field name="fields">account_id, enero,febrero,marzo,abril,mayo,junio,julio,agosto,noviembre,diciembre</field>
+            <field name="consulta">select fcl.id from fpa_flujocaja_line fcl
+                            left join account_account aa on aa.id = fcl.account_id
+                            inner join fpa_flujocaja fc on fc.id = fcl.encabezado_id
+                            WHERE fc.user_id = {user_id} AND fc.company_id = {company_id} AND fcl.nivel in ({niveles})
+                            ORDER BY aa.code asc</field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name), fcl.amount_01 as enero,fcl.amount_02 as febrero,fcl.amount_03 as marzo,fcl.amount_04 as abril,fcl.amount_05 as mayo,fcl.amount_06 as junio,fcl.amount_07 as julio,fcl.amount_08 as agosto,fcl.amount_09 as septiembre,fcl.amount_10 as octubre,fcl.amount_11 as noviembre,fcl.amount_12 as diciembre, fcl.amount_total, fcl.bold from fpa_flujocaja_line fcl
+                            left join account_account aa on aa.id = fcl.account_id
+                            left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                            inner join fpa_flujocaja fc on fc.id = fcl.encabezado_id
+                            left join fpa_financial_reports_concepts ffrc on ffrc.id = fcl.concepts_id
+                            left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id = ffrc.id AND itc.lang = '{lang}'
+                            WHERE fc.user_id = {user_id} AND fc.company_id = {company_id} AND fc.financial_id = {financial_id}
+                            ORDER BY ffrc.sequence, aa.code asc NULLS FIRST</field>
+        </record>
+  </data>
+</openerp>

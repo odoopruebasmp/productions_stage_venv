@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="module_electronic_invoice" model="ir.module.category">
+            <field name="name">Gestion Factura Electronica</field>
+        </record>
+        <record id="group_user_electronic_invoice" model="res.groups">
+            <field name="name">Usuario</field>
+            <field name="category_id" ref="module_electronic_invoice"/>
+        </record>
+        <record id="group_admin_electronic_invoice" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_electronic_invoice"/>
+        </record>
+    </data>
+</openerp>

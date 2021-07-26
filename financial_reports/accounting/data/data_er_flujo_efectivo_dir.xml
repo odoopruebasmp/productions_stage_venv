@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_er_flujo_efectivo_dir_data" model="fpa.financial.reports">
+            <field name="name">FLUJO DE EFECTIVO (METODO DIRECTO)</field>
+            <field name="categ">fic</field>
+            <field name="action">action_fpa_pyg_c</field>
+            <field name="model_wzr">fpa.pyg.c.wizard</field>
+            <field name="model">fpa.pyg.c.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="tree">view_fpa_pyg_c_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">D,E,F</field>
+            <field name="porc">G</field>
+            <field name="type">con</field>
+            <field name="sign">True</field>
+            <field name="partner_filter">True</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('account_id','!=',False),('financial_id','=',%s)]</field>
+            <field name="template">financial_reports.template_report_pyg_c</field>
+            <field name="view">wizard_fpa_pyg_c_view</field>
+            <field name="title">Concepto,Codigo,Cuenta,Variacion</field>
+            <field name="fields">account_id,variation</field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="consulta">select fbpl.id 
+                        from fpa_pyg_c_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            inner join fpa_pyg_c fbp on fbp.id = fbpl.encabezado_id
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id}
+                            ORDER BY aa.code asc</field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name), aa.code, COALESCE(it.value,aa.name) as cuenta, round(COALESCE(fbpl.variation,0),2), fbpl.bold from fpa_pyg_c_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                            inner join fpa_pyg_c fbp on fbp.id = fbpl.encabezado_id
+                            left join fpa_financial_reports_concepts ffrc on ffrc.id = fbpl.concepts_id
+                            left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id = ffrc.id AND itc.lang = '{lang}'
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id} ORDER BY ffrc.sequence,  aa.code NULLS FIRST, aa.code asc</field>
+        </record>
+        <record id="erfed_niveles_99" model="fpa.niveles">
+            <field name="code">99</field>
+            <field name="name">Auxiliares</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" /> 
+            <field name="help">Muestra totales por Auxiliares</field>
+        </record>
+        <record id="erfed_niveles_100" model="fpa.niveles">
+            <field name="code">100</field>
+            <field name="name">Total por concepto</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" /> 
+            <field name="help">Muestra totales por concepto</field>
+        </record>
+        <!-- CONCEPTOS -->
+         <record id="c_fpa_er_flujo_efectivo_dir_1" model="fpa.financial.reports.concepts">
+            <field name="name">Depreciaciones</field>
+            <field name="sequence">1</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_2" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Cuentas por cobrar</field>
+            <field name="sequence">2</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_3" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Compañias Vinculadas</field>
+            <field name="sequence">3</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_4" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Deudores varios</field>
+            <field name="sequence">4</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_5" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Anticipos Varios</field>
+            <field name="sequence">5</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_6" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento  Inventarios</field>
+            <field name="sequence">6</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_7" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Anticipos Impuestos</field>
+            <field name="sequence">7</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_8" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Proveedores Nacionales</field>
+            <field name="sequence">8</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_9" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Costos y Gastos por Pagar</field>
+            <field name="sequence">9</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_10" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Dividendos</field>
+            <field name="sequence">10</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_11" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Impuestos y retenciones por pagar</field>
+            <field name="sequence">11</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_12" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Aportes de Nomina</field>
+            <field name="sequence">12</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_13" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Obligaciones Laborales</field>
+            <field name="sequence">13</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_14" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Ingresos Recibidos por anticipado</field>
+            <field name="sequence">14</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_15" model="fpa.financial.reports.concepts">
+            <field name="name">FLUJO DE EFECTIVO NETO EN ACTIVIDADES DE OPERACIÓN</field>
+            <field name="sequence">15</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_16" model="fpa.financial.reports.concepts">
+            <field name="name">FLUJO DE EFECTIVO NETO EN ACTIVIDADES DE OPERACIÓN</field>
+            <field name="sequence">16</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_17" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Equipo de Cómputo</field>
+            <field name="sequence">17</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_18" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Equipo de Oficina</field>
+            <field name="sequence">18</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_19" model="fpa.financial.reports.concepts">
+            <field name="name">EFECTIVO NETO UTILIZADO EN ACTIVIDADES DE INVERSION</field>
+            <field name="sequence">19</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_20" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Obligaciones Financieras</field>
+            <field name="sequence">20</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_21" model="fpa.financial.reports.concepts">
+            <field name="name">Disminución Revalorizacion del Patrimonio</field>
+            <field name="sequence">21</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_22" model="fpa.financial.reports.concepts">
+            <field name="name">Aumento Utilidades Acumulada</field>
+            <field name="sequence">22</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_23" model="fpa.financial.reports.concepts">
+            <field name="name">EFECTIVO NETO PROVISTO POR LAS ACTIVIDADES DE FINANCIACION</field>
+            <field name="sequence">23</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_24" model="fpa.financial.reports.concepts">
+            <field name="name">DISMINUCION NETO EN EFECTIVO </field>
+            <field name="sequence">24</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_25" model="fpa.financial.reports.concepts">
+            <field name="name">EFECTIVO AL COMIENZO DEL AÑO</field>
+            <field name="sequence">25</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record>
+        <record id="c_fpa_er_flujo_efectivo_dir_26" model="fpa.financial.reports.concepts">
+            <field name="name">EFECTIVO AL FINAL DEL AÑO</field>
+            <field name="sequence">26</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_flujo_efectivo_dir_data')" />             
+        </record> 
+    </data>
+</openerp>

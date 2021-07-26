@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+    <!--ORDENES DE COMPRA PO-->    
+    <record id="view_purchase_order_form_fabricante_form" model="ir.ui.view">
+        <field name="name">purchase.order.form.fabricante</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="fabricante_id" required="True"/>
+                <field name='country_fabricante_id' invisible="1"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_purchase_order_tree_fabricante_form" model="ir.ui.view">
+        <field name="name">purchase.order.tree.fabricante</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="before">
+                <field name="fabricante_id"/>
+                <field name="country_fabricante_id" invisible="1"/>                
+                <field name="tipo_compra" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_purchase_order_search_mp" model="ir.ui.view">
+        <field name="name">purchase.order.search.mp</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name='fabricante_id'/>
+                <field name="tipo_compra"/>
+                <field name="country_fabricante_id" invisible="1"/>
+            </field>
+            <group expand="0" string="Group By" position="inside">
+                <filter string="Fabricante" icon="terp-personal" domain="[]" context="{'group_by':'fabricante_id'}"/>
+                <filter string="Pais Fabricante" icon="terp-personal" domain="[]" context="{'group_by':'country_fabricante_id'}"/>
+                <filter string="Tipo Compra" icon="terp-personal" domain="[]" context="{'group_by':'tipo_compra'}"/>
+            </group>
+        </field>
+    </record>
+    
+    
+    <!--LINEAS DE ORDENES DE COMPRA-->
+    <record id="view_purchase_order_line_form_fabricante_form" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.fabricante</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="fabricante_id"/>
+                <field name='country_fabricante_id'/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_purchase_order_line_tree_fabricante_form" model="ir.ui.view">
+        <field name="name">purchase.order.line.tree.fabricante</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="fabricante_id"/>
+                <field name='country_fabricante_id' invisible="1"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_purchase_order_line_search_mp" model="ir.ui.view">
+        <field name="name">purchase.order.line.search.mp</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_search"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name='fabricante_id'/>
+                <field name='country_fabricante_id'/>
+            </field>
+            <group expand="0" string="Group By" position="inside">
+                <filter string="Fabricante" icon="terp-personal" domain="[]" context="{'group_by':'fabricante_id'}"/>
+                <filter string="Pais Fabricante" icon="terp-personal" domain="[]" context="{'group_by':'country_fabricante_id'}"/>
+            </group>
+        </field>
+    </record>
+    
+    
+    
+            
+    <record id="view_purchase_requisition_form_extended_mp" model="ir.ui.view">
+        <field name="name">purchase.requisition.form.extended.mp</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form" />
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <!--<field name="date_start" readonly="True"/>-->
+                <field name="international"/>
+            </field>
+            <!--<field name="date_end" position="replace">
+                <field name="date_end" string="Fecha estimada de entrega"/>
+            </field>-->
+            <field name="picking_type_id" position="after">
+                <field name="location_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+            </field>
+            <!--<field name="ordering_date" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>-->
+            <field name="multiple_rfq_per_supplier" position="after">
+                <field name="tipo_compra" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+            </field>
+            <field name="line_ids" position="before">
+                <button name="aprobar_todos" string="APROBAR LINEAS" type="object" default_focus="1" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+            </field>
+            <xpath expr="//sheet/notebook/page/field[@name='line_ids']/tree/field[@name='product_id']" position="replace">
+                <field name="product_id" required="True" domain="[('purchase_ok','=', True),('type','=', parent.tipo_compra)]" on_change="onchange_product_id(product_id,product_uom_id,parent.account_analytic_id,analytic_account_id,parent.date_end, schedule_date, context)"/>
+            </xpath>
+        </field>
+    </record>
+    
+        <record id="view_purchase_requisition_search_mp" model="ir.ui.view">
+            <field name="name">purchase.requisition.search.mp</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="tipo_compra"/>
+                </field>
+                <group expand="0" string="Group By" position="inside">
+                    <filter string="Tipo Compra" icon="terp-personal" domain="[]" context="{'group_by':'tipo_compra'}"/>
+                </group>
+                <field name="name" position="after">
+                    <field name="location_id"/>
+                </field>
+                <!--<field name="ordering_date" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>-->
+            </field>
+        </record>
+    
+        <!--PURCHASE REQUISITION LINE-->
+        <record id="view_purchase_requisition_line_search_mp" model="ir.ui.view">
+            <field name="name">purchase.requisition.line.search.mp</field>
+            <field name="model">purchase.requisition.line</field>
+            <field name="inherit_id" ref="purchase_requisition_extended.view_purchase_requisition_line_filter"/>
+                <field name="arch" type="xml">
+                    <field name="product_id" position="after">
+                        <field name="tipo_compra"/>
+                    </field>
+                    <group expand="0" string="Agrupar Por..." position="inside">
+                        <filter string="Tipo Compra" icon="terp-personal" domain="[]" context="{'group_by':'tipo_compra'}"/>
+                    </group>
+                </field>
+        </record>
+    
+    </data>
+</openerp>

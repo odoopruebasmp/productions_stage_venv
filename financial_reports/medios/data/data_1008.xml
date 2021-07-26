@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_medios_1008" model="fpa.financial.reports">
+            <field name="name">1008 - Saldo de cuentas por cobrar</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field>
+            <field name="type">ex</field>
+            <field name="export_type_date">cut</field>
+            <field name="application_type">account</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">N</field>
+            <field name="title">Concepto,Tipo de documento,Número identificacion deudor,DV,Primer apellido deudor,Segundo apellido deudor,Primer nombre deudor,Otros nombres deudor,Razon social deudor,Direccion,Código dpto,Código mcp,País de residencia o domicilio,Saldos cuentas por cobrar al 31-12</field>
+            <field name="query">
+                SELECT code,code_dian,ref,dev_ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,
+                    CASE WHEN primer_nombre IS NULL THEN name ELSE '' END,street,rcs_code,rc_code,rco_code,
+                    SUM(N)
+                FROM (
+                    SELECT ffrcc.code,rdt.code_dian,rp.ref,rp.dev_ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                        rp.otros_nombres,rp.name,rp.street,rcs.code as rcs_code,rc.code as rc_code,rco.code as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='N' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit), 0) END), 0) N
+                    FROM account_move_line aml
+                        INNER JOIN account_account aa ON aa.id = aml.account_id
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date @min= '{date_to}' AND fpa.id={financial_id} AND aml.company_id={company_id} AND aa.type='receivable' --'{date_from}'
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                        rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,rco.code,ffrccl.col,ffrccl.type,rp.dev_ref,
+                        fpa.tope_min
+                    HAVING ROUND(SUM(aml.debit-aml.credit), 0) != 0 AND
+                            (ROUND(SUM(aml.debit-aml.credit), 0) @may= COALESCE(fpa.tope_min,0) OR
+                            ROUND(SUM(aml.debit-aml.credit), 0) @min 0)
+                UNION ALL
+                    SELECT ffrcc.code,'43' as code_dian,'222222222' as ref,'7' as dev_ref,NULL as primer_apellido,NULL as segundo_apellido,
+                        NULL as primer_nombre,NULL as otros_nombres,'CUANTÍAS MENORES' as name,NULL as street,NULL as rcs_code,NULL as rc_code,NULL as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='N' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit), 0) END), 0) N
+                    FROM account_move_line aml
+                        INNER JOIN account_account aa ON aa.id = aml.account_id
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date @min= '{date_to}' AND fpa.id={financial_id} AND aml.company_id={company_id} AND aa.type='receivable' --'{date_from}'
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                        rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,rco.code,ffrccl.col,ffrccl.type,rp.dev_ref,
+                        fpa.tope_min
+                    HAVING ROUND(SUM(aml.debit-aml.credit), 0) @min COALESCE(fpa.tope_min,0) AND
+                           ROUND(SUM(aml.debit-aml.credit), 0) @may 0
+                ) as datos
+                GROUP BY code,code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,street,rcs_code,rc_code,rco_code,dev_ref
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_1008_1315" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1315 - Cuentas por cobrar a clientes</field>
+            <field name="code">1315</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1008')" />             
+        </record>
+        <record id="c_1008_1315" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1315 - Cuentas por cobrar a clientes</field>
+            <field name="code">1315</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1008')" />             
+        </record>
+        <record id="c_1008_1316" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1316 - Cuentas por cobrar a accionistas, socios, comuneros, cooperados y compañías vinculadas</field>
+            <field name="code">1316</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1008')" />             
+        </record>
+        <record id="c_1008_1317" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1317 - Otras cuentas por cobrar</field>
+            <field name="code">1317</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1008')" />             
+        </record>
+        <record id="c_1008_1318" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1318 - Provisión de la cartera</field>
+            <field name="code">1318</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1008')" />             
+        </record>
+    </data>
+</openerp>

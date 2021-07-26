@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report file="financial_reports.template_report_auxiliar_analitico"
+                id="report_auxiliar_analitico"
+                model="fpa.auxiliar.analitico.line"
+                name="financial_reports.template_report_auxiliar_analitico"
+                report_type="qweb-pdf"
+                string="Auxiliar analítico"/>
+
+        <record id="report_auxiliar_analitico" model="ir.actions.report.xml">
+            <field name="paperformat_id"
+                   ref="paperformat_horizontal_reports"/>
+        </record>
+
+        <template id="financial_reports.template_report_auxiliar_analitico"
+                  name="financial_reports.template_report_auxiliar_analitico">
+
+            <style>
+                pre {
+                font-size:10px;
+                font-family: monospace;
+                white-space: pre;
+                margin: 0em 0;
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                background: #FFFFFF;
+                }
+                #corners2 {
+                background-color: #78CDD9;
+                padding: 80px;
+                font-weight: bold;
+                color: #ffffff;
+                font-size:10px;
+                }
+                #borderless{
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                }
+
+                #corners {
+                border-radius: 25px 25px;
+                background: #1687B4;
+                padding: 0px;
+                width: 100%;
+                heigth: 10%;
+                color: #ffffff;
+                font-weight: bold;
+                }
+
+            </style>
+
+            <div class="page" style="font-size:10px;margin-top: 0px">
+                <div id="corners">
+                    <strong>
+                        <div align="center">
+                            <h4>
+                                LIBRO AUXILIAR ANALITICO
+                            </h4>
+                        </div>
+
+                        <div class="container">
+
+                            <div class="col-xs-6" align="left" style="margin-left: 100px; margin-top: -5px">
+                                <h5>
+                                    <span t-field="docs[0].encabezado_id.chart_account_id.company_id.name"/>
+                                </h5>
+                            </div>
+                            <div class="col-xs-6" align="center" style="margin-left: -100px; margin-top: -5px">
+                                <h5>FECHA DE GENERACIÓN:
+                                    <span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+                                </h5>
+                            </div>
+
+                            <div class="col-xs-6" align="left" style="margin-left: 100px; margin-top: -10px">
+                                <h5>NIT:
+                                    <span t-field="docs[0].encabezado_id.company_id.partner_id.ref"/> - <span t-field="docs[0].encabezado_id.company_id.partner_id.dev_ref"/>
+                                </h5>
+                            </div>
+                            <div class="col-xs-6" align="center" style="margin-left: -190px; margin-top: -5px">
+                                <h5>DESDE:
+                                    <span t-field="docs[0].encabezado_id.date_from"/>
+                                </h5>
+                            </div>
+
+                            <div class="col-xs-6" align="left" style="margin-left: 100px; margin-top: -10px">
+                                <h5>
+                                    <span t-esc="docs[0].financial_id._get_unidades()"/>
+                                    de
+                                    <span t-field="docs[0].encabezado_id.chart_account_id.company_id.currency_id.name"/>
+                                </h5>
+                            </div>
+                            <div class="col-xs-6" align="center" style="margin-left: -187px; margin-top: -5px">
+                                <h5>HASTA :
+                                    <span t-field="docs[0].encabezado_id.date_to"/>
+                                </h5>
+                            </div>
+                        </div>
+
+                    </strong>
+                </div>
+
+                <table class="table-striped" style="font-size:100%;width: 100%; margin-top: 10px; margin-bottom: 30px">
+                    <thead id="corners2">
+                        <tr>
+                            <th style="text-align: center;">
+                                <strong>CUENTA</strong>
+                            </th>
+                            <th style="text-align: left;">
+                                <strong>TERCERO</strong>
+                            </th>
+                            <th style="text-align: left;">
+                                <strong>ASIENTO</strong>
+                            </th>
+                            <th style="text-align: left;">
+                                <strong>CUENTA ANALÍTICA</strong>
+                            </th>
+                            <th style="text-align: center;">
+                                <strong>FECHA</strong>
+                            </th>
+                            <th style="text-align: right;">
+                                <strong>S INICIAL</strong>
+                            </th>
+                            <th style="text-align: right;">
+                                <strong>DÉBITO</strong>
+                            </th>
+                            <th style="text-align: right;">
+                                <strong>CRÉDITO</strong>
+                            </th>
+                            <th style="text-align: right;">
+                                <strong>S FINAL</strong>
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        <t t-as="o" t-foreach="docs">
+
+                            <tr t-if="o.nivel == 99">
+                                <td align="left">
+                                    <span t-field="o.account_id"/>
+                                </td>
+                                <td align="left">
+                                    <span t-field="o.partner_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.asiento"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.account_analytic_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.fecha"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.amount_inicial"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.debit"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.credit"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.amount_final"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                            </tr>
+                            <tr t-if="o.nivel != 99">
+                                <td align="left">
+                                    <span t-field="o.account_id"/>
+                                </td>
+                                <td align="center">
+                                    <span t-field="o.partner_id"/>
+                                </td>
+                                <td align="center">
+                                    <span t-field="o.asiento"/>
+                                </td>
+                                <td align="left">
+                                    <span t-field="o.account_analytic_id"/>
+                                </td>
+                                <td align="center">
+                                    <span t-field="o.fecha"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.amount_inicial"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.debit"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.credit"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                                <td align="right">
+                                    <span t-field="o.amount_final"
+                                          t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <div class="footer" style="margin-top: 55 PX">
+                <div align="center">
+                    <small>
+                        <strong>
+                            <span>Pagina</span>
+                            <span class="page"/>
+                            de
+                            <span class="topage"/>
+                        </strong>
+                    </small>
+                </div>
+            </div>
+
+        </template>
+    </data>
+</openerp>

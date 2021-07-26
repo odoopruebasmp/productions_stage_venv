@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="crm_case_section_form_extended" model="ir.ui.view">
+            <field name="name">crm.case.section.extended</field>
+            <field name="model">crm.case.section</field>
+            <field name="inherit_id" ref="sales_team.crm_case_section_view_form"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="analytic_account_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="invoice_form_extended" model="ir.ui.view">
+            <field name="name">account.invoice.form.sale.extended</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="fiscal_position" position="after">
+                    <field name="partner_shipping_id" attrs="{'required': [('state','=','draft')]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="invoice_supplier_extended" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.sale.extended</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="fiscal_position" position="after">
+                    <field name="partner_shipping_id"/>
+                </field>
+            </field>
+        </record>
+	
+        <record id="view_order_form_extended" model="ir.ui.view">
+            <field name="name">order.form.extended</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button name="cancel" position="after">
+                    <button name="action_cancel_draft" states="cancel" type="object" string="Volver a Borrador"/>
+                </button >
+                <field name="partner_shipping_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="partner_shipping_id" position="after">
+                    <field name="contact_name"/>
+                </field>
+                <field name="date_order" position="after">
+                    <field name="time_entrega"/>
+                    <field name="garantia"/>
+                </field>
+                <field name="tax_id" position="after">
+                    <field name="project_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_partner_tree_sale_extended" model="ir.ui.view">
+            <field name="name">res.partner.sale.extended.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                    <field name="block" groups="sale_extended.group_modify_over_credit_limit"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_partner_property_form_sale_extended" model="ir.ui.view">
+            <field name="name">res.partner.sale.extended.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="credit_limit" position="after">
+                    <field name="check_due" groups="sale_extended.group_modify_over_credit_limit"/>
+                    <field name="block" groups="sale_extended.group_modify_over_credit_limit"/>
+                </field>
+                <field name="credit_limit" position="attributes">
+                    <attribute name="groups">sale_extended.group_modify_over_credit_limit</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_res_partner_filter_sale_extended" model="ir.ui.view">
+            <field name="name">res.partner.sale.extended.filter</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <filter string="Credito bloqueado" name="supplier" domain="[('block','=',True)]" groups="sale_extended.group_modify_over_credit_limit" help="Clientes Bloqueados" />
+                </field>
+            </field>
+        </record>
+        
+    </data>
+    <data noupdate="1">
+        
+        <record id="sale.trans_draft_router" model="workflow.transition">
+            <field name="condition">check_limit()</field>
+        </record>
+        
+        <record id="sale.trans_sent_router" model="workflow.transition">
+            <field name="condition">check_limit()</field>
+        </record>
+        
+        <record id="sale.trans_draft_sent" model="workflow.transition">
+            <field name="condition">check_limit()</field>
+        </record>
+    
+    </data>
+</openerp>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate="1">
+        <!--res.document.type-->
+        <record id="partner_co_document_type_NI" model="res.document.type">
+            <field name="name">Numero de identificación tributaria</field>
+            <field name="code">NI</field>
+            <field name="code_dian">31</field>
+        </record>
+        <record id="partner_co_document_type_CC" model="res.document.type">
+            <field name="name">Cédula de ciudadanía</field>
+            <field name="code">CC</field>
+            <field name="code_dian">13</field>
+        </record>
+        <record id="partner_co_document_type_CE" model="res.document.type">
+            <field name="name">Cédula de extranjería</field>
+            <field name="code">CE</field>
+            <field name="code_dian">22</field>
+        </record>
+        <record id="partner_co_document_type_TI" model="res.document.type">
+            <field name="name">Tarjeta de identidad</field>
+            <field name="code">TI</field>
+            <field name="code_dian">12</field>
+        </record>
+        <record id="partner_co_document_type_RC" model="res.document.type">
+            <field name="name">Registro civil de nacimiento</field>
+            <field name="code">RC</field>
+            <field name="code_dian">11</field>
+        </record>
+        <record id="partner_co_document_type_PA" model="res.document.type">
+            <field name="name">Pasaporte</field>
+            <field name="code">PA</field>
+            <field name="code_dian">41</field>
+        </record>
+        <record id="partner_co_document_type_CD" model="res.document.type">
+            <field name="name">Came Diplomatico</field>
+            <field name="code">CD</field>
+        </record>
+        <record id="partner_co_document_type_TE" model="res.document.type">
+            <field name="name">Tarjeta de extranjería</field>
+            <field name="code">TE</field>
+            <field name="code_dian">21</field>
+        </record>
+        <record id="partner_co_document_type_DE" model="res.document.type">
+            <field name="name">Documento de identificación extranjero</field>
+            <field name="code">DE</field>
+            <field name="code_dian">42</field>
+        </record>
+        <record id="partner_co_document_type_SI" model="res.document.type">
+            <field name="name">Sin identificación del exterior o para uso definido por la DIAN</field>
+            <field name="code">SI</field>
+            <field name="code_dian">43</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="avancys_idea_form_view">
+            <field name="name">avancys.form</field>
+            <field name="model">avancys.idea</field>
+            <field name="arch" type="xml">
+                <form string="Formulario de idea">
+                    <sheet>
+                        <group>
+                            <group string='Datos Generales'>
+    	                        <field name="name"/>
+                                <field name="create_uid" readonly="True"/>
+                                <field name="groupIdea_ids"/>
+                            </group>
+                            <group string='Resultados de Votaciones'>
+                                <field name="votes"/>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+                        <group string='Período de Votaciones'>
+                            <field name="datefrom"/>
+                            <field name="dateto"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="avancys_idea_tree_view">
+            <field name="name">avancys.tree</field>
+            <field name="model">avancys.idea</field>
+            <field name="arch" type="xml">
+                <tree string="Lista de idea">
+                    <field name="name"/>
+                    <field name="groupIdea_ids"/>
+                    <field name="datefrom"/>
+                    <field name="dateto"/>
+                    <field name="votes"/>
+                    <field name="notes"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="avancys_idea_list_action">
+            <field name="name">Idea</field>
+            <field name="res_model">avancys.idea</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crea tu primera idea
+                </p>
+            </field>
+        </record>
+    </data>
+</openerp>

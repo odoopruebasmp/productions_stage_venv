@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="customs_obligations_form" model="ir.ui.view">
+            <field name="name">customs.obligations.form</field>
+            <field name="model">customs.obligations</field>
+            <field name="arch" type="xml">
+                <form string="Usuarios Aduaneros">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="code"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <br/>
+                        <h3 class="oe_grey">Nota:</h3>
+                        <ul class="oe_grey">
+                            <li>Diligencie la información según el código y nombre especificado por la DIAN</li>
+                            <li>Campo 54 - RUT</li>
+                        </ul>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tributary_obligations_form" model="ir.ui.view">
+            <field name="name">tributary.obligations.form</field>
+            <field name="model">tributary.obligations</field>
+            <field name="arch" type="xml">
+                <form string="Responsabilidades Tributarias">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="code"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <br/>
+                        <h3 class="oe_grey">Nota:</h3>
+                        <ul class="oe_grey">
+                            <li>Diligencie la información según el código y nombre especificado por la DIAN</li>
+                            <li>Campo 53 - RUT</li>
+                        </ul>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="customs_obligations_tree" model="ir.ui.view">
+            <field name="name">customs.obligations.tree</field>
+            <field name="model">customs.obligations</field>
+            <field name="arch" type="xml">
+                <tree string="Usuarios Aduaneros">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tributary_obligations_tree" model="ir.ui.view">
+            <field name="name">tributary.obligations.tree</field>
+            <field name="model">tributary.obligations</field>
+            <field name="arch" type="xml">
+                <tree string="Responsabilidades Tributarias">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="customs_obligations" model="ir.actions.act_window">
+            <field name="name">Usuarios Aduaneros</field>
+            <field name="res_model">customs.obligations</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="customs_obligations_tree"/>
+        </record>
+
+        <record id="tributary_obligations" model="ir.actions.act_window">
+            <field name="name">Responsabilidades Tributarias</field>
+            <field name="res_model">tributary.obligations</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tributary_obligations_tree"/>
+        </record>
+
+        <record id="obligation_0" model="tributary.obligations">
+            <field name="name">Gran Contribuyente</field>
+            <field name="code">O-13</field>
+        </record>
+        <record id="obligation_1" model="tributary.obligations">
+            <field name="name">Autorretenedor</field>
+            <field name="code">O-15</field>
+        </record>
+        <record id="obligation_2" model="tributary.obligations">
+            <field name="name">Agente de retención IVA</field>
+            <field name="code">O-23</field>
+        </record>
+        <record id="obligation_3" model="tributary.obligations">
+            <field name="name">Régimen Simple de Tributación – SIMPLE</field>
+            <field name="code">O-47</field>
+        </record>
+        <record id="obligation_4" model="tributary.obligations">
+            <field name="name">No responsable</field>
+            <field name="code">R-99-PN</field>
+        </record>
+        <record id="obligation_5" model="tributary.obligations">
+            <field name="name">No Aplica</field>
+            <field name="code">ZZ</field>
+        </record>
+
+        <menuitem id="customs_obl_menu" name="Obligaciones Aduaneras" parent="account_analytic_avancys.taxes_config_menu"
+                  sequence="20" action="customs_obligations"/>
+        <menuitem id="tax_obl_menu" name="Obligaciones Tributarias" parent="account_analytic_avancys.taxes_config_menu"
+                  sequence="30" action="tributary_obligations"/>
+
+    </data>
+</openerp>

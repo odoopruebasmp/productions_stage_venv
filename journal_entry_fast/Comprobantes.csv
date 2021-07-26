@@ -1,0 +1,85 @@
+journal_id,period_id,narration,ref,date,line_id/name,line_id/date,line_id/ref,line_id/ref1,line_id/ref2,line_id/partner_id,line_id/account_id,line_id/debit,line_id/credit,line_id/analytic_account_id,line_id/date_maturity
+SALDOS INICIALES,00/2015,SALDOS INICIALES,SALDOS INICIALES,2015-01-01,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,,811018807,1305050301,16588600,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,,890982364,1305050301,38750804,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,,890907038,1305050301,37700000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,,890981212,1305050301,20105500,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 08 -12,890981212,1305050301,4021100,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 09 -12,890981212,1305050301,4021100,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 10-12,890981212,1305050301,4021100,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 11-12,890981212,1305050301,4021100,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 12-12,890981212,1305050301,4021100,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 08 -12,890981212,9999999999,0,4021100,Ventas-Medellin--Direcci�n Regional,2015-01-31
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 09 -12,890981212,9999999999,0,4021100,Ventas-Medellin--Direcci�n Regional,2015-02-28
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 10-12,890981212,9999999999,0,4021100,Ventas-Medellin--Direcci�n Regional,2015-03-31
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 11-12,890981212,9999999999,0,4021100,Ventas-Medellin--Direcci�n Regional,2015-04-30
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 12-12,890981212,9999999999,0,4021100,Ventas-Medellin--Direcci�n Regional,2015-05-31
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 05 -12,890982364,1305050301,45404,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 06 -12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 07 -12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 08 -12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 09 -12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 10-12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 11-12,890982364,1305050301,5529300,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 12-12,890982364,1305050301,5529600,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 05 -12,890982364,9999999999,0,45404,Ventas-Medellin--Direcci�n Regional,2014-12-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 06 -12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-01-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 07 -12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-02-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 08 -12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-03-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 09 -12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-04-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 10-12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-05-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 11-12,890982364,9999999999,0,5529300,Ventas-Medellin--Direcci�n Regional,2015-06-24
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,Cuota 12-12,890982364,9999999999,0,5529600,Ventas-Medellin--Direcci�n Regional,2015-07-24
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 08 -12,890907038,1305050301,7540000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 09 -12,890907038,1305050301,7540000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 10-12,890907038,1305050301,7540000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 11-12,890907038,1305050301,7540000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 12-12,890907038,1305050301,7540000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 08 -12,890907038,9999999999,0,7540000,Ventas-Medellin--Direcci�n Regional,2015-01-31
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 09 -12,890907038,9999999999,0,7540000,Ventas-Medellin--Direcci�n Regional,2015-02-28
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 10-12,890907038,9999999999,0,7540000,Ventas-Medellin--Direcci�n Regional,2015-03-31
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 11-12,890907038,9999999999,0,7540000,Ventas-Medellin--Direcci�n Regional,2015-04-30
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,Cuota 12-12,890907038,9999999999,0,7540000,Ventas-Medellin--Direcci�n Regional,2015-05-31
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 02 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 03 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 04 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 05 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 06 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 07 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 08 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 09 -12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 10-12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 11-12,811018807,1305050301,1508000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 12-12,811018807,1305050301,1508600,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 02 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2014-12-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 03 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-01-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 04 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-02-28
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 05 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-03-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 06 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-04-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 07 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-05-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 08 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-06-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 09 -12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-07-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 10-12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-08-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 11-12,811018807,9999999999,0,1508000,Ventas-Medellin--Direcci�n Regional,2015-09-30
+,,,,,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,Cuota 12-12,811018807,9999999999,0,1508600,Ventas-Medellin--Direcci�n Regional,2015-10-30
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 02 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 03 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 04 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 05 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 06 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 07 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 08 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 09 -12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 10-12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 11-12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 12-12,860034372,1305050301,8606000,0,Ventas-Medellin--Direcci�n Regional,2015-02-01
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 02 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-01-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 03 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-02-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 04 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-03-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 05 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-04-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 06 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-05-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 07 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-06-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 08 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-07-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 09 -12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-08-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 10-12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-09-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 11-12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-10-24
+,,,,,Union Nacional de Empleados  Bancarios NIT:860034372,2015-01-01,CONTRATO: 239756,PH Cupos Institucionales,Cuota 12-12,860034372,9999999999,0,8606000,Ventas-Medellin--Direcci�n Regional,2015-11-24

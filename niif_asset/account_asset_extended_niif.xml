@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_asset_asset_search" model="ir.ui.view">
+            <field name="name">account.asset.asset.niif.search</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">search</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after" >
+                    <field name="state"/>
+                    <field name="product_id"/>
+                    <field name="prodlot_id"/>
+                    <field name="asset_type"/>
+                    <field name="parent_id"/>
+                    <field name="purchase_date"/>
+                    <field name="centrocosto_id"/>
+                    <field name="type_baja"/>
+                    <separator/>
+                    <filter string="Borrador" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="Progreso" name="open" domain="[('state','=','open')]"/>
+                    <filter string="Cerrado" name="close" domain="[('state','=','close')]"/>
+                    <filter string="Vendidos" name="sale" domain="[('type_baja','=','venta')]"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Producto" name="product_id" context="{'group_by':'product_id'}"/>
+                        <filter string="Serial" name="prodlot_id" context="{'group_by':'prodlot_id'}"/>
+                        <filter string="Estado" name="state" context="{'group_by':'state'}"/>
+                        <filter string="Categoria" name="category_id" context="{'group_by':'category_id'}"/>
+                        <filter string="Tipo" name="asset_type" context="{'group_by':'asset_type'}"/>
+                        <filter string="Activo Padre" name="parent_id" context="{'group_by':'parent_id'}"/>
+                        <filter string="Fecha de Compra" name="purchase_date" context="{'group_by':'purchase_date'}"/>
+                        <filter string="Cuenta Analitica" name="centrocosto_id" context="{'group_by':'centrocosto_id'}"/>
+                        <filter string="Tipo Baja" name="type_baja" context="{'group_by':'type_baja'}"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_asset_asset_graph">
+            <field name="name">account.asset.asset.graph</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Activos" type="pivot" stacked="True"> 
+                    <field name="purchase_value_niif" type="measure"/>    
+                    <field name="salvage_value_niif" type="measure"/>
+                    <field name="value_to_depreciate_niif" type="measure"/>
+                    <field name="amount_residual_niif" type="measure"/>
+                    <field name="value_to_depreciate" type="measure"/>
+                    <field name="value_residual" type="measure"/>
+                    <field name="amount_depreciado" type="measure"/>
+                    <field name="amount_deterioro" type="measure"/>    
+                    <field name="amount_valorizacion" type="measure"/>
+                    <field name="amount_venta_fiscal" type="measure"/>    
+                    <field name="amount_venta_contable" type="measure"/>                                        
+                </graph>
+            </field>
+        </record>
+        
+        <record id="account_asset.action_account_asset_asset_form" model="ir.actions.act_window">
+            <field name="view_mode">tree,form,graph</field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="account_asset_depreciation_line_graph">
+            <field name="name">account.asset.depreciation.line.niif</field>
+            <field name="model">account.asset.depreciation.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Inventarios" type="pivot" stacked="True">          
+                    <field name="amount" type="measure"/>      
+                </graph>
+            </field>
+        </record>
+        
+        <record id="view_account_asset_depreciation_line_search" model="ir.ui.view">
+            <field name="name">account.asset.depreciation.line.search</field>
+            <field name="model">account.asset.depreciation.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="asset_id2"/>
+                    <field name="category_id"/>
+                    <separator/>
+                    <filter string="Contabilizado" name="ejecutado" domain="[('move_id','!=',False)]"/>
+                    <group string="Group By">
+                        <filter string="Activo Contable" name="asset_id2" context="{'group_by':'asset_id2'}"/>
+                        <filter string="Estado" name="state" context="{'group_by':'state'}"/>
+                        <filter string="categoria" name="category_id" context="{'group_by':'category_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_account_asset_depreciation_line_search_dos" model="ir.ui.view">
+            <field name="name">account.asset.depreciation.line.search</field>
+            <field name="model">account.asset.depreciation.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="asset_id"/>
+                    <field name="category_id"/>
+                    <separator/>
+                    <filter string="Contabilizado" name="ejecutado" domain="[('move_id','!=',False)]"/>
+                    <group string="Group By">
+                        <filter string="Activo Fiscal" name="asset_id" context="{'group_by':'asset_id'}"/>
+                        <filter string="Estado" name="state" context="{'group_by':'state'}"/>
+                        <filter string="categoria" name="category_id" context="{'group_by':'category_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="open_account_asset_depreciation_fiscal" model="ir.actions.act_window">
+            <field name="name">Analisis Fiscal</field>
+            <field name="res_model">account.asset.depreciation.line</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('asset_id','!=',False)]</field>
+            <field name="view_mode">graph,tree,form</field>
+            <field name="search_view_id" ref="view_account_asset_depreciation_line_search_dos"/>
+        </record>
+        
+        <record id="open_account_asset_depreciation_niif" model="ir.actions.act_window">
+            <field name="name">Analisis Contable</field>
+            <field name="res_model">account.asset.depreciation.line</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('asset_id2','!=',False)]</field>
+            <field name="view_mode">graph,tree,form</field>
+            <field name="search_view_id" ref="view_account_asset_depreciation_line_search"/>
+        </record>
+                    
+       <menuitem action="open_account_asset_depreciation_fiscal" id="open_account_asset_depreciation_menu_fiscal" name="Analisis Fiscal" parent="account_asset.menu_finance_assets" sequence="200"/>
+       <menuitem action="open_account_asset_depreciation_niif" id="open_account_asset_depreciation_menu_niif" name="Analisis Contable" parent="account_asset.menu_finance_assets" sequence="201"/>
+        
+        
+        
+        <record model="ir.ui.view" id="view_asset_depreciation_confirmation_wizard_form_niff">
+            <field name="name">asset.depreciation.confirmation.wizard.form.niff</field>
+            <field name="model">asset.depreciation.confirmation.wizard</field>
+            <field name="inherit_id" ref="account_asset.view_asset_depreciation_confirmation_wizard"/>
+            <field name="arch" type="xml">
+                <field name="period_id" position="before">
+                    <field name="type_plan"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_asset_category_form_niff">
+            <field name="name">account.asset.category.form.niff</field>
+            <field name="model">account.asset.category</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <label string="." colspan="2"/>
+                    <label for ="journal_niff_structure_property" string="Configuracion Contable" colspan="2"/>
+                    <field name="journal_niff_structure_property" required="1"/>
+                    <field name="account_asset_nif_property" required="1"/>
+                    <field name="account_depreciation_nif_property" required="1"/>
+                    <field name="account_expense_depreciation_nif_property"/>
+                    <field name="account_cost_nif_property"/>
+                    <field name="account_gasto_venta_nif_property"/>
+                    <label string="." colspan="2"/>
+                    <label string="Configuracion Baja Contable" colspan="2"/>                    
+                    <field name="journal_down_id"/>
+                    <field name="journal_down_id1"/>
+                    <field name="journal_sale_id"/>
+                    <field name="account_asset_ganancia_niif_id"/>
+                    <field name="account_down_id"/>
+                    <label string="." colspan="2"/>
+                    <label string="Configuracion Deterioro" colspan="2"/>                    
+                    <field name="journal_niff_deterioro"/>
+                    <field name="account_deterioro"/>
+                    <field name="account_deterioro_gasto"/>
+                    <field name="account_recuperacion"/>
+                    <field name="account_recuperacion_ingreso"/>
+                    <label string="Configuracion Modelo de Medicion" colspan="2"/>                    
+                    <field name="model_method"/> 
+                    <field name="account_superavit_id" attrs="{'invisible':[('model_method','!=','revaluacion')], 'required':[('model_method','=','revaluacion')]}"/>
+                </field>
+                <field name="method_number" position="after">
+                    <field name="nif_method_number" attrs="{'invisible':[('method_time','!=','number')], 'required':[('method_time','=','number')]}"/>
+                </field>
+            </field>
+        </record>
+    
+        <record model="ir.ui.view" id="view_account_asset_asset_form_niff">
+            <field name="name">account.asset.asset.form.niff</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_asset_extended.view_account_asset_asset_form2"/>
+            <field name="arch" type="xml">
+                <page string="Depreciation Board" position="after">
+                    <page string="NIIF">
+                        <group>
+                            <group string="Balance">                   
+                                <field name="purchase_value_niif" widget="monetary" options="{'currency_field': 'currency_id'}" required="1"/>
+                                <field name="salvage_value_niif" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'required': [('nif_method','=','reduction')]}"/>
+                                <field name="amount_deterioro" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_valorizacion" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_depreciado" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="value_to_depreciate_niif" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>                                
+                                <field name="amount_residual_niif" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name='depreciation_date'/>
+                            </group>
+                            <group string="Configuracion">
+                                <field name="nif_method"/>
+                                <field name="nif_method_time" class="oe_inline"/>
+                                <field name="nif_prorata" attrs="{'invisible': [('nif_method_time','=','end')]}"/>
+                                <field name="period_prorate_niif" attrs="{'invisible': [('nif_prorata','=',False)]}"/>
+                                <field name="nif_method_number" attrs="{'invisible':[('nif_method_time','=','end')], 'required':[('nif_method_time','=','number')]}"/>
+                                <field name="nif_method_period" required="0"/>
+                                <field name="nif_method_end" attrs="{'required': [('nif_method_time','=','end')], 'invisible':[('nif_method_time','=','number')]}"/>
+                            </group>
+                        </group>
+                        <button type="object" name="compute_depreciation_board_niff" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','!=','draft')]}"/> 
+                        <field name="depreciation_line_nif_ids" mode="tree" readonly="1">
+                            <tree string="Depreciation Lines" colors="blue:(move_check == False);black:(move_check == True)" readonly="1">
+                                <field name="depreciation_date"/>
+                                <field name="sequence" invisible="1"/>
+                                <field name="remaining_value_end" readonly="1" string="Valor Libros"/>
+                                <field name="depreciated_value" readonly="1"/>
+                                <field name="amount" sum="Total"/>
+                                <field name="remaining_value" readonly="1" string="Saldo Depreciar/Amortizar"/>  
+                                <field name="amount_valorizado" readonly="1" sum="Total"/>
+                                <field name="move_check" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="move_id" attrs="{'invisible':[('move_id','=',False)]}" string="Asiento"/>                                
+                                <button name="create_move" attrs="{'invisible':['|',('move_id','!=',False),('state','!=','open')]}" icon="gtk-execute" string="Crear" type="object"/>
+                                <button name="unlink_move_nif" attrs="{'invisible':['|',('move_id','=',False),('state','=','draft')]}" icon="STOCK_UNDO" string="Eliminar" type="object"/>
+                            </tree>
+                            <form string="Depreciation Lines"> 
+                                <group>
+                                    <group>
+                                        <field name="asset_id2" invisible="1" readonly="1"/>
+                                        <field name="parent_state" invisible="1" readonly="1"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="amount" readonly="1"/>
+                                        <field name="move_id" readonly="1"/>
+                                        <field name="move_check" readonly="1"/>
+                                        <field name="parent_state" invisible="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="sequence" readonly="1"/>
+                                        <field name="depreciation_date" readonly="1"/>
+                                        <field name="depreciated_value" readonly="1"/>
+                                        <field name="remaining_value" readonly="1"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>                                               
+                    </page>
+                    <page string="Deterioro / Recuperable" attrs="{'invisible': [('state','=', 'draft')]}">
+                        <field name="deterioro_id" mode="tree" attrs="{'readonly':[('state','!=','open')]}">
+                            <tree string="Deterioro y V. Recuperable" editable="bottom" attrs="{'readonly':[('state','!=','open')]}">
+                                <field name="type" attrs="{'readonly':[('recuperado','=',True)]}"/>   
+                                <field name="date" attrs="{'readonly':[('recuperado','=',True)]}"/>
+                                <field name="cost_realy" attrs="{'readonly':[('recuperado','=',True)]}"/>
+                                <field name="cost_use" attrs="{'readonly':['|',('recuperado','=',True),('type','!=','deterioro')]}"/>    
+                                <field name="cost_recuperable"/>
+                                <field name="cost"/> 
+                                <field name="value" sum="Total"/>
+                                <field name="valorizacion" readonly="1" sum="Total"/>
+                                <field name="recuperado" invisible="1"/>
+                                <field name="move_id"/> 
+                                <field name="state" invisible="1"/>
+                                <button name="calcular" attrs="{'invisible':['|',('recuperado','=',True),('state','!=','open')]}" icon="gtk-execute" string="Calcular" type="object"/>
+                                <button name="cancelar" attrs="{'invisible':['|',('recuperado','=',False),('state','!=','open')]}" icon="STOCK_UNDO" string="Calcular" type="object"/>
+                            </tree>
+                            <form string="Deterioro"> 
+                                <group>
+                                    <field name="type" readonly="1"/>   
+                                    <field name="date" readonly="1"/>
+                                    <field name="cost_realy" readonly="1"/>
+                                    <field name="cost_use" readonly="1"/>    
+                                    <field name="cost_recuperable" readonly="1"/>
+                                    <field name="cost" readonly="1"/> 
+                                    <field name="value" readonly="1"/>
+                                    <field name="valorizacion" readonly="1"/>
+                                    <field name="move_id" readonly="1"/> 
+                                    <field name="state" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>                        
+                    </page>                    
+                </page>                
+            </field>
+        </record>
+
+        <record id="view_compute_depreciation_tables_wiz" model="ir.ui.view">
+            <field name="name">view.compute.depreciation.tables.wiz</field>
+            <field name="model">compute.depreciation.tables.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Calcular tablas">
+                    <footer>
+                        <button name="calcular_tablas" string="Calcular tablas" type="object"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_compute_depreciation_tables_wiz" model="ir.actions.act_window">
+            <field name="name">action.compute.depreciation.tables.wiz</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">compute.depreciation.tables.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_compute_depreciation_tables_wiz" />
+            <field name="target">new</field>
+        </record>
+
+        <act_window id="calcular_tablas_depreciacion_menu" multi="True" name="Calcular tablas" res_model="compute.depreciation.tables.wiz" src_model="account.asset.asset" view_mode="form" target="new" view_type="tree" context="{'active_ids': active_id}"/>
+        
+    </data>
+</openerp>

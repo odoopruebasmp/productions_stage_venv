@@ -1,0 +1,14 @@
+<openerp>
+    <data noupdate="1">
+        <record model="ir.cron" id="verify_days_pila">
+            <field name="name">DIASPILA</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'hr.payroll.pila'"/>
+            <field name="function" eval="'generate_notification'"/>
+            <field name="args">()</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_fpa_sale_munic_taxes_view" model="ir.ui.view">
+            <field name="name">Ventas Municipio</field>
+            <field name="model">fpa.sale.munic.taxes.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Opciones del informe" version="7.0">
+                    <label string=""/>
+                    <notebook colspan="4" tabpos="up">
+                        <page string="Parametros Principales">
+                            <group>
+                                <group style="width:64%">
+                                    <field name="date_from"/>
+                                    <field name="product_type"/>
+                                    <field name="inv_state"/>
+                                </group>
+                                <group style="width:60%">
+                                    <field name="date_to"/>
+                                    <field name="period_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Parametros Opcionales">
+                            <group string="Terceros">
+                                <field name="partner_ids"/>
+                            </group>
+                            <group string="Municipios">
+                                <field name="munic_ids"/>
+                            </group>
+                            <group string="Cuenta Analítica">
+                                <field name="analy_ids"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button class="oe_highlight" default_focus="1" name="generar" string="Generar" type="object"/>o
+
+                        <button class="oe_link" special="cancel" string="Cancelar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fpa_sale_munic_taxes_wiz" model="ir.actions.act_window">
+            <field name="name">Asistente para generar Ventas/Devoluciones de Impuestos por Municipio</field>
+            <field name="res_model">fpa.sale.munic.taxes.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_fpa_sale_munic_taxes_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_fpa_sale_munic_taxes_tree" model="ir.ui.view">
+            <field name="name">fpa.sale.munic.taxes.line.tree</field>
+            <field name="model">fpa.sale.munic.taxes.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="tipo_doc"/>
+                    <field name="invoice_id"/>
+                    <field name="invoice_date"/>
+                    <field name="analytic_acc_id"/>
+                    <field name="munic_cod"/>
+                    <field name="munic_id"/>
+                    <field name="tipo_acc"/>
+                    <field name="partner_nit"/>
+                    <field name="partner_id"/>
+                    <field name="invoice_value"/>
+                    <field name="invoice_tax"/>
+                    <field name="invoice_auto"/>
+                    <field name="inv_state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fpa_sale_munic_taxes_tree" model="ir.actions.act_window">
+            <field name="name">Ventas-Devoluciones de Impuestos por Municipio</field>
+            <field name="res_model">fpa.sale.munic.taxes.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_fpa_sale_munic_taxes_tree"/>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="target">current</field>
+        </record>
+
+        <record id="fpa_sale_munic_taxes_line_search" model="ir.ui.view">
+            <field name="name">fpa.sale.munic.taxes.line.search</field>
+            <field name="model">fpa.sale.munic.taxes.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="partner_id"/>
+                    <field name="analytic_acc_id"/>
+                    <field name="munic_id"/>
+                    <field name="invoice_date"/>
+                    <field name="inv_state"/>
+                    <field name="tipo_acc"/>
+                    <field name="tipo_doc"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'partner_id'}" string="Tercero"/>
+                        <filter context="{'group_by':'analytic_acc_id'}" string="Cuenta analítica"/>
+                        <filter context="{'group_by':'munic_id'}" string="Municipio"/>
+                        <filter context="{'group_by':'invoice_date'}" string="Fecha"/>
+                        <filter context="{'group_by':'inv_state'}" string="Estado"/>
+                        <filter context="{'group_by':'tipo_acc'}" string="Tipo Acción"/>
+                        <filter context="{'group_by':'tipo_doc'}" string="Tipo Documento"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</openerp>

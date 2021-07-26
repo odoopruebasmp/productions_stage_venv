@@ -1,0 +1,3 @@
+.openerp .avancys_table tr:nth-child(even) {
+    background-color: #f0eeee;
+}

@@ -1,0 +1,9 @@
+.tour-step-background,
+.tour-backdrop {
+    position: fixed !important;
+}
+
+.tour-step-background {
+    background: #fff;
+    opacity: 0.2;
+}

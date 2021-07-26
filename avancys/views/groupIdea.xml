@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="avancys_group_idea_form_view">
+            <field name="name">avancys.form</field>
+            <field name="model">avancys.group_idea</field>
+            <field name="arch" type="xml">
+                <form string="Formulario de Grupo de ideas">
+                    <sheet>
+	                    <group>
+    	                    <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <notebook>
+                                <page string="Ideas">
+                                    <field name="idea_ids" readonly="True">
+                                        <field name="name"/>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="avancys_group_idea_tree_view">
+            <field name="name">avancys.tree</field>
+            <field name="model">avancys.group_idea</field>
+            <field name="arch" type="xml">
+                <tree string="Grupo de ideas">
+                        <field name="name"/>
+                        <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="avancys_group_idea_list_action">
+            <field name="name">idea</field>
+            <field name="res_model">avancys.group_idea</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crea tu primer grupo de idea
+                </p>
+            </field>
+        </record>
+    </data>
+</openerp>

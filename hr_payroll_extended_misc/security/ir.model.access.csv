@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fpa_financial_reports_concepts,fpa.financial.reports.concepts,model_fpa_financial_reports_concepts,financial_reports.group_user_report_accounting_reports,1,1,1,1
+,,,,,,,
+access_fpa_balance_pruebas_wizard,fpa.balance.pruebas.wizard,model_fpa_balance_pruebas_wizard,financial_reports.group_user_report_accounting_reports,1,1,1,1
+access_fpa_balance_pruebas_line,fpa.balance.pruebas.line,model_fpa_balance_pruebas_line,financial_reports.group_user_report_accounting_reports,1,1,1,1
+access_fpa_balance_pruebas,fpa.balance.pruebas,model_fpa_balance_pruebas,financial_reports.group_user_report_accounting_reports,1,1,1,1

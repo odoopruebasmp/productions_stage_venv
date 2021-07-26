@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim:fdl=1:
+-->
+<templates id="template" xml:space="preserve">
+    <t t-extend="ClientListScreenWidget">
+        <t t-jquery=".back" t-operation="after">
+                <span class="button search_customer" style="margin-left: 16px;left: 117px;">
+                      <i class='fa fa-search-plus'></i>Search Customer
+                </span>
+        </t>
+    </t>
+</templates>

@@ -1,0 +1,25 @@
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="compute_sheet_form_view">
+			<field name="name">hr.payroll.compute.form</field>
+			<field name="model">hr.payroll.compute</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Actualizar Calculos">
+					<separator string="Compute Sheets" colspan="4"></separator>
+					<button icon="gtk-cancel" special="cancel"
+						string="Close" />
+					<button name="compute_sheet" string="Actualizar Calculos"
+						type="object" icon="terp-stock_format-scientific" />
+				</form>
+			</field>
+		</record>
+
+
+		<!-- <act_window name="Actualizar Calculos" res_model="hr.payroll.compute"
+			src_model="hr.payslip" view_mode="form" target="new"
+			key2="client_action_multi" id="action_employee_compute_sheets" /> -->
+
+	</data>
+</openerp>

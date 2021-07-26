@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+	
+        <!--<record id="wiz_show_lines_view_id" model="ir.ui.view">
+            <field name="name">wiz.show.lines.form</field>
+            <field name="model">wiz.show.lines</field>
+            <field name="arch" type="xml">
+                <form string="Cantidades No Disponibles" version='7.0'>
+                    <footer>
+                        <button name='show_lines' type='object' string='Show lines' />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wiz_show_lines_action" model="ir.actions.act_window">
+            <field name="name">Cantidades No Disponibles</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wiz.show.lines</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Cantidades No Disponibles" id="menu_sale_order_line_show_id" parent="base.menu_sales" action="wiz_show_lines_action" />-->
+
+    </data>
+</openerp>

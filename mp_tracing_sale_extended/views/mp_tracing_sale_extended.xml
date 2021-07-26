@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record model="ir.ui.view" id="mp_tracing_invoice_line_form">
+            <field name="name">mp.tracing.account.invoice.line.view.form.extended</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='product_id']" position="after">               
+                    <field name="product_low_turnover" invisible="True"/>
+                    <field name="qty_initial_prd" invisible="True"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mp_tracing_invoice_line_products_extended_view_form">
+        <field name="name">mp.products.extended.form.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product_mp.product_variant_extended_view_mp"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">                
+                <xpath expr="//field[@name='type']" position="after">               
+                    <field name="product_low_turnover"/>
+                    <field name="qty_initial_prd"/>
+                </xpath>
+
+            </field>
+        </record>
+                   
+    </data>
+</openerp>

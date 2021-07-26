@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="purchase_import_sequence_type" model="ir.sequence.type">
+            <field name="name">Purchase Import</field>
+            <field name="code">purchase.import</field>
+        </record>
+
+        <record id="purchase_import_sequence" model="ir.sequence">
+            <field name="name">Purchase Import</field>
+            <field name="code">purchase.import</field>
+            <field name="prefix">IMP-</field>
+            <field name="padding">5</field>
+        </record>
+        
+        <record id="ir_cron_send_alert_action" model="ir.cron">
+            <field name="name">Send Email Alert</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model">purchase.import</field>
+            <field name="function">send_alerts</field>
+            <field name="active" eval="False"/>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="create_refund_picking_wizard" model="ir.ui.view">
+            <field name="name">create.refund.picking.wizard</field>
+            <field name="model">refund.picking.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Crear">
+                    <separator string="Crear Transferencia de Reintegro"/>
+                    <group>
+                        <label string="Se creará un transferencia de inventario a la ubicación indicada con los productos de la transferencia de Novedad. También pasará a Resuelto el Estado Novedad de la transferencia de novedad y transferencia origen."/>
+                    </group>
+                    <group>
+                        <field name="location_id"/>
+                    </group>
+                    <footer>
+                        <button name="create_picking" string="Crear" type="object" default_focus="1" class="oe_highlight"/>
+                        o
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_create_refund_picking_wizard" model="ir.actions.act_window">
+            <field name="name">Crear</field>
+            <field name="res_model">refund.picking.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="create_refund_picking_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

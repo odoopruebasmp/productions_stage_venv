@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+idea_manager,idea manager,model_avancys_idea,group_idea_manager,1,1,1,1
+idea_group_manager,idea group manager,model_avancys_group_idea,group_idea_manager,1,1,1,1
+votes_manager,votes manager,model_avancys_votes,group_idea_manager,1,1,1,1
+group_manager,group manager,model_avancys_group,group_idea_manager,1,1,1,1
+users_manager,group users,model_avancys_users,group_idea_manager,1,1,1,1

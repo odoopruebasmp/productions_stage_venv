@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_res_partner_niif_cartera_form" model="ir.ui.view">
+            <field name="name">res.partner.niif.cartera.form.inherit2</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name='function' position="after">
+                    <field name="type_customer" attrs="{'invisible': [('customer','=',False)],'required': [('customer','=',True)]}"/>                  
+                </field>
+            </field>
+        </record>
+        
+        <!--GESTION DEL SIMULADOR DETERIORO DE CARTERA-->        
+        <record id="view_account_move_line_deterioro_tree" model="ir.ui.view">
+            <field name="name">account.move.line.deterioro.tree</field>
+            <field name="model">account.move.line.deterioro</field>
+            <field name="arch" type="xml">
+                <tree string='Deterioro Cartera' editable="bottom">
+                    <field name='ok'/>
+                    <field name='type'/>
+                    <field name='account_id' invisible="1"/>
+                    <field name='partner_id'/>
+                    <field name='name'/>
+                    <field name='ref'/>
+                    <field name='date'/>
+                    <field name='date_maturity'/>
+                    <field name='days'/>
+                    <field name='politica_id' string="Politica"/>                    
+                    <field name="amount_start" sum="Total"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="amount_history" sum="Total"/>
+                    <field name="amount_aplicar" sum="Total"/>
+                    <field name="amount_end" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_account_move_line_deterioro" model="ir.ui.view">
+            <field name="name">account.move.line.deterioro.search.cartera</field>
+            <field name="model">account.move.line.deterioro</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis Deterioro">
+                    <field name='type'/>
+                    <field name='account_id' invisible="1"/>
+                    <field name='partner_id'/>
+                    <field name='name'/>
+                    <field name='ref'/>
+                    <field name='date'/>
+                    <field name='date_maturity'/>
+                    <field name='days'/>
+                    <field name='politica_id' string="Politica"/>                 
+                    <separator/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Politica" name="politica_id" context="{'group_by':'politica_id'}"/>
+                        <filter string="Tipo" name="type" context="{'group_by':'type'}"/>
+                        <filter string="Cliente" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Cuenta" name="account_id" context="{'group_by':'account_id'}"/>
+                        <filter string="Fecha" name="date" context="{'group_by':'date'}"/>
+                        <filter string="Fecha Vencimiento" name="date_maturity" context="{'group_by':'date_maturity'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_account_move_line_deterioro_report_graph_cartera" model="ir.ui.view">
+            <field name="name">account.move.line.deterioro.report.graph.cartera</field>
+            <field name="model">account.move.line.deterioro</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Movimientos" type="pivot" stacked="True">                    
+                    <field name="politica_id"/>
+                    <field name="type"/>
+                    <field name="amount_start" type="measure"/>
+                    <field name="amount_history" type="measure"/>
+                    <field name="amount" type="measure"/>
+                    <field name="amount_end" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="view_account_journal_form_niiif_cartera" model="ir.ui.view">
+            <field name="name">account.journal.niif.cartera</field>
+            <field name="model">account.journal</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="NIIF">
+                        <group>
+                            <field name="niif"/>                           
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        
+        <!--GESTION DE DETERIORO DE CARTERA-->        
+        <record id="view_change_cartera_tree" model="ir.ui.view">
+            <field name="name">change.cartera.tree</field>
+            <field name="model">change.cartera</field>
+            <field name="arch" type="xml">
+                <tree string='Deterioro Cartera'>
+                    <field name='name'/>
+                    <field name='date'/>
+                    <field name='period_id'/>
+                    <field name='state'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_change_cartera_form" model="ir.ui.view">
+            <field name="name">change.cartera.form</field>
+            <field name="model">change.cartera</field>
+            <field name="arch" type="xml">
+                <form string='Recuperacion Y Deterioro' version='7.0'>
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" icon="gtk-go-forward" states="draft"/>
+                        <button string="Calcular" name="calcular" states="confirmed" type="object" icon="STOCK_REFRESH"/>
+                        <button string="Contabilizar" name="contabilizar" states="confirmed" type="object"/>                        
+                        <button string="Recalcular" name="recalcular" states="done" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" states="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="name"/>                        
+                            </h1>
+                            <div name='buttons' class="oe_right"> 
+                                <button class="oe_inline oe_stat_button" name="view_detalle" type="object" icon="fa-bar-chart-o">
+                                    <field string="Analisis" name="count" widget="statinfo"/>
+                                </button>
+                            </div>
+                        </group>
+                        <separator/>
+                        <group colspan="2" col="2">
+                            <field name='politica_id'/>
+                        </group>
+                        <group colspan="4" col="4">
+                            <field name='date'/>
+                            <field name='period_id'/>
+                            <field name='journal_id'/>                            
+                            <field name='company_id'/>
+                        </group>                
+                        <notebook colspan="4" attrs="{'invisible': [('state','=','draft')]}">
+                            <page string="Movimientos">
+                                <group>
+                                    <field name="line_ids" nolabel="1">
+                                        <tree>
+                                            <field name='move_deterioro_id' string="Origen"/>
+                                            <field name='period_id'/>
+                                            <field name='name'/>
+                                            <field name='ref'/>
+                                            <field name='date'/>
+                                            <field name='account_id'/>
+                                            <field name='partner_id'/>
+                                            <field name='analytic_account_id'/>                                            
+                                            <field name='debit' sum="Total"/>
+                                            <field name='credit' sum="Total"/>
+                                            <field name='state'/>
+                                        </tree>
+                                    </field>
+                                </group>                                
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        
+        <!--POLITICA RECUPERACION Y DETERIORO DE CARTERA-->        
+        <record id="view_politica_cartera_tree" model="ir.ui.view">
+            <field name="name">politica.cartera.tree</field>
+            <field name="model">politica.cartera</field>
+            <field name="arch" type="xml">
+                <tree string='Politica Cartera'>
+                    <field name='name'/>
+                    <field name='description'/>
+                    <field name='type_customer'/>                    
+                    <field name='type'/>
+                    <field name='type_interes'/>
+                    <field name='type_calc'/>
+                    <field name='active'/>                    
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_politica_cartera_form" model="ir.ui.view">
+            <field name="name">politica.cartera.form</field>
+            <field name="model">politica.cartera</field>
+            <field name="arch" type="xml">
+                <form string='Politica' version='7.0'>
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="name"/>                        
+                            </h1>
+                        </group>
+                        <group colspan="4" col="4">
+                            <field name='type_customer'/>
+                            <field name='type'/>
+                            <field name='type_interes'/>
+                            <field name='type_calc'/>
+                        </group>
+                        <group colspan="4" col="4">                            
+                            <field name='active'/>
+                            <field name='company_id'/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lineas">
+                                <group>
+                                    <field name="line_ids" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name='name'/>
+                                            <field name='amount_start'/>
+                                            <field name='amount_end'/>
+                                            <field name='deterioro'/>                                            
+                                            <field name='account_deterioro_id'/>
+                                            <field name='account_recuperable_id'/>
+                                        </tree>
+                                    </field>
+                                </group>                                
+                            </page>
+                            <page string="Descripcion">
+                                <field name="description" nolabel="1"/>                   
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="view_politica_cartera_line_form" model="ir.ui.view">
+            <field name="name">politica.cartera.line.form</field>
+            <field name="model">politica.cartera.line</field>
+            <field name="arch" type="xml">
+                <form string='Politica Line' version='7.0'>
+                    <sheet>
+                        <h1>
+                            <field name='name' readonly="1"/>
+                        </h1>
+                        <group colspan="4" col="4">   
+                            <field name='deterioro' readonly="1"/>   
+                        </group>
+                        <group colspan="4" col="4">                            
+                            <field name='amount_start' readonly="1"/>
+                            <field name='amount_end' readonly="1"/>
+                        </group>
+                        <group colspan="4" col="4">                                            
+                            <field name='account_deterioro_id' readonly="1"/>
+                            <field name='account_recuperable_id' readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="action_change_cartera" model="ir.actions.act_window">
+            <field name="name">Recuperacion y Deterioro de Cartera</field>
+            <field name="res_model">change.cartera</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>            
+        </record>
+        
+        
+        <record id="action_config_cartera" model="ir.actions.act_window">
+            <field name="name">Politica Cartera</field>
+            <field name="res_model">politica.cartera</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>            
+        </record>
+        
+        <!--PROCESO-->
+        <menuitem id="menu_process_niif" name="Procesos NIIF" parent="account.menu_finance" sequence="4"/>
+        <menuitem id="menu_change_cartera" name="Cartera" parent="menu_process_niif" sequence="1"/>
+        <menuitem action="action_change_cartera" id="menu_change_cartera_dos" name="Deterioro y Recuperacion" parent="menu_change_cartera" sequence="1"/>
+        
+        <!--CONFIGURACION-->
+        <menuitem id="menu_niif" parent="account.menu_finance_configuration" name="NIIF" sequence="10"/>
+        <menuitem id="menu_deterioro_config" parent="menu_niif" name="Policicas NIIF" sequence="1"/>
+        <menuitem id="menu_process_config" parent="menu_niif" name="Procesos NIIF" sequence="2"/>
+        <menuitem action="action_config_cartera" id="menu_recuperable_deterioro" name="Cartera" parent="menu_deterioro_config" sequence="0"/>
+        
+        
+        
+        <record id="view_move_line_form_cartera_change_extended" model="ir.ui.view">
+            <field name="name">account.move.line.extended.cartera.change</field>
+            <field name="model">account.move.line</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Recuperacion y Deterioro">
+                        <group colspan="4" col="4">
+                            <field name="politica_id" context="{'move_id':active_id}"/>
+                            <field name="cartera_politica" context="{'move_id':active_id}"/>                                            
+                        </group>
+                        <group colspan="4" col="4" string="Informacion General">
+                            <field name="cartera_amount" context="{'move_id':active_id}"/>   
+                            <field name="cartera_residual" context="{'move_id':active_id}"/>
+                            <field name="cartera_old" context="{'move_id':active_id}"/>
+                            <field name="cartera_id"  string="Proceso" context="{'move_id':active_id}"/>
+                            <field name="move_deterioro_id" string="Origen Deterioro" context="{'move_id':active_id}"/>
+                            <field name="move_recuperable_id" string="Origen Recuperable" context="{'move_id':active_id}"/>
+                        </group>           
+                        <group>
+                            <group string="Movimientos Deterioro">
+                                <field name="move_deterioro_ids" nolabel="1" context="{'move_id':active_id}">
+                                    <tree editable="bottom">
+                                        <field name='move_deterioro_id' string="Origen"/>
+                                        <field name='period_id'/>
+                                        <field name='account_id'/>
+                                        <field name='debit' sum="Total"/>
+                                        <field name='credit' sum="Total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Movimientos Recuperacion">                                
+                                <field name="move_recuperable_ids" nolabel="1" context="{'move_id':active_id}">
+                                    <tree editable="bottom">
+                                        <field name='move_recuperable_id' string="Origen"/>
+                                        <field name='period_id'/>
+                                        <field name='account_id'/>
+                                        <field name='debit' sum="Total"/>
+                                        <field name='credit' sum="Total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                        <group colspan="4" col="4" string="Configuracion">
+                            <field name="cartera_ok" context="{'move_id':active_id}"/>
+                        </group> 
+                    </page>
+                </notebook>
+            </field>
+        </record>       
+        
+        
+        
+        
+        
+        <!--<record id="view_account_move_line_report_graph_cartera" model="ir.ui.view">
+            <field name="name">account.move.line.report.graph.cartera</field>
+            <field name="model">account.move.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Movimientos" type="pivot" stacked="True">
+                    <field name="change_id"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                </graph>
+            </field>
+        </record>-->
+        
+        
+        <!--<record id="view_account_move_line_report_search_cartera" model="ir.ui.view">
+            <field name="name">account.move.line.search.cartera</field>
+            <field name="model">account.move.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="move_id"/>
+                    <field name="partner_id"/>
+                    <field name="invoice"/>
+                    <field name="account_id"/>
+                    <field name="date"/>
+                    <field name="date_maturity"/>
+                    <field name="date_created"/>
+                    <field name="followup_line_id"/>
+                    <field name="followup_date"/>
+                    <field name="change_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="account_change_id"/>                    
+                    <separator/>
+                    <filter name="CUENTAS" icon="terp-document-new" domain="[('account_change_id','!=',False)]" string="CUENTAS" help="Aquellos movimientos que se generaron como dieferencia en cambio a el saldo de una cuenta"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Proceso" name="change_id" context="{'group_by':'change_id'}"/>
+                        <filter string="Cuenta Analitica" name="analytic_account_id" context="{'group_by':'analytic_account_id'}"/>
+                        <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Cuenta" name="account_id" context="{'group_by':'account_id'}"/>
+                        <filter string="Periodo" name="period_id" context="{'group_by':'period_id'}"/>
+                        <filter string="Diario" name="journal_id" context="{'group_by':'journal_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>-->
+
+        <!--<record id="action_account_move_line_report_all_cartera" model="ir.actions.act_window">
+            <field name="name">Analisis de Movimientos</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('cartera_id','!=',False)]</field>
+            <field name="graph_view_id" ref="view_account_move_line_report_graph_cartera"/>
+            <field name="search_view_id" ref="view_account_move_line_report_search_cartera"/>            
+        </record>
+        
+        <menuitem action="action_account_move_line_report_all_cartera" id="menu_action_account_move_line_report_all_cartera" parent="niif_account.menu_change_cartera" sequence="1" string="Analisis de Movimientos"/>-->
+        
+        
+        <!--MOVIMIENTOS ANALITICOS-->
+        
+        <!--<record id="view_account_analytic_line_report_graph_prueba" model="ir.ui.view">
+            <field name="name">account.analytic.line.report.graph.prueba</field>
+            <field name="model">account.analytic.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Movimientos Analiticos" type="pivot" stacked="True">
+                    <field name="change_id"/>
+                    <field name="account_id"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        
+        <record id="view_account_analytic_line_report_search_prueba" model="ir.ui.view">
+            <field name="name">account.analytic.line.search.prueba</field>
+            <field name="model">account.analytic.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="move_id"/>
+                    <field name="partner_id"/>
+                    <field name="account_id"/>
+                    <field name="date"/>
+                    <field name="change_id"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Proceso" name="change_id" context="{'group_by':'change_id'}"/>
+                        <filter string="Cuenta Analitica" name="account_id" context="{'group_by':'account_id'}"/>
+                        <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Cuenta" name="general_account_id" context="{'group_by':'general_account_id'}"/>
+                        <filter string="Periodo" name="period_id" context="{'group_by':'period_id'}"/>
+                        <filter string="Diario" name="journal_id" context="{'group_by':'journal_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_analytic_line_report_all_prueba" model="ir.actions.act_window">
+            <field name="name">Analisis de Movimientos Analitcos</field>
+            <field name="res_model">account.analytic.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('change_id','!=',False)]</field>
+            <field name="graph_view_id" ref="view_account_analytic_line_report_graph_prueba"/>
+            <field name="search_view_id" ref="view_account_analytic_line_report_search_prueba"/>            
+        </record>
+        
+        <menuitem action="action_account_analytic_line_report_all_prueba" id="menu_action_account_analytic_line_report_all_prueba" parent="diferencia_cambio.menu_change_difference" sequence="2" string="Analisis Analitico"/>-->
+        
+    </data>    
+    
+    <data noupdate="1">
+        <record id="seq_cartera_number_type" model="ir.sequence.type">
+            <field name="name">NIIF</field>
+            <field name="code">cartera.change</field>
+        </record>
+        <record id="seq_caretara_number" model="ir.sequence">
+            <field name="name">Proceso de Recuperacion y Deterioro de Cartera</field>
+            <field name="code">cartera.change</field>
+            <field name="prefix">REC-DET-NIIF-</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,147 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import time
+from operator import itemgetter
+from itertools import groupby
+from openerp.osv import fields, osv, orm
+from openerp.tools.translate import _
+from openerp import workflow
+from openerp import tools
+from openerp.tools import float_compare, DEFAULT_SERVER_DATETIME_FORMAT
+import openerp.addons.decimal_precision as dp
+
+class account_loan(osv.osv):
+    _name = 'account.loan'
+    def _check_loan_no(self, cr, uid, ids, context=None):
+        '''
+        Check if the UoM has the same category as the product standard UoM
+        '''
+        if not context:
+            context = {}
+            
+        for rule in self.browse(cr, uid, ids, context=context):
+            if rule.product_id.uom_id.category_id.id != rule.product_uom.category_id.id:
+                return False
+            
+        return True
+    _columns = {
+              'loan_no':fields.char('Numero de Obligacion', size=64),
+              'loan_var_type':fields.selection([('fixed', 'Plazo Fijo'), ('intcom', 'Intercompania'), ('shareholder', 'Accionistas'), ('leasing', 'Leasing'), ('rotary', 'Rotativo'), ], "Modalidad de Obligacion"),
+              'dec_type':fields.selection([('cuoto_fija', 'Cuoto Fija'), ('capital_fijo', 'Capital Fijo')], 'Tipo de Amortizacion'),
+              'partner_id':fields.many2one('res.partner', 'Tercero'),
+              'loan_type':fields.selection([('por_cobrar', 'Por Cobrar'), ('por_pagar', 'Por Pagar')], 'Tipo de Obligacion'),
+              'currency_id':fields.many2one('res.currency', 'Moneda'),
+              'intrest_per_period':fields.float('Interes Periodico'),
+              'period_no':fields.integer('Meses Entre Periodos'),
+              'periods_to_pay':fields.integer('Plazo inicial'),
+#              'remain_period':fields.function(_period_remain, string='Periodos por pagar', type='float', store=True),
+              'remain_period':fields.char('Periodos por pagar'),
+              'final_payment':fields.float('Pago final'),
+              'start_period':fields.integer('Periodo de gracia'),
+    #          'balance':fields.function(_balance_remain, string='Saldo por amortizar', type='float', store=True),
+              'balance':fields.float('Saldo por amortizar'),
+              'payment_date':fields.date('Fecha de desembolso'),
+              'first_payment':fields.float('Primer desembolso'),
+#              'balance_debt':fields.function(_debt_balance_remain, string='Saldo de obligacion', type='float', store=True),
+              'balance_debt':fields.char('Saldo de obligacion'),
+              'state':fields.selection([
+                                        ('new', 'Draft'),
+                                        ('in_progress', 'ejecucion '),
+                                        ('done', 'Terminada')], 'Status', readonly=True, track_visibility='onchange'),
+            'loan_move_line_ids':fields.one2many('loan.move.line', 'loan_id', 'Loan Depriciation Line'),
+              }
+    _sql_constraints = [('unique_loan_no','unique(loan_no)', 'Loan Number name already exists')]
+    _defaults = {
+               'state':'new'
+               }
+    
+    def action_button_confirm(self, cr, uid, ids, context=None):
+        cur_obj = self.browse(cr , uid , ids[0])
+        self.write(cr, uid, cur_obj.id, {'state':'in_progress'})
+        return True
+    
+    def action_button_done(self, cr, uid, ids, context=None):
+        cur_obj = self.browse(cr , uid , ids[0])
+        self.write(cr, uid, cur_obj.id, {'state':'done'})
+        return True
+    
+    
+    def _compute_board_undone_dotation_nb(self, cr, uid, asset, depreciation_date, total_days, context=None):
+        undone_dotation_number = asset.method_number
+        if asset.method_time == 'end':
+            end_date = datetime.strptime(asset.method_end, '%Y-%m-%d')
+            undone_dotation_number = 0
+            while depreciation_date <= end_date:
+                depreciation_date = (datetime(depreciation_date.year, depreciation_date.month, depreciation_date.day) + relativedelta(months= +asset.method_period))
+                undone_dotation_number += 1
+        if asset.prorata:
+            undone_dotation_number += 1
+        return undone_dotation_number
+    
+    
+    def compute_loan_board(self, cr, uid, ids, context=None):
+        res = {}
+        active_id = context.get('active_id')
+        depreciation_lin_obj = self.pool.get('loan.move.line')
+        currency_obj = self.pool.get('res.currency')
+        for loan in self.browse(cr, uid, ids, context=context):
+            final_payment = loan.final_payment
+            incre = 0
+            initial_value = 0.0
+            final_bal = 0.0
+            date = datetime.strptime((datetime.strptime(loan.payment_date, '%Y-%m-%d') + relativedelta(months=0)).strftime('%Y-%m-%d'), '%Y-%m-%d')
+            for period in range(0, loan.remain_period):
+                if loan.dec_type and loan.dec_type == 'cuoto_fija':
+                    try1 = (loan.intrest_per_period) * (1 + loan.intrest_per_period) * float((loan.remain_period))
+                    try2 = (1 + loan.intrest_per_period) * (float(loan.remain_period) - 1)
+                    bal_debt = loan.balance_debt or 0.0
+                    loan_balance = loan.balance or 0.0 
+                    try3 = (float(loan_balance) - (float(bal_debt) - loan.final_payment)) * (loan.intrest_per_period)
+                    capital_payment = (try1 / try2) * try3
+                else:
+                    capital_payment = loan.balance / float(loan.remain_period)
+                interest = loan.intrest_per_period * float(loan.remain_period)
+                cote = capital_payment + interest
+                loan_obj = depreciation_lin_obj.create(cr, uid, {"period":period + 1, 'date':date, 'initial_value':initial_value, 'capital_payment':capital_payment, 'interest':interest, 'final_bal':final_bal, 'cote':cote , 'final_bal':final_payment, 'loan_id':loan.id})
+                loan_obj_id = depreciation_lin_obj.browse(cr, uid, loan_obj, context=None)
+                incre += loan.period_no
+                date = datetime.strptime((datetime.strptime(loan.payment_date, '%Y-%m-%d') + relativedelta(months=incre)).strftime('%Y-%m-%d'), '%Y-%m-%d')
+                initial_value = loan_obj_id.final_bal
+                final_bal = initial_value - loan_obj_id.val_to_capital + loan_obj_id.payment - capital_payment
+        return True  
+
+    
+    
+    
+    
+class loan_move_line(osv.osv):
+    _name = "loan.move.line"
+    
+    def _get_move_check(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for line in self.browse(cr, uid, ids, context=context):
+            res[line.id] = bool(line.loan_id)
+        return res
+    
+    
+    _columns = {
+                'loan_id':fields.many2one('account.loan', 'Loan'),
+              'period':fields.integer('Period'),
+              'date':fields.date('Date'),
+              'initial_value':fields.float('Initial Value'),
+              'core_adjust':fields.float('Core Adjustment'),
+              'val_to_capital':fields.float('Value To Capital'),
+              'payment':fields.float('First Payment'),
+              'capital_payment':fields.float('Capital Payment'),
+              'interest':fields.float('Interest'),
+              'cote':fields.float('Cote'),
+              'final_bal':fields.float('Final Balance'),
+              'penality_interest':fields.float('Penality Interest'),
+              'bank_charges':fields.float('Bank Charges'),
+#              'move_id': fields.many2one('account.move', 'Depreciation Entry'),
+#              'move_check': fields.function(_get_move_check, method=True, type='boolean', string='Posted', store=True)
+              
+              }  
+    
+    
+    

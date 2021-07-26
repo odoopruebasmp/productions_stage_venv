@@ -1,0 +1,37 @@
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="import_pay_slip_form_view">
+            <field name="name">import.pay.slip.form</field>
+            <field name="model">import.pay.slip</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Pay Slip">
+                    <field name="binary_file"/>
+                    <separator string="" colspan="4"/>
+                    <group col="4" colspan="4">
+                        <label string="" colspan="4"/>
+                        <button icon="gtk-cancel" special="cancel"
+                            string="Close" />
+                        <button name="import_payslip" string="Import"
+                            type="object" icon="gtk-execute" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_import_pay_slip_wizard">
+            <field name="name">Import PaySlips</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.pay.slip</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="import_pay_slip_menu" name="Import Payslips"
+            parent="hr_payroll.menu_hr_root_payroll"
+            action="action_import_pay_slip_wizard" />
+
+    </data>
+</openerp>

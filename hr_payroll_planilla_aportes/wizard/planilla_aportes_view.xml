@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="planilla_aportes_wizard_view" model="ir.ui.view">
+            <field name="name">planilla.aportes.wizard.view</field>
+            <field name="model">planilla.aportes.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Planilla de Aportes" version="7.0">
+                <group>
+                    <field name="name" invisible="1" />
+                    <field name="date" attrs="{'invisible':[('name','!=',False)]}"/>
+                    <field name="file_text" filename="name" attrs="{'invisible':[('name','=',False)]}"/>
+                </group>
+                
+                <footer>
+                    <button name="do_process" string="Generar Archivo" type="object" class="oe_highlight" attrs="{'invisible':[('name','!=',False)]}"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_planilla_aportes_wizard" model="ir.actions.act_window">
+            <field name="name">Planilla de Aportes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="res_model">planilla.aportes.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="planilla_aportes_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <record model="ir.values" id="supp_planilla_aportes_wizard">
+            <field name="name">Planilla de Aportes</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_planilla_aportes_wizard'))" />
+            <field name="key">action</field>
+            <field name="model">hr.payslip.run</field>
+        </record>
+        
+    </data>
+</openerp>

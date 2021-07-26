@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<document filename="test.pdf">
+  <template pageSize="(612.0,792.0)" title="Test" author="Avancys" allowSplitting="20">
+    <pageTemplate id="first">
+      <frame id="first" x1="34.0" y1="3.2cm" width="547" height="600"/>
+      <stylesheet>
+        <paraStyle name="main_header" fontSize="6.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+	  </stylesheet>
+        <pageGraphics>
+            <!-- Set here the default font to use for all <drawString> tags -->
+            <setFont name="DejaVuSans" size="8"/>
+            <!-- You Logo - Change X,Y,Width and Height -->
+            <image x="1.3cm" y="26.0cm" height="40.0" >[[ company.logo or removeParentNode('image') ]]</image>
+            <fill color="black"/>
+            <stroke color="black"/>
+                <!-- page header -->
+            <lines>1.3cm 25.8cm 20cm 25.8cm</lines>
+            <drawRightString x="20cm" y="26.1cm">[[ company.rml_header1 ]]</drawRightString>
+            <drawString x="1.3cm" y="25.4cm">[[ company.partner_id.name ]] / NIT [[ company.partner_id.ref ]]</drawString>
+            <drawString x="1.3cm" y="24.9cm">[[ company.partner_id.street]] / [[ company.partner_id.city_id.name]] - [[ company.partner_id.country_id.name]]</drawString>
+            <drawString x="1.3cm" y="24.4cm">Teléfono: [[ company.partner_id.phone ]]</drawString>
+
+            <lines>1.3cm 24.2cm 7cm 24.2cm</lines>
+
+            <!-- left margin -->
+            <rotate degrees="90"/>
+            <fill color="grey"/>
+            <drawString x="2.65cm" y="-0.4cm">Impreso por Avancys ERP http://www.avancys.com</drawString>
+            <fill color="black"/>
+            <rotate degrees="-90"/>
+
+            <!--page bottom-->
+            <lines>1.2cm 1.6cm 19.9cm 1.6cm</lines>
+            <place x="1.3cm" y="0cm" height="1.55cm" width="19.0cm">
+                <para style="main_footer" alignment="RIGHT">Página: <pageNumber/></para>
+            </place>
+        </pageGraphics>
+    </pageTemplate>
+  </template>
+  <stylesheet>
+    <blockTableStyle id="Standard_Outline">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <initialize>
+      <paraStyle name="all" alignment="justify"/>
+    </initialize>
+    <paraStyle name="P1" rightIndent="-1.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10"/>
+    <paraStyle name="P2" rightIndent="-1.0" leftIndent="0.0" fontName="Helvetica-Bold" fontSize="16.0" leading="25" alignment="CENTER" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P3" fontName="Helvetica" fontSize="14.0" leading="25" alignment="CENTER" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P4" fontName="Helvetica" alignment="CENTER" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P5" fontName="Helvetica" fontSize="14.0" leading="17" alignment="JUSTIFY" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P6" fontName="Helvetica" alignment="JUSTIFY" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P7" fontName="Helvetica-Bold" alignment="JUSTIFY" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="Standard" fontName="Helvetica"/>
+    <paraStyle name="Text body" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="Heading" fontName="Helvetica" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="List" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="Table Contents" fontName="Helvetica"/>
+    <paraStyle name="Table Heading" fontName="Helvetica" alignment="CENTER"/>
+    <paraStyle name="Caption" fontName="Helvetica" fontSize="12.0" leading="15" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="Index" fontName="Helvetica"/>
+    <paraStyle name="Footer" fontName="Helvetica"/>
+    <paraStyle name="Horizontal Line" fontName="Helvetica" fontSize="6.0" leading="8" spaceBefore="0.0" spaceAfter="14.0"/>
+    <paraStyle name="terp_header" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="Heading 9" fontName="Helvetica-Bold" fontSize="75%" leading="NaN" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_tblheader_General" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_tblheader_Details" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_default_8" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_8" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_tblheader_General_Centre" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="CENTER" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_tblheader_General_Right" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="RIGHT" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_tblheader_Details_Centre" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="CENTER" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_tblheader_Details_Right" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_default_Right_8" fontName="Helvetica" fontSize="8.0" leading="10" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Centre_8" fontName="Helvetica" fontSize="8.0" leading="10" alignment="CENTER" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_header_Right" fontName="Helvetica-Bold" fontSize="15.0" leading="19" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_header_Centre" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="CENTER" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_default_address" fontName="Helvetica" fontSize="10.0" leading="13" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_9" fontName="Helvetica" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_9" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Centre_9" fontName="Helvetica" fontSize="9.0" leading="11" alignment="CENTER" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Right_9" fontName="Helvetica" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_2" fontName="Helvetica" fontSize="2.0" leading="3" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_8_italic" rightIndent="0.0" leftIndent="20.0" fontName="Helvetica-Oblique" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Note" rightIndent="0.0" leftIndent="9.0" fontName="Helvetica-Oblique" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="Space bet user and signature" fontName="Helvetica" fontSize="4.0" leading="5" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_8_Italic" fontName="Helvetica-Oblique" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_9_Right" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <images/>
+  </stylesheet>
+  <story>
+    <para style="P1">[[repeatIn(objects,'o')]]</para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="P2">[[ company.partner_id.name ]]</para>
+    <para style="P3">[[ company.partner_id.ref ]]   [[company.partner_id.dev_ref and '-' or '']] [[company.partner_id.dev_ref or '']]</para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="P3">CERTIFICA</para>
+    <para style="Text body"> </para>
+    <para style="Text body"> </para>
+    <para style="P4"> </para>
+    <para style="P4"> </para>
+    <para style="P5">Que el(la) señor(a) <font face="Helvetica">[[o.employee_id.partner_id.name or '']]</font>,
+    identificado(a) con cédula de ciudadanía No. <font face="Helvetica">[[o.employee_id.partner_id.ref or '']] </font>
+    de <font face="Helvetica">[[o.employee_id.partner_id.city_id.name or '']]</font>,
+    [['labora' if o.state != 'done' else 'laboró']] en esta compañía desde el <font face="Helvetica">
+    [[str(o.date_start[8:10] + '/' + o.date_start[5:7] + '/' + o.date_start[0:4]) + (str(' hasta el ' + str(o.date_end[8:10] + '/' + o.date_end[5:7] + '/' + o.date_end[0:4])) if o.state == 'done' else '')]]</font>,
+    desempeñándose en el cargo de <font face="Helvetica">[[o.employee_id.job_id.name or '']]</font>,
+    por medio de un contrato a término <font face="Helvetica">[[o.type_id.term or '']] de tipo [['regular' if o.type_id.type_class == 'reg' else 'integral' if o.type_id.type_class == 'int' else 'aprendiz' or '']]</font>.</para>
+
+    <para style="P6"> </para>
+    <para style="P5">Devengando unos ingresos mensuales de $[[ formatLang(o.wage, digits=get_digits(dp='Account'))]] PESOS M/Cte,
+    un promedio variable mensual de $[[ formatLang(o.get_avg()[0] or 0, digits=get_digits(dp='Account'))]] PESOS M/Cte y un promedio mensual no prestacional de $[[ formatLang(o.get_avg()[1] or 0, digits=get_digits(dp='Account'))]]
+    </para>
+    <para style="P6">            </para>
+    <para style="P5">El presente certificado se expide a solicitud del interesado en Bogotá el <font face="Helvetica">[[ time.strftime('%d/%m/%Y') ]]</font>.</para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P1"><font color="white"> </font></para>
+    <para style="P1"><font color="white"> </font></para>
+    <para style="P5">Cordialmente,</para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+    <para style="P6"> </para>
+
+    <para style="P6"> </para>
+
+
+    <para style="P7">[[ o.employee_id.coordinador_rrhh.name or '' ]]</para>
+    <para style="P7">[[ o.employee_id.coordinador_rrhh.job_id.name or '' ]]</para>
+    <para style="P7">[[ company.partner_id.name ]]</para>
+    <para style="P1">
+      <font color="white"> </font>
+    </para>
+  </story>
+</document>

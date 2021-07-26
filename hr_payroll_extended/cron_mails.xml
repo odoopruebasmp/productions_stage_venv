@@ -1,0 +1,55 @@
+<openerp>
+    <data>
+        
+        <!--<record id="periodo_prueba_cron_email_template" model="email.template">-->
+            <!--<field name="name">Recordatorio Expiracion Contrato de Prueba</field>-->
+            <!--<field name="email_from">${object.email or ''}</field>-->
+            <!--<field name="subject">Recordatorio Expiracion Contrato de Prueba Open-ERP</field>-->
+            <!--<field name="email_to"><![CDATA[${ctx["mail"]}]]></field>-->
+            <!--<field name="lang">${object.lang}</field>-->
+            <!--<field name="model_id" ref="base.model_res_users"/>-->
+            <!--<field name="auto_delete" eval="True"/>-->
+            <!--<field name="body_html"><![CDATA[-->
+<!--<p>Hola,</p>-->
+
+<!--<p>A los siguientes empleados se les vencera el contrato de prueba en 15 dias, el ${ctx["fecha"]}</p>-->
+
+<!--<ul>-->
+    <!--% for company in ctx["companias"]:-->
+    <!--<li>${company.name}-->
+        <!--<ul>-->
+        <!--% for contrato in ctx["contracts"]:-->
+            <!--% if contrato.company_id.id == company.id:-->
+                <!--<li>${contrato.name}: ${contrato.employee_id.name}</li>-->
+            <!--% endif-->
+        <!--% endfor-->
+        <!--</ul>-->
+    <!--% endfor-->
+    <!--</li>-->
+<!--</ul>-->
+
+    <!---->
+<!--<pre>-->
+<!--&#45;&#45; -->
+<!--Avancys-OpenERP Email Automatico-->
+<!--</pre>-->
+
+            <!--]]></field>-->
+        <!--</record>-->
+        <!--&lt;!&ndash;-->
+        <!--&ndash;&gt;-->
+    <!--</data>-->
+    <!--<data noupdate="1">-->
+    <!--&lt;!&ndash; <data> &ndash;&gt;-->
+        <!--<record model="ir.cron" id="periodo_prueba_cron">-->
+            <!--<field name="name">Recordatorio Expiracion Contrato de Prueba</field>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">days</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field name="doall" eval="False"/>-->
+            <!--<field name="model" eval="'hr.contract'"/>-->
+            <!--<field name="function" eval="'cron_periodo_prueba'"/>-->
+        <!--</record>-->
+
+    </data>
+</openerp>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>       
+        
+        <record id="view_partner_form_product_mp" model="ir.ui.view">
+            <field name="name">res.partner.form.product.mp</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                  <field name="no_tienda" />
+                  <field name="ean_localizacion" />
+                  <field name="cedi_padre" />
+                </field>
+            </field>
+        </record>
+
+        
+        <record id="view_res_partner_filter_inherited" model="ir.ui.view">
+            <field name="name">res.partner.selected.inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Companies" position="after" >
+                    <filter string="Category" name="category" domain="[('category_id','!=',False)]" />
+                </filter>
+            </field>
+        </record>
+        
+        <!--PRODUCT VARIANT FORM VIEW -->        
+        <record model="ir.ui.view" id="product_variant_extended_view_mp">
+            <field name="name">product.extended.variant.form.view.mp</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">                    
+                <field name="active" position="after">
+                    <field name="type_negocio" attrs="{'required': [('type','=','product')]}"/>
+                    <field name="type_compra" attrs="{'required': [('type','=','product')]}"/>
+                    <field name="siigo_code"/>
+                    <field name="plu"/>
+                    <field name="plu_14"/>
+                </field>                    
+                <field name="ean13" position="after">
+                    <label for="ean_codigo"/>
+                    <div name="ean_codigo">
+                        <field name="ean_codigo" placeholder="e.g. 5901234123457" required="True"/>
+                    </div>
+                    <label for="ean_14"/>
+                    <div name="ean14">
+                        <field name="ean_14" placeholder="e.g. 5901234123457"/>
+                    </div>
+                    <label for="tariff_head"/>
+                    <div name="tariff_head">
+                        <field name="tariff_head" placeholder="Partida arancelaria, en caso de requerirse en facturación electrónica"/>
+                    </div>
+                    <field name="fabricante_id"/>
+                </field>
+                <field name="description" position="before">                                    
+                    <group>
+                        <group>
+                            <field name="marca_id"/>
+                            <field name="material"/>
+                            <field name="color"/>
+                        </group>
+                        <group>
+                            <field name="required_certificate"/>
+                            <field name="product_register"/>
+                            <field name="warranty"/>
+                        </group>
+                        <group colspan="4">
+                            <field name="customer_categ_id" attrs="{'required': [('type','=','product')]}"/>
+                            <field name="supplier_categ_id" attrs="{'required': [('type','=','product')]}"/>
+                        </group>
+                        <group colspan="4" >
+                            <separator string="Eventos" colspan="4"/>
+                            <newline/>
+                            <field name="product_event" nolabel="1"/>
+                        </group>
+                    </group> 
+                </field>
+                <field name="product_manager" position="after">
+                    <group col="6" colspan="6">
+                        <group name="empaque" string="empaque">
+                            <field name="emp_large"/>
+                            <field name="emp_width"/>
+                            <field name="emp_high"/>
+                            <field name="emp_weight"/>
+                            <field name="emp_qty"/>
+                        </group>
+                        <group name="sub_embaque" string="sub embaque">
+                            <field name="subemp_large"/>
+                            <field name="subemp_width"/>
+                            <field name="subemp_high"/>
+                            <field name="subemp_weight"/>
+                            <field name="subemp_qty"/>
+                        </group>
+                        <group name="sub_embaque" string="producto">
+                            <field name="prod_large"/>
+                            <field name="prod_width"/>
+                            <field name="prod_high"/>
+                            <field name="prod_weight"/>
+                        </group>
+                    </group>
+                </field>
+                <field name="categ_id" position="after">
+                    <label for="division_id" class="oe_edit_only"/>
+                    <h2><field name="division_id"/></h2>
+                    <label for="category_id" class="oe_edit_only"/>
+                    <h2><field name="category_id"/></h2>
+                </field>                
+            </field>
+        </record>
+        
+        
+        <!-- CUSTOMER CATEGORY SEARCH TREE -->
+        <record id="view_customer_category_filter" model="ir.ui.view">
+            <field name="name">customer.category.select</field>
+            <field name="model">customer.category</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer Category">
+                    <group expand="0" string="Group By...">
+                        <filter string="Category" icon="terp-personal" domain="[]" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+        
+        
+        <!-- CUSTOMER CATEGORY TREE -->        
+        <record model="ir.ui.view" id="customer_category_tree">
+            <field name="name">customer.category.tree</field>
+            <field name="model">customer.category</field>
+            <field name="priority">1</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Customer Category">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <!-- CUSTOMER CATEGORY FORM -->    
+        <record id="customer_category_form" model="ir.ui.view">
+            <field name="name">customer.category.form</field>
+            <field name="model">customer.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Customer Category" version="7.0">
+                    <group>
+                        <field name="name"/>
+                    </group>  
+                </form>
+            </field>
+        </record>
+
+        
+        <!-- SUPPLIER CATEGORY SEARCH TREE -->
+        <record id="view_supplier_category_filter" model="ir.ui.view">
+            <field name="name">supplier.category.select</field>
+            <field name="model">supplier.category</field>
+            <field name="arch" type="xml">
+                <search string="Search supplier Category">
+                    <group expand="0" string="Group By...">
+                        <filter string="Category" icon="terp-personal" domain="[]" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+        
+        
+        <!-- SUPPLIER CATEGORY TREE -->        
+        <record model="ir.ui.view" id="supplier_category_tree">
+            <field name="name">supplier.category.tree</field>
+            <field name="model">supplier.category</field>
+            <field name="priority">1</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Supplier Category">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <!-- SUPPLIER CATEGORY FORM -->    
+        <record id="supplier_category_form" model="ir.ui.view">
+            <field name="name">supplier.category.form</field>
+            <field name="model">supplier.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Supplier Category" version="7.0">
+                    <group>
+                        <field name="name"/>
+                    </group>  
+                </form>
+            </field>
+        </record>    
+                
+
+        
+        <!-- CUSTOMER CATEGORY MENU -->
+        <record id="action_customer_category_view" model="ir.actions.act_window">
+            <field name="name">Customer Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">customer.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_customer_category_filter"/>
+            <field name="view_id" ref="customer_category_tree"/>
+        </record>
+                        
+        <record id="customer_category_tree1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="customer_category_tree"/>
+            <field name="act_window_id" ref="action_customer_category_view"/>
+        </record>
+        
+        <record id="customer_category_form2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="customer_category_form"/>
+            <field name="act_window_id" ref="action_customer_category_view"/>
+        </record>
+
+        <menuitem action="action_customer_category_view" id="menu_action_customer_category_view" parent="stock.menu_product_in_config_stock" sequence="3"/>
+        
+        
+        <!-- SUPPLIER CATEGORY MENU -->                            
+        <record id="action_supplier_category_view" model="ir.actions.act_window">
+            <field name="name">Supplier Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">supplier.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_supplier_category_filter"/>
+            <field name="view_id" ref="supplier_category_tree"/>
+        </record>
+
+        
+        <record id="supplier_category_tree1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="supplier_category_tree"/>
+            <field name="act_window_id" ref="action_supplier_category_view"/>
+        </record>
+        
+        <record id="supplier_category_form2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="supplier_category_form"/>
+            <field name="act_window_id" ref="action_supplier_category_view"/>
+        </record>
+                        
+        <menuitem action="action_supplier_category_view" id="menu_action_supplier_category_view" parent="stock.menu_product_in_config_stock" sequence="4"/>
+                        
+
+    </data>
+</openerp>

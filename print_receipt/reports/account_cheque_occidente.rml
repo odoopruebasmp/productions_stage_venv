@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<document filename="test.pdf">
+  <template pageSize="(612.0,792.0)" title="Test" author="Martin Simon" allowSplitting="20">
+    <pageTemplate id="first">
+      <frame id="first" x1="18.0" y1="29.0" width="551" height="734"/>
+    </pageTemplate>
+  </template>
+  <stylesheet>
+    <blockTableStyle id="Standard_Outline">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <blockTableStyle id="Tabla1">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <blockTableStyle id="Tabla2">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <blockTableStyle id="Tabla3">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <blockTableStyle id="Tabla4">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <initialize>
+      <paraStyle name="all" alignment="justify"/>
+    </initialize>
+    <paraStyle name="P1" fontName="Helvetica"/>
+    <paraStyle name="P2" fontName="Helvetica" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P3" fontName="Helvetica-Bold" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P4" fontName="Helvetica" fontSize="2.0" leading="3" alignment="LEFT"/>
+    <paraStyle name="P5" fontName="Helvetica-Bold" fontSize="18.0" leading="22" alignment="CENTER"/>
+    <paraStyle name="P6" fontName="Helvetica" fontSize="10.0" leading="13" alignment="LEFT"/>
+    <paraStyle name="P7" fontName="Helvetica" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P8" fontName="Helvetica" fontSize="10.0" leading="13"/>
+    <paraStyle name="P9" fontName="Helvetica" fontSize="10.0" leading="13" alignment="LEFT"/>
+    <paraStyle name="P10" fontName="Helvetica" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P11" fontName="Helvetica-Bold" fontSize="10.0" leading="13" alignment="RIGHT"/>
+    <paraStyle name="P12" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="RIGHT"/>
+    <paraStyle name="P13" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P14" rightIndent="0.0" leftIndent="-3.0" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="P15" fontName="Helvetica" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P16" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="10.0" leading="13"/>
+    <paraStyle name="P17" rightIndent="-1.0" leftIndent="0.0" fontName="Helvetica"/>
+    <paraStyle name="P18" fontName="Helvetica" fontSize="11.0" leading="14" alignment="LEFT"/>
+    <paraStyle name="P19" fontName="Helvetica" fontSize="11.0" leading="14"/>
+    <paraStyle name="P20" fontName="Helvetica" fontSize="11.0" leading="14" alignment="RIGHT" spaceBefore="14.0" spaceAfter="0.0"/>
+    <paraStyle name="P21" fontName="Helvetica" fontSize="11.0" leading="14" alignment="LEFT" textColor="#404040"/>
+    <paraStyle name="P22" fontName="Helvetica" fontSize="11.0" leading="14" alignment="RIGHT"/>
+    <paraStyle name="P23" fontName="Helvetica" fontSize="11.0" leading="14" alignment="LEFT"/>
+    <paraStyle name="P24" fontName="Helvetica" fontSize="11.0" leading="14"/>
+    <paraStyle name="P25" fontName="Helvetica" fontSize="11.0" leading="14" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P26" fontName="Helvetica" fontSize="11.0" leading="14" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P27" fontName="Helvetica" fontSize="11.0" leading="14" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="Standard" fontName="Helvetica"/>
+    <paraStyle name="Heading" fontName="Helvetica" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="Text body" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="List" fontName="Helvetica" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="Caption" fontName="Helvetica" fontSize="12.0" leading="15" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="Index" fontName="Helvetica"/>
+    <paraStyle name="Table Contents" fontName="Helvetica"/>
+    <paraStyle name="Table Heading" fontName="Helvetica" alignment="CENTER"/>
+    <paraStyle name="terp_header" fontName="Helvetica-Bold" fontSize="12.0" leading="15" alignment="LEFT" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="terp_default_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Right_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="8.0" leading="10" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Right_9" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_8" rightIndent="0.0" leftIndent="0.0" fontName="Helvetica-Bold" fontSize="8.0" leading="10" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_9" rightIndent="0.0" leftIndent="-3.0" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="LEFT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <paraStyle name="terp_default_Bold_Right_9" rightIndent="0.0" leftIndent="-3.0" fontName="Helvetica-Bold" fontSize="9.0" leading="11" alignment="RIGHT" spaceBefore="0.0" spaceAfter="0.0"/>
+    <images/>
+  </stylesheet>
+  <story>
+    <para style="P17">[[repeatIn(objects,'voucher')]]</para>
+    <blockTable colWidths="551.0" style="Tabla1">
+      <tr>
+        <td>
+          <para style="P27">
+            <font color="white"> </font>
+          </para>
+          <blockTable colWidths="158.0,40.0,36.0,31.0,9.0,232.0" style="Tabla2">
+            <tr>
+              <td>
+                <para style="P20">
+                  <font color="white"> </font>
+                </para>
+              </td>
+              <td>
+                <para style="P18">
+                  <font face="Helvetica">[[ str(voucher.date) and ('%s'%(str(voucher.date)[0:4])) or '' ]] </font>
+                </para>
+              </td>
+              <td>
+                <para style="P18">
+                  <font face="Helvetica">[[ str(voucher.date) and ('%s'%(str(voucher.date)[5:7])) or '' ]]</font>
+                </para>
+                <para style="P18">
+                  <font color="white"> </font>
+                </para>
+              </td>
+              <td>
+                <para style="P21">[[ str(voucher.date) and ('%s'%(str(voucher.date)[8:10])) or '' ]]</para>
+              </td>
+              <td>
+                <para style="P22">
+                  <font color="white"> </font>
+                </para>
+              </td>
+              <td>
+                <para style="P23">[[ voucher.amount]]******</para>
+              </td>
+            </tr>
+          </blockTable>
+          <para style="P27">
+            <font color="white"> </font>
+          </para>
+          <para style="P27">
+            <font color="white"> </font>
+          </para>
+          <blockTable colWidths="489.0" style="Tabla3">
+            <tr>
+              <td>
+                <para style="P24">[[ voucher.partner_id.name ]] </para>
+              </td>
+            </tr>
+          </blockTable>
+          <para style="P27">
+            <font color="white"> </font>
+          </para>
+          <para style="P27">
+            <font color="white"> </font>
+          </para>
+          <blockTable colWidths="492.0" style="Tabla4">
+            <tr>
+              <td>
+                <para style="P19">[[ voucher.amount_in_word ]]*******</para>
+              </td>
+            </tr>
+          </blockTable>
+          <para style="P26">
+            <font color="white"> </font>
+          </para>
+          <para style="P25">
+            <font color="white"> </font>
+          </para>
+        </td>
+      </tr>
+    </blockTable>
+    <para style="P16">
+      <font color="white"> </font>
+    </para>
+  </story>
+</document>
+

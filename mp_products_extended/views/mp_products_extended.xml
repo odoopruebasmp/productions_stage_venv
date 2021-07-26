@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+   	 <record model="ir.ui.view" id="mp_products_extended_view_form">
+            <field name="name">mp.products.extended.form.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product_mp.product_variant_extended_view_mp"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">            
+                
+	            <field name="emp_large" position="replace"/>
+	            <field name="emp_width" position="replace"/>
+	            <field name="emp_high" position="replace"/>
+	            <field name="emp_weight" position="replace"/>
+	            <field name="emp_qty" position="replace"/>
+
+	            <field name="subemp_large" position="replace"/>
+	            <field name="subemp_width" position="replace"/>
+	            <field name="subemp_high" position="replace"/>
+	            <field name="subemp_weight" position="replace"/>
+	            <field name="subemp_qty" position="replace"/>
+
+	            <field name="prod_large" position="replace"/>
+	            <field name="prod_width" position="replace"/>
+	            <field name="prod_high" position="replace"/>
+	            <field name="prod_weight" position="replace"/>
+
+                <xpath expr="//group[@name='empaque']" position="replace"></xpath>
+                <xpath expr="//group[@name='sub_embaque']" position="replace"></xpath>
+                <xpath expr="//group[@name='sub_embaque']" position="replace"></xpath>
+
+                <field name="product_manager" position="after">
+                <group col="8" colspan="8">
+                    <group name="product" string="Producto">
+                            <field name="prod_large"/>
+                            <field name="prod_width"/>
+                            <field name="prod_high"/>
+                            <field name="prod_weight"/>
+                    </group>
+                    <group name="packing_product" string="Empaque Venta">
+                            <field name="emp_large"/>
+                            <field name="emp_width"/>
+                            <field name="emp_high"/>
+                            <field name="emp_weight"/>
+
+                    </group>
+                    <group name="inner_box" string="Inner Box">
+                            <field name="innerbox_large"/>
+                            <field name="innerbox_width"/>
+                            <field name="innerbox_high"/>
+                            <field name="innerbox_weight"/>
+                            <field name="innerbox_qty"/>
+                    </group>
+                    <group name="master_box" string="Master Box">
+                            <field name="masterbox_large"/>
+                            <field name="masterbox_width"/>
+                            <field name="masterbox_high"/>
+                            <field name="masterbox_weight"/>
+                            <field name="masterbox_qty"/>
+                    </group>
+                </group>
+            </field>
+
+           </field>
+       </record>
+   </data>
+</openerp>

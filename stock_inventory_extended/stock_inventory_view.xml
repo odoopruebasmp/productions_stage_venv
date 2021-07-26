@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--             WORKFLOW             -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="wkf_stock_inventory_cost" model="workflow">
+            <field name="name">stock.inventory.cost.basic</field>
+            <field name="osv">stock.inventory.cost</field>
+            <field name="on_create">True</field>
+        </record>
+        
+        <!-- Activity -->        
+        <record id="act_borrador" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_stock_inventory_cost"/>
+            <field name="flow_start">True</field>
+            <field name="name">Borrador</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+       <record id="act_confirmado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_stock_inventory_cost"/>
+            <field name="name">Confirmado</field>
+            <field name="kind">function</field>
+            <field name="action">confirmado()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_aprobado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_stock_inventory_cost"/>
+            <field name="name">Aprobado</field>
+            <field name="kind">function</field>
+            <field name="action">aprobado()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+                        
+        <record id="act_cancelado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_stock_inventory_cost"/>
+            <field name="name">Cancelado</field>
+            <field name="kind">function</field>
+            <field name="action">cancelado()</field>
+            <field name="split_mode">XOR</field>
+            <field name="flow_stop">True</field>
+        </record>
+        
+        <!-- Transistion -->
+        <record id="trans_borrador_confirmado" model="workflow.transition">
+            <field name="act_from" ref="act_borrador"/>
+            <field name="act_to" ref="act_confirmado"/>
+            <field name="signal">confirmar</field>
+        </record>       
+        
+        <record id="trans_borrador_cancelado" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_cancelado"/>
+            <field name="signal">cancelar</field>
+        </record>
+                        
+        <record id="trans_ejecucion_aprobado" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_aprobado"/>
+            <field name="group_id" ref="account_analytic_avancys.group_manager_margin_cost"/>
+            <field name="signal">aprobar</field>
+        </record>
+        
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--              FOLOWERS            -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="mt_borrador" model="mail.message.subtype">
+            <field name="name">Actualizacion Inventario/costo Nuevo</field>
+            <field name="res_model">stock.inventory.cost</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Actualizacion Inventario/costo Nuevo</field>
+        </record>
+        <record id="mt_confirmado" model="mail.message.subtype">
+            <field name="name">Actualizacion Inventario/costo Confirmado</field>
+            <field name="res_model">stock.inventory.cost</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Solicitud Actualizacion Inventario/costo Confirmado</field>
+        </record>        
+        <record id="mt_aprobado" model="mail.message.subtype">
+            <field name="name">Actualizacion Inventario/costo Aprobado</field>
+            <field name="res_model">stock.inventory.cost</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Solicitud Actualizacion Inventario/costo Aprobado</field>
+        </record>
+        <record id="mt_cancelado" model="mail.message.subtype">
+            <field name="name">Actualizacion Inventario/costo Cancelado</field>
+            <field name="res_model">stock.inventory.cost</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Solicitud Actualizacion Inventario/costo Cancelado</field>
+        </record>
+        
+        
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!--              VISTAS              -->
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        
+        <record id="stock_inventory_cost_view_tree" model="ir.ui.view">
+            <field name="name">stock.inventory.cost.tree</field>
+            <field name="model">stock.inventory.cost</field>
+            <field name="arch" type="xml">
+                <tree string="Actualizacion Inventario/costo">
+                    <field name="name"/>
+                    <field name="causal"/>
+                    <field name="warehouse_id"/>
+                    <field name="location_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+         </record>
+        
+      
+         <record id="stock_inventory_costview_form" model="ir.ui.view">
+            <field name="name">stock.inventory.cost.form</field>
+            <field name="model">stock.inventory.cost</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Actualizacion Inventario/costo" version="7.0">
+                    <header>
+                        <button string="Confirmar" name="confirmar" states="borrador"/>
+                        <button string="Aprobar" name="aprobar" states="confirmado"/>
+                        <button string="Cancelar" name="cancelar" states="confirmado"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,confirmado,aprobado" states="borrador,confirmado,aprobado"/>
+                    </header>
+                    <sheet string="Actualizacion Inventario/costo">
+                        <group attrs="{'invisible':[('state','in',['borrador'])]}">
+                            <h1>
+                                <field name="name"/>
+                                
+                            </h1>
+                            <div class="oe_right">
+                                <button class="oe_inline oe_stat_button" name="view_moves" type="object" 
+                                    icon="fa-bar-chart-o">
+                                    <field string="Movimientos" name="move_count" widget="statinfo"/>
+                                </button>
+                                <button class="oe_inline oe_stat_button" name="view_products" type="object" 
+                                    icon="fa-list-ol">
+                                    <field string="Productos" name="line_count" widget="statinfo"/>
+                                </button>
+                            </div>
+                        </group>
+                        <group col="4">
+                            <field name="causal"/>                            
+                            <field name="date" attrs="{'readonly':[('recosteo','=',False)],'required':[('recosteo','=',True)]}"/>
+                            <field name="location_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="cost_por_bodega"/>
+                        </group>
+                        <notebook position="inside" colspan="4">
+                            <page string="Productos">
+                                <group>
+                                    <field name="line_ids" nolabel="1"  options="{'no_create': True}" attrs="{'readonly':[('state','in',['aprobado'])]}">
+                                        <tree editable="bottom">
+                                            <field name="product_id"/>
+                                            <field name="product_uom_id"/>
+                                            <field name="product_qty_actual"/>
+                                            <field name="cost_actual"/>
+                                            <field name="product_qty"/>
+                                            <field name="cost"/>
+                                            <field name="account_stock_id" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                                            <field name="account_cost_id" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                                            <field name="observaciones"/>                                                                                        
+                                        </tree>
+                                    </field>
+                                </group>  
+                            </page>
+                            <page string="Observaciones">
+                                <field name="observaciones" nolabel="1" attrs="{'readonly':[('state','in',['aprobado','cancelado'])]}"/>
+                            </page>
+                            <page string="Trazabilidad" attrs="{'invisible':[('state','in',['borrador'])]}">
+                                <group>
+                                    <group string="Creacion">
+                                        <field name="create_uid"/>
+                                        <field name="create_date"/>
+                                    </group>
+                                    <group string="Confirmacion">
+                                        <field name="user_confirm"/>
+                                        <field name="date_confirm"/>
+                                    </group>
+                                    <group string="Aprobacion">
+                                        <field name="user_aprobacion"/>
+                                        <field name="date_aprobacion"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Configuracion" attrs="{'invisible':[('state','in',['borrador'])]}" groups="account_analytic_avancys.group_manager_margin_cost">
+                                <group string="Diarios">
+                                    <field name="journal_stock_id"/>   
+                                    <field name="journal_cost_id"/>  
+                                </group>
+                                <group string="Costos Avanzados">
+                                    <field name="recosteo" attrs="{'invisible':[('cost_por_bodega','=',True)]}"/>
+                                </group>
+                                <field name="text" attrs="{'invisible':[('recosteo','=',False)]}" nolabel="1"/>
+                            </page>
+                            <page string="Contabilidad" attrs="{'invisible':[('state','not in',['aprobado'])]}" groups="account_analytic_avancys.group_manager_margin_cost">
+                                <group>
+                                    <field name="move_stock" attrs="{'invisible':[('move_stock','=',False)]}"/>   
+                                    <field name="move_cost" attrs="{'invisible':[('move_cost','=',False)]}"/>  
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+         
+                  
+         <record id="stock_inventory_cost_view_search" model="ir.ui.view">
+            <field name='name'>stock.inventory.cost.search</field>
+            <field name='model'>stock.inventory.cost</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Actualizacion Inventario/costo">
+                    <field name="name"/>
+                    <field name="causal"/>
+                    <field name="warehouse_id"/>
+                    <field name="location_id"/>
+                    <field name="state"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_warehouse_id" string="Almacen" icon="terp-partner" domain="[]" context="{'group_by':'warehouse_id'}"/>
+                        <filter name="group_location_id" string="Ubicacion" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                        <filter name="group_state" string="Estado" icon="terp-partner" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+       
+         <record id="open_stock_inventoy_cost" model="ir.actions.act_window">
+            <field name="name">Actualizacion Inventario/costo</field>
+            <field name="res_model">stock.inventory.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+         </record>
+        
+         <menuitem action="open_stock_inventoy_cost" id="menu_open_return_order" name="Ajuste Inventario/costo" parent="stock.menu_stock_inventory_control" sequence="100"/>
+         
+        <report
+            auto="False" 
+            id="stock_inventoy_cost_id" 
+            model="stock.inventory.cost" 
+            name="print.stock.inventory.cost" 
+            rml="stock_inventory_extended/report.rml" 
+            string="Soporte Ajuste"
+            header="False"
+        />
+                
+    </data>
+    
+    <data>
+        
+        <record id="seq_stock_inventoy_cost_type" model="ir.sequence.type">
+            <field name="name">Inventario/costo</field>
+            <field name="code">stock.inventoy.cost.number</field>
+        </record>
+        <record id="seq_stock_inventoy_cost_number" model="ir.sequence">
+            <field name="name">Actualizacion Inventario/costo</field>
+            <field name="code">stock.inventoy.cost.number</field>
+            <field name="prefix">INV-COST-</field>
+            <field name="padding">5</field>
+        </record>
+        
+    </data>
+</openerp>

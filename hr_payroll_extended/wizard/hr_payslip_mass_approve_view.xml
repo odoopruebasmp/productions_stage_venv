@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+           <record model="ir.ui.view" id="hr_leave_payslip_approve_form_view">
+                <field name="name">hr.payslip.mass.approve.form</field>
+                <field name="model">hr.payslip.mass.approve</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Confirmacion Masiva">
+                        <label string="Confirmacion Masiva"/>
+                        <separator colspan="4"/>
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Confirmacion Masiva" name="approve_mass_leave" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <!-- <act_window id="action_payslip_mass_approve"
+            key2="client_action_multi" name="Confirmacion Masiva"
+            res_model="hr.payslip.mass.approve" src_model="hr.payslip"
+            view_mode="form" target="new" view_type="form" /> -->
+    
+    </data>
+</openerp>

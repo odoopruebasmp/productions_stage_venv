@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="stock_picking_mp3">
+            <t t-call="report.html_container">                
+                <!-- encabezado del documento -->
+                <div class="header">                
+                    <div class="col-xs-3">
+                        <t>
+                            <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 80px;"/>
+                        </t>
+                        <t>
+                            NIT.<span t-field="res_company.partner_id.ref" />-4
+                        </t>
+                    </div>
+                    <div class="row">
+                        <div class="text-center" style="font-size:12px">
+                            <p><ul>REMISIÓN ENTREGA DE MERCANCÍA</ul></p>
+                            <p><ul>CRA 72 N° 95-51 BODEGA 13 - PARQUE EMPRESARIAL LOS LAGARTOS</ul></p>
+                            <p><ul>PBX: 6 13 8444 - 6 13 6955</ul></p>
+                            <p><ul >BOGOTA - COLOMBIA</ul></p>
+                        </div>
+                    </div>
+                </div>                
+            
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">                        
+                        <div class="page" style="font-size:12px">
+                            <br></br>
+                            <style>
+                                th.intro {
+                                    text-align: center;
+                                }
+
+                                .important1 {
+                                    background-color: #D8D8D8;
+                                }
+                                .important2 {
+                                    background-color: #F2F2F2;
+                                }
+                            </style>
+                            
+                            <table class="table" style="font-size:9px"> 
+                                <tr>
+                                    <td class="intro important1"><strong>No. Pedido</strong></td>
+                                    <td class="intro important2"><span t-field="o.origin"/></td>
+                                    <td class="intro important1"><strong>No. Remisión</strong></td>
+                                    <td class="intro important2"><span t-field="o.name"/></td>
+                                    <td class="intro important1"><strong>No. O.C.</strong></td>
+                                    <td class="intro important2"><span t-field="o.n_oc"/></td>
+                                </tr>
+                                <tr colspan="6">
+                                    <td class="intro important1" ><strong>Proveedor</strong></td>
+                                    <td class="intro important2"><span t-field="res_company.partner_id.name"/></td>
+                                    <td class="intro important1" ><strong>Teléfono</strong></td>
+                                    <td class="intro important2"><span t-field="res_company.partner_id.mobile"/><span>  </span><span t-field="res_company.partner_id.phone"/></td>
+                                    <td class="intro important1" ><strong>Dirección Proveedor</strong></td>
+                                    <td class="intro important2"><span t-field="res_company.partner_id.street"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important1" ><strong>Fecha</strong></td>
+                                    <td class="intro important2"><span t-field="o.date_done"/></td>
+                                    <td class="intro important1" ><strong>Punto de Venta</strong></td>
+                                    <td class="intro important2" colspan="3"><span t-field="o.partner_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="intro important1" ><strong>Notificacion de Entrega</strong></td>
+                                    <td class="intro important2" colspan="5"><span t-field="o.carrier_coment"/></td>
+                                </tr>
+                            </table>
+                            <table class="table table-hover" style="font-size:12px">
+                                <tr>
+                                    <th colspan="4" class="intro important1">INFORMACION DEL PEDIDO</th>
+                                </tr>
+                                <tr>
+                                    <th class="intro">Cantidad</th>
+                                    <th class="intro">Referencia</th>
+                                    <th colspan="3" class="intro">Descripción</th>
+                                </tr>
+                                <tr t-foreach="o.move_lines" t-as="l">
+                                    <td class="text-center"><span t-field="l.product_uom_qty"/></td>
+                                    <td class="text-center"><span t-field="l.product_id.default_code"/></td>
+                                    <td><span t-field="l.product_id.name"/></td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered" style="font-size:9px">
+                                <tr>
+                                    <th colspan="3" class="intro important1">VERIFICACION DE ENTREGA</th>
+                                </tr>
+                                <tr>
+                                    <th class="intro important1">OBSERVACION</th>
+                                    <th colspan="2" class="intro important1">Marque con una x(equis)</th>
+                                </tr>
+                                <tr>
+                                    <td>Ojo mágico - Timbre</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                </tr>
+                                    <td>Certificado de garantía</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td>Paquete de llaves y escudo</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                </tr>
+                                <tr>
+                                    <td>Estado general de la puerta</td>
+                                    <td class="text-center">BUENO</td>
+                                    <td class="text-center">MALO</td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered" style="font-size:9px">
+                                <tr>
+                                    <th colspan="3" class="intro important1">VALIDACION DE ENTREGA</th>
+                                </tr>
+                                <tr>
+                                    <th class="intro important1">PARAMETRO</th>
+                                    <th colspan="2" class="intro important1">Marque con una x(equis)</th>
+                                </tr>
+                                <tr>
+                                    <td>El transportador se identificó</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                </tr>
+                                <tr>
+                                    <td>La puerta se entregó en el lugar indicado</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                </tr>
+                                <tr>
+                                    <td>Se me permitió revisar la puerta a satisfacción</td>
+                                    <td class="text-center">SI</td>
+                                    <td class="text-center">NO</td>
+                                </tr>
+                            </table>
+                            
+                            <!--<p>
+                                <strong>Observación:</strong>
+                            </p>-->
+                            <br/>
+                            <style>
+                                p{ 
+                                    width: 300px;
+                                    text-align: center;
+                                    border-top-width:thin;
+                                    border-top-style:solid;
+                                    border-top-color:black;                                    
+                                }
+                            </style>
+                            <table class="table table-hover" style="font-size:9px">   
+                                <tr>
+                                    <th style="margin-left: 25 mm"> 
+                                        <p> Firma del cliente </p>
+                                    </th>
+                                    <th style="margin-left: 85 mm">
+                                        <p> Firma del transportador </p>
+                                    </th>
+                                </tr>
+                            </table>
+                            <div class="text-center">
+                                <ul class="list-inline">
+                                    <li>Nombre</li>
+                                    <li>______________________________________</li>
+                                    <li>Cédula</li>
+                                    <li>__________________</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+
+        </template>
+    </data>
+</openerp>
+

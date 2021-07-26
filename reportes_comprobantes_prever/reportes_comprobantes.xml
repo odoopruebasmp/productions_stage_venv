@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <!-- Formato de papel media carta -->
+        <record id="paperformat_media_carta" model="report.paperformat">
+            <field name="name">Media Carta</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">140</field>
+            <field name="page_width">215</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">42</field>
+            <field name="dpi">80</field>
+        </record>
+        
+        <!-- Formato de papel de los cheques -->
+        <record id="paperformat_cheque_avvillas" model="report.paperformat">
+            <field name="name">Cheque AVvillas</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">215</field>
+            <field name="page_width">178</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">17</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="paperformat_cheque_bancolombia" model="report.paperformat">
+            <field name="name">Cheque Bancolombia</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">215</field>
+            <field name="page_width">178</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">19</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+        
+        <record id="paperformat_cheque_occidente" model="report.paperformat">
+            <field name="name">Cheque Occidente</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">215</field>
+            <field name="page_width">178</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">19</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+        
+        <!-- Comprobante de Ingreso -->
+        <report
+            id="comprobante_ingreso"
+            model="account.voucher"
+            string="Comprobante de Ingreso"
+            report_type="qweb-pdf"
+            name="reportes_comprobantes.reporte_ingreso" 
+            file="reportes_comprobantes.reporte_ingreso"
+        />
+        
+        <record id="comprobante_ingreso" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_media_carta"/>
+        </record>
+        
+        <!-- Comprobante Contable -->
+        <report
+            id="comprobante_contables_generico"
+            model="account.move"
+            string="Comprobante Contable Generico"
+            report_type="qweb-pdf"
+            name="reportes_comprobantes.comprobante_contables_generico" 
+            file="reportes_comprobantes.comprobante_contables_generico"
+        />
+		
+        <!-- Cheque Banco AV Villas -->
+        <report
+            id="comprobante_avvillas"
+            model="account.voucher"
+            string="Cheque Banco AV Villas"
+            report_type="qweb-pdf"
+            name="reportes_comprobantes.cheque_avvillas"
+            file="reportes_comprobantes.cheque_avvillas"
+        />
+        
+        <record id="comprobante_avvillas" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_cheque_avvillas"/>
+        </record>
+        
+        <!-- Cheque Bancolombia -->
+        <report
+            id="comprobante_bancolombia"
+            model="account.voucher"
+            string="Cheque Bancolombia"
+            report_type="qweb-pdf"
+            name="reportes_comprobantes.cheque_bancolombia"
+            file="reportes_comprobantes.cheque_bancolombia"
+        />
+        
+        <record id="comprobante_bancolombia" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_cheque_bancolombia"/>
+        </record>
+        
+        <!-- Cheque Banco de Occidente -->
+        <report
+            id="comprobante_occidente"
+            model="account.voucher"
+            string="Cheque Banco Occidente"
+            report_type="qweb-pdf"
+            name="reportes_comprobantes.cheque_occidente"
+            file="reportes_comprobantes.cheque_occidente"
+        />
+        
+        <record id="comprobante_occidente" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_cheque_occidente"/>
+        </record>
+		
+    </data>
+</openerp>

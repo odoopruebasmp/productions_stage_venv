@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_sale_import_wiz" model="ir.ui.view">
+            <field name="name">sale.import.wiz</field>
+            <field name="model">import.xlsx.file</field>
+            <field name="arch" type="xml">
+                <form string="Import XLSX File" version="7.0">
+                    <group>                        
+                        <field name="warehouse_id"/>
+                        <field name="location_id"/>                        
+                        <field name="cross_docking"/>
+                        <field name="type_cross"/>
+                        <field name='picking_type_cross' attrs="{'invisible':[('type_cross','!=','remision')], 'required':[('type_cross','=','remision')]}"/>
+                    </group>
+                    <group>
+                        <field name="file"/>
+                    </group>
+                    <footer>
+                        <button name="import_order" string="Import" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_import_wiz" model="ir.actions.act_window">
+            <field name="name">Import XLSX</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.xlsx.file</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_sale_import_wiz" />
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

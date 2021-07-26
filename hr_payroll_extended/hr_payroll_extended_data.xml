@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data noupdate='1'>
+
+        <!-- <record id="ir_cron_compute_pay_slip" model="ir.cron">
+            <field name="name">Create Payslip</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'hr.payslip.run'" name="model"/>
+            <field eval="'compute_pay_slip_create'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record id="ir_cron_create_allocation_request" model="ir.cron">
+            <field name="name">Create Allocation Request</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'hr.holidays.allocation.rule'" name="model"/>
+            <field eval="'compute_allocation_leave'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_toyears0" model="hr.holidays.allocation.rule">
+            <field eval="14" name="no_of_leave"/>
+            <field name="name">Leave :- 1 to 5 Years</field>
+            <field eval="1.0" name="year_from"/>
+            <field eval="0.0" name="month_from"/>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="1" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="5.0" name="year_to"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_afteryears0" model="hr.holidays.allocation.rule">
+            <field eval="18" name="no_of_leave"/>
+            <field name="name">Leave :- After 5 Years</field>
+            <field eval="5.0" name="year_from"/>
+            <field eval="0.0" name="month_from"/>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="1" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths0" model="hr.holidays.allocation.rule">
+            <field eval="6" name="no_of_leave"/>
+            <field eval="6" name="month_to"/>
+            <field name="name">Leave :- More than 5 months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="5" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths1" model="hr.holidays.allocation.rule">
+            <field eval="7" name="no_of_leave"/>
+            <field eval="7" name="month_to"/>
+            <field name="name">Leave :- More than 6 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="6" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths2" model="hr.holidays.allocation.rule">
+            <field eval="8" name="no_of_leave"/>
+            <field eval="8" name="month_to"/>
+            <field name="name">Leave :- More than 7 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="7" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths3" model="hr.holidays.allocation.rule">
+            <field eval="9" name="no_of_leave"/>
+            <field eval="9" name="month_to"/>
+            <field name="name">Leave :- More than 8 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="8" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths4" model="hr.holidays.allocation.rule">
+            <field eval="10" name="no_of_leave"/>
+            <field eval="10" name="month_to"/>
+            <field name="name">Leave :- More than 9 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="9" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths5" model="hr.holidays.allocation.rule">
+            <field eval="11" name="no_of_leave"/>
+            <field eval="11" name="month_to"/>
+            <field name="name">Leave :- More than 10 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="10" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_morethanmonths6" model="hr.holidays.allocation.rule">
+            <field eval="12" name="no_of_leave"/>
+            <field eval="12" name="month_to"/>
+            <field name="name">Leave :- More than 11 Months</field>
+            <field name="leave_type_id" ref="hr_holidays.holiday_status_cl"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">leave</field>
+            <field eval="11" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_noticeto0" model="hr.holidays.allocation.rule">
+            <field eval="7" name="no_of_leave"/>
+            <field eval="6" name="month_to"/>
+            <field name="name">Notice :- 3 month to 6 month</field>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">notice</field>
+            <field eval="3" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_noticetoyear0" model="hr.holidays.allocation.rule">
+            <field eval="14" name="no_of_leave"/>
+            <field name="name">Notice :- 6month to 1 year</field>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">notice</field>
+            <field eval="1.0" name="year_to"/>
+            <field eval="6" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_noticeafteryear0" model="hr.holidays.allocation.rule">
+            <field eval="28" name="no_of_leave"/>
+            <field name="name">Notice :- after 1 year</field>
+            <field eval="1.0" name="year_from"/>
+            <field eval="0.0" name="month_from"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">notice</field>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_severanceto0" model="hr.holidays.allocation.rule">
+            <field eval="6" name="no_of_leave"/>
+            <field eval="6" name="month_to"/>
+            <field name="name">Severance :- 3month to 6month</field>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">severance</field>
+            <field eval="3" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_severanceto1" model="hr.holidays.allocation.rule">
+            <field eval="13" name="no_of_leave"/>
+            <field name="name">Severance :- 6month to 1Year</field>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">severance</field>
+            <field eval="1.0" name="year_to"/>
+            <field eval="6" name="month_from"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_severanceto2" model="hr.holidays.allocation.rule">
+            <field eval="21" name="no_of_leave"/>
+            <field name="name">Severance :- 1Year to 5Year</field>
+            <field eval="1.0" name="year_from"/>
+            <field eval="0.0" name="month_from"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">severance</field>
+            <field eval="5.0" name="year_to"/>
+        </record>
+
+        <record id="hr_holidays_allocation_rule_severanceafteryear0" model="hr.holidays.allocation.rule">
+            <field eval="23" name="no_of_leave"/>
+            <field name="name">Severance :- After 5 year</field>
+            <field eval="5.0" name="year_from"/>
+            <field eval="0.0" name="month_from"/>
+            <field eval="0" name="repeated_year"/>
+            <field name="allocation_type">severance</field>
+        </record> -->
+    </data> 
+
+</openerp>

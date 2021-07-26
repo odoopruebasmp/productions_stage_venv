@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+                        
+        
+        <record id="view_account_acccount_extended" model="ir.ui.view">
+            <field name="name">account.account.change</field>
+            <field name="model">account.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="diff" context="{'id':active_id}"/>
+                    <field name="naturaleza" attrs="{'required': [('diff','!=',False)],'invisible': [('diff','=',False)]}" context="{'id':active_id}"/>
+                    <field name="account_diff_niif_id" attrs="{'required': [('diff','=','cuenta')],'invisible': [('diff','!=','cuenta')]}" context="{'id':active_id}"/> 
+                    
+                </field>
+                <label for="note" position="before">
+                    <group colspan="4" col="4" string="DIFERENCIA EN CAMBIO" attrs="{'invisible': [('diff','=',False)]}">
+                        <field name="account_income_niif_id" context="{'id':active_id}" attrs="{'required': [('diff','!=',False)]}"/>
+                        <field name="account_expense_niif_id" context="{'id':active_id}" attrs="{'required': [('diff','!=',False)]}"/>
+                        <field name="diff_partner_id" context="{'id':active_id}"/>
+                        <field name="account_analytic_change_id" context="{'id':active_id}"/>
+                        <field name="diff_amount_local" context="{'id':active_id}"/>
+                        <field name="amount_change" context="{'id':active_id}"/>
+                        <field name="diff_amount_divisa" context="{'id':active_id}"/>
+                        <field name="diff_amount_trm" context="{'id':active_id}"/>
+                        <field name="diff_process" invisible="1"/>                                                
+                    </group>
+                    <group colspan="4" col="4" string="Movimientos de Diferencia en Cambio" attrs="{'invisible': [('diff','!=','cuenta')]}">
+                        <field name="account_change_ids" nolabel="1" context="{'id':active_id}">
+                            <tree>
+                                <field name='name'/>
+                                <field name='ref'/>
+                                <field name='date'/>
+                                <field name='account_id'/>
+                                <field name='partner_id'/>
+                                <field name='analytic_account_id'/>                                            
+                                <field name='debit' sum="Total"/>
+                                <field name='credit' sum="Total"/>
+                                <field name='currency_id'/>
+                                <field name='amount_currency'/>
+                                <field name='state'/>
+                            </tree>
+                        </field>
+                    </group>
+                </label>
+            </field>
+        </record>    
+        
+        
+        
+        <!--GESTION DE DIFERENCIA EN CAMBIO-->
+        
+        <record id="view_change_difference_tree" model="ir.ui.view">
+            <field name="name">change.difference.tree</field>
+            <field name="model">change.difference</field>
+            <field name="arch" type="xml">
+                <tree string='Diferencia en Cambio'>
+                    <field name='name'/>
+                    <field name='currency_id'/>
+                    <field name='period_id'/>                    
+                    <field name='date'/>
+                    <field name='rate'/>
+                    <field name='state'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_change_difference_form" model="ir.ui.view">
+            <field name="name">change.difference.form</field>
+            <field name="model">change.difference</field>
+            <field name="arch" type="xml">
+                <form string='Diferencia en Cambio'>
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" icon="gtk-go-forward" states="draft"/>
+                        <button string="Calcular" name="calcular" states="confirmed" type="object" icon="STOCK_REFRESH"/>
+                        <button string="Recalcular" name="recalcular" states="done" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" states="draft,confirmed,done"/>
+                    </header>
+                    <h1>
+                        <field name='name'/>
+                    </h1>
+                    <separator/>
+                    <group colspan="4" col="4">                        
+                        <field name='currency_id'/>
+                        <field name='date'/>
+                        <field name='period_id'/>
+                        <field name='rate'/>
+                        <field name='journal_id'/>
+                    </group>                
+                    <notebook colspan="4">
+                        <page string="Movimientos">
+                            <group>
+                                <field name="line_ids" nolabel="1">
+                                    <tree>
+                                        <field name='move_change_id'/>
+                                        <field name='name'/>
+                                        <field name='ref'/>
+                                        <field name='date'/>
+                                        <field name='account_id'/>
+                                        <field name='partner_id'/>
+                                        <field name='analytic_account_id'/>                                            
+                                        <field name='debit'/>
+                                        <field name='credit'/>
+                                        <field name='currency_id'/>
+                                        <field name='amount_currency'/>
+                                        <field name='state'/>
+                                    </tree>
+                                </field>
+                            </group>                                
+                        </page>
+                    </notebook>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_change_difference" model="ir.actions.act_window">
+            <field name="name">Diferencia en Cambio</field>
+            <field name="res_model">change.difference</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>            
+        </record>
+        
+        <menuitem id="menu_change_difference" name="Diferencia en Cambio" parent="account.menu_finance" sequence="5"/>
+        <menuitem action="action_change_difference" id="menu_change_difference_dos" name="Diferencia en Cambio" parent="menu_change_difference" sequence="1"/>
+        
+        
+        <record id="view_move_line_form_difference_change_extended" model="ir.ui.view">
+            <field name="name">account.move.line.extended.difference.change</field>
+            <field name="model">account.move.line</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Diferencia en Cambio">                                               
+                        <group colspan="4" col="4" string="Balance">
+                            <field name="diff_amount_local" context="{'move_id':active_id}"/>
+                            <field name="diff_amount_divisa" context="{'move_id':active_id}"/>
+                            <field name="diff_amount_trm" context="{'move_id':active_id}"/>
+                            <field name="amount_change" context="{'move_id':active_id}"/>
+                        </group>
+                        <group colspan="4" col="4" string="Movimientos Relacionados">
+                            <field name="change_id" context="{'move_id':active_id}"/>
+                            <field name="move_change_id" context="{'move_id':active_id}"/>
+                        </group>                        
+                        <group string="Movimientos de Diferencia en Cambio">
+                            <field name="move_change_ids" nolabel="1" context="{'move_id':active_id}"/>
+                        </group>
+                        <group colspan="4" col="4" string="Configuracion">
+                            <field name="change_not" context="{'move_id':active_id}"/>
+                        </group> 
+                    </page>
+                </notebook>
+            </field>
+        </record>        
+        
+        
+        
+        
+        
+        <record id="view_account_move_line_report_graph_prueba" model="ir.ui.view">
+            <field name="name">account.move.line.report.graph.prueba</field>
+            <field name="model">account.move.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Movimientos" type="pivot" stacked="True">
+                    <field name="change_id"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                </graph>
+            </field>
+        </record>
+        
+        
+        <record id="view_account_move_line_report_search_prueba" model="ir.ui.view">
+            <field name="name">account.move.line.search.prueba</field>
+            <field name="model">account.move.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="move_id"/>
+                    <field name="partner_id"/>
+                    <field name="invoice"/>
+                    <field name="account_id"/>
+                    <field name="date"/>
+                    <field name="date_maturity"/>
+                    <field name="date_created"/>
+                    <field name="followup_line_id"/>
+                    <field name="followup_date"/>
+                    <field name="change_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="account_change_id"/>                    
+                    <separator/>
+                    <filter name="CUENTAS" icon="terp-document-new" domain="[('account_change_id','!=',False)]" string="CUENTAS" help="Aquellos movimientos que se generaron como dieferencia en cambio a el saldo de una cuenta"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Proceso" name="change_id" context="{'group_by':'change_id'}"/>
+                        <filter string="Cuenta Analitica" name="analytic_account_id" context="{'group_by':'analytic_account_id'}"/>
+                        <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Cuenta" name="account_id" context="{'group_by':'account_id'}"/>
+                        <filter string="Periodo" name="period_id" context="{'group_by':'period_id'}"/>
+                        <filter string="Diario" name="journal_id" context="{'group_by':'journal_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_move_line_report_all_prueba" model="ir.actions.act_window">
+            <field name="name">Analisis de Movimientos</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('change_id','!=',False)]</field>
+            <field name="graph_view_id" ref="view_account_move_line_report_graph_prueba"/>
+            <field name="search_view_id" ref="view_account_move_line_report_search_prueba"/>            
+        </record>
+        
+        <menuitem action="action_account_move_line_report_all_prueba" id="menu_action_account_move_line_report_all_prueba" parent="diferencia_cambio.menu_change_difference" sequence="1" string="Analisis de Movimientos"/>
+        
+        <!--MOVIMIENTOS ANALITICOS-->
+        
+        <!--<record id="view_account_analytic_line_report_graph_prueba" model="ir.ui.view">
+            <field name="name">account.analytic.line.report.graph.prueba</field>
+            <field name="model">account.analytic.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Movimientos Analiticos" type="pivot" stacked="True">
+                    <field name="change_id"/>
+                    <field name="account_id"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        
+        <record id="view_account_analytic_line_report_search_prueba" model="ir.ui.view">
+            <field name="name">account.analytic.line.search.prueba</field>
+            <field name="model">account.analytic.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Movimientos">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="move_id"/>
+                    <field name="partner_id"/>
+                    <field name="account_id"/>
+                    <field name="date"/>
+                    <field name="change_id"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Proceso" name="change_id" context="{'group_by':'change_id'}"/>
+                        <filter string="Cuenta Analitica" name="account_id" context="{'group_by':'account_id'}"/>
+                        <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Cuenta" name="general_account_id" context="{'group_by':'general_account_id'}"/>
+                        <filter string="Periodo" name="period_id" context="{'group_by':'period_id'}"/>
+                        <filter string="Diario" name="journal_id" context="{'group_by':'journal_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_account_analytic_line_report_all_prueba" model="ir.actions.act_window">
+            <field name="name">Analisis de Movimientos Analitcos</field>
+            <field name="res_model">account.analytic.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('change_id','!=',False)]</field>
+            <field name="graph_view_id" ref="view_account_analytic_line_report_graph_prueba"/>
+            <field name="search_view_id" ref="view_account_analytic_line_report_search_prueba"/>            
+        </record>
+        
+        <menuitem action="action_account_analytic_line_report_all_prueba" id="menu_action_account_analytic_line_report_all_prueba" parent="diferencia_cambio.menu_change_difference" sequence="2" string="Analisis Analitico"/>-->
+        
+    </data>    
+    
+    <data noupdate="1">
+        <record id="seq_difference_number_type" model="ir.sequence.type">
+            <field name="name">Proceso de Dieferencia en Cambio</field>
+            <field name="code">difference.change</field>
+        </record>
+        <record id="seq_difference_number" model="ir.sequence">
+            <field name="name">Numero de Dieferencia en Cambio</field>
+            <field name="code">difference.change</field>
+            <field name="prefix">DIFF-</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+</openerp>

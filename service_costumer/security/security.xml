@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        
+        <!-- Grupos de permisos para el modulo de Srvicio al Cliente -->
+        <record model="ir.module.category" id="module_category_service">
+            <field name="name">Servicio al Cliente</field>
+        </record>
+        
+        <record model="res.groups" id="group_user_service">
+            <field name="name">Usuario de Servicio al Cliente</field>
+            <field name="category_id" ref="module_category_service"/>
+        </record>
+                
+        <record model="res.groups" id="group_tecnico_mantenimiento">
+            <field name="name">Tecnico de Servicio al Cliente</field>
+            <field name="category_id" ref="module_category_service"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_service'))]"/>
+        </record>
+        
+        <record model="res.groups" id="group_manager_service">
+            <field name="name">Gestor de Servicio al Cliente</field>
+            <field name="category_id" ref="module_category_service"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_tecnico_mantenimiento'))]"/>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="xml_massive_generation" model="ir.ui.view">
+            <field name="name">Generación Masiva XML FE</field>
+            <field name="model">xml.massive.generation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group string="Facturas a Procesar">
+                        <field name="invoices" nolabel="1"/>
+                    </group>
+                    <h3 class="oe_grey">Nota:</h3>
+                        <ul class="oe_grey">
+                            <li>Facturas con Estado XML 'No Transferido'</li>
+                        </ul>
+                    <footer>
+                        <button name="massive_ei_generation" string="Confirmar" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_xml_massive_generation" multi="True" key2="client_action_multi" name="Generar XML FE"
+                    res_model="xml.massive.generation" src_model="account.invoice" view_mode="form" target="new"
+                    view_type="form"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--WIZARD-WIZARD-WIZARD-WIZARD-->
+        
+        <record id="stock_report_kardex_wizard_view" model="ir.ui.view">
+            <field name="name">Kardex</field>
+            <field name="model">stock.report.kardex.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Report Kardex">
+                <group col="2">
+                    <field name="print_report"/>
+                </group>
+                <group col="4">
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </group>
+                <notebook>
+                    <page string="Productos">
+                        <field name="product_ids" nolabel="1">
+                            <tree>
+                                <field name="default_code"/>
+                                <field name="product_tmpl_id"/>
+                                <field name="categ_id"/>
+                                <field name="qty_available"/>
+                                <field name="uom_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Ubicaciones">
+                        <field name="location_ids" nolabel="1">
+                            <tree>
+                                <field name="complete_name"/>
+                                <field name="usage"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="kardex_compute" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_stock_report_kardex_wizard" model="ir.actions.act_window">
+            <field name="name">Kardex</field>
+            <field name="res_model">stock.report.kardex.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="stock_report_kardex_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Informe Kardex" id="menu_stock_report_kardex" parent="menu_report_avancys_stock" action="action_stock_report_kardex_wizard" sequence="1" groups="report_odoo_extended.group_user_report_avancys_stock"/>
+
+        <record id="view_stock_report_kardex_line_tree" model="ir.ui.view">
+            <field name="name">stock.report.kardex.line.tree</field>
+            <field name="model">stock.report.kardex.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Informe Kardex" default_order="product_id,date">
+                    <field name="product_id" invisible="1"/>
+                    <field name="default_code"/>
+                    <field name="product_name"/>
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="origin"/>
+                    <field name="type_move"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="qty_start"/>
+                    <field name="qty_in" sum="Total"/>
+                    <field name="qty" sum="Total"/>
+                    <field name="qty_out" sum="Total"/>
+                    <field name="qty_end"/>
+                    <field name="cost_move"/>
+                    <field name="cost_total_move"/>
+                    <field name="cost_promedio"/>
+                    <field name="cost_promedio_total"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_report_kardex_line_filter" model="ir.ui.view">
+            <field name="name">stock.report.kardex.line.filter</field>
+            <field name="model">stock.report.kardex.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Informe Kardex">
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="origin"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="type_move"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product_id" string="Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="group_name" string="Documento Referencia" icon="terp-partner" domain="[]" context="{'group_by':'name'}"/>
+                        <filter name="group_origin" string="Documento Origen" icon="terp-partner" domain="[]" context="{'group_by':'origin'}"/>
+                        <filter name="group_date" string="Fecha" icon="terp-partner" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="group_type_move" string="Tipo de Movimiento" icon="terp-partner" domain="[]" context="{'group_by':'type_move'}"/>
+                        <separator orientation="horizontal"/>
+                        <filter name="group_location_id" string="Ubicacion Origen" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                        <filter name="group_location_dest_id" string="Ubicacion Destino" icon="terp-partner" domain="[]" context="{'group_by':'location_dest_id'}"/>
+                    </group>
+                    <group expand="0" string="Base">
+                        <filter name="group_principal" string="Producto/Movimiento" icon="terp-partner" domain="[]" context="{'group_by': ['product_id','move_id']}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_stock_report_kardex_line_graph" model="ir.ui.view">
+            <field name="name">stock.report.kardex.line.graph</field>
+            <field name="model">stock.report.kardex.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Kardex" type="pivot" stacked="True">
+                    <field name="qty_start" type="measure"/>
+                    <field name="qty_in" type="measure"/>
+                    <field name="qty" type="measure"/>
+                    <field name="qty_out" type="measure"/>
+                    <field name="qty_end" type="measure"/>
+                    <field name="cost_move" type="measure"/>
+                    <field name="cost_total_move" type="measure"/>
+                    <field name="cost_promedio" type="measure"/>
+                    <field name="cost_promedio_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+
+        <record id="action_stock_report_kardex_line" model="ir.actions.act_window">
+            <field name="name">Analisis de Kardex</field>
+            <field name="res_model">stock.report.kardex.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        
+    </data>
+</openerp>

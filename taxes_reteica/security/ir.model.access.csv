@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+res_ciiu_account_user,model_res_ciiu,model_res_ciiu,account.group_account_user,1,1,1,1
+res_ciiu_base_user,model_res_ciiu,model_res_ciiu,base.group_user,1,0,0,0

@@ -1,0 +1,209 @@
+<openerp>
+    <data>
+        
+        
+        
+        <record id="view_company_niif_inventory_form_avancys" model="ir.ui.view">
+            <field name="name">res.company.niif.inventory.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Configuracion Politicas NIIF">
+                        <group string="Reconocimiento Ingreso" col="2">
+                            <field name="niif_income"/>
+                        </group>
+                        <group string="Impuestos Direfidos" col="4">                                
+                            <field name="account_tax_expense_niif_id"/>
+                            <field name="account_tax_income_niif_id"/>
+                            <field name="account_tax_active_niif_id"/>
+                            <field name="account_tax_pasivo_niif_id"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_account_invoice_niif_form" model="ir.ui.view">
+            <field name="name">account.invoice.niif.form.inherit2</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="NIIF">
+                        <group string="Reconocimiento Ingresos">
+                            <field name="move_niif"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        
+        <record id="view_stock_picking_niif_form" model="ir.ui.view">
+            <field name="name">stock.picking.niif.form.inherit2</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="NIIF">
+                        <group string="Reconocimiento Ingresos" attrs="{'invisible': [('state','!=','done')]}">
+                            <field name="move_income_niif"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_res_partner_niif_form" model="ir.ui.view">
+            <field name="name">res.partner.niif.form.inherit2</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="NIIF" attrs="{'invisible': [('customer','=',False)]}">
+                        <group string="Reconocimiento Ingresos">
+                            <field name="account_income_niif"/>
+                            <field name="account_reserve_niif"/>
+                            
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_stock_picking_type_form_inherit_avancys_niif" model="ir.ui.view">
+            <field name="name">stock.picking.type.form.inherit.avancys.niif</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <field name='return_picking_type_id' position="after">
+                    <field name="journal_income_id"/>                  
+                </field>
+            </field>
+        </record>
+        
+        
+        <record id="view_category_property_niif_form2" model="ir.ui.view">
+            <field name="name">product.category.property.form.inherit2</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//group[@name='parent']/group[@name='account_property']" position="after">
+                        <group string="NIIF" colspan="2">
+                            <field name="account_income_niif"/>
+                            <field name="account_depreciacion_debit_id"/>
+                            <field name="account_depreciacion_credit_id"/>
+                            <field name="analytic_inventory_deterioro_id"/>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record id="tree_product_normal_niif_form_view_10" model="ir.ui.view">
+            <field name="name">product.product.niif.form.inherit2</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <tree string="Productos NIIF" editable="top" colors="red:deterioro == 'aplica' ">
+                    <field name="name" readonly="1"/>
+                    <field name="default_code" readonly="1"/>
+                    <field name="tipo_producto_niff"/>
+                    <field name="qty_niif" readonly="1"/>
+                    <field name="costo_niif"/>
+                    <field name="costo_total_niif"/>
+                    <field name="price_niif" attrs="{'readonly': [('tipo_producto_niff','=','materia_prima')]}"/>
+                    <field name="costo_estimado_de_venta" attrs="{'readonly': [('tipo_producto_niff','=','materia_prima')]}"/>
+                    <field name="valor_de_reposicion" attrs="{'readonly': [('tipo_producto_niff','!=','materia_prima')]}"/>
+                    <field name="valor_neto_realizable"/>
+                    <field name="valor_diferencia"/>
+                    <field name="valor_diferencia_total"/>
+                    <field name="deterioro"/>                    
+                </tree> 
+            </field>
+        </record>
+        
+        <record id="open_windows_contract_product_niif" model="ir.actions.act_window">
+            <field name="name">Productos NIIF</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('tipo_producto_niff','!=',False),('type','=','product'),('is_asset','=',False)]</field>
+            <field name="view_id" ref="tree_product_normal_niif_form_view_10"/>
+         </record>
+        
+        <menuitem id="menu_inventory_niif" name="Deterioro Inventario" parent="stock.menu_stock_root" sequence="10"/>
+        <menuitem id="menu_product_avancys_niif" action="open_windows_contract_product_niif" name="Productos" parent="menu_inventory_niif" sequence="1"/>
+        
+        <record id="product_normal_niif_form_view5" model="ir.ui.view">
+            <field name="name">product.normal.form.inherit2</field>
+            <field name="model">product.product</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="NIIF" attrs="{'invisible': [('type','!=','product')]}">
+                        <group>
+                            <field name="tipo_producto_niff"/>
+                        </group>
+                        <group colspan="6" col="6" string="Costo y Cantidad de Referencia">
+                            <field name="costo_niif"/>
+                            <field name="qty_niif"/>
+                            <field name="costo_total_niif"/>
+                            <field name="date_qty_cost"/>
+                            <field name="date_qty_cost_update"/>
+                            <field name="user_qty_cost"/>
+                        </group>
+                        <group colspan="6" col="6" string="Valor de Reposicion" attrs="{'invisible': [('tipo_producto_niff','!=','materia_prima')]}">
+                            <field name="valor_de_reposicion" attrs="{'required': [('tipo_producto_niff','=','materia_prima')]}"/>
+                            <field name="date_reposicion"/>
+                            <field name="user_reposicion"/>
+                        </group>
+                        <group colspan="6" col="6" string="Precio de Venta Minimo" attrs="{'invisible': [('tipo_producto_niff','!=','producto_terminado')]}">
+                            <field name="price_niif" attrs="{'required': [('tipo_producto_niff','=','producto_terminado')]}"/>
+                            <field name="date_price"/>
+                            <field name="user_price"/>
+                        </group>
+                        <group colspan="6" col="6" string="Costo Estimado de Venta" attrs="{'invisible': [('tipo_producto_niff','!=','producto_terminado')]}">
+                            <field name="costo_estimado_de_venta" attrs="{'required': [('tipo_producto_niff','=','producto_terminado')]}"/>
+                            <field name="date_cost_estimado"/>
+                            <field name="user_cost_estimado"/>
+                        </group>
+                        <group colspan="6" col="6" string="Informacion de Referencia" attrs="{'invisible': [('tipo_producto_niff','!=','semi_elaborado')]}">
+                            <field name="amount_costo_end" attrs="{'required': [('tipo_producto_niff','=','semi_elaborado')]}"/>
+                            <field name="costo_end"/>
+                            <field name="product_costo_end"/>
+                            <field name="date_cost_end"/>
+                            <field name="user_cost_end"/>
+                        </group>
+                        <group colspan="6" col="6" string="Calculos">
+                            <field name="valor_neto_realizable" readonly="1"/>
+                            <field name="valor_diferencia" readonly="1"/>
+                            <field name="valor_diferencia_total" readonly="1"/>                            
+                        </group>
+                        <group>
+                            <field name="deterioro" attrs="{'required': [('tipo_producto_niff','!=',False)]}"/>
+                        </group>
+                        <group string="Contabilizacion Deterioro" attrs="{'invisible': [('tipo_producto_niff','=',False)]}">
+                            <field name="deterioros_ids" nolabel="1">
+                                <tree>
+                                    <field name="move_id"/>
+                                    <field name="name"/>
+                                    <field name="ref"/>
+                                    <field name="account_niif_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="debit" sum="Toatl"/>
+                                    <field name="credit" sum="Total"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field> 
+                        </group> 
+                    </page> 
+                </notebook> 
+            </field>
+        </record>
+        
+    </data>
+</openerp>

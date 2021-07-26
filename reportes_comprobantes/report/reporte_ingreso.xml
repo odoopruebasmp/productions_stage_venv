@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+<template id="reporte_ingreso">
+
+    <t t-call="report.html_container" t-foreach="docs" t-as="o">
+			<!-- encabezado del documento -->
+        <div class="header">
+            <div class="row">
+                <div class="col-xs-3">
+                    <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 40px;"/>
+                </div>
+            </div>
+            <div class="row zero_min_height">
+                <div class="col-xs-12">
+                    <div style="border-bottom: 1px solid black;"/>
+                </div>
+            </div>
+            
+            <div class="row" >
+                <div class="col-xs-5" style="font-size:12px">
+                    <div><span t-field="res_company.name" /><span class="pull-right">NIT: <span t-field="res_company.partner_id.ref" />-<span t-field="res_company.partner_id.dev_ref" /></span></div>
+                    <div><span t-field="res_company.street" /></div>
+                    <div><span t-field="res_company.city" /> / <span t-field="res_company.state_id" /></div>
+                    <div><span t-field="res_company.country_id" /></div>
+                    <div>Teléfono: <span class="pull-right" t-field="res_company.phone" /></div>
+                    <div>Sitio WEB: <span class="pull-right" t-field="res_company.website" /></div>
+                    <div style="border-bottom: 1px solid black;"/>
+                </div>
+                <div class="col-xs-1">
+                    <span>&#160;</span>
+                </div>
+                <div class="col-xs-2" style="font-size:11px">
+                    <div><span><b>RECIBO CAJA N°: </b></span></div>
+                    <div><span>Fecha:</span></div>
+                    <div><span>Recibido de:</span></div>
+                    <div><span>NIT ó CC:</span></div>
+                    <div><span><b>Valor recibido:</b></span></div>
+                    <div><span>Valor en letras:</span></div>
+                </div>
+                <div style="font-size:11px; text-align : right; margin-right: 6mm">
+                    <div style="font-size:13px"><b><span t-field="o.number"/></b></div>
+                    <div><span t-field="o.date"/></div>
+                    <div><span t-field="o.partner_id.name"/></div>
+                    <div><span><span t-field="o.partner_id.ref"/>-<span t-field="o.partner_id.dev_ref"/></span></div>
+                    <div><b>&#36; <span t-field="o.amount"/></b></div>
+                    <div><span t-esc="o.amount" t-esc-options="{&quot;widget&quot;: &quot;num2words&quot;}" /><span> pesos mcte</span></div>
+                </div>
+            </div>
+        </div>
+			<!-- cuerpo del documento -->
+			<div class="page">
+                <!-- Datos información del pago -->
+                <div class="col-xs-7">
+                    <table class="table table-condensed" style="margin:0px 0px 0px 0px" t-if="(sum((line.amount > 0 and line.amount or 0) for line in o.line_cr_ids)) > 0">
+                        <thead style="font-size:9px">
+                            <H6 colspan='5' align='left'><b>INFORMACIÓN DEL PAGO</b></H6>
+                            <H6><span>CONCEPTO: </span><span t-field="o.reference"/></H6>
+                            <tr>
+                                <th align='center'>CONTRATO O FACTURA</th>
+                                <th align='center'>FECHA</th>
+                                <th align='center'>IMPORTE ORIGINAL</th>
+                                <th align='center'>SALDO DE FACTURA</th>
+                                <th align='center'>VALOR</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="font-size:9px">
+                                <td><b>Total</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td colspan='2' align='left'><b>&#36; <t t-esc="'{0:,.0f}'.format(sum((line.amount > 0 and line.amount or 0) for line in o.line_cr_ids))"/></b></td>
+                            </tr>
+                        </tfoot>
+                        <tbody style="font-size:9px" t-foreach="o.line_cr_ids" t-as="l">
+                            <tr t-if="l.amount > 0">
+                                <td align='left'><span t-field="l.move_line_id.move_id.name"/></td>
+                                <td align='center' t-if="l.move_line_id.date_maturity"><span t-field="l.move_line_id.date_maturity"/></td>
+                                <td align='center' t-if="not l.move_line_id.date_maturity"><span t-field="l.move_line_id.date"/></td>
+                                <td align='center'>&#36; <span t-field="l.amount_original"/></td>
+                                <td align='center'>&#36; <span t-field="l.amount_unreconciled"/></td>
+                                <td align='center'>&#36; <span t-field="l.amount"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Datos de facturas rectificativas o anticipos -->
+                    <table class="table table-condensed" style="margin:0px 0px 0px 0px" t-if="(sum((line.amount > 0 and line.amount or 0) for line in o.line_dr_ids)) > 0">
+                        <thead style="font-size:9px">
+                            <tr>
+                                <th colspan='5' style="font-size:10px" align='left'>FACTURAS RECTIFICATIVAS O ANTICIPOS</th>
+                            </tr>
+                            <tr>
+                                <th align='center'>ASIENTO CONTABLE</th>
+                                <th align='center'>FECHA</th>
+                                <th align='center'>IMPORTE ORIGINAL</th>
+                                <th align='center'>SALDO DE FACTURA</th>
+                                <th align='center'>VALOR</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="font-size:9px">
+                                <td><b>Total</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td colspan='2' align='left'><b>&#36; <t t-esc="'{0:,.0f}'.format(sum((line.amount > 0 and line.amount or 0) for line in o.line_dr_ids))"/></b></td>
+                            </tr>
+                        </tfoot>
+                        <tbody style="font-size:9px" t-foreach="o.line_dr_ids" t-as="l">
+                            <tr t-if="l.amount > 0">
+                                <td align='left'><span t-field="l.move_line_id.ref" align='left'/></td>
+                                <td align='center' t-if="l.move_line_id.date_maturity"><span t-field="l.move_line_id.date_maturity"/></td>
+                                <td align='center' t-if="not l.move_line_id.date_maturity"><span t-field="l.move_line_id.date"/></td>
+                                <td align='center'>&#36; <span t-field="l.amount_original" align='right'/></td>
+                                <td align='center'>&#36; <span t-field="l.amount_unreconciled" align='right'/></td>
+                                <td align='center'>&#36; <span t-field="l.amount" align='right'/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Datos de las retenciones y/o los descuentos -->
+                <div class="col-xs-5">
+                    <table class="table table-condensed" style="margin:0px 0px 0px 0px" t-if="o.account_amount_ids">
+                        <thead style="font-size:9px">
+                            <tr>
+                                <th colspan='5' style="font-size:10px" align='left'>RETENCIONES Y/O DESCUENTOS</th>
+                            </tr>
+                            <tr>
+                                <th colspan='5' align='center'>COMENTARIO</th>
+                                <th colspan='1' align='center'>VALOR</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr style="font-size:9px">
+                                <td colspan='5' ><b>Total</b></td>
+                                <td colspan='1' align='right'><b>&#36; <t t-esc="'{0:,.0f}'.format(abs(sum(line.amount for line in o.account_amount_ids)))"/></b></td>
+                            </tr>
+                        </tfoot>
+                        <tbody style="font-size:9px" t-foreach="o.account_amount_ids" t-as="l">
+                            <tr>
+                                <td colspan='5'><span t-field="l.name" align='left'/></td>
+                                <td colspan='1' align='right'>&#36; <span t-esc="'{0:,.0f}'.format(abs(l.amount))"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    <tr class="row zero_min_height">
+                        <div class="col-xs-5" align="center">
+                        </div>
+                    </tr>
+			</div>
+			<!-- Pie de página  -->
+			<div class="footer">
+				<div class="col-xs-5" style="font-size:8px">
+					<span> </span>
+					<th ALIGN='left'>Página  <span class="page"/>  de  <span class="topage"/></th>
+				</div>
+                <div class="col-xs-3" style="font-size:10px">
+                    <div aling="center" style="border-bottom: 1px solid black"/>
+                    <th class="text-right">Firma y sello de recibido.</th>
+				</div>
+			</div>
+    </t>
+</template>
+</data>
+</openerp>

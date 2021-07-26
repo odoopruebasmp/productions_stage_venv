@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="account_report_diario_avancys_sql_view" model="ir.ui.view">
+            <field name="name">Libro Diario</field>
+            <field name="model">account.report.diario.avancys.sql</field>
+            <field name="arch" type="xml">
+            <form string="Report Options">
+                <label string=""/>
+                <group col="4">
+                   <field name="chart_account_id" widget='selection'/>
+                   <field name="company_id" invisible="1"/>
+                </group>
+                <notebook tabpos="up" colspan="4">
+                    <page string="Parametros del Informe">
+                        <group string="Fechas">
+                            <field name="date_from" />
+                            <field name="date_to" />
+                        </group>
+                        <group string="Filtros">
+                            <field name="estado" />
+                        </group>
+                        <group string="Cuentas">
+                            <field name="account_ids"/>
+                        </group>
+                        <group string="Diarios">
+                            <field name="journal_ids"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="calcular" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    or 
+                    <button string="Cancelar" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_account_report_diario_sql_avancys" model="ir.actions.act_window">
+            <field name="name">Libro Diario</field>
+            <field name="res_model">account.report.diario.avancys.sql</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_report_diario_avancys_sql_view"/>
+            <field name="target">new</field>
+        </record>
+             
+        <!-- <menuitem name="Libro Diario" id="menu_report_diario_2_sql_avancys" parent="menu_report_avancys" action="action_account_report_diario_sql_avancys" sequence="6" groups="report_odoo_extended.group_user_report_avancys_contable"/> -->
+      
+        <record id="view_account_report_diario_sql_avancys_line_tree" model="ir.ui.view">
+            <field name="name">account.report.diario.avancys.line.tree</field>
+            <field name="model">account.report.diario.avancys.line.sql</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="subcuenta" invisible="1"/>
+                    <field name="cuenta" invisible="1"/>
+                    <field name="grupo" invisible="1"/>
+                    <field name="clase" invisible="1"/>
+                    <field name="nivel" invisible="1"/>
+                    <field name="journal_name"/>
+                    <field name="debit"/>
+                    <field name="credit"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_report_diario_sql_avancys_line_filter" model="ir.ui.view">
+            <field name="name">account.report.diario.avancys.line.sql.filter</field>
+            <field name="model">account.report.diario.avancys.line.sql</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Libro diario">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="subcuenta"/>
+                    <field name="cuenta"/>
+                    <field name="grupo"/>
+                    <field name="clase"/>
+                    <field name="journal_name"/>
+                    <filter string="Clases" name="clase2" domain="[('nivel','=',1)]"/>
+                    <filter string="Grupos" name="grupo2" domain="[('nivel','=',2)]"/>
+                    <filter string="Cuentas" name="cuenta2" domain="[('nivel','=',3)]"/>
+                    <filter string="Subcuentas" name="subcuenta2" domain="[('nivel','=',4)]"/>
+                    <filter string="Auxiliares" name="code2" domain="[('nivel','=',5)]"/>
+                    <filter string="Detalle Diario" name="code2" domain="[('nivel','=',10)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_code" string="Cuentas" icon="terp-partner" domain="[]" context="{'group_by':'code'}"/>
+                        <filter name="group_journal_name" string="Diario" icon="terp-partner" domain="[]" context="{'group_by':'journal_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>        
+        
+        <record id="view_account_report_diario_sql_avancys_line_graph" model="ir.ui.view">
+            <field name="name">account.report.diario.avancys.line.sql.graph</field>
+            <field name="model">account.report.diario.avancys.line.sql</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Informe Libro diario y Balance" type="pivot" stacked="True">
+                    <field name="journal_id"/>
+                    <field name="debit" type="measure"/>
+                    <field name="credit" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="action_account_report_diario_sql_avancys_line_indicator" model="ir.actions.act_window">
+            <field name="name">Informe Libro Diario</field>
+            <field name="res_model">account.report.diario.avancys.line.sql</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        
+    </data>
+</openerp>

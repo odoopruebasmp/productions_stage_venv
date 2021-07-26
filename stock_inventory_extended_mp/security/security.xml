@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!-- Grupos de permisos para el modulo de Anticipos cliente Avancys-->
+        <record model="ir.module.category" id="module_category_avancys_ajustes">
+            <field name="name">Ajustes Inventario/Recosteo</field>
+        </record>
+        
+        <record model="res.groups" id="group_user_ajustes">
+            <field name="name">Usuario Ajustes</field>
+            <field name="category_id" ref="module_category_avancys_ajustes"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        
+        <record model="res.groups" id="group_manager_logistica_ajustes">
+            <field name="name">Manager Logistico</field>
+            <field name="category_id" ref="module_category_avancys_ajustes"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_ajustes'))]"/>
+        </record>
+                
+        <record model="res.groups" id="group_manager_contabilidad_ajustes">
+            <field name="name">Manager Contable</field>
+            <field name="category_id" ref="module_category_avancys_ajustes"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_ajustes'))]"/>
+        </record>
+        
+        <record model="res.groups" id="group_ejecutor_ajustes">
+            <field name="name">Ejecutor Ajustes</field>
+            <field name="category_id" ref="module_category_avancys_ajustes"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_ajustes'))]"/>
+        </record>
+        
+        <record model="res.groups" id="group_validador_ajustes">
+            <field name="name">Validador Ajustes</field>
+            <field name="category_id" ref="module_category_avancys_ajustes"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_ajustes'))]"/>
+        </record>
+        
+                
+        
+    </data>
+</openerp>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+res_city_base_user,model_res_city,model_res_city,base.group_user,1,0,0,0
+res_document_type,model_res_document_type,model_res_document_type,base.group_user,1,0,0,0
+access_partner_sexo,access_partner_sexo,model_partner_sexo,base.group_user,1,0,0,0
+
+access_partner_sexo,access_partner_sexo,model_partner_sexo,base.group_user,1,0,0,0
+access_partner_ocupacion,access_partner_ocupacion,model_res_partner_ocupacion,base.group_user,1,1,1,0
+access_partner_estado_civil,access_partner_estado_civil,model_res_partner_estado_civil,base.group_user,1,1,1,0
+access_partner_parentesco_partner,access_partner_parentesco_partner,model_res_partner_parentesco_partner,base.group_user,1,1,1,1
+access_partner_parentesco,access_res_partner_parentesco,model_res_partner_parentesco,base.group_user,1,1,1,1
+

@@ -1,0 +1,451 @@
+<openerp>
+    <data>
+        
+        <menuitem name="Horas Extra" parent="hr.menu_hr_root" id="menu_open_horas_extra" sequence="21"/>
+
+        <record model="ir.ui.view" id="payroll_extrahours_type_tree_view">
+            <field name="name">payroll.extrahours.tree</field>
+            <field name="model">hr.payroll.extrahours.type</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Categoria Horas Extra">
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="multiplicador" />
+                    <field name="contract_types" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="payroll_extrahours_type_form_view">
+            <field name="name">payroll.extrahours.form</field>
+            <field name="model">hr.payroll.extrahours.type</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Categoria Horas Extra" version="7.0">
+                    <sheet string="Categoria Hora Extra">
+                        <group col="8" colpsan="4">
+                            <field name="code" colpsan="2"/>
+                            <newline/>
+                            <field name="name" colpsan="2"/>
+                            <field name="multiplicador" colpsan="2" />
+                        </group>
+                        <newline />
+                        <notebook colspan="4">
+                            <page string="Descripcion">
+                                <field name="descripcion"/>
+                            </page>
+                            <page string="Calculo">
+                                <field name="python_code"/>
+                            </page>
+                            <page string="Horario">
+                                <field name="horario" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="diasemana"/>
+                                        <field name="hour_from" widget="float_time" class="oe_inline"/>
+                                        <field name="hour_to" widget="float_time" class="oe_inline"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Tipo de contratos">
+                                <field name="contract_types" nolabel="1" colspan="4"/>
+                            </page>
+                            <page string="Contabilidad">
+                                <group>
+                                    <field name="concept_category"/>
+                                    <field name="skip_payment"/>
+                                    <field name="partner_type"/>
+                                </group>
+                                <group cols="4">
+                                    <group cols="2" string="Débitos">
+                                        <field name="reg_adm_debit"/>
+                                        <field name="reg_com_debit"/>
+                                        <field name="reg_ope_debit"/>
+                                        <field name="int_adm_debit"/>
+                                        <field name="int_com_debit"/>
+                                        <field name="int_ope_debit"/>
+                                        <field name="apr_adm_debit"/>
+                                        <field name="apr_com_debit"/>
+                                        <field name="apr_ope_debit"/>
+                                    </group>
+                                    <group cols="2" string="Créditos">
+                                        <field name="reg_adm_credit"/>
+                                        <field name="reg_com_credit"/>
+                                        <field name="reg_ope_credit"/>
+                                        <field name="int_adm_credit"/>
+                                        <field name="int_com_credit"/>
+                                        <field name="int_ope_credit"/>
+                                        <field name="apr_adm_credit"/>
+                                        <field name="apr_com_credit"/>
+                                        <field name="apr_ope_credit"/>
+                                    </group>
+                                </group>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+            id="action_payroll_extrahours_type_tree_view">
+            <field name="name">Categoria Horas Extra</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payroll.extrahours.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="payroll_extrahours_type_tree_view" />
+        </record>
+
+        <menuitem id="payroll_extrahours_type_menu" name="Categorias de horas extra"
+            parent="menu_open_horas_extra"
+            action="action_payroll_extrahours_type_tree_view" sequence="21" />
+        
+        <record id="hr_extrahours_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.extrahours.search</field>
+            <field name='model'>hr.payroll.extrahours</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Horas Extra">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="duracion"/>
+                    <field name="total" widget="monetary"/>
+                    <field name="state"/>
+                    <field name="type_id"/>
+                    <field name="name"/>
+                    <group expand="0" string="Agrupar Por...">
+                        <filter name="group_type_id" string="Tipo" icon="terp-partner" domain="[]" context="{'group_by':'type_id'}"/>
+                        <filter name="group_employee_id"  string="Empleado" icon="terp-personal" domain="[]"  context="{'group_by':'employee_id'}"/>
+                        <filter name="group_contract_id"  string="Contrato" icon="terp-folder-orange" domain="[]" context="{'group_by':'contract_id'}"/>
+                        <filter name="group_state"  string="Estado" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+                
+        <record id="hr_extra_tree" model="ir.ui.view">
+            <field name='name'>hr.payroll.extrahours.tree</field>
+            <field name='model'>hr.payroll.extrahours</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Horas Extra">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="type_id"/>
+                    <field name="date_start"/>
+                    <field name="duracion"/>
+                    <field name="date_end"/>
+                    <field name="approve_date"/>
+                    <field name="total" widget="monetary" options="{'currency_field': 'moneda_local'}"/>
+                    <field name="moneda_local" invisible="1"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form view of hr_holiday_public -->
+        
+        <record id="hr_extra_form" model="ir.ui.view">
+            <field name='name'>hr.payroll.extrahours.form</field>
+            <field name='model'>hr.payroll.extrahours</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Hora Extra" version="7.0">
+                    <header>
+                        <button string="Pasar a Borrador" name="draft" states="refused,cancelled" icon="gtk-convert"/>
+                        <button string="Confirmar" name="confirm" states="draft" icon="gtk-yes"/>
+                        <button string="Validar" name="validate" states="confirmed" icon="gtk-apply" groups="base.group_hr_user" />
+                        <button string="Rechazar" name="refuse" states="confirmed" icon="gtk-no" groups="base.group_hr_user" />
+                        <button string="Cancelar" name="cancel"  states="draft,validated,confirmed,refused" icon="gtk-cancel"/>
+                        <button string="Calcular" name="compute_value" type="object" states="draft,validated,confirmed,refused,cancel" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,validated,done,paid" statusbar_colors='{"confirmed":"blue","validated":"green","cancelled":"red","refused":"red"}'/>
+                    </header>
+                    <sheet string="Hora Extra">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colpsan="4">
+                            <field name="employee_id" on_change="onchange_employee(employee_id,date_start,context)" colspan="2" groups="base.group_hr_user" />
+                            <field name="contract_id_2" colspan="2" groups="base.group_hr_user" />
+                            <field name="date_start" on_change="onchange_dates(date_start,duracion,False,employee_id,type_id,duracion,context)" colspan="2"/>
+                            <field name="approve_date" colspan="2"/>
+                            <field name="date_end" on_change="onchange_dates(date_start,False,date_end,employee_id,type_id,duracion,context)" colspan="2"/>
+                            <field name="unit" widget="monetary" options="{'currency_field': 'moneda_local'}"/>
+                            <field name="duracion" on_change="onchange_dates(date_start,duracion,False,employee_id,type_id,duracion,context)" colspan="2"/>
+                            <label for="totales" string="Total"/>
+                            <div>
+                                <field name="total" widget="monetary" options="{'currency_field': 'moneda_local'}" class="oe_inline"/>
+                                <field name="moneda_local" class="oe_inline"/>
+                            </div>
+                            <newline/>
+                            <field name="type_id" />
+                            <field name="payslip_id" readonly="True" attrs="{'invisible': [('state','!=','paid')]}"/>
+                        </group>
+                        <newline />
+                        <group>
+                            <separator string="Descripcion" colspan="4"/>
+                            <field name="description" colspan="4" nolabel="1"/>
+                            <field name="contract_id" invisible="True" colspan="2"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Calendario hr_payroll_extrahours -->
+        
+        <record model="ir.ui.view" id="extrahours_calendar_view">
+            <field name="name">Calendario Horas Extra</field>
+            <field name='model'>hr.payroll.extrahours</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Horas Extra" date_start="date_start" color="type_id" date_delay="duracion">
+                    <field name="employee_id"/>
+                    <field name="total" widget="monetary"/>
+                </calendar>
+            </field>
+        </record>
+        
+        <!-- Grafica de hr_payroll_extrahours -->
+        
+        <record id="view_extrahours_graph" model="ir.ui.view">
+            <field name="name">hr.payroll.extrahours.graph</field>
+            <field name="model">hr.payroll.extrahours</field>
+            <field name="arch" type="xml">
+                <graph string="Costo Horas Extra">
+                    <field name="type_id"/>
+                    <field name="total" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        
+        <!-- Action of hr_payroll_extrahours -->
+        
+        <record id="hr_extra_action" model="ir.actions.act_window">
+            <field name='name'>Horas Extra</field>
+            <field name='res_model'>hr.payroll.extrahours</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>calendar,tree,form,graph</field>
+        </record>
+        
+        <!-- Menu of hr_payroll_extrahours -->
+        
+        <record id="hr_extra_menu" model="ir.ui.menu">
+            <field name="name">Horas Extra</field>
+            <field name="parent_id" ref="menu_open_horas_extra"/>
+            <field name="action" ref="hr_extra_action"/>
+            <field name="sequence">10</field>
+        </record>
+        
+        <!-- DATA -->
+        
+        <record id="mt_horaextra_new" model="mail.message.subtype">
+            <field name="name">Nueva Hora Extra </field>
+            <field name="res_model">hr.payroll.extrahours</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Hora Extra Creada</field>
+        </record>
+        <record id="mt_horaextra_confirmada" model="mail.message.subtype">
+            <field name="name">Hora Extra Confirmada</field>
+            <field name="res_model">hr.payroll.extrahours</field>
+            <field name="default" eval="True"/> 
+            <field name="sequence" eval="2"/>
+            <field name="description">Hora Extra Confirmada</field>
+        </record>
+        <record id="mt_horaextra_validada" model="mail.message.subtype">
+            <field name="name">Hora Extra Validada</field>
+            <field name="res_model">hr.payroll.extrahours</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Hora Extra Validada</field>
+        </record>
+        <record id="mt_horaextra_rechazada" model="mail.message.subtype">
+            <field name="name">Hora Extra Rechazada</field>
+            <field name="res_model">hr.payroll.extrahours</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Hora Extra Rechazada</field>
+        </record>
+        <record id="mt_horaextra_cancelada" model="mail.message.subtype">
+            <field name="name">Hora Extra Cancelada</field>
+            <field name="res_model">hr.payroll.extrahours</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Hora Extra Cancelada</field>
+        </record>
+
+    <!-- WORKFLOW -->
+        
+        <!-- Workflow definition 
+            1. draft->submitted
+            2. submitted->accepted 
+            2. submitted->refused 
+            3. accepted->refused
+            3. accepted->done
+            4. refused->draft 
+            5. done->accepted
+            6. refused->cancel
+            6. submitted->cancel
+            6. accepted->cancel
+            6. cancel->draft
+        -->
+
+        <record model="workflow" id="wkf_extras">
+            <field name="name">hr.wkf.extras</field>
+            <field name="osv">hr.payroll.extrahours</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="extras_act_draft"> <!-- draft -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="extras_act_confirm"> <!-- submitted -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">confirm()</field>
+            <field name="split_mode">OR</field>
+        </record>
+
+        <record model="workflow.activity" id="extras_act_validate"> <!-- accepted -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">validate()</field>
+        </record>
+
+        <record model="workflow.activity" id="extras_act_refuse"> <!-- refused -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="name">refuse</field>
+            <field name="kind">function</field>
+            <field name="action">refuse()</field>
+        </record>
+        
+        <record model="workflow.activity" id="extras_act_cancel"> <!-- cancel -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">cancel()</field>
+        </record>
+        
+        <record model="workflow.activity" id="extras_act_done"> <!-- done -->
+            <field name="wkf_id" ref="wkf_extras" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">done()</field>
+        </record>
+        
+        <!--
+            workflow transition
+        -->
+
+        <record model="workflow.transition" id="extras_draft2confirm">  <!-- 1. draft->submitted -->
+            <field name="act_from" ref="extras_act_draft" />
+            <field name="act_to" ref="extras_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="extras_confirm2validate"> <!-- 2. submitted->accepted   -->
+            <field name="act_from" ref="extras_act_confirm" />
+            <field name="act_to" ref="extras_act_validate" />
+            <field name="signal">validate</field>
+        </record>
+
+        <record model="workflow.transition" id="extras_confirm2refuse"> <!-- 2. submitted->refused -->
+            <field name="act_from" ref="extras_act_confirm" />
+            <field name="act_to" ref="extras_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_validate2confirm"> <!-- 2. accepted->submitted -->
+            <field name="act_from" ref="extras_act_validate" />
+            <field name="act_to" ref="extras_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="extras_validate2refuse"> <!-- 3. accepted->refused -->
+            <field name="act_from" ref="extras_act_validate" />
+            <field name="act_to" ref="extras_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_validate2done"> <!-- 3. accepted->done -->
+            <field name="act_from" ref="extras_act_validate" />
+            <field name="act_to" ref="extras_act_done" />
+            <field name="signal">done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_refuse2draft"> <!-- 4. refused->draft -->
+            <field name="act_from" ref="extras_act_refuse" />
+            <field name="act_to" ref="extras_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_done2validate"> <!-- 5. done->accepted -->
+            <field name="act_from" ref="extras_act_done" />
+            <field name="act_to" ref="extras_act_validate" />
+            <field name="signal">cancel_done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_refuse2cancel"> <!-- 6. refuse->cancel -->
+            <field name="act_from" ref="extras_act_refuse" />
+            <field name="act_to" ref="extras_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_validate2cancel"> <!-- 6. validate->cancel -->
+            <field name="act_from" ref="extras_act_validate" />
+            <field name="act_to" ref="extras_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_confirm2cancel"> <!-- 6. submitted->cancel -->
+            <field name="act_from" ref="extras_act_confirm" />
+            <field name="act_to" ref="extras_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="extras_cancel2draft"> <!-- 6. cancel->draft -->
+            <field name="act_from" ref="extras_act_cancel" />
+            <field name="act_to" ref="extras_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="seq_extras_number_type" model="ir.sequence.type">
+            <field name="name">Numero extras</field>
+            <field name="code">payroll.extras.number</field>
+        </record>
+        <record id="seq_extras_number" model="ir.sequence">
+            <field name="name">Numero extras</field>
+            <field name="code">payroll.extras.number</field>
+            <field name="prefix">EXT-</field>
+            <field name="padding">10</field>
+        </record>
+    </data>
+</openerp>

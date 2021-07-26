@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="sale_order_view_more" model="ir.ui.view">
+            <field name="name">sale.order.view.more</field>
+            <field name="model">sale.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="deli_addres" attrs="{'readonly': [('state','not in',['draft','sent'])]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_view_more" model="ir.ui.view">
+            <field name="name">res.partner.view.more</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='street2']" position="after">
+                    <label for="main_street"/>
+                    <field name="main_street"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

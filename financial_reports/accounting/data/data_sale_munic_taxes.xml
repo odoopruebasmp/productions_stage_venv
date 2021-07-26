@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_sale_munic_taxes_data" model="fpa.financial.reports">
+            <field name="name">VENTAS - DEVOLUCIONES DE IMPUESTOS POR MUNICIPIO</field>
+            <field name="categ">imp</field>
+            <field name="action">action_fpa_sale_munic_taxes_wiz</field>
+            <field name="model_wzr">fpa.sale.munic.taxes.wizard</field>
+            <field name="model">fpa.sale.munic.taxes.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="template">financial_reports.template_report_sale_munic_taxes</field>
+            <field name="tree">view_fpa_sale_munic_taxes_tree</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('financial_id','=',%s)]]</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#272828</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">J,K,L</field>
+            <field name="sign">True</field>
+            <field name="type">sco</field>
+            <field name="sum_column">True</field>
+            <field name="view">wizard_fpa_sale_munic_taxes_view</field>
+            <field name="title">Tipo,Número,Fecha,Cuenta Analítica,Cód. Municipio,Municipio,Tipo Acción,NIT Cliente,Cliente,Valor,IVA,Auto RETE,Estado</field>
+            <field name="consulta">SELECT id FROM fpa_sale_munic_taxes_line
+            </field>
+            <field name="consulta_xlsx">SELECT (CASE WHEN mtl.tipo_doc = 'out_invoice' THEN 'FAC' ELSE 'NC' END),ai.number,mtl.invoice_date,ana.name,
+                                            mtl.munic_cod,rc.name,(CASE WHEN mtl.tipo_acc = 'serv' THEN 'Servicio' ELSE 'Venta' END),mtl.partner_nit,rp.name,
+                                            mtl.invoice_value,mtl.invoice_tax,mtl.invoice_auto,mtl.inv_state, False
+                                            FROM fpa_sale_munic_taxes_line mtl
+                                            INNER JOIN account_invoice ai ON mtl.invoice_id = ai.id
+                                            LEFT JOIN account_analytic_account ana ON mtl.analytic_acc_id = ana.id
+                                            LEFT JOIN res_city rc ON mtl.munic_id = rc.id
+                                            LEFT JOIN res_partner rp ON mtl.partner_id = rp.id
+                                            WHERE mtl.user_id = {user_id} AND mtl.company_id = {company_id}
+                                            AND mtl.financial_id = {financial_id}
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,513 @@
+<openerp>
+    <data>
+        
+        <menuitem name="Novedades" parent="hr.menu_hr_root" id="menu_open_novedades" sequence="22"/>
+        
+        <record model="ir.ui.view" id="payroll_novedades_category_form_view">
+            <field name="name">payroll.novedades.category.form</field>
+            <field name="model">hr.payroll.novedades.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Categoria de Novedades" version="7.0">
+                    <sheet string="Categoria de Novedades">
+                        <group col="4" colpsan="4">
+                            <field name="name" colpsan="2"/>
+                            <field name="code" colpsan="2"/>
+                        </group>
+                        <notebook>
+                            <page string="Descripcion">
+                                <field name="descripcion"/>
+                            </page>
+                            <page string="Contabilidad">
+                                <group>
+                                    <field name="concept_category"/>
+                                    <field name="partner_type"/>
+                                    <field name="partner_other" attrs="{'invisible':[('partner_type', '!=', 'other')], 'required': [('partner_type', '=', 'other')]}"/>
+                                    <field name="hour_novelty"/>
+                                    <field name="ex_rent" attrs="{'invisible':[('concept_category', 'in', ['deductions', 'contributions', 'subtotals', 'provisions'])]}"/>
+                                    <field name="ded_rent" attrs="{'invisible':[('concept_category', '!=', 'deductions')]}"/>
+                                    <field name="afc" attrs="{'invisible':[('concept_category', '!=', 'deductions')]}"/>
+                                </group>
+                                <group cols="4">
+                                    <group cols="2" string="Débitos">
+                                      <field name="reg_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="reg_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="reg_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                    </group>
+                                    <group cols="2" string="Créditos">
+                                      <field name="reg_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="reg_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="reg_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="int_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                      <field name="apr_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="payroll_novedades_type_tree_view">
+            <field name="name">hr.payroll.novedades.category.tree</field>
+            <field name="model">hr.payroll.novedades.category</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Categoria Novedades">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="descripcion" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+            id="action_payroll_novedades_category_tree_view">
+            <field name="name">Categoria Novedades</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payroll.novedades.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="payroll_novedades_type_tree_view" />
+        </record>
+        
+        <record id="hr_novedades_category_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.novedades.category.search</field>
+            <field name='model'>hr.payroll.novedades.category</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Categorias de Novedades">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="descripcion" />
+                </search>
+            </field>
+        </record>
+
+        <record id="hour_novelty_tree" model="ir.ui.view">
+            <field name="name">hour.novelty.tree</field>
+            <field name="model">hour.novelty</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="novelty_category"/>
+                    <field name="date"/>
+                    <field name="hours"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hour_novelty_form" model="ir.ui.view">
+            <field name="name">hour.novelty.form</field>
+            <field name="model">hour.novelty</field>
+            <field name="arch" type="xml">
+                <form string="Novedad por horas">
+                     <header>
+                        <button name="create_novelty" states="draft" string="Registrar novedad" type="object" class="oe_highlight"/>
+                         <button name="cancel" states="validated" string="Cancelar" type="object" class="oe_highlight"/>
+                         <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group cols="4">
+                            <group cols="2">
+                                <field name="employee_id" required="1" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                                <field name="novelty_category" required="1" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                                <field name="date" required="1" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                                <field name="hours" required="1" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                            </group>
+                            <group cols="2">
+                                <field name="contract_id"/>
+                                <field name="wage"/>
+                                <field name="days_month" required="1" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                                <field name="amount"/>
+                                <field name="novelty_id" attrs="{'invisible': [('state', '!=', 'validated')], 'readonly': [('state', '=', 'validated')]}"/>
+                            </group>
+                        </group>
+                     </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_massive_novelty" model="ir.actions.server">
+            <field name="name">Validar</field>
+            <field name="model_id" ref="model_hour_novelty"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_model') == 'hour.novelty' and context.get('active_ids'):
+                    self.massive_novelty(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_massive_novelty" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hour.novelty'" name="model"/>
+            <field name="name">Validar descuento por horas</field>
+            <field eval="'ir.actions.server,%d'%action_massive_novelty" name="value"/>
+        </record>
+
+        <record id="action_hour_novelty" model="ir.actions.act_window">
+            <field name="name">Descuento por horas</field>
+            <field name="res_model">hour.novelty</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="payroll_novedades_category_menu" name="Categorias de Novedades"
+            parent="menu_open_novedades"
+            action="action_payroll_novedades_category_tree_view" sequence="21" />
+
+        <menuitem id="hour_novelty_menu" name="Descuento por horas"
+            parent="menu_open_novedades" action="action_hour_novelty" sequence="30" />
+
+        <record id="hr_novedades_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.novedades.search</field>
+            <field name='model'>hr.payroll.novedades</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Novedades">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="valor"/>
+                    <field name="cantidad"/>
+                    <field name="total" widget="monetary"/>
+                    <field name="date"/>
+                    <field name="approve_date"/>
+                    <field name="state"/>
+                    <field name="category_id"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+                
+        <record id="hr_novedades_tree" model="ir.ui.view">
+            <field name='name'>hr.payroll.novedades.tree</field>
+            <field name='model'>hr.payroll.novedades</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Novedades">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="valor"/>
+                    <field name="cantidad"/>
+                    <field name="total" widget="monetary"/>
+                    <field name="date"/>
+                    <field name="approve_date"/>
+                    <field name="state"/>
+                    <field name="category_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="hr_novedades_form2" model="ir.ui.view">
+            <field name='name'>hr.payroll.novedades.form2</field>
+            <field name='model'>hr.payroll.novedades</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Novedades" version="7.0">
+                    <header>
+                        <button string="Pasar a Borrador" name="draft" type="object" states="refused,cancelled" icon="gtk-convert"/>
+                        <button string="Confirmar" name="confirm" type="object" states="draft" icon="gtk-yes"/>
+                        <button string="Validar" name="validate" type="object" states="confirmed" icon="gtk-apply" groups="base.group_hr_user" />
+                        <button string="Rechazar" name="refuse" type="object" states="confirmed" icon="gtk-no" groups="base.group_hr_user" />
+                        <button string="Cancelar" name="cancel" type="object"  states="validated,confirmed,refused" icon="gtk-cancel"/>
+                        <field name="state" widget="statusbar"  statusbar_visible="draft,confirmed,validated,done,refused,cancelled" statusbar_colors='{"confirmed":"blue","validated":"green","cancelled":"red","refused":"red"}'/>
+                    </header>
+                    <sheet string="Novedades">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colpsan="4">
+                            <field name="employee_id" colspan="2" />
+                            <field name="contract_id" colspan="2" />
+                            <field name="date" colspan="2" />
+                            <field name="approve_date" colspan="2"/>
+                            <field name="valor" colspan="2" />
+                            <newline />
+                            <field name="cantidad" colspan="2" />
+                            <newline />
+                            <label for="costo" string="Costo"/>
+                            <div>
+                                <field name="total" widget="monetary" options="{'currency_field': 'moneda_local'}" class="oe_inline"/>
+                                <field name="moneda_local" class="oe_inline"/>
+                            </div>
+                            <newline/>
+                            <field name="category_id" />
+                            <field name="payslip_id" attrs="{'invisible': [('state','!=','paid')]}"/>
+                        </group>
+                        <newline />
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Calendario hr_payroll_extrahours -->
+        
+        <!-- <record model="ir.ui.view" id="extrahours_calendar_view">
+            <field name="name">Calendario Horas Extra</field>
+            <field name='model'>hr.payroll.extrahours</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Horas Extra" date_start="date_start" color="type_id" date_delay="duracion">
+                    <field name="employee_id"/>
+                    <field name="total" widget="monetary"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record> -->
+        
+        <!-- Grafica de hr_payroll_extrahours -->
+        
+        <record id="view_novedades_graph" model="ir.ui.view">
+            <field name="name">hr.payroll.novedades.graph</field>
+            <field name="model">hr.payroll.novedades</field>
+            <field name="arch" type="xml">
+                <graph string="Novedades">
+                    <field name="category_id"/>
+                    <field name="total" operator="+"/>
+                    <field name="cantidad" operator="*"/>
+                </graph>
+            </field>
+        </record>
+        
+        <!-- Action of hr_payroll_extrahours -->
+        
+        <record id="hr_novedades_action" model="ir.actions.act_window">
+            <field name='name'>Novedades</field>
+            <field name='res_model'>hr.payroll.novedades</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form,graph</field>
+        </record>
+        
+        <!-- Menu of hr_payroll_extrahours -->
+        
+        <record id="hr_novedades_menu" model="ir.ui.menu">
+            <field name="name">Novedades</field>
+            <field name="parent_id" ref="menu_open_novedades"/>
+            <field name="action" ref="hr_novedades_action"/>
+            <field name="sequence">10</field>
+        </record>
+        
+        <!-- DATA -->
+        
+        <record id="mt_novedad_new" model="mail.message.subtype">
+            <field name="name">Nueva Novedad</field>
+            <field name="res_model">hr.payroll.novedades</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Novedad Creada</field>
+        </record>
+        <record id="mt_novedad_confirmada" model="mail.message.subtype">
+            <field name="name">Novedad Confirmada</field>
+            <field name="res_model">hr.payroll.novedades</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Novedad Confirmada</field>
+        </record>
+        <record id="mt_novedad_validada" model="mail.message.subtype">
+            <field name="name">Novedad Validada</field>
+            <field name="res_model">hr.payroll.novedades</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Novedad Validada</field>
+        </record>
+        <record id="mt_novedad_rechazada" model="mail.message.subtype">
+            <field name="name">Novedad Rechazada</field>
+            <field name="res_model">hr.payroll.novedades</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Novedad Rechazada</field>
+        </record>
+        <record id="mt_novedad_cancelada" model="mail.message.subtype">
+            <field name="name">Novedad Cancelada</field>
+            <field name="res_model">hr.payroll.novedades</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Novedad Cancelada</field>
+        </record>
+        
+        <!-- WORKFLOW -->
+        
+        <!-- Workflow definition 
+            1. draft->submitted
+            2. submitted->accepted 
+            2. submitted->refused 
+            3. accepted->refused
+            3. accepted->done
+            4. refused->draft 
+            5. done->accepted
+            6. refused->cancel
+            6. submitted->cancel
+            6. accepted->cancel
+            6. cancel->draft
+        -->
+
+        <record model="workflow" id="wkf_novedades">
+            <field name="name">hr.wkf.novedades</field>
+            <field name="osv">hr.payroll.novedades</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="novedades_act_draft"> <!-- draft -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="action">draft()</field>
+            <field name="kind">function</field>
+        </record>
+
+        <record model="workflow.activity" id="novedades_act_confirm"> <!-- submitted -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">confirm()</field>
+            <field name="split_mode">OR</field>
+        </record>
+
+        <record model="workflow.activity" id="novedades_act_validate"> <!-- accepted -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">validate()</field>
+        </record>
+
+        <record model="workflow.activity" id="novedades_act_refuse"> <!-- refused -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="name">refuse</field>
+            <field name="kind">function</field>
+            <field name="action">refuse()</field>
+        </record>
+        
+        <record model="workflow.activity" id="novedades_act_cancel"> <!-- cancel -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">cancel()</field>
+        </record>
+        
+        <record model="workflow.activity" id="novedades_act_done"> <!-- done -->
+            <field name="wkf_id" ref="wkf_novedades" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">done()</field>
+        </record>
+        
+        <!--
+            workflow transitions
+        -->
+
+        <record model="workflow.transition" id="novedades_draft2confirm">  <!-- 1. draft->submitted -->
+            <field name="act_from" ref="novedades_act_draft" />
+            <field name="act_to" ref="novedades_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="novedades_confirm2validate"> <!-- 2. submitted->accepted   -->
+            <field name="act_from" ref="novedades_act_confirm" />
+            <field name="act_to" ref="novedades_act_validate" />
+            <field name="signal">validate</field>
+        </record>
+
+        <record model="workflow.transition" id="novedades_confirm2refuse"> <!-- 2. submitted->refused -->
+            <field name="act_from" ref="novedades_act_confirm" />
+            <field name="act_to" ref="novedades_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_validate2confirm"> <!-- 2. accepted->submitted -->
+            <field name="act_from" ref="novedades_act_validate" />
+            <field name="act_to" ref="novedades_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="novedades_validate2refuse"> <!-- 3. accepted->refused -->
+            <field name="act_from" ref="novedades_act_validate" />
+            <field name="act_to" ref="novedades_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_validate2done"> <!-- 3. accepted->done -->
+            <field name="act_from" ref="novedades_act_validate" />
+            <field name="act_to" ref="novedades_act_done" />
+            <field name="signal">done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_refuse2draft"> <!-- 4. refused->draft -->
+            <field name="act_from" ref="novedades_act_refuse" />
+            <field name="act_to" ref="novedades_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_done2validate"> <!-- 5. done->accepted -->
+            <field name="act_from" ref="novedades_act_done" />
+            <field name="act_to" ref="novedades_act_validate" />
+            <field name="signal">cancel_done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_refuse2cancel"> <!-- 6. refuse->cancel -->
+            <field name="act_from" ref="novedades_act_refuse" />
+            <field name="act_to" ref="novedades_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_validate2cancel"> <!-- 6. validate->cancel -->
+            <field name="act_from" ref="novedades_act_validate" />
+            <field name="act_to" ref="novedades_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_confirm2cancel"> <!-- 6. submitted->cancel -->
+            <field name="act_from" ref="novedades_act_confirm" />
+            <field name="act_to" ref="novedades_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="novedades_cancel2draft"> <!-- 6. cancel->draft -->
+            <field name="act_from" ref="novedades_act_cancel" />
+            <field name="act_to" ref="novedades_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="seq_novedades_number_type" model="ir.sequence.type">
+            <field name="name">Numero Novedad</field>
+            <field name="code">payroll.novedades.number</field>
+        </record>
+        <record id="seq_novedades_number" model="ir.sequence">
+            <field name="name">Numero Novedad</field>
+            <field name="code">payroll.novedades.number</field>
+            <field name="prefix">NOV-</field>
+            <field name="padding">10</field>
+        </record>
+    </data>
+</openerp>

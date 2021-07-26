@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <!-- Nómina -->
+      <record id="papel_nomina" model="report.paperformat">
+          <field name="name">Nómina</field>
+          <field name="default" eval="True"/>
+          <field name="format">custom</field>
+          <field name="page_height">280</field>
+          <field name="page_width">216</field>
+          <field name="orientation">Portrait</field>
+          <field name="margin_top">10</field>
+          <field name="margin_bottom">10</field>
+          <field name="margin_left">20</field>
+          <field name="margin_right">20</field>
+          <field name="header_line" eval="False"/>
+          <field name="header_spacing">1</field>
+          <field name="dpi">80</field>
+      </record>
+        <!-- Factura de Venta -->
+        <!--<report
+        auto="False"
+        id="account_invoice_report_factura_id2"
+        model="account.invoice"
+        name="account.report_invoice2"
+        rml="reportes_moreproducts/report/factura.rml"
+        string="Factura Cliente"
+        header="False"/>-->
+
+        <!-- Albaran -->
+        <report
+            id="stock_picking_mp"
+            model="stock.picking"
+            string="Albaran General"
+            report_type="qweb-pdf"
+            name="reportes_moreproducts.stock_picking_mp2"
+            file="reportes_moreproducts.stock_picking_mp2"
+            />
+
+        <!-- Remision -->
+        <report
+            id="stock_remision_mp"
+            model="stock.picking"
+            string="Albaran Puertas"
+            report_type="qweb-pdf"
+            name="reportes_moreproducts.stock_picking_mp3"
+            file="reportes_moreproducts.stock_picking_mp3"
+            />
+
+        <!-- Remision Cross Docking -->
+        <report
+            id="stock_remision_mp_cross"
+            model="stock.picking"
+            string="Albaran Cross Docking"
+            report_type="qweb-pdf"
+            name="reportes_moreproducts.stock_picking_mp4"
+            file="reportes_moreproducts.stock_picking_mp4"
+            />
+
+        <!-- Pedido de Compra -->
+        <!--<report
+            id="purchase_order_mp"
+            model="purchase.order"
+            string="PEDIDO DE COMPRA"
+            report_type="qweb-pdf"
+            name="reportes_moreproducts.purchase_order_mp_report"
+            file="reportes_moreproducts.purchase_order_mp_report"
+            />-->
+
+        <!-- Pedido de Venta -->
+        <!--<report
+            id="sale_order_mp"
+            model="sale.order"
+            string="PEDIDO DE VENTA"
+            report_type="qweb-pdf"
+            name="reportes_moreproducts.sale_order_mp_report"
+            file="reportes_moreproducts.sale_order_mp_report"
+            />-->
+
+
+    </data>
+</openerp>

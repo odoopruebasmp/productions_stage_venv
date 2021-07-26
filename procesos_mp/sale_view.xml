@@ -1,0 +1,109 @@
+<openerp>
+    <data>
+        
+        <record id="sale_order_view_inherit" model="ir.ui.view">
+            <field name="name">sale_order_view_inherit</field>
+            <field name="model">sale.order</field>
+            <field name='priority'>16</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='acuerdo_promocional'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='ean_del_tem'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position=	'after'>
+                    <field name='ean_del_tem'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='plu_lineas'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='cantidad_total'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='ean_punto_de_venta'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position='after'>
+                    <field name='ean_punto_de_venta'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='precio_bruto'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position='after'>
+                    <field name='precio_bruto'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='precio_neto'/>
+                </xpath>              
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position='after'>
+                    <field name='precio_neto'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='nombre_punto_de_venta'/>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position='after'>
+                    <field name='nombre_punto_de_venta'/>
+                </xpath>              
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='cliente_final'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position='after'>
+                    <field name='note_pedido'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='sequence']" position='after'>
+                    <field name='despacho'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position='after'>
+                    <field name='precio_neto'/>
+                </xpath>
+                <xpath expr="//field[@name='date_order']" position='after'>
+                    <field name='fecha_malla'/>
+                    <field name='n_oc'/>
+                </xpath>                
+                <xpath expr="//field[@name='partner_shipping_id']" position='after'>
+                    <field name='punto_de_venta'/>
+                </xpath>            
+                <!--<xpath expr="//field[@name='partner_shipping_id']" position='after'>
+                    <field name='remisionada'/>
+                </xpath>    -->            
+                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position='attributes'>
+                    <attribute name='invisible'>1</attribute>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position='attributes'>
+                    <attribute name='invisible'>1</attribute>
+                </xpath>                
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom']" position='attributes'>
+                    <attribute name='invisible'>1</attribute>
+                </xpath>                                                            
+            </field>
+        </record>
+
+        <record id="sale_order_tree_inherit" model="ir.ui.view">
+            <field name="name">sale_order_tree_view_inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml"> 
+                <xpath expr="//field[@name='partner_id']" position='after'>
+                    <field name='n_oc'/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_sale_order_search_inherit_mp" model="ir.ui.view">
+            <field name="name">sale.order.search.inherit.mp</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after" >
+                    <field name="n_oc" string="Numero O.C."/>
+                </field>
+                <group position="inside">
+                    <filter string="Numero O.C." name="n_oc" domain="[]"  context="{'group_by':'n_oc'}"/>
+                </group>                
+            </field>
+        </record>
+
+     </data>
+</openerp>

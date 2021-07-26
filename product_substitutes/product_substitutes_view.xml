@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+        
+        
+        <record model="ir.ui.view" id="view_product_product_substitutes_form">
+            <field name="name">product.product.substitutes.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">                           
+                <notebook position='inside'>
+                    <page string="Productos Sustitutos">
+                        <group>
+                            <field name="product_substitutes_ids" nolabel="1">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="coheficiente"/>
+                                    <field name="qty"/>
+                                    <field name="qty_in"/>
+                                </tree>        
+                            </field>                            
+                        </group>
+                    </page>
+                    <page string="Productos Complementarios">
+                        <group>
+                            <field name="product_complementary_ids" nolabel="1">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="coheficiente"/>
+                                    <field name="qty"/>
+                                    <field name="qty_in"/>
+                                </tree>        
+                            </field>                            
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!--PRODUCTOS SUSTITUTOS-->
+        <record model="ir.ui.view" id="view_product_substitutes_form">
+            <field name="name">product.substitutes.form</field>
+            <field name="model">product.substitutes</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml"> 
+                <form string="Productos Sustitutos" version="7.0">
+                <sheet string="Productos Sustitutos">
+                        <group col="4" colspan="4">
+                            <field name="product_id"/>
+                        </group>
+                        <separator colspan="4"/>
+                        <group col="4" colspan="4">
+                            <field name="qty"/>
+                        </group>
+                        <group col="4" colspan="4">
+                            <field name="coheficiente"/>
+                            <field name="qty_substitutes"/>
+                            <field name="qty_substitutes_in"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lineas">
+                                <field name="location_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="location_id"/>
+                                        <field name="qty"/>
+                                        <field name="qty_in"/>
+                                    </tree>        
+                                </field> 
+                            </page>                        
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!--PRODUCTOS COMPLEMENTARIOS-->
+        <record model="ir.ui.view" id="view_product_complementary_form">
+            <field name="name">product.complementary.form</field>
+            <field name="model">product.complementary</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml"> 
+                <form string="Productos Complementarios" version="7.0">
+                    <sheet string="Productos Complementarios">
+                        <group col="4" colspan="4">
+                            <field name="product_id"/>
+                        </group>
+                        <separator colspan="4"/>
+                        <group col="4" colspan="4">
+                            <field name="qty"/>
+                        </group>
+                        <group col="4" colspan="4">
+                            <field name="coheficiente"/>
+                            <field name="qty_complementary"/>
+                            <field name="qty_complementary_in"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Lineas">
+                                <field name="line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="location_id"/>
+                                        <field name="qty"/>
+                                        <field name="qty_in"/>
+                                    </tree>        
+                                </field> 
+                            </page>                        
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+               
+                
+    </data>
+</openerp>

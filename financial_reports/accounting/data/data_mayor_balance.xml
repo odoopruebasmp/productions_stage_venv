@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_mayor_balance_data" model="fpa.financial.reports">
+            <field name="name">MAYOR Y BALANCE</field>
+            <field name="categ">co</field>
+            <field name="action">action_fpa_mayor_balance</field>
+            <field name="model_wzr">fpa.mayor.balance.wizard</field>
+            <field name="model">fpa.mayor.balance.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="template">financial_reports.template_mayor_balance</field>
+            <field name="tree">view_fpa_mayor_balance_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">D,E,F,G,H,I</field>
+            <field name="sign">True</field>
+            <field name="type">con</field>
+            <field name="domain">
+                [('user_id','=',%s),('account_id','!=',False),('company_id','=',%s),('financial_id','=',%s)]
+            </field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="view">wizard_fpa_mayor_balance_view</field>
+            <field name="title">Concepto,Codigo,Cuenta,Saldo Inicial Debito,Saldo Inicial Credito,Debito,Credito,Saldo Final Debito,Saldo Final Credito</field>
+            <field name="fields">concepto, code, cuenta, ref, name, amount_inicial, debit, credit, amount_final</field>
+            <field name="consulta">select myb.id from fpa_mayor_balance_line myb WHERE myb.user_id = {user_id} AND
+                myb.company_id = {company_id} AND myb.financial_id = {financial_id} ORDER BY myb.cuenta asc
+            </field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name) as concepto,
+                aa.code,
+                COALESCE(it.value,aa.name) as cuenta,
+                myb.amount_inicial_debit,
+                myb.amount_inicial_credit,
+                myb.debit,
+                myb.credit,
+                myb.amount_final_debit,
+                myb.amount_final_credit,
+                myb.bold
+                from fpa_mayor_balance_line myb
+                inner join fpa_mayor_balance fbp on fbp.id = myb.encabezado_id
+                left join fpa_financial_reports_concepts ffrc on ffrc.id = myb.concepts_id
+                left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id =
+                ffrc.id AND itc.lang = '{lang}'
+                left join account_account aa on aa.id = myb.account_id
+                left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang =
+                '{lang}'
+                WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id} AND myb.financial_id = {financial_id}
+                ORDER BY ffrc.sequence, aa.code NULLS FIRST, aa.code asc
+            </field>
+        </record>
+        <record id="mb_niveles_99" model="fpa.niveles">
+            <field name="code">99</field>
+            <field name="name">Auxiliares</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_mayor_balance_data')"/>
+            <field name="help">Muestra totales por auxiliares</field>
+        </record>
+        <record id="mb_niveles_100" model="fpa.niveles">
+            <field name="code">100</field>
+            <field name="name">Total por concepto</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_mayor_balance_data')"/>
+            <field name="help">Muestra totales por concepto</field>
+        </record>
+    </data>
+</openerp>

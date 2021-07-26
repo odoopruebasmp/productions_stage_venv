@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        
+        <record id="view_hr_holidays_filter_extended" model="ir.ui.view">
+            <field name="name">hr.holidays.filter</field>
+            <field name="model">hr.holidays</field>
+            <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter"/>
+            <field name="arch" type="xml">
+                <filter name="validated" position="after">
+                    <filter icon="terp-camera_test" domain="[('state','=','paid')]" string="Pagadas" name="paid"/>
+                </filter>
+                <filter name="group_employee" position="replace">
+                </filter>
+                <filter name="group_type" position="after">
+                    <filter name="group_employee" string="Employee" icon="terp-personal" domain="[]" context="{'group_by':'employee_id'}"/>
+                </filter>
+                <field name="employee_id" position="after">
+                    <field name="contract_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="hr_holidays.open_company_allocation">
+            <field name="context">{'search_default_group_type': 1, 'search_default_group_employee': 1, 'search_default_validated': 1, 'search_default_paid': 1}</field>
+            <field name="domain">[('holiday_type','=','employee')]</field>
+        </record>
+        
+        <record id="view_holiday_extended" model="ir.ui.view">
+            <field name="name">hr.holidays.tree</field>
+            <field name="model">hr.holidays</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_holidays.view_holiday"/>
+            <field name="arch" type="xml">
+                <field name="holiday_type" position="replace"/>
+                <field name="holiday_status_id" position="replace"/>
+                <field name="employee_id" position="after">
+                    <field name="contract_id"/>
+                </field>
+                <field name="state" position="before">
+                    <field name="holiday_status_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="edit_holiday_new_extended" model="ir.ui.view">
+            <field name="name">Allocation Request Extended</field>
+            <field name="model">hr.holidays</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group/div/group" position="attributes">
+                    <attribute name="attrs">{'invisible': [('type', '=', 'null')]}</attribute>
+                </xpath>
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,validate,paid" statusbar_colors='{"confirm":"blue","paid":"green","refuse":"red"}'/>
+                </field>
+                <button name="confirm" position="replace"/>
+                <button name="validate" position="replace"/>
+                <button name="second_validate" position="replace"/>
+                <button name="refuse" position="replace"/>
+                <button name="reset" position="replace">
+                    <button name="holidays_confirm" states="draft" string="Confirmar" type="object" class="oe_highlight"/>
+                    <button name="holidays_validate" states="confirm" string="Validar" type="object" class="oe_highlight"/>
+                    <button name="holidays_refuse" states="confirm,validate,validate1" string="Cancelar" type="object" class="oe_highlight"/>
+                    <button string="Pasar a borrador" name="holidays_reset" type="object" states="cancel,refuse"/>
+                    <button string="Calcular" name="compute" states="draft,confirm" type="object" class="oe_highlight"/>
+                </button>
+                <field name="department_id" position="replace"/>
+                <field name="holiday_type" position="replace">
+                    <field name="holiday_type" invisible='1'/>
+                </field>
+                <field name="employee_id" position="replace"/>
+                <field name="holiday_status_id" position="before">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="approve_date"/>
+                    <field name="general_illness_ext" readonly="1" invisible="1"/>
+                    <field name="ibc"/>
+                    <field name="vacaciones" readonly="1" invisible="1"/>
+                    <field name="payed_vac" attrs="{'invisible': [('vacaciones','!=',True)]}"/>
+                    <field name="special_vac_base" attrs="{'invisible': [('vacaciones','!=',True)]}"/>
+                    <field name="general_illness" readonly="1" invisible="1"/>
+                    <field name="atep" readonly="1" invisible="1"/>
+                    <field name="absence_id" attrs="{'invisible': [('general_illness_ext','!=',True)], 'required': [('general_illness_ext','=',True)]}"/>
+                    <field name="payslip_id" attrs="{'invisible': [('state','!=','paid')]}"/>
+                </field>
+                <field name="notes" position="replace"/>
+                <field name="number_of_days_temp" position="replace">
+                    <group>
+                        <field name="number_of_days_temp" attrs="{'readonly':[('type', '=', 'remove')]}" string="Dias"/>
+                        <field name="number_of_days_in_payslip" string="Dias en Nomina"/>
+                        <button name="set_for_one_day" type="object" states="draft" string="1 Dia Ausencia" class="oe_link oe_edit_only" context="{'type': 'normal',}"/>
+                        <button name="set_for_one_day_payslip" type="object" states="draft" string="1 Dia Nomina" class="oe_link oe_edit_only" context="{'type': 'payslip',}"/>
+                    </group>
+                </field>
+                <field name="name" position="replace"/>
+                <xpath expr="//sheet/group" position="before">
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </xpath>
+                <sheet position="inside">
+                    <notebook>
+                        <page string="Descripcion">
+                            <group>
+                                <field name="notes" nolabel="1" colspan="4"/>
+                            </group>
+                        </page>
+                        <page string="Detalle Dias">
+                            <field name="line_ids" nolabel="1" colspan="4">
+                                <tree string="Dias de Ausencia">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="week_day"/>
+                                    <field name="hours_assigned" widget="float_time" sum="Total Hours"/>
+                                    <field name="days_assigned" sum="Total Days"/>
+                                    <field name="hours_payslip" widget="float_time" sum="Total Hours"/>
+                                    <field name="days_payslip" sum="Total Days"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </field>
+        </record>
+        
+        <record id="hr_holidays_view_leave_form1" model="ir.ui.view">
+            <field name="name">Leave Request extended</field>
+            <field name="model">hr.holidays</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_holidays.allocation_company_new"/>
+            <field name="arch" type="xml">
+                <!-- DEPRECATED -->
+                <form>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_edit_holiday_status_extended_form" model="ir.ui.view">
+            <field name="name">hr.holidays.status.extended.form</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="code"/>
+                </field>
+                <field name="active" position="before">
+                    <field name="working_hours_id"/>
+                    <field name="force_working_hours"/>
+                    <field name="working_hours_slip_id"/>
+                    <field name="complete_pay"/>
+                    <field name="apply_publicholiday"/>
+                    <field name="apply_publicholiday_pay_days"/>
+                    <field name="sub_wd"/>
+                    <field name="no_payable"/>
+                    <field name="maternal_lic"/>
+                    <field name="paternal_lic"/>
+                    <field name="general_illness"/>
+                    <field name="atep"/>
+                    <field name="general_illness_ext" attrs="{'invisible':[('general_illness','!=',True), ('atep','!=',True)]}"/>
+                    <field name="gi_b2" attrs="{'invisible':[('general_illness','!=',True)]}"/>
+                    <field name="gi_b90" attrs="{'invisible':[('general_illness','!=',True)]}"/>
+                    <field name="gi_b180" attrs="{'invisible':[('general_illness','!=',True)]}"/>
+                    <field name="gi_a180" attrs="{'invisible':[('general_illness','!=',True)]}"/>
+                    <field name="ibc"/>
+                    <field name="apply_payslip_pay_31"/>
+                    <field name="apply_cut"/>
+                    <field name="holiday_valid_date"/>
+                    <field name="disc_day_off"/>
+                    <field name="vacaciones"/>
+                    <field name="overlap"/>
+                    <field name="full_day"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Contabilidad">
+                        <group>
+                            <field name="concept_category"/>
+                            <field name="partner_type"/>
+                            <field name="ex_rent" attrs="{'invisible':[('concept_category', 'in', ['deductions', 'contributions', 'subtotals', 'provisions'])]}"/>
+                        </group>
+                        <group cols="4">
+                            <group cols="2" string="Débitos">
+                              <field name="reg_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="reg_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="reg_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            </group>
+                            <group cols="2" string="Créditos">
+                              <field name="reg_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="reg_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="reg_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="int_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                              <field name="apr_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!-- Holiday assignation rules -->
+        <record id="hr_holidays_allocation_rule_search" model="ir.ui.view">
+            <field name="name">hr.holidays.allocation.rule.search</field>
+            <field name="model">hr.holidays.allocation.rule</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Leave Allocation Rule">
+                    <field name="name"/>
+                    <field name="no_of_leave"/>
+                    <field name="year_from"/>
+                    <field name="month_from"/>
+                    <field name="total_month_from"/>
+                    <newline/>
+                    <field name="year_to"/>
+                    <field name="month_to"/>
+                    <field name="total_month_to"/>
+                    <field name="repeated_year"/>
+                    <field name="leave_type_id"/>
+                    <field name="allocation_type"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_holidays_allocation_rule_tree_view">
+            <field name="name">hr.holidays.allocation.rule.tree</field>
+            <field name="model">hr.holidays.allocation.rule</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Leave Allocation Rule">
+                    <field name="name"/>
+                    <field name="no_of_leave"/>
+                    <field name="year_from"/>
+                    <field name="year_to"/>
+                    <field name="month_from"/>
+                    <field name="month_to"/>
+                    <field name="total_month_from"/>
+                    <field name="total_month_to"/>
+                    <field name="repeated_year"/>
+                    <field name="leave_type_id"/>
+                    <field name="allocation_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_holidays_allocation_rule_form_view">
+            <field name="name">hr.holidays.allocation.rule.form</field>
+            <field name="model">hr.holidays.allocation.rule</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Leave Allocation Rule">
+                    <field name="name"/>
+                    <field name="no_of_leave"/>
+                    <field name="year_from" required="1"/>
+                    <field name="year_to"/>
+                    <field name="month_from" required="1"/>
+                    <field name="month_to"/>
+                    <field name="total_month_from"/>
+                    <field name="total_month_to"/>
+                    <field name="allocation_type"/>
+                    <field name="repeated_year" attrs="{'invisible': [('allocation_type', '!=', 'leave')]}"/>
+                    <field name="leave_type_id" attrs="{'invisible': [('allocation_type', '!=', 'leave')], 'required': [('allocation_type', '=', 'leave')]}"/>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_holidays_allocation_rule_view">
+            <field name="name">Allocation Rules</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.holidays.allocation.rule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hr_holidays_allocation_rule_menu" parent="hr_payroll.payroll_configure"
+            action="action_hr_holidays_allocation_rule_view"/>
+
+                <!-- Search view of hr_holiday_public -->
+        
+        <record id="hr_holiday_public_search" model="ir.ui.view">
+            <field name='name'>hr.holiday.public.search</field>
+            <field name='model'>hr.holiday.public</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Search holiday">
+                        <field name="name"/>
+                        <field name="state"/>                       
+                </search>
+            </field>
+        </record>
+            
+        <!-- Tree view of hr_holiday_public -->
+                
+        <record id="hr_holiday_public_tree" model="ir.ui.view">
+            <field name='name'>hr.holiday.public.tree</field>
+            <field name='model'>hr.holiday.public</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Holidays">
+                    <field name="name"/>
+                    <!-- <field name="state"/> -->
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form view of hr_holiday_public -->
+        
+        <record id="hr_holiday_public_form" model="ir.ui.view">
+            <field name='name'>hr.holiday.public.form</field>
+            <field name='model'>hr.holiday.public</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Holiday detail">
+                    <group colspan="4" col="4">
+                        <field name="name"/>
+                    </group>
+                    <newline />
+                    <notebook colspan="4">
+                        <page string="Holidays">
+                            <field name="holiday_line_ids" nolabel="1" colspan="4"/>
+                        </page>
+                    </notebook>
+                    <newline />
+                </form>
+            </field>
+        </record>
+        
+        <!-- Action of hr_holiday_public -->
+        
+        <record id="hr_holiday_public_action" model="ir.actions.act_window">
+            <field name='name'>Dias Festivos</field>
+            <field name='res_model'>hr.holiday.public</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+        
+        <!-- Menu of hr_holiday_public -->
+        
+        <menuitem name="Dias Festivos" action="hr_holiday_public_action" id="hr_holiday_public_menu" parent="hr.menu_hr_configuration" sequence="11"/>
+
+        <!-- hr.menu_hr_main -->
+        
+        <!-- Search view of hr_holiday_lines -->
+        
+        <record id="hr_holiday_lines_search" model="ir.ui.view">
+            <field name='name'>hr.holiday.lines.search</field>
+            <field name='model'>hr.holiday.lines</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Search holiday">
+                    <field name="holiday_date"/>
+                    <field name="name"/>
+                    <field name="day"/>
+                    <field name="holiday_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Tree view of hr_holiday_lines -->
+                
+        <record id="hr_holiday_lines_tree" model="ir.ui.view">
+            <field name='name'>hr.holiday.lines.tree</field>
+            <field name='model'>hr.holiday.lines</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Holidays">
+                    <field name="holiday_date"/>
+                    <field name="name"/>
+                    <field name="day"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form view of hr_holiday_lines -->
+        
+        <record id="hr_holiday_lines_form" model="ir.ui.view">
+            <field name='name'>hr.holiday.lines.form</field>
+            <field name='model'>hr.holiday.lines</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Holiday detail">
+                    <group colspan="4" col="4">
+                        <field name="holiday_date" on_change='onchange_holiday_date(holiday_date)'/>
+                        <field name="name"/>
+                        <field name="day"/>
+                        <field name="state" invisible="1"/>
+                    </group>    
+                </form>
+            </field>
+        </record>
+        
+        <!-- Calendar -->
+        
+        <record id="resource_calendar_form_extended" model="ir.ui.view">
+            <field name="name">resource.calendar.form</field>
+            <field name="model">resource.calendar</field>
+            <field name="inherit_id" ref="resource.resource_calendar_form"/>
+            <field name="arch" type="xml">
+                <field name="manager" position="after">
+                    <field name="hours_payslip"/>
+                    <field name="tz"/>
+                    <field name="public_holidays_id"/>
+                    <field name="calendar_type"/>
+                    <!-- <field name="month_of_thirty"/> -->
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_resource_calendar_attendance_extended_form" model="ir.ui.view">
+            <field name="name">resource.calendar.attendance.payroll.form</field>
+            <field name="model">resource.calendar.attendance</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="resource.view_resource_calendar_attendance_form"/>
+            <field name="arch" type="xml">
+                <field name="date_from" position="replace">
+                </field>
+            </field>
+        </record>
+        
+        <!-- WORKFLOW -->
+        <record model="workflow.transition" id="hr_holidays.holiday_draft2confirm"> <!-- 1. draft->submitted (no signal) -->
+            <field name="act_from" ref="hr_holidays.act_draft" />
+            <field name="act_to" ref="hr_holidays.act_confirm" />
+            <field name="signal">confirm</field>
+            <field name="condition">True</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+        
+        <record model="workflow.activity" id="hr_holidays.act_draft"> <!-- draft -->
+            <field name="flow_start" eval="True"/>
+        </record>
+
+        <record model="workflow.activity" id="hr_holidays.act_confirm"> <!-- submitted -->
+            <field name="flow_start" eval="False"/>
+        </record>
+        
+        <!-- MENSAJES -->
+        <record id="mt_holidays_new" model="mail.message.subtype">
+            <field name="name">Nueva Ausencia</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Ausencia Creada</field>
+        </record>
+        <record id="mt_holidays_confirmed" model="mail.message.subtype">
+            <field name="name">Ausencia Confirmada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Ausencia Confirmada</field>
+        </record>
+        <record id="mt_holidays_approved" model="mail.message.subtype">
+            <field name="name">Ausencia Validada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Ausencia Validada</field>
+        </record>
+        <record id="mt_holidays_validate1" model="mail.message.subtype">
+            <field name="name">Ausencia Validada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Ausencia Validada</field>
+        </record>
+        <record id="mt_holidays_refused" model="mail.message.subtype">
+            <field name="name">Ausencia Rechazada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Ausencia Rechazada</field>
+        </record>
+        <record id="mt_holidays_cancel" model="mail.message.subtype">
+            <field name="name">Ausencia Cancelada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="6"/>
+            <field name="description">Ausencia Cancelada</field>
+        </record>
+        <record id="mt_holidays_paid" model="mail.message.subtype">
+            <field name="name">Ausencia Pagada</field>
+            <field name="res_model">hr.holidays</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="description">Ausencia Pagada</field>
+        </record>
+    </data>
+    <data noupdate="0">
+        <record id="seq_holiday_add_number_type" model="ir.sequence.type">
+            <field name="name">Numero Asignacion Ausencia</field>
+            <field name="code">payroll.holiday.number.add</field>
+        </record>
+        <record id="seq_holidays_add_number" model="ir.sequence">
+            <field name="name">Numero Asignacion Ausencia</field>
+            <field name="code">payroll.holiday.number.add</field>
+            <field name="prefix">ASI-</field>
+            <field name="padding">10</field>
+        </record>
+        <record id="seq_holiday_remove_type" model="ir.sequence.type">
+            <field name="name">Numero Ausencia</field>
+            <field name="code">payroll.holiday.number.remove</field>
+        </record>
+        <record id="seq_holidays_remove" model="ir.sequence">
+            <field name="name">Numero Ausencia</field>
+            <field name="code">payroll.holiday.number.remove</field>
+            <field name="prefix">AUS-</field>
+            <field name="padding">10</field>
+        </record>
+        
+    </data>
+
+</openerp>

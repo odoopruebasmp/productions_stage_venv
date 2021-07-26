@@ -1,0 +1,195 @@
+/*INCREMENTO DE WALL DE MENSAJES*/
+
+.openerp .oe_mail_wall .oe_mail {
+    width: 800px    !important;
+}
+
+.openerp .oe_form .oe_form_field {
+    background: #fff0 !important;
+}
+
+.openerp .oe_horizontal_separator{
+    color: #01588c;
+}
+
+.red-bar-test {
+  background:  repeating-linear-gradient(
+      45deg,
+      #807d27,
+      #807d27 30px,
+      #000000 30px,
+      #000000 60px)
+}
+
+/* AVANCYS TABLE */
+.openerp .avancys_table {
+
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.openerp .avancys_table td:nth-child(even) {
+    background-color: #f0f0f000
+}
+
+.openerp .avancys_table td {
+    padding: 4px;
+}
+
+.openerp .avancys_table th {
+    background-color: #428bca;
+    color: white;
+    padding: 4px;
+}
+
+/*AJUSTES EN TABLA X2MANY*/
+.openerp .oe_list_content th {
+    background-color: #428bca;
+    color: white;
+    padding: 4px;
+
+}
+
+.openerp .oe_kanban_view .oe_kanban_groups_records {
+    background: #fff !important;
+}
+
+.openerp .oe_list_record_selector {
+    background-color: #eeeef7 !important;
+}
+
+.openerp .oe_list.oe_list_editable.oe_editing .oe_form_field {
+    min-width: 50px;
+}
+
+.openerp .oe_searchview {
+    min-width: 700px;
+}
+
+.openerp .oe_list_content th.oe_sortable div {
+    text-align: center;
+}
+
+.openerp .oe_list_content th.oe_sortable, .openerp .oe_list_content th.oe_sortable div {
+    min-width: 30px;
+}
+
+/*TAMAÑO SHEET AUMENTADO*/
+.openerp .remove_sheet {
+      min-width: 50%;
+      margin: 10 auto;
+}
+
+.openerp .oe_application .oe_form_sheet {
+    min-width: 50%;
+    max-width: 90%;
+    margin: 10 auto;
+}
+
+.openerp .oe_form_editable .oe_form .oe_form_field_datetime input {
+    width: 200px;
+}
+
+#avancys_help_button {
+    padding: 16px 12px;
+}
+
+.avancys-btn {
+    height: 40px;
+}
+
+.openerp button.avancys-btn{
+  background-color: #01588c;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#01588c), to(#01588c));
+  background-image: -webkit-linear-gradient(top, #01588c, #01588c);
+  background-image: -moz-linear-gradient(top, #01588c, #01588c);
+  background-image: -ms-linear-gradient(top, #01588c, #01588c);
+  background-image: -o-linear-gradient(top, #01588c, #01588c);
+  background-image: linear-gradient(to bottom, #01588c, #01588c);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+}
+
+.openerp button.avancys-btn:hover {
+  background-color: #c63939;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#8988b7), to(#8988b7));
+  background-image: -webkit-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -moz-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -ms-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -o-linear-gradient(top, #8988b7, #8988b7);
+  background-image: linear-gradient(to bottom, #8988b7, #8988b7);
+
+}
+
+.openerp button.avancys-btn-purple{
+  background-color: #01588c;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#01588c), to(#01588c));
+  background-image: -webkit-linear-gradient(top, #01588c, #01588c);
+  background-image: -moz-linear-gradient(top, #01588c, #01588c);
+  background-image: -ms-linear-gradient(top, #01588c, #01588c);
+  background-image: -o-linear-gradient(top, #01588c, #01588c);
+  background-image: linear-gradient(to bottom, #01588c, #01588c);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+}
+
+.openerp button.avancys-btn-purple:hover {
+  background-color: #c63939;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#8988b7), to(#8988b7));
+  background-image: -webkit-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -moz-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -ms-linear-gradient(top, #8988b7, #8988b7);
+  background-image: -o-linear-gradient(top, #8988b7, #8988b7);
+  background-image: linear-gradient(to bottom, #8988b7, #8988b7);
+
+}
+
+
+.openerp button.avancys-btn-orange{
+  background-color: #ed6f2d;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ed6f2d), to(#ed6f2d));
+  background-image: -webkit-linear-gradient(top, #ed6f2d, #ed6f2d);
+  background-image: -moz-linear-gradient(top, #ed6f2d, #ed6f2d);
+  background-image: -ms-linear-gradient(top, #ed6f2d, #ed6f2d);
+  background-image: -o-linear-gradient(top, #ed6f2d, #ed6f2d);
+  background-image: linear-gradient(to bottom, #ed6f2d, #ed6f2d);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+}
+
+
+.openerp button.avancys-btn-orange:hover {
+  background-color: #c63939;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f77d3b), to(#f77d3b));
+  background-image: -webkit-linear-gradient(top, #f77d3b, #f77d3b);
+  background-image: -moz-linear-gradient(top, #f77d3b, #f77d3b);
+  background-image: -ms-linear-gradient(top, #f77d3b, #f77d3b);
+  background-image: -o-linear-gradient(top, #f77d3b, #f77d3b);
+  background-image: linear-gradient(to bottom, #f77d3b, #f77d3b);
+
+}
+
+.openerp button.avancys-btn-light-blue{
+  background-color: #7b94ad;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#01588c), to(#01588c));
+  background-image: -webkit-linear-gradient(top, #01588c, #01588c);
+  background-image: -moz-linear-gradient(top, #01588c, #01588c);
+  background-image: -ms-linear-gradient(top, #01588c, #01588c);
+  background-image: -o-linear-gradient(top, #01588c, #01588c);
+  background-image: linear-gradient(to bottom, #01588c, #01588c);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
+}
+
+@media (min-width: 992px){.modal-lg{width: 1150px;}}
+
+.openerp .oe_form_sheet_width {max-width: 1100px}
+
+.openerp .payslip_sheet {
+    min-width:1366px;
+    max-width:1366px;
+}

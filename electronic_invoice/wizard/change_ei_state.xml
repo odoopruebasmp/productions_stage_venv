@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="change_ei_state_view" model="ir.ui.view">
+            <field name="name">Cambiar Estado documento XML</field>
+            <field name="model">change.ei.state</field>
+            <field name="arch" type="xml">
+                <form string="Modificar Estado XML Factura Electrónica">
+                    <label string="¿Desea modificar el estado de transferencia del XML de Factura Electrónica del presente documento?"/>
+                    <br/>
+                    <label string="Recuerde que el log generado previamente, por integridad de la información, no será eliminado."/>
+                    <footer>
+                        <button name="chg_ei_state" string="Confirmar" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_chg_ei_state_view" model="ir.actions.act_window">
+            <field name="name">Cambiar Estado documento XML</field>
+            <field name="res_model">change.ei.state</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="change_ei_state_view"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

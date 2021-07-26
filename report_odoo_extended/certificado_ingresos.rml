@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<document filename="certificado.pdf">
+  <template pageSize="(612.0,792.0)" title="Test" author="Avancys" allowSplitting="20">
+    <pageTemplate id="first">
+      <frame id="first" x1="1.0cm" y1="1.0cm" width="19.59cm" height="25.6cm"/>
+            <pageGraphics>
+                <place x="5.3cm" y="0.54cm" height="0.50cm" width="11.0cm">
+                    <para style="P9"></para>
+                </place>
+                <image file="certificado_220.png" x="1.5cm" y="1.5cm" width="650" height="700" alignment="CENTER"></image>
+
+            </pageGraphics>
+    </pageTemplate>
+    
+    <stylesheet>
+    
+        <blockTableStyle id="Standard_Outline">
+            <blockAlignment value="LEFT"/>
+            <blockValign value="TOP"/>
+        </blockTableStyle>
+
+        <blockTableStyle id="Table1">
+            <blockValign value="TOP"/>
+            <blockAlignment value="LEFT"/>
+			<blockFont name="Helvetica"/>
+			<blockBottomPadding length="0"/>
+			<blockTopPadding length="0"/>
+			<blockLeftPadding length="0"/>
+			<blockRightPadding length="0"/>
+        </blockTableStyle>
+        
+        <blockTableStyle id="Table2">
+            <blockValign value="TOP"/>
+            <blockAlignment value="LEFT"/>
+			<blockFont name="Helvetica"/>
+			<blockBottomPadding length="0"/>
+			<blockTopPadding length="0"/>
+			<blockLeftPadding length="0"/>
+			<blockRightPadding length="0"/>
+        </blockTableStyle>
+        
+        <blockTableStyle id="Table3">
+            <blockValign value="TOP"/>
+            <blockAlignment value="LEFT"/>
+			<blockFont name="Helvetica"/>
+			<blockBottomPadding length="0"/>
+			<blockTopPadding length="0"/>
+			<blockLeftPadding length="0"/>
+			<blockRightPadding length="0"/>
+        </blockTableStyle>
+        
+        <initialize>
+            <paraStyle name="all" alignment="justify"/>
+        </initialize>
+        
+        <paraStyle name="P1" fontName="Helvetica-Bold" fontSize="9.0" leading="0" alignment="LEFT"/>
+        <paraStyle name="P2" fontName="Helvetica" fontSize="8.0" leading="0" alignment="LEFT"/>
+        <paraStyle name="P3" fontName="Helvetica" fontSize="8.0" leading="0" alignment="RIGHT"/>
+        <images/>
+    </stylesheet>
+    
+    
+  </template>
+  
+    <story>
+        <para style="P2">[[repeatIn(objects,'o')]]</para>
+        <para style="P2">[[setLang('es_CO')]]</para>
+        <spacer length="29"/>
+        <blockTable colWidths="285,215,120" rowHeights="0.7cm" style="Table3">
+            <tr>
+                <td><para style="P2"></para></td>
+                <td><para style="P1">[[ str(o.certificado_id.account_year_id.date_start)[0:4] or '' ]]</para></td>
+                <td><para style="P2"></para></td>
+            </tr>
+        </blockTable>
+
+        <spacer length="25"/>
+        <blockTable colWidths="70,133,404,5" rowHeights="0.7cm" style="Table1">
+            <tr>
+                <td><para style="P2"></para></td>
+                <td><para style="P2">[[o.company_id.partner_id.ref or '']]</para></td>
+                <td><para style="P2">[[o.company_id.partner_id.dev_ref or '']]</para></td>
+                <td><para style="P2"></para></td>
+            </tr>
+        </blockTable>
+        <blockTable colWidths="70,542" rowHeights="0.93cm" style="Table2">
+            <tr>
+                <td><para style="P2"></para></td>
+                <td><para style="P2">[[o.company_id.name or '']]</para></td>
+            </tr>
+        </blockTable>
+        
+        <blockTable colWidths="70,60,120,80,80,80,80,42" rowHeights="0.57cm" style="Table3">
+            <tr>
+                <td><para style="P2"></para></td>
+                <td><para style="P2">[[o.name.partner_id.ref_type.code_dian or '']]</para></td>
+                <td><para style="P2">[[o.name.partner_id.ref or '']]</para></td>
+                <td><para style="P2">[[o.name.partner_id.primer_apellido or '']]</para></td>
+                <td><para style="P2">[[o.name.partner_id.segundo_apellido or '']]</para></td>
+                <td><para style="P2">[[o.name.partner_id.primer_nombre or '']]</para></td>
+                <td><para style="P2">[[o.name.partner_id.otros_nombres or '']]</para></td>
+                <td><para style="P2"></para></td>
+            </tr>
+        </blockTable>
+        <spacer length="5"/>
+
+        <blockTable colWidths="80,30,20,53,30,20,36,30,20,26,164,25,40,38" rowHeights="0.7cm" style="Table3">
+            <tr>
+                <td><para style="P2"></para></td>
+                <td><para style="P2">[[ str(o.date_from)[0:4] or '' ]]</para></td>
+                <td><para style="P2">[[ str(o.date_from)[5:7] or '' ]]</para></td>
+                <td><para style="P2">[[ str(o.date_from)[8:10] or '' ]]</para></td>
+
+                <td><para style="P2">[[ str(o.date_to)[0:4] or '' ]]</para></td>
+                <td><para style="P2">[[ str(o.date_to)[5:7] or '' ]]</para></td>
+                <td><para style="P2">[[ str(o.date_to)[8:10] or '' ]]</para></td>
+
+                <td><para style="P2">[[str(o.create_date)[0:4] or '']]</para></td>
+                <td><para style="P2">[[str(o.create_date)[5:7] or '']]</para></td>
+                <td><para style="P2">[[str(o.create_date)[8:10] or '']]</para></td>
+
+                <td><para style="P2">[[o.cert_id.city_id.name or '']]</para></td>
+                <td><para style="P2">[[o.cert_id.city_id.provincia_id.code or '']]</para></td>
+                <td><para style="P2">[[o.cert_id.city_id.code or '']]</para></td>
+                <td><para style="P2"></para></td>
+            </tr>
+        </blockTable>
+        <spacer length="13"/>
+        <section>
+      
+            <blockTable colWidths="480,89,42" rowHeights="0.395cm" style="Table3">
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('37'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('38'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('39'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('40'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('41'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('42'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('43'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('44'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('45'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('46'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('47'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+            </blockTable>
+        </section> 
+        <section>
+     
+            <blockTable colWidths="480,89,42" rowHeights="0.4cm" style="Table3">
+                <tr>
+                    <td><para style="P3"></para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: l.concepto_id.sequence &lt; 48, o.items_ids) ,  0), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+            </blockTable>
+        </section> 
+        <spacer length="10"/>
+        <section>
+            <blockTable colWidths="480,89,42" rowHeights="0.395cm" style="Table3">
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('49'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('50'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('51'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('52'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+                <tr>
+                    <td><para style="P3">[[l.name]]</para></td>
+                    <td><para style="P3">[[ formatLang(reduce(lambda x, obj: x+obj.amount or x+0 , filter( lambda l: str(l.concepto_id.sequence).startswith('53'), o.items_ids), 0 ), digits=2) ]]</para></td>
+                    <td><para style="P3"></para></td>
+                </tr>
+            </blockTable>
+        </section> 
+
+    </story>
+  
+</document>

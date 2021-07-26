@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_company_sale_cost_invoice_form_avancys" model="ir.ui.view">
+            <field name="name">res.company.sale.cost.invoice.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Politicas">
+                        <group>
+                            <group string="Reserva">
+                                <field name="automatic_reserve"/>
+                            </group>
+                            <group string="Costo de venta">
+                                <field name="sale_cost_invoice"/>
+                            </group>
+                            <group string="Fecha remision">
+                                <field name="move_date_invoice"/>
+                            </group>
+                            <group string="Generacion de factura de venta">
+                                <field name="automatic_invoice"/>
+                            </group>
+                            <group string="Validacion de factura de venta">
+                                <field name="automatic_valid"/>
+                            </group>
+                            <group string="Unidad de factura proveedor">
+                                <field name="uom_uos_invoice"/>
+                            </group>
+                            <group string="Detalle de serial/lote en factura de venta">
+                                <field name="invoice_lot"/>
+                            </group>
+                            <group string="Item de factura por Linea de pedido">
+                                <field name="line_for_sale"/>
+                            </group>
+                            <group string="Facturacion Analitica - Valores por defecto">
+                                <field name="analytic_default"/>
+                            </group>
+                            <group string="Impuesto a nivel analitico">
+                                <field name="invoice_tax_analytic"/>
+                            </group>
+                            <group string="Restriccion de movimientos con productos con costo cero">
+                                <field name="restriction_cost_zero"/>
+                            </group>
+                            <group string="Calculo de ICA por CIIU">
+                                <field name="ciiu_ica"/>
+                            </group>
+                            <group string="Ciudades en Cuentas analiticas">
+                                <field name="city_cc"/>
+                            </group>
+                            <group string="Solicitar Factura Recepcion Importaciones">
+                                <field name="invoice_import"/>
+                            </group>
+                            <group string="Gestion de Inventario y Activos Fijos, una sola Referencia">
+                                <field name="purchase_asset"/>
+                            </group>
+                            <group string="Permitir Movimientos de Entrada con Costo Cero">
+                                <field name="zero_cost_moves_incomes"/>
+                            </group>
+                            <group string="Permitir Movimientos de Cantidades Negativas">
+                                <field name="negative_qty"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_stock_picking_type_form_inherit_avancys_2" model="ir.ui.view">
+            <field name="name">stock.picking.type.form.inherit.avancys</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <field name='warehouse_id' position="after">
+                    <field name="journal_id"/>
+                    <field name="journal_invoice_id"/>
+                    <field name="journal_return_invoice_id"/>                    
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_template_property_form" model="ir.ui.view">
+            <field name="name">product.template.stock.property.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock_account.view_template_property_form"/>
+            <field name="arch" type="xml">
+                <field name='cost_method' position="attributes">
+                    <attribute name='attrs'>{'invisible': [('type','=','noaplica')]}</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_invoice_line_form_account_analytic_inventory_account_56">
+            <field name="name">account.invoice.line.form.inventory.account</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"></field>
+            <field name="arch" type="xml">
+                <!-- <label for="name" position="replace"/> -->
+                <field name="name" position="replace">
+                    <notebook>
+                        <page String="Descripcion">
+                            <field name="name" nolabel="1" colspan="4"/>
+                        </page>
+                        <page String="Envios Recibidos">
+                            <field name="stock_move_ids" nolabel="1" colspan="4">
+                                <tree string="Envios Recibidos">
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="location_id"/>
+                                    <field name="location_dest_id"/>
+                                    <field name="date"/>
+                                    <field name="state"/>
+                                    <button name="separate_line" icon="STOCK_INDENT" type="object" string="Separar a otra linea de factura"/>
+                                </tree>
+                            </field>
+                            <field name="lot_ids"/>
+                        </page>
+                    </notebook>
+                </field>
+            </field>
+        </record>
+        
+         <!-- Inherited from view of partner-->
+        <record model="ir.ui.view" id="view_res_partner_property_accured_form">
+            <field name="name">res.partner.property.accured.form</field>
+            <field name="model">res.partner</field>
+            <field name="priority">2</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_account_payable']" position="after">
+                    <field name="accrued_account_payable_id" />
+                </xpath>
+            </field>
+         </record>
+
+        <record id="view_product_category_property_cogs_form" model="ir.ui.view">
+            <field name="name">product.category.property.cogs.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='property_account_expense_categ']" position="after">
+                        <field name="cogs_account_id"/>
+                        <field name="transit_accout_id"/>
+                        <group string="Devoluciones" col="2" colspan="2">
+                            <field name="account_return_id"/>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_product_category_process_form" model="ir.ui.view">
+            <field name="name">product.category.process.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="stock_account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='property_stock_valuation_account_id']" position="after">
+                        <field name="account_production_transit_id"/>
+                        <field name="journal_production_id"/>
+                        <field name="account_production_analytic_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_product_product_cogs_form_inventory_dos" model="ir.ui.view">
+            <field name="name">product.product.cogs.form.inherit.dos</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='property_account_income']" position="after">
+                        <field name="cogs_account_id"/>
+                        <field name="transit_accout_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record id="view_product_product_historicos_form_extended" model="ir.ui.view">
+            <field name="name">product.product.historicos.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <label string="Cost Price" for="standard_price" position="before">
+                        <field name="costo_standard" attrs="{'invisible': [('cost_method','!=','average')]}" groups="stock_extended.group_stock_extended_manager"/>
+                        <field name="costo_variation" attrs="{'invisible': [('cost_method','!=','average')]}" groups="stock_extended.group_stock_extended_manager"/>
+                        <field name="costo_zero" attrs="{'invisible': [('cost_method','!=','average')]}" groups="stock_extended.group_stock_extended_manager"/>
+                    </label>                    
+                    <notebook position='inside'>
+                        <page String="Historicos">
+                            <group>
+                                <group string="Compras" attrs="{'invisible': [('purchase_ok','!=',True)]}">
+                                    <field name="document_purchase"/>
+                                    <field name="partner_purchase"/>
+                                    <field name="fabricante_id" attrs="{'invisible': [('fabricante_id','=',False)]}"/>
+                                    <field name="date_purchase"/>
+                                    <field name="qty_purchase"/>
+                                    <field name="cost_purchase"/>
+                                </group>
+                                <group string="Ventas" attrs="{'invisible': [('sale_ok','!=',True)]}">
+                                    <field name="document_sale"/>
+                                    <field name="partner_sale"/>
+                                    <field name="date_sale"/>
+                                    <field name="qty_sale"/>
+                                    <field name="price_sale"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_template_property_form_extended" model="ir.ui.view">
+            <field name="name">product.product.stock.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock_account.view_template_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="property_stock_account_input" position="replace">
+                        <field name="property_stock_account_input" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]"/>
+                    </field>
+                    <field name="property_stock_account_output" position="replace">
+                        <field name="property_stock_account_output" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_stock_location_account_inherit">
+            <field name="name">stock.location.account.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"></field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='active']" position="after" >
+                    <field name="account_location_id"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="invoice_form_avancys_inventory_2">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_analytic_avancys.invoice_form_avancys"></field>
+            <field name="arch" type="xml">
+                <field name="internal_number" position="replace"/>
+                <field name="partner_id" position="before">
+                    <field name="internal_number" readonly="True"/>
+                </field>
+                <field name="origin" position="after">
+                    <field name="stock_picking_id" readonly="True"/>
+                </field>
+                <button name="invoice_cancel" position="before">
+                    <button name="recompute_stock_picking" type="object" states="draft" string="Recalcular con el envio" attrs="{'invisible': [('stock_picking_id','=','False')]}"/>
+                </button>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="invoice_form_avancys_inventory_supplier_2">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_analytic_avancys.invoice_supplier_form_avancys"></field>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="stock_picking_id" readonly="True"/>
+                </field>
+                <button name="invoice_cancel" position="before">
+                    <button name="recompute_stock_picking" type="object" states="draft" string="Recalcular con la recepcion" attrs="{'invisible': [('stock_picking_id','=','False')]}"/>
+                </button>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_picking_form_inventory_account">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock_extended.view_stock_account_picking_extend_form"></field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="account_move_id" attrs="{'invisible': [('state','!=','done')]}"/>
+                </field>
+                <field name="backorder_id" position="after">
+                    <button name="do_transfer_button" type="object" string="Recalcular Comprobante" help="Esta funcionalidad te permite recalcular el movimiento contable generado a partir de la informacion del picking, aplica para todo tipo de movimiento con excepcion de recepciones de compras u ordenes de produccion" groups="stock.group_stock_manager" attrs="{'invisible': [('state','!=','done')]}"/>
+                    <button name="do_location_button" type="object" string="Cambiar Ubicaciónes" help="Esta funcionalidad te permite modificar la ubicacion origen y destino de los movimientos de inventario asociados, aplica para aquellos movimientos que no han sido transferidos y que es necesario el cambio de la ubicacion, esto solo lo puede ejecutar el Director Logistico" groups="stock.group_stock_manager" attrs="{'invisible': [('state','=','done')]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <!--STOCK MOVE-->
+        <record id="view_stock_move_search_mp" model="ir.ui.view">
+            <field name="name">stock.move.search.mp</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_search"/>
+                <field name="arch" type="xml">
+                    <field name="product_id" position="after">
+                        <field name="type_product"/>
+                    </field>
+                    <group expand="0" string="Group By" position="inside">
+                        <filter string="Tipo Producto" icon="terp-personal" domain="[]" context="{'group_by':'type_product'}"/>
+                    </group>
+                </field>
+        </record>
+                    
+    </data>
+</openerp>

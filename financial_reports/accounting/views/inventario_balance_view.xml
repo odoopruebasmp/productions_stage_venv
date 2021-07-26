@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="wizard_fpa_inventario_balance_view" model="ir.ui.view">
+			<field name="name">Inventario y Balance</field>
+			<field name="model">fpa.inventario.balance.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Opciones del informe" version="7.0">
+					<label string="" />
+					<group col="4">
+						<field name="chart_account_id" widget='selection' />
+						<field name="company_id" invisible="1" />
+                        <field name="account_filter" invisible="True"/>
+                        <field name="partner_filter" invisible="True"/>
+                        <field name="journal_filter" invisible="True"/>
+					</group>
+					<notebook tabpos="up" colspan="4">
+						<page string="Parametros Principales">
+							<group string="Fechas">
+								<field name="date_from" />
+								<field name="date_to" />
+							</group>
+                            <group string="Niveles">
+                                <field name="niveles" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            </group>
+							<group string="Filtros">
+								<field name="estado" />
+							</group>
+						</page>
+						<page string="Parametros Opcionales">
+							<group string="Cuentas" attrs="{'invisible':[('account_filter', '!=', True)]}">
+								<field name="account_ids" />
+							</group>
+							<group string="Diarios" attrs="{'invisible':[('journal_filter', '!=', True)]}">
+								<field name="journal_ids" />
+							</group>
+							<group string="Periodos">
+                                <field name="sp_periods"/>
+                            </group>
+						</page>
+					</notebook>
+					<footer>
+						<button name="generar" string="Generar" type="object"
+							default_focus="1" class="oe_highlight" />
+						o
+						<button string="Cancelar" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_fpa_inventario_balance" model="ir.actions.act_window">
+			<field name="name">Asistente para generar Inventario y Balance</field>
+			<field name="res_model">fpa.inventario.balance.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="wizard_fpa_inventario_balance_view" />
+			<field name="target">new</field>
+		</record>
+
+		<record id="view_fpa_inventario_balance_line_tree" model="ir.ui.view">
+			<field name="name">fpa.inventario.balance.line.tree</field>
+			<field name="model">fpa.inventario.balance.line</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree default_order="concepts_id,account_id" colors="blue:nivel ==100">
+					<field name="nivel" invisible="True"/>
+					<field name="concepts_id" />
+					<field name="account_id" />
+		                        <field name="amount_final" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_inventario_balance" model="ir.actions.act_window">
+			<field name="name">Inventario y Balance</field>
+			<field name="res_model">fpa.inventario.balance.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,graph</field>
+			<field name="view_id" ref="view_fpa_inventario_balance_line_tree" />
+			<field name="domain">[('user_id', '=', uid)]</field>
+			<field name="target">current</field>
+		</record>
+
+		<!--<menuitem name="Inventario y Balance" id="menu_fpa_inventario_balance"
+			parent="menu_fpa_analyze_financial_reports" action="action_inventario_balance"
+			sequence="15" />-->
+
+		<record id="view_fpa_inventario_balance_line_graph" model="ir.ui.view">
+			<field name="name">fpa.inventario.balance.line.graph</field>
+			<field name="model">fpa.inventario.balance.line</field>
+			<field name="type">graph</field>
+			<field name="arch" type="xml">
+				<graph string="Informe Inventario y Balance" type="pivot"
+					stacked="True">
+					<field name="amount_inicial" type="measure" />
+				</graph>
+			</field>
+		</record>
+
+		<record id="fpa_inventario_balance_line" model="ir.ui.view">
+			<field name="name">fpa.inventario.balance.line.search</field>
+			<field name="model">fpa.inventario.balance.line</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Buscar">
+					<field name="account_id"/>
+					<group expand="0" string="Group By">
+						<filter context="{'group_by':'concepts_id'}" name="group_concepts_id" string="Conceptos"/>
+						<filter context="{'group_by':'account_id'}" string="Cuenta"/>
+					</group>
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

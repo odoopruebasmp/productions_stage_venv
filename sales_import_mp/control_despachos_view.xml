@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+<!-- Create new view of control despachos -->
+        
+        
+        <record model="ir.ui.view" id="view_control_office_tree">
+            <field name="name">view.control.office.tree</field>
+            <field name="model">control.office</field>
+            <field name="arch" type="xml">
+                <tree string="Control De Despachos" colors="red:diff_neto &gt; 0.0">
+                    <field name="sale_id"/>
+                    <field name="create_date"/>
+                    <field name="cust_ref"/>
+                    <field name="min_ship_date"/>
+                    <field name="max_ship_date"/>
+                    <field name="date_malla"/>
+                    <field name="value"/>
+                    <field name="value_total"/>
+                    <field name="partner_type"/>
+                    <field name="partner_id"/>                    
+                    <field name="branch_name"/>
+                    <field name="city_branch"/>                    
+                    <field name="zona_branch"/>
+                    <field name="event_id"/>
+                    <field name="picking_id"/>
+                    <field name="picking_state"/>
+                    <field name="picking_date"/>
+                    <field name="picking_guia"/>
+                    <field name='state_guia'/>
+                    <field name="invoice"/>
+                    <field name="invoice_state"/>
+                    <field name="invoice_date"/>
+                    <field name="valor_neto_fact"/>                    
+                    <field name="diff_neto"/>
+                    <field name="valor_total_fact"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="view_control_office_search">
+            <field name="name">view.control.office.search</field>
+            <field name="model">control.office</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Analisis">
+                    <field name="sale_id"/>
+                    <field name="cust_ref"/>
+                    <field name="partner_type"/>
+                    <field name="partner_id"/>                    
+                    <field name="branch_name"/>
+                    <field name="city_branch"/>                    
+                    <field name="zona_branch"/>
+                    <field name="event_id"/>
+                    <field name="picking_id"/>
+                    <field name="invoice"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_partner_id" string="Tercero" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="group_branch_name" string="Sucursal" icon="terp-partner" domain="[]" context="{'group_by':'branch_name'}"/>
+                        <filter name="group_partner_type" string="Tipo de Tercero" icon="terp-partner" domain="[]" context="{'group_by':'partner_type'}"/>
+                        <filter name="group_city_branch" string="Ciudad" icon="terp-partner" domain="[]" context="{'group_by':'city_branch'}"/>
+                        <filter name="group_zona_branch" string="Zona" icon="terp-partner" domain="[]" context="{'group_by':'zona_branch'}"/>
+                        <filter name="group_event_id" string="Evento" icon="terp-partner" domain="[]" context="{'group_by':'event_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        
+        <record model="ir.ui.view" id="view_control_office_form">
+            <field name="name">control.office.form</field>
+            <field name="model">control.office</field>
+            <field name="arch" type="xml">
+                <form string="Control De Despachos">
+                    <group col="4" colspan="4" string="INFORMACION GENERAL">
+                        <field name="sale_id"/>
+                        <field name="create_date"/>
+                        <field name="cust_ref"/>
+                        <field name="min_ship_date"/>
+                        <field name="max_ship_date"/>
+                        <field name="date_malla"/>                        
+                        <field name="partner_type"/>
+                        <field name="partner_id"/>                    
+                        <field name="branch_name"/>
+                        <field name="city_branch"/>                    
+                        <field name="zona_branch"/>
+                        <field name="event_id"/>
+                    </group>
+                    <separator colspan="4"/>
+                    <group col="4" colspan="4" string="VALORES">
+                        <field name="value"/>                        
+                        <field name="valor_neto_fact"/>
+                        <field name="value_total"/>
+                        <field name="valor_total_fact"/>
+                    </group>
+                    <group col="4" colspan="4" string="VALOR AGOTADO">
+                        <field name="diff_neto"/>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="REMISIONES">
+                            <field name="picking_ids"/>
+                        </page>
+                        <page string="FACTURAS">
+                            <field name="invoice_id"/>
+                        </page>                       
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="view_sales_import_mp_partner_dos" model="ir.ui.view">
+            <field name="name">sale.order.import.mp.partner.dos</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref='base.view_partner_form'/>
+            <field name="arch" type="xml">
+                <field name="category_id" position='attributes'>
+                    <attribute name='invisible'>True</attribute>
+                </field>
+                <field name="category_id" position='before'>
+                    <field name='category_id2' placeholder="Tipo de Cliente"/>
+                </field>
+            </field>
+        </record>        
+        
+        
+        
+        <record id="view_account_invoice_mp_dos" model="ir.ui.view">
+            <field name="name">account.invoice.mp</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref='account.invoice_form'/>
+            <field name="arch" type="xml">
+                <field name="sent" position='after'>
+                    <label string="N O.C."/>
+                    <field name='n_oc'/>
+                </field>
+            </field>   
+        </record>
+        
+        
+        <record id="view_event_event_mp" model="ir.ui.view">
+            <field name="name">event.event.mp</field>
+            <field name="model">event.event</field>
+            <field name="inherit_id" ref='event.view_event_form'/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Pedidos de Venta">
+                        <field name="sale_ids" widget="many2many"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_control_office">
+            <field name="name">Control De Despachos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">control.office</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        
+        <record id="stock_picking_imp_view_control_despachos_id" model="ir.ui.view">
+            <field name="name">stock.picking.control.despachos.view.inherit.name</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="carrier_placa" position="after">
+                    <field name="state_guia" attrs="{'required':[('state','=','done')]}"/>
+                </field>
+            </field>
+        </record>
+        
+
+        <!-- Add a menu item for it -->
+        <menuitem name="Control De Despachos"
+            id="menu_control_office"
+            parent="base.menu_sales"
+            action="action_control_office"
+          />
+        
+    </data>
+</openerp>

@@ -1,0 +1,66 @@
+<openerp>
+    <data>
+        
+        <record id="view_partner_form_extended_co" model="ir.ui.view">
+            <field name="name">view.partner.form.extended.co</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="partner_extended.view_partner_form_extended" />
+            <field name="arch" type="xml">
+                <field name="ref" position="after">
+                    <field name="dev_ref" class="oe_inline"/>
+                </field>
+                <field name="entidad_comercial" position="after">
+                    <field name="tipo_tercero"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Checklist BASQ">
+                        <group>
+                            <field name="requisitosbasq"/>
+                            <group>
+                            <field name="formato" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="camaradecomercio" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="rut" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="certificadobancario" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="licencias" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="certificadoiso" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="acuerdoseguridad" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="inscripcion" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="visitainstalacion" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="verificacionlclinton" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="controloria" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            <field name="procuradoria" attrs="{'invisible': [('requisitosbasq','=', False)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_partner_tree_extended" model="ir.ui.view">
+            <field name="name">res.partner.tree.extended.co</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="partner_extended.view_partner_tree_extended" />
+            <field name="arch" type="xml">
+                <field name="entidad_comercial" position="after">
+                    <field name="tipo_tercero"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_res_partner_filter_extended" model="ir.ui.view">
+            <field name="name">res.partner.select.extended.co</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="partner_extended.view_res_partner_filter_extended" />
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="tipo_tercero"/>
+                </field>
+                <filter string="Tipo" position="after">
+                    <filter string="Tipo Persona" context="{'group_by': 'tipo_tercero'}"/>
+                </filter>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Transfer Details -->
+        
+        <record id="view_stock_enter_transfer_details_extended" model="ir.ui.view">
+            <field name="name">Enter transfer details extended</field>
+            <field name="model">stock.transfer_details</field>
+            <field name="inherit_id" ref="stock.view_stock_enter_transfer_details"/>
+            <field name="arch" type="xml">
+                <field name="lot_id" position="after" >
+                    <field name="quantity_init" invisible="1"/>
+                    <button name="put_in_lot" string="Nuevo Lote" type="object" icon="stock_gantt" attrs="{'invisible': [('lot_id', '!=', False)]}" groups="stock.group_production_lot"/>                    
+                </field>
+                <xpath expr="//form/group/field/tree[@string='Inventory Details']" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+                <xpath expr="//form/group[@string='Packages To Move']" position="before">
+                    <group>
+                        <field name="div_b" string="Dividir Lineas Automaticamente" attrs="{'invisible': [('div_b', '=', True)]}"/>
+                    </group>
+                    <group class="oe_inline" attrs="{'invisible': [('div_b', '=', False)]}">
+                        <field name="p_line" string="Linea"/>
+                        <field name="div_lineas" string="Cantidad"/>
+                        <button name="div_line" string="Dividir" type="object"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Transfer Details -->
+        
+        <record id="view_sstock_invoice_onshipping_extended" model="ir.ui.view">
+            <field name="name">stock.invoice.onshipping.extended</field>
+            <field name="model">stock.invoice.onshipping</field>
+            <field name="inheritF_id" ref="stock_account.view_stock_invoice_onshipping"/>
+            <field name="arch" type="xml">
+                <field name="group" position="replace" >
+                    <field name="group" string="Agrupar Factura"/>
+                    <field name="invoice_id" attrs="{'invisible': [('group', '=', False)], 'required': [('group', '!=', False)]}" context="{'group': True}"/>
+                    <field name="invoice_type" invisible="1"/>
+                    <field name="journal_type" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="journal_id" attrs="{'invisible': [('group', '=', True)]}" domain="[('type','=',journal_type)]"/>
+                    <field name="invoice_date" attrs="{'invisible': [('group', '=', True)]}"/>
+                </field>
+                <field name="journal_id" position="replace" />
+                <field name="invoice_date" position="replace" />
+            </field>
+        </record>
+        
+        <!-- WIZARD SCRAP -->
+        
+        <record id="view_stock_move_scrap_extended_wizard_2" model="ir.ui.view">
+            <field name="name">Scrap Move Scrap Extended</field>
+            <field name="model">stock.move.scrap</field>
+            <field name="inherit_id" ref="stock.view_stock_move_scrap_wizard"/>
+            <field name="arch" type="xml">
+                <field name="restrict_lot_id" position="replace" >
+                    <field name="move_id" invisible="True" />
+                    <field name="restrict_lot_id" domain="[('product_id','=',product_id)]" groups="stock.group_production_lot"
+                    context="{'default_product_id': product_id,'filter_reserved_lots':True,'move_id': move_id}" options="{'no_create': True}" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_product_category_tolerancias_form" model="ir.ui.view">
+            <field name="name">product.category.tolerancias.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="stock_account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='type']" position="after">
+                        <group string="Tolerancias" colspan="4" col="4">
+                            <group string="Compras">
+                                <field name="tolerancia_inferior_compras" string="Parciales"/>
+                                <field name="tolerancia_superior_compras" string="Adicionales"/>
+                            </group>
+                            <group string="Ventas">
+                                <field name="tolerancia_inferior_ventas" string="Parciales"/>
+                                <field name="tolerancia_superior_ventas" string="Adicionales"/>
+                            </group>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="stock_multi_done" model="ir.actions.server">
+            <field name="name">Procesar</field>
+            <field name="model_id" ref="model_stock_move"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_model') == 'stock.move' and context.get('active_ids'):
+                    self.action_done(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_stock_multi_done" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'stock.move'" name="model"/>
+            <field name="name">Procesar</field>
+            <field eval="'ir.actions.server,%d'%stock_multi_done" name="value"/>
+        </record>
+
+    </data>
+</openerp>

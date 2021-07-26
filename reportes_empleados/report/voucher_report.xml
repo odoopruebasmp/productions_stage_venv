@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+        auto="False" 
+        id="hr_contract_certificado" 
+        model="hr.contract" 
+        name="hr.contract.certificado" 
+        rml="reportes_empleados/report/certificado_laboral.rml" 
+        string="Certificado Laboral"/>
+        
+        
+        <record id="view_certficado_laboral_hr_employee_inherit" model="ir.ui.view">
+            <field name="name">view.certificado.laboral.hr.employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref='hr.view_employee_form'/>
+            <field name="arch" type="xml">
+                <field name="coach_id" position='after'>
+                    <field name="coordinador_rrhh"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

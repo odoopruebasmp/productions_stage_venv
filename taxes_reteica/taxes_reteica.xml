@@ -1,0 +1,67 @@
+<openerp>
+    <data>
+        
+        <record id="view_partner_form_extended_ciiu" model="ir.ui.view">
+            <field name="name">view.partner.form.extended.ciiu</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="partner_extended.view_partner_form_extended" />
+            <field name="arch" type="xml">
+                <label name="complete_name" position="before">
+                    <field name="ciiu_id" />
+                </label>
+            </field>
+        </record>
+        
+        <record id="view_ciiu_tree" model="ir.ui.view">
+            <field name="name">res.ciiu.tree</field>
+            <field name="model">res.ciiu</field>
+            <field name="arch" type="xml">
+                <tree string="CIIU">
+                    <field name="name"/>
+                    <field name="desc"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_ciiu_tree2" model="ir.actions.act_window">
+            <field name="name">CIIU</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.ciiu</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem id="ciiu_config_menu" name="CIIU" parent="account_analytic_avancys.taxes_config_menu" sequence="10" action="action_ciiu_tree2" />
+        
+        <record id="view_ciiu_form" model="ir.ui.view">
+            <field name="name">res.ciiu.form</field>
+            <field name="model">res.ciiu</field>
+            <field name="arch" type="xml">
+                <form string="Codigo Ciiu">
+                    <group col="2">
+                        <field name="name"/>
+                        <field name="desc"/>
+                        <field name="tax_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+         <record id="account_invoice_line_ciiu_form" model="ir.ui.view">
+            <field name="name">account.invoice.line.ciiu.form</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+                <field name="invoice_line_tax_id" position="after">
+                    <field name="ciiu_id"/>
+                    <field name="city_id"/>
+                </field>
+            </field>
+        </record>
+
+        
+    </data>
+</openerp>

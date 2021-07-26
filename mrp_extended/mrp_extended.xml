@@ -1,0 +1,711 @@
+<openerp>
+    <data>
+        
+        <!-- PRODUCTION PLANNED LINE -->
+        
+        <menuitem id="menu_product_avancys_manufactory" action="product.product_normal_action" name="Product Variants" parent="mrp.menu_mrp_bom" sequence="10"/>
+        
+        <record id="view_move_form_expiry_extended" model="ir.ui.view">
+            <field name="name">stock.production.lot.form.mrp.extended</field>
+            <field name="model">stock.production.lot</field>
+            <field name="inherit_id" ref="product_expiry.view_move_form_expiry"/>
+            <field name="arch" type="xml">
+                <field name="use_date" position="before">
+                    <field name="create_date" string="Fecha de Formulacion"/>
+                </field>
+            </field>
+        </record>
+                
+        <record id="mrp_production_product_tree_extended_view" model="ir.ui.view">
+            <field name="name">mrp.production.product.line.tree.extended</field>
+            <field name="model">mrp.production.product.line</field>
+            <field name="inherit_id" ref="mrp.mrp_production_product_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="product_uos" position="after">
+                    <field name="cost" sum="Costo Planeado" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="consumido_qty"/>
+                    <field name="consume_cost" sum="Costo Consumido" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="eficiencia"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_mrp_production_product_line_extended" model="ir.ui.view">
+            <field name="name">mrp.production.product.line.tree.mrp.extended</field>
+            <field name="model">mrp.production.product.line</field>
+            <field name="arch" type="xml">
+                <tree colors="black:eficiencia == 100;green:eficiencia &gt; 100;red:eficiencia &lt; 100" string="Eficiencia de Consumos" create="false">
+                    <field name="name"/>
+                    <field name="production_id"/>
+                    <field name="date_planned"/>
+                    <field name="product_id"/>
+                    <field name="product_uom"/>
+                    <field name="product_uos_qty"/>
+                    <field name="product_uos"/>
+                    <field name="product_qty"/>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="consumido_qty"/>
+                    <field name="consume_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="eficiencia"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_mrp_production_product_line_extended_search" model="ir.ui.view">
+            <field name="name">mrp.production.product.line.mrp.extended</field>
+            <field name="model">mrp.production.product.line</field>
+            <field name="arch" type="xml">
+                <search string="Eficiencia de Consumos">
+                    <field name="name"/>
+                    <field name="production_id"/>
+                    <field name="date_planned"/>
+                    <field name="product_id"/>
+                    <field name="product_uom"/>
+                    <field name="product_uos_qty"/>
+                    <field name="product_uos"/>
+                    <field name="product_qty"/>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="consumido_qty"/>
+                    <field name="consume_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="eficiencia"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Orden de Produccion" name="by_production_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'production_id'}"/>
+                        <filter string="Mes" name="by_date_planned" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'date_planned'}"/>
+                        <filter string="Producto" name="by_product_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_id'}"/>
+                        <filter string="Unidad de Medida" name="by_product_uom" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_uom'}"/>
+                        <filter string="Unidad de Venta" name="by_product_uos" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_uos'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_planned_products_mrp_extended">
+            <field name="name">mrp.production.product.line.graph.mrp.extended</field>
+            <field name="model">mrp.production.product.line</field>
+            <field name="arch" type="xml">
+                <graph string="Eficiencia de Consumos" type="bar">
+                    <field name="product_id" type="row"/>
+                    <field name="eficiencia" type="measure"/>
+                    <field name="date_planned" interval="month" type="col"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="action_planned_products_mrp_extended" model="ir.actions.act_window">
+            <field name="name">Eficiencia de Consumos</field>
+            <field name="res_model">mrp.production.product.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="context">{'search_default_by_date_planned':1,'search_default_by_product_id':1}</field>
+            <field name="domain">[('consumido_qty','>',0)]</field>
+            <field name="search_view_id" ref="view_mrp_production_product_line_extended_search"/>
+            <field name="view_id" ref="view_mrp_production_product_line_extended"/>
+        </record>
+        
+        <!-- STOCK MOVE -->
+        
+        <record id="view_stock_move_tree_schedule_mrp_extended" model="ir.ui.view">
+            <field name="name">stock.move.tree.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';red:state in ['waiting','confirmed'] and date_expected &lt; current_date;green:state == 'assigned' and date_expected &gt; current_date;brown:state == 'assigned' and date_expected &lt; current_date" string="Reservas" create="false">
+                    <field name="raw_material_production_id"/>
+                    <field name="create_date"/>
+                    <field name="date_expected" />
+                    <field name="product_id"/>
+                    <field name="adicional"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom_id" />
+                    <field name="total_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="string_availability_info"/>
+                    <field name="remaining_reserved_qty"/>
+                    <field name="lot_ids" invisible="1"/>
+                    <field name="location_id" groups="stock.group_locations"/>
+                    <field name="location_dest_id" groups="stock.group_locations"/>
+                    <field name="state"/>
+                    <button type="object"
+                            name="action_confirm"
+                            string="Confirmar" 
+                            icon="terp-check"
+                            states="draft" class="oe_edit_only"/>
+                    <button type="object"
+                            name="action_cancel"
+                            string="Cancelar" 
+                            icon="STOCK_CANCEL"
+                            states="waiting,confirmed,assigned" class="oe_edit_only"/>
+                    <button type="object"
+                            name="action_assign"
+                            string="Mirar Disponibilidad" 
+                            icon="gtk-find-and-replace"
+                            states="waiting,confirmed" class="oe_edit_only"/>
+                    <button type="object"
+                            name="do_unreserve"
+                            string="Deshacer Reserva" 
+                            icon="STOCK_UNDO"
+                            states="assigned" class="oe_edit_only"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_stock_move_search_schedule_mrp_extended" model="ir.ui.view">
+            <field name="name">stock.move.search.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <search string="Stock Moves">
+                    <filter string="Adicionales" name="adicionales" domain="[('adicional','=',True)]" />
+                    <filter string="Planificados" name="planificados" domain="[('adicional','=',False)]" />
+                    <separator/>
+                    <filter icon="terp-camera_test" string="En Borrador" name="borrador" domain="[('state','=','draft')]" />
+                    <filter icon="terp-camera_test" string="En espera de disponibilidad" name="espera" domain="[('state','in',('confirmed','waiting'))]" />
+                    <filter icon="terp-stock" string="Reservados" name="asignado" domain="[('state','=','assigned')]"/>
+                    <separator/>
+                    <filter icon="terp-go-today" string="Para Hoy" domain="[('date_expected','&lt;=',time.strftime('%%Y-%%m-%%d 23:59:59')),('date_expected','&gt;=',time.strftime('%%Y-%%m-%%d 00:00:00'))]" help="Orders processed Today or planned for Today"/>
+                    <filter icon="terp-go-today" string="Retrasados" domain="[('date_expected','&lt;',time.strftime('%%Y-%%m-%%d %%H:%%M:%%S'))]" help="Orders processed Today or planned for Today"/>
+                    <field name="raw_material_production_id"/>
+                    <field name="product_id"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="lot_ids"/>
+                    <field name="create_date"/>
+                    <field name="date_expected"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Mes Creacion" name="groupby_create_date" icon="terp-go-month" domain="[]" context="{'group_by':'create_date'}" groups="base.group_no_one"/>
+                        <filter string="Mes Programado" name="groupby_date" icon="terp-go-month" domain="[]" context="{'group_by':'date_expected'}"/>
+                        <filter string="Orden de Produccion" name="groupby_acopio_production_id" domain="[]" context="{'group_by':'raw_material_production_id'}"/>
+                        <filter string="Origen" name="groupby_location_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'location_id'}" groups="stock.group_locations"/>
+                        <filter string="Destino" name="groupby_dest_location_id" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'location_dest_id'}" groups="stock.group_locations"/>
+                        <filter icon="terp-stock_effects-object-colorize" name="groupby_state" string="Estado" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Producto" name="by_product" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_stock_move_tree_consumo_mrp_extended" model="ir.ui.view">
+            <field name="name">stock.move.tree.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <tree colors="red:scrapped==True;black:state in ('confirmed','ready','in_production');gray:state == 'cancel' " string="Moves" create="false">
+                    <field name="raw_material_production_id"/>
+                    <field name="date"/>
+                    <field name="create_date" invisible="True"/>
+                    <field name="date_expected" invisible="True" />
+                    <field name="product_id"/>
+                    <field name="adicional"/>
+                    <field name="scrapped"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom_id" />
+                    <field name="total_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="restrict_lot_id"/>
+                    <field name="location_id" groups="stock.group_locations"/>
+                    <field name="location_dest_id" groups="stock.group_locations"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_stock_move_search_consumo_mrp_extended" model="ir.ui.view">
+            <field name="name">stock.move.search.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <search string="Stock Moves">
+                    <filter string="Adicionales" name="adicionales" domain="[('adicional','=',True)]" />
+                    <filter string="Planificados" name="planificados" domain="[('adicional','=',False)]" />
+                    <separator/>
+                    <filter icon="terp-dialog-close" string="Realizados" name="done" domain="[('state','=','done')]"/>
+                    <filter string="Cancelados" name="cancelled" domain="[('state','=','cancel')]" />
+                    <filter string="No Cancelados" name="not_cancelled" domain="[('state','!=','cancel')]" />
+                    <filter string="Desechados" name="scrapped" domain="[('scrapped','=',True)]" />
+                    <filter string="No Desechados" name="not_scrapped" domain="[('scrapped','=',False)]" />
+                    <separator/>
+                    <filter icon="terp-go-today" string="Hoy" domain="[('date','&lt;=',time.strftime('%%Y-%%m-%%d 23:59:59')),('date','&gt;=',time.strftime('%%Y-%%m-%%d 00:00:00'))]" help="Orders processed Today or planned for Today"/>
+                    <field name="raw_material_production_id"/>
+                    <field name="product_id"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="restrict_lot_id"/>
+                    <field name="date"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Mes Realizado" name="groupby_date" icon="terp-go-month" domain="[]" context="{'group_by':'date'}" groups="base.group_no_one"/>
+                        <filter string="Orden de Produccion" name="groupby_acopio_production_id" domain="[]" context="{'group_by':'raw_material_production_id'}"/>
+                        <filter string="Lote" name="groupby_picking_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'restrict_lot_id'}"/>
+                        <filter string="Origen" name="groupby_location_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'location_id'}" groups="stock.group_locations"/>
+                        <filter string="Destino" name="groupby_dest_location_id" icon="terp-gtk-jump-to-ltr" domain="[]" context="{'group_by':'location_dest_id'}" groups="stock.group_locations"/>
+                        <filter icon="terp-stock_effects-object-colorize" name="groupby_state" string="Estado" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Producto" name="by_product" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_move_form_mrp_extended" model="ir.ui.view">
+            <field name="name">stock.move.form.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="adicional" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_stock_move_acopios_graph">
+            <field name="name">mrp.stock.move.mrp.extended</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <graph string="Acopios de Produccion" type="bar">
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="action_stock_move_mrp_extended" model="ir.actions.act_window">
+            <field name="name">Reservas y Necesidades Materiales</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_groupby_date':1, 'search_default_by_product':1}</field>
+            <field name="domain">[('raw_material_production_id','!=',False),('state','not in',['done', 'cancel'])]</field>
+            <field name="search_view_id" ref="view_stock_move_search_schedule_mrp_extended"/>
+            <field name="view_id" ref="view_stock_move_tree_schedule_mrp_extended"/>
+        </record>    
+        
+        <record id="action_stock_move_consume_mrp_extended" model="ir.actions.act_window">
+            <field name="name">Consumos Materiales</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_not_cancelled':1, 'search_default_groupby_date':1, 'search_default_by_product':1}</field>
+            <field name="domain">[('raw_material_production_id','!=',False),('state','in',['done', 'cancel'])]</field>
+            <field name="search_view_id" ref="view_stock_move_search_consumo_mrp_extended"/>
+            <field name="view_id" ref="view_stock_move_tree_consumo_mrp_extended"/>
+        </record>
+        
+        <menuitem action="action_stock_move_mrp_extended" id="menu_stock_move_mrp_extended" parent="mrp.menu_mrp_manufacturing" sequence="40"/>
+        <menuitem name="Estadisticas" id="menu_info_mrp_statistics_extended" parent="base.menu_mrp_root" sequence="4"/>
+        <menuitem action="action_stock_move_consume_mrp_extended" id="menu_stock_move_consume_mrp_extended" parent="menu_info_mrp_statistics_extended" sequence="2"/>
+        <menuitem action="action_planned_products_mrp_extended" id="menu_planned_products_mrp_extended" parent="menu_info_mrp_statistics_extended" sequence="3"/>
+        
+        
+        
+        
+        <!-- COSTOS DE PRODUCTOS EN PROCESO MODULO DE PRODUCTION -->
+        
+        <record id="view_account_move_line_mrp_cost_search" model="ir.ui.view">
+            <field name="name">account.move.line.cost.report.search</field>
+            <field name="model">account.move.line</field>
+            <field name="type">search</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_account_move_line_report_search"/>
+            <field name="arch" type="xml">
+                <field name="followup_date" position="after">
+                   <field name="product_id"/>
+                    <field name="mrp_id"/>
+                </field>                    
+                <separator/>
+                <group string="Group By" position="inside">
+                    <filter string="Produccion" name="mrp_id" context="{'group_by':'mrp_id'}"/>
+                    <filter string="Producto" name="product_id" context="{'group_by':'product_id'}"/>
+                </group>
+            </field>
+        </record>               
+        
+        <record id="view_account_move_line_mrp_cost_graph" model="ir.ui.view">            
+            <field name="name">account.move.line.mrp.cost.graph</field>
+            <field name="model">account.move.line</field>
+            <field name="type">graph</field>
+                <field name="arch" type="xml">
+                    <graph string="Costos Producto Proceso" type="pivot" stacked="True">
+                        <field name="product_id"/>
+                        <field name="mrp_id"/>
+                        <field name="name"/>                        
+                        <field name="debit" type="measure"/>
+                        <field name="quantity" type="measure"/>
+                    </graph>
+                </field>
+        </record>
+        
+        <record id="mrp_production_account_move_line_cost_extended" model="ir.actions.act_window">
+            <field name="name">Costos Producto Proceso</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_account_move_line_mrp_cost_graph"/>
+            <field name="search_view_id" ref="view_account_move_line_mrp_cost_search"/>
+            <field name="domain">[('mrp_id','!=',False),('state_mrp','=','in_production')]</field>
+        </record>
+        
+        
+        <menuitem name="Productos en proceso" id="menu_product_process_extended" parent="base.menu_mrp_root" sequence="4" groups="account_analytic_avancys.group_manager_margin_cost"/>
+        <menuitem action="mrp_production_account_move_line_cost_extended" id="menu_stock_move_consume_mrp_extended" parent="menu_product_process_extended" sequence="1" groups="account_analytic_avancys.group_manager_margin_cost"/>
+        
+        
+        <!-- PRODUCTION -->
+        
+        <record id="mrp_production_tree_view_extended" model="ir.ui.view">
+            <field name="name">mrp.production.tree.extended</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="product_qty" position="after">
+                    <field name="remaining_product_qty" sum="Total Pendiente"/>
+                </field>
+                <field name="hour_total" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="cycle_total" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="mrp_production_tree_extended_statistics_view" model="ir.ui.view">
+            <field name="name">mrp.production.tree</field>
+            <field name="model">mrp.production</field>
+            <field name="arch" type="xml">
+                <tree fonts="bold:message_unread==True" colors="black:eficiencia == 100;green:eficiencia &gt; 100;red:eficiencia &lt; 100" string="Manufacturing Orders">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name"/>
+                    <field name="date_planned"/>
+                    <field name="origin"/>
+                    <field name="product_id"/>
+                    <field name="product_qty" sum="Total Qty"/>
+                    <field name="produced_product_qty" sum="Cantidad Producida"/>
+                    <field name="product_uom" groups="product.group_uom"/>
+                    <field name="routing_id" groups="mrp.group_mrp_routings"/>
+                    <field name="hour_total" sum="Total Hours"/>
+                    <field name="cycle_total" sum="Total Cycles"/>
+                    <field name="planned_operations_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="planned_total" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="consumos_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="adiciones_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="desechos_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="total_consumos_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="operaciones_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="production_cost" sum="Costo" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="eficiencia_cantidad"/>
+                    <field name="eficiencia_precio"/>
+                    <field name="eficiencia"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_mrp_production_filter_extended_2" model="ir.ui.view">
+            <field name="name">mrp.production.form.mrp.extended</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+                <filter name="inprogress" position="after">
+                    <filter icon="terp-camera_test" string="Terminadas" name="done" domain="[('state','=','done')]" help="Ordenes de produccion terminadas"/>
+                </filter>
+                <filter string="Product" position="before">
+                    <filter string="Referencia" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'name'}"/>
+                </filter>
+            </field>
+        </record>
+        
+        <record id="mrp_production_statistics_extended" model="ir.actions.act_window">
+            <field name="name">Ordenes De Produccion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="view_id" ref="mrp_production_tree_extended_statistics_view"/>
+            <field name="search_view_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="context">{'search_default_group_date_planned':1, 'search_default_group_product_id':1,'search_default_done': 1}</field>
+        </record>
+        
+        <menuitem action="mrp_production_statistics_extended" id="menu_production_statistics_mrp_extended" parent="menu_info_mrp_statistics_extended" sequence="3"/>
+        
+        <record id="mrp_production_form_view_extended" model="ir.ui.view">
+            <field name="name">mrp.production.form.extended</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <button name="action_assign" position="attributes">
+                    <attribute name="states">confirmed,in_production,picking_except</attribute>
+                </button>
+                <button name="action_assign" position="after">
+                    <button name="button_produce_done_dos" states="in_production" string="Finalizar Produccion" class="oe_highlight"/>
+                </button>
+                <field name="origin" position="after">
+                    <field name="account_move_id"/>
+                    <field name="move_product_process_id"/>
+                </field>
+                <sheet position="attributes">
+                    <attribute name="class">oe_form_sheet_width_wider</attribute>
+                </sheet>
+                <xpath expr="//field[@name='workcenter_lines']/form/group/field[@name='hour']" position="after">
+                    <field name="type_cost"/>
+                    <field name="cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="delay"/>
+                </xpath>
+                <xpath expr="//field[@name='workcenter_lines']/tree/field[@name='hour']" position="after">
+                    <field name="type_cost"/>
+                    <field name="cost" sum="Costo Total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="delay"/>
+                </xpath>
+                <xpath expr="//field[@name='workcenter_lines']/tree/field[@name='hour']" position="attributes">
+                    <attribute name="sum">"Total"</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='state']" position="replace">
+                    <field name="total_cost" sum="Costo Total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="adicional" readonly="1"/>
+                    <field name="adicional_aux" invisible="1"/>
+                    <field name="restrict_lot_id" string="Lote a Reservar" domain="[('product_id','=?', product_id)]" options="{'no_create': True}"/>
+                    <field name="string_availability_info"/>
+                    <field name="remaining_reserved_qty" />
+                    <field name="state" readonly="1"/>
+                    <button type="object"
+                            name="action_confirm"
+                            string="Confirmar" 
+                            icon="terp-check"
+                            states="draft" class="oe_edit_only"/>
+                    <button type="object"
+                            name="action_cancel"
+                            string="Cancelar" 
+                            icon="STOCK_CANCEL"
+                            states="waiting,confirmed,assigned" class="oe_edit_only"/>
+                    <button type="object"
+                            name="action_assign"
+                            string="Mirar Disponibilidad" 
+                            icon="gtk-find-and-replace"
+                            states="waiting,confirmed" class="oe_edit_only"/>
+                    <button type="object"
+                            name="do_unreserve"
+                            string="Deshacer Reserva" 
+                            icon="STOCK_UNDO"
+                            states="confirmed,assigned" class="oe_edit_only"/>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="attributes">
+                    <attribute name="on_change">onchange_product_id(product_id)</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']" position="attributes">
+                    <attribute name="context">{'adicional': True,'default_adicional': True,'adicional_aux': True,'default_adicional_aux': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
+                <group string="Consumed Products" position="before">
+                    <newline/>
+                </group>
+                <xpath expr="//field[@name='move_lines2']/tree" position="inside">
+                    <button name="%(stock.move_scrap)d"
+                    string="Desechar" type="action" icon="terp-gtk-jump-to-ltr"
+                    states="done,cancel"/>
+                </xpath>
+                <xpath expr="//field[@name='move_lines2']/tree/field[@name='state']" position="replace">
+                    <field name="total_cost" sum="Total" readonly="1" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="adicional" readonly="1"/>
+                    <field name="scrapped" readonly="1"/>
+                    <field name="state" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids']/tree/field[@name='state']" position="replace">
+                    <field name="state" invisible="1"/>
+                    <button type="object"
+                            name="action_confirm"
+                            string="Confirmar" 
+                            icon="terp-check"
+                            states="draft" class="oe_edit_only"/>
+                    <button type="object"
+                            name="action_cancel"
+                            string="Cancelar" 
+                            icon="STOCK_CANCEL"
+                            states="waiting,confirmed,assigned" class="oe_edit_only"/>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']" position="attributes">
+                    <attribute name="context">{'adicional': True,'default_adicional': True,'adicional_aux': True,'default_adicional_aux': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids']/tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids']/tree/field[@name='product_id']" position="attributes">
+                    <attribute name="domain">[('id','=',parent.product_id)]</attribute>
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids']/tree/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids']/tree/field[@name='product_uom']" position="replace">
+                </xpath>
+                
+                <xpath expr="//field[@name='move_created_ids2']/tree" position="attributes">
+                    <attribute name="color">red:scrapped==True;gray:state == 'cancel';black:state == 'done'</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_created_ids2']/tree/field[@name='state']" position="before">
+                    <field name="total_cost" sum="Total" readonly="1" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="adicional" readonly="1"/>
+                    <field name="scrapped" readonly="1"/>
+                    <field name="state" readonly="1"/>
+                </xpath>
+                
+                <button name="%(mrp.action_change_production_qty)d" position="attributes">
+                    <attribute name="states">confirmed,ready,in_production</attribute>
+                </button>
+                
+                <page string="Extra Information" position="inside">
+                    <label string="Observaciones"/>
+                    <field name="notes"/>
+                </page>
+                
+                <notebook position="inside">
+                    <page string="Costos" groups="account_analytic_avancys.group_manager_margin_cost">
+                        <group>
+                            <group string="Costos Planificados">
+                                <field name="planned_cost"/>
+                                <field name="planned_operations_cost"/>
+                                <label string="---------------------------------------" />
+                                <label string="--------------" />
+                                <field name="planned_total"/>
+                            </group>
+                            <group string="Eficiencia">
+                                <field name="produced_product_qty"/>
+                                <field name="eficiencia_cantidad"/>
+                                <field name="eficiencia_precio"/>
+                                <field name="eficiencia"/>
+                            </group>
+                            <group string="Costos Produccion">
+                                <field name="consumos_cost"/>
+                                <field name="adiciones_cost"/>
+                                <field name="desechos_cost"/>
+                                <label string="---------------------------------------" />
+                                <label string="--------------" />
+                                <field name="total_consumos_cost"/>
+                                <field name="operaciones_cost"/>
+                                <label string="---------------------------------------" />
+                                <label string="--------------" />
+                                <field name="production_cost"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!-- BOM -->
+        
+        <record id="mrp_bom_tree_view_extended2" model="ir.ui.view">
+            <field name="name">mrp.bom.tree.extended</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="date_stop" position="after">
+                    <field name="products_cost" sum="Total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="operaciones_cost" sum="Total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="total_cost" sum="Total" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="mrp_bom_form_view_extended" model="ir.ui.view">
+            <field name="name">mrp.bom.form.extended</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="products_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="operaciones_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                    <field name="total_cost" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </field>
+                <xpath expr="//field[@name='bom_line_ids']/tree/field[@name='date_start']" position="before">
+                    <field name="tolerancia_inferior" />
+                    <field name="tolerancia" />
+                    <field name="products_cost" sum="Costo Productos" groups="account_analytic_avancys.group_manager_margin_cost"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- WORKCENTER -->
+        
+        <record id="mrp_workcenter_view_extended" model="ir.ui.view">
+            <field name="name">mrp.workcenter.form.extended</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="total_cost_for_cycle" attrs="{'invisible':[('type_cost','=','variable')]}"/>
+                </field>
+                <field name="resource_type" position="after">
+                    <field name="type_cost"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Costos" attrs="{'invisible':[('type_cost','!=','variable')]}">
+                        <group>
+                            <field name="mrp_working_workcenter_range_ids" nolabel="1" attrs="{'invisible':[('type_cost','!=','variable')]}">
+                                <tree editable='button' string="Costos">
+                                    <field name="size_1"/>
+                                    <field name="size_2"/>
+                                    <field name="cost"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!-- ROUTING -->
+        
+        <record id="mrp_routing_workcenter_form_view_extended" model="ir.ui.view">
+            <field name="name">mrp.routing.workcenter.form.extended</field>
+            <field name="model">mrp.routing.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="type_cost"/>
+                    <field name="cost"/>
+                    <!--<field name="attribute_value_ids" widget="many2many_tags"/>-->
+                </field>                    
+            </field>
+        </record>
+        
+        <record id="mrp_routing_form_view_extended" model="ir.ui.view">
+            <field name="name">mrp.routing.form.extended</field>
+            <field name="model">mrp.routing</field>
+            <field name="inherit_id" ref="mrp.mrp_routing_form_view"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="cost"/>
+                </field>
+                <field name="workcenter_lines" position="replace">
+                    <field name="workcenter_lines">
+                        <tree>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="workcenter_id"/>
+                            <field name="cycle_nbr"/>
+                            <field name="hour_nbr"/>
+                            <field name="type_cost"/>
+                            <field name="cost" sum="Costo"/>
+                            <field name="attribute_value_ids" widget="many2many_tags"/>
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
+        
+        <!-- WIZARD de Consumo -->
+        
+        <record id="view_stock_move_consume_wizard_extended" model="ir.ui.view">
+            <field name="name">Consume Move Extended</field>
+            <field name="model">stock.move.consume</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_consume_wizard"/>
+            <field name="arch" type="xml">
+                <field name="restrict_lot_id" position="replace" >
+                    <field name="move_id" invisible="True" />
+                    <field name="restrict_lot_id" domain="[('product_id','=',product_id)]" groups="stock.group_production_lot"
+                    context="{'default_product_id': product_id,'filter_reserved_lots':True,'move_id': move_id}" options="{'no_create': True}" />
+                </field>
+            </field>
+        </record>
+        
+        <!-- WORKFLOW de Consumo -->
+        
+        <record id="mrp.prod_trans_in_production_done" model="workflow.transition">
+            <field name="signal">button_produce_done_dos</field>
+        </record>
+        
+    </data>
+</openerp>

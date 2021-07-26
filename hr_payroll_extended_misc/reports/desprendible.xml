@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_payslip_avancys" inherit_id="hr_payroll.report_payslip">
+            <xpath expr="//t[@t-name='hr_payroll.report_payslip']" position="replace">
+                <t t-name="hr_payroll.report_payslip">
+                    <t t-call="report.html_container">
+                        <t t-foreach="docs" t-as="o">
+                            <div class="page" style="margin-top: 0mm">
+                                <br/>
+                                <div class="row">
+                                    <!--<t t-foreach="o.move_id.line_id" t-as="line">-->
+                                            <!--<t t-if="line.ref == o.number and line.reconcile_id">-->
+                                                 <!--<t t-foreach="line.reconcile_id.line_id" t-as="lines">-->
+                                                    <!--<t t-if="not lines.ref == o.number">-->
+                                                        <!--<h1>Comprobante: <span t-field="lines.move_id.name"/></h1>-->
+                                                    <!--</t>-->
+                                                 <!--</t>-->
+                                            <!--</t>-->
+                                    <!--</t>-->
+                                    <h4 class="text-center"><strong>COMPROBANTE PAGO DE NOMINA</strong></h4>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-xs-5 text-left">
+                                        <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" width="153" height="80"/>
+                                        <h5>
+                                            <small>
+                                                <span t-field="o.company_id.partner_id.name"/>
+
+                                            <br>NIT:
+                                                <span t-field="o.company_id.partner_id.ref"/>-<span t-field="o.company_id.partner_id.dev_ref"/>
+                                            </br>
+                                            <br>Tel:
+                                                <span t-field="o.company_id.partner_id.phone"/>
+                                            </br>
+                                            <br>Dir:
+                                                <span t-field="o.company_id.partner_id.street"/>
+                                            </br>
+                                            </small>
+                                        </h5>
+                                    </div>
+                                    <div class="col-xs-6 pull-right" style="margin-top: 12mm">
+                                        <h1 class="h4 mb4">
+                                            <span t-if="o.state == 'done'">Comprobante de</span>
+                                            <span t-if="o.state != 'done'">Borrador de</span>
+                                            <span t-field="o.tipo_nomina.name"/>
+                                            <small t-if="o.number">
+                                                <span t-field="o.number"/>
+                                            </small>
+                                            <!--<t t-foreach="o.move_id.line_id" t-as="line">-->
+                                            <!--<t t-if="line.ref == o.number and line.reconcile_id">-->
+                                                <!--<p><strong>Fecha de Pago: </strong><span t-field="line.reconcile_id.create_date"/></p>-->
+                                            <!--</t>-->
+                                            <!--</t>-->
+                                        </h1>
+                                        <div class="panel panel-default mb6">
+                                            <div class="panel-body" style="padding:6px 15px;">
+                                                <h2 t-if="o.tipo_nomina.code != 'Liquidacion'" class="h5 pull-left">
+                                                    <h2 class="h5 pull-left">Período:
+                                                    <small>
+                                                        <span t-field="o.payslip_period_id.display_name"/> De
+                                                        <span t-field="o.date_from"/>
+                                                        a
+                                                        <span t-field="o.date_to"/>
+                                                    </small>
+                                                </h2>
+
+                                                </h2>
+                                                <h2 t-if="o.tipo_nomina.code == 'Liquidacion'" class="h5 pull-left">
+                                                    Fecha deliquidación:
+                                                    <small>
+                                                        <span t-field="o.liquidacion_date"/>
+                                                    </small>
+                                                </h2>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt16">
+                                    <div class="col-xs-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">
+                                                    <strong><span t-field="o.employee_id.name"/> </strong>
+                                                    <span class="text-primary">
+                                                        <span t-field="o.employee_id.partner_id.ref_type.name"/>
+                                                        <span t-field="o.employee_id.partner_id.ref"/>
+                                                    </span>
+                                                </h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="col-xs-6">
+                                                    <div class="list-group mb0">
+
+                                                        <p class="list-group-item-text">
+                                                            <strong>Email:</strong>
+                                                            <span t-field="o.employee_id.work_email"/>
+                                                        </p>
+                                                        <p class="list-group-item-text">
+                                                            <strong>Cargo:</strong>
+                                                            <span t-field="o.contract_id.employee_id.job_id.name"/>
+                                                        </p>
+                                                        <t t-if="o.employee_id.bank_account_id">
+                                                            <p class="list-group-item-text">
+                                                                <small t-field="o.employee_id.bank_account_id.bank_name"/> <span t-field="o.employee_id.bank_account_id.state"/> <span class="list-group-item-text" t-field="o.employee_id.bank_account_id.acc_number"/>
+                                                            </p>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div class="list-group mb0">
+
+                                                        <p class="list-group-item-text">
+                                                            <strong>Contrato:</strong>
+                                                            <span t-field="o.contract_id.type_id.name"/>
+                                                        </p>
+
+                                                        <p class="list-group-item-text"> <!-- t-if="o.tipo_nomina.code in ['Vacaciones']"-->
+                                                            <strong>Salario Básico Mensual:</strong>
+                                                            <span  t-esc="o.get_wage()" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <t t-set="dev" t-value="[]"/>
+                                    <t t-set="prs" t-value="[]"/>
+                                    <t t-set="ded" t-value="[]"/>
+                                    <t t-set="ngr" t-value="[]"/>
+                                    <t t-foreach="o.concept_ids.sorted(key=lambda b: b.code)" t-as="h">
+                                        <t t-if="h.category in ['earnings', 'o_earnings', 'o_salarial_earnings', 'o_rights', 'comp_earnings','non_taxed_earnings']">
+                                            <t t-set="dev" t-value="dev + [(h.name,h.total,h.qty)]"/>
+                                        </t>
+                                        <t t-if="h.category == 'provisions' and h.total">
+                                            <t t-set="prs" t-value="prs + [(h.name,h.total,h.qty)]"/>
+                                        </t>
+                                        <t t-if="h.category == 'deductions' and h.total">
+                                            <t t-set="ded" t-value="ded + [(h.name,h.total,h.qty)]"/>
+                                        </t>
+                                    </t>
+                                    <div class="col-xs-6">
+                                        <div t-if="dev" class="panel panel-default" style="font-size:8pt;">
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th>INGRESOS</th>
+                                                        <th class="text-right">CANTIDAD</th>
+                                                        <th class="text-right">TOTAL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-set="ht" t-value="0"/>
+                                                    <t t-foreach="dev" t-as="h">
+                                                        <tr>
+                                                            <td>
+                                                                <span t-esc="h[0]"/>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-esc="h[2]"/>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-esc="h[1]" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                                <t t-set="ht" t-value="ht + h[1]"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                                <tfoot>
+                                                   <td class="text-left"><strong>TOTAL INGRESOS</strong></td>
+                                                    <td/>
+                                                    <td class="text-right">
+                                                        <strong><span t-esc="ht" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/></strong>
+                                                    </td>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <!-- t t-set="horas" t-value="sum((h.code == 'HORASEXTRA' and h.total &gt; 0 and h.amount or 0) for h in o.details_by_salary_rule_category)"/>
+                                            <div class="panel panel-default" t-if="horas" -->
+
+
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title small">Entidades de seguridad social y Parafiscales</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <ul class="small list-unstyled" style="line-height:10pt;font-size:8pt;">
+                                                    <li t-if="o.contract_id.pensiones.id == o.contract_id.cesantias.id">
+                                                        <strong>Fondo de pensiones y cesantías:</strong>
+                                                        <span t-field="o.contract_id.pensiones.name"/>
+                                                    </li>
+                                                    <li t-if="o.contract_id.pensiones.id != o.contract_id.cesantias.id">
+                                                        <strong>Fondo de pensiones:</strong>
+                                                        <span t-field="o.contract_id.pensiones.name"/>
+                                                    </li>
+                                                    <li t-if="o.contract_id.pensiones.id != o.contract_id.cesantias.id">
+                                                        <strong>Fondo de cesantías:</strong>
+                                                        <span t-field="o.contract_id.cesantias.name"/>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Entidad promotora de salud:</strong>
+                                                        <span t-field="o.contract_id.eps.name"/>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Caja de compensación:</strong>
+                                                        <span t-field="o.contract_id.cajacomp.name"/>
+                                                    </li>
+                                                    <li>
+                                                        <strong>Administradora de riesgos laborales:</strong>
+                                                        <span t-field="o.contract_id.arl.name"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div t-if="ded" class="panel panel-default">
+                                            <table class="table table-condensed" style="font-size:8pt;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>DEDUCCIONES</th>
+                                                        <th class="text-right">CANTIDAD</th>
+                                                        <th class="text-right">TOTAL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-set="ht" t-value="0"/>
+                                                    <t t-foreach="ded" t-as="h">
+                                                        <tr>
+                                                            <td>
+                                                                <span t-esc="h[0]"/>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-esc="h[2]"/>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-esc="h[1]" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                                <t t-set="ht" t-value="ht + h[1]"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                                <tfoot>
+                                                   <td class="text-left"><strong>TOTAL DEDUCCIONES</strong></td>
+                                                    <td/>
+                                                    <td class="text-right">
+                                                        <strong><span t-esc="ht" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/></strong>
+                                                    </td>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+                                        <!--<div t-if="o.prestamos_total_ids" class="panel panel-default">-->
+                                            <!--<table class="table table-condensed" style="font-size:8pt;">-->
+                                                <!--<thead>-->
+                                                    <!--<tr>-->
+                                                        <!--<th>PRÉSTAMOS</th>-->
+                                                        <!--<th class="text-right">SALDO</th>-->
+                                                    <!--</tr>-->
+                                                <!--</thead>-->
+                                                <!--<tbody>-->
+                                                    <!--<t t-foreach="o.prestamos_ids.sorted(key=lambda b: b.category)" t-as="pre">-->
+                                                        <!--<tr>-->
+                                                            <!--<td>-->
+                                                                <!--<span t-esc="pre.name"/>-->
+                                                            <!--</td>-->
+                                                            <!--<td class="text-right">-->
+                                                                <!--<span t-esc="pre.deuda - pre.cuota" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>-->
+                                                            <!--</td>-->
+                                                        <!--</tr>-->
+                                                    <!--</t>-->
+                                                <!--</tbody>-->
+                                            <!--</table>-->
+                                        <!--</div>-->
+                                        <div class="panel panel-default">
+                                            <table class="table table-condensed small" style="font-size:8pt;">
+                                                <tfoot>
+                                                    <t t-foreach="o.concept_ids" t-as="h">
+                                                        <t t-if="h.code == 'NETO'">
+                                                            <tr class="border-black">
+                                                                <td>
+                                                                    <strong t-field="h.display_name"/>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <strong><span t-field="h.total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/></strong>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:9pt;">
+                                                    <span t-field="o.employee_id.name"/>,
+                                                    <span t-field="o.employee_id.partner_id.ref_type.name"/>
+                                                    <span t-field="o.employee_id.partner_id.ref"/>
+                                                </small>
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Recibí conforme
+                                                </small>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <t t-set="neto" t-value="sum((h.code == 'NETO' and h.total or 0) for h in o.concept_ids)"/>
+                                <div class="row" t-if="o.tipo_nomina.code == 'Liquidacion'">
+                                    <div class="col-xs-6">
+                                        <p>
+                                            <!-- span t-field="o.note"/><br/ -->
+                                            <t t-if="neto&lt;0.0">
+                                                <t t-set="neto" t-value="neto * -1"/>
+                                                Menos
+                                            </t>
+                                            <span class="text-capitalize" style="text-transform:capitalize;" t-esc="neto" t-esc-options="{&quot;widget&quot;: &quot;num2words&quot;}"/>&amp;nbsp;Pesos.
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="alert alert-info mb8" style="padding:8px;">
+                                            <p class="text-justify" style="font-size:10pt; line-height:10pt;">
+                                                El empleado hace constar que ha recibido de la empresa
+                                                el valor correspondiente a la liquidación de las
+                                                prestaciones detalladas en este comprobante.
+                                                <span class="pull-right">
+                                                    <i class="fa fa-caret-down"/>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" t-if="o.tipo_nomina.code == 'Liquidacion'">
+                                    <div class="col-xs-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:0.8cm;">
+                                                <small t-field="o.write_uid"/>
+                                                <br/>
+                                                <small t-field="o.write_date"/>
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Elaborado por
+                                                    <br/>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:0.6cm; overflow:hidden;">
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Firma autorizada
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:1.6cm; overflow:hidden;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:9pt;">
+                                                    <span t-field="o.employee_id.name"/>,
+                                                    <span t-field="o.employee_id.partner_id.ref_type.name"/>
+                                                    <span t-field="o.employee_id.partner_id.ref"/>
+                                                </small>
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Recibí conforme
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" t-if="o.tipo_nomina.code == 'Vacaciones'">
+                                    <div class="col-xs-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:0.8cm;">
+                                                <small t-field="o.write_uid"/>
+                                                <br/>
+                                                <small t-field="o.write_date"/>
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Elaborado por
+                                                    <br/>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:0.6cm; overflow:hidden;">
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Firma autorizada
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" style="min-height:2.3cm; max-height:2.3cm; padding-top:1.6cm; overflow:hidden;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:9pt;">
+                                                    <span t-field="o.employee_id.name"/>,
+                                                    <span t-field="o.employee_id.partner_id.ref_type.name"/>
+                                                    <span t-field="o.employee_id.partner_id.ref"/>
+                                                </small>
+                                            </div>
+                                            <div class="panel-footer" style="padding:1pt 8pt;">
+                                                <small style="font-size:8pt; font-weight:normal; line-height:8pt;">
+                                                    Recibí conforme
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</openerp>

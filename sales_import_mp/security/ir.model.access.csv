@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sale_order_imported_file_user_id,sale.order.imported.file.user,model_sale_order_imported_file,base.group_sale_salesman,1,1,1,0
+sale_order_imported_file_manager_id,sale.order.imported.file.manager,model_sale_order_imported_file,base.group_sale_manager,1,1,1,0
+contro_de_user_id,control.office.user,model_control_office,base.group_sale_salesman,1,1,1,0
+contro_de_manager_id,control.office.manager,model_control_office,base.group_sale_manager,1,1,1,0
+pos_extra_user_id,pos.extra.user,model_pos_extra,base.group_sale_salesman,1,1,1,0
+pos_extra_manager_id,pos.extra.manager,model_pos_extra,base.group_sale_manager,1,1,1,0

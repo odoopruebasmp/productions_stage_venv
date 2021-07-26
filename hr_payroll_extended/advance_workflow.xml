@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="wkf_advance" model="workflow">
+            <field name="name">hr.payroll.advance.basic</field>
+            <field name="osv">hr.payroll.advance</field>
+            <field name="on_create">True</field>
+        </record>
+        
+        <!-- Activity -->
+        <record id="act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">wf_draft()</field>
+        </record>
+        
+        <record id="act_waiting_approval" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">waiting_approval</field>
+            <field name="kind">function</field>
+            <field name="action">wf_waiting_approval()</field>
+        </record>
+        
+        <record id="act_refused" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">refused</field>
+            <field name="kind">function</field>
+            <field name="action">wf_refused()</field>
+        </record>
+        
+        <record id="act_waiting_financial_approval" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">waiting_financial_approval</field>
+            <field name="kind">function</field>
+            <field name="action">wf_waiting_financial_approval()</field>
+        </record>
+        
+        <record id="act_waiting_signature" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">waiting_signature</field>
+            <field name="kind">function</field>
+            <field name="action">wf_waiting_signature()</field>
+        </record>
+        
+        <record id="act_validated" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">validated</field>
+            <field name="kind">function</field>
+            <field name="action">wf_validated()</field>
+        </record>
+        
+        <record id="act_cancelled" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">cancelled</field>
+            <field name="kind">function</field>
+            <field name="action">wf_cancelled()</field>
+            <field name="flow_stop">True</field>
+            <field name="kind">stopall</field>
+        </record>
+        
+        <!-- BORRAR act_to_paid -->
+        <record id="act_to_paid" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">to_pay</field>
+            <field name="kind">function</field>
+            <field name="action">wf_to_pay()</field>
+        </record>
+        
+        <record id="act_to_pay" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">to_pay</field>
+            <field name="kind">function</field>
+            <field name="action">wf_to_pay()</field>
+        </record>
+        
+        <record id="act_paid" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">paid</field>
+            <field name="kind">function</field>
+            <field name="action">wf_paid()</field>
+        </record>
+        
+        <record id="act_expired" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">expired</field>
+            <field name="kind">function</field>
+            <field name="action">wf_expired()</field>
+        </record>
+        
+        <record id="act_to_discount" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">to_discount</field>
+            <field name="kind">function</field>
+            <field name="action">wf_to_discount()</field>
+        </record>
+        
+        <record id="act_to_refund" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_advance"/>
+            <field name="name">to_refund</field>
+            <field name="kind">function</field>
+            <field name="action">wf_to_refund()</field>
+        </record>
+        
+        <!-- Transistion -->
+        
+        <record id="trans_draft_send" model="workflow.transition">
+            <field name="act_from" ref="act_draft"/>
+            <field name="act_to" ref="act_waiting_approval"/>
+            <field name="signal">draft_send_for_approval</field>
+        </record>
+        
+        <record id="trans_approval_accept" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_approval"/>
+            <field name="act_to" ref="act_waiting_financial_approval"/>
+            <field name="signal">approval_accept</field>
+            <field name="condition">verificacionDirector()</field>
+        </record>
+        
+        <record id="trans_refuse" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_approval"/>
+            <field name="act_to" ref="act_refused"/>
+            <field name="signal">refuse</field>
+        </record>
+        
+        <record id="trans_back_to_draft" model="workflow.transition">
+            <field name="act_from" ref="act_refused"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">back_to_draft</field>
+        </record>
+        
+        <record id="trans_financial_approval_accept" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_financial_approval"/>
+            <field name="act_to" ref="act_waiting_signature"/>
+            <field name="signal">financial_approval_accept</field>
+        </record>
+        
+        <record id="trans_financial_refuse" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_financial_approval"/>
+            <field name="act_to" ref="act_refused"/>
+            <field name="signal">refuse</field>
+        </record>
+        
+        <record id="trans_signature_accept" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_signature"/>
+            <field name="act_to" ref="act_validated"/>
+            <field name="signal">signature_accept</field>
+        </record>
+        
+        <record id="trans_signature_refuse" model="workflow.transition">
+            <field name="act_from" ref="act_waiting_signature"/>
+            <field name="act_to" ref="act_refused"/>
+            <field name="signal">refuse</field>
+        </record>
+        
+        <record id="trans_cancel" model="workflow.transition">
+            <field name="act_from" ref="act_validated"/>
+            <field name="act_to" ref="act_cancelled"/>
+            <field name="signal">cancel</field>
+            <field name="condition">verificacionDirector()</field>
+        </record>
+        
+        <record id="trans_generate_account_move" model="workflow.transition">
+            <field name="act_from" ref="act_validated"/>
+            <field name="act_to" ref="act_to_pay"/>
+            <field name="signal">generate_account_move</field>
+        </record>
+        
+        <record id="trans_expiration" model="workflow.transition">
+            <field name="act_from" ref="act_to_pay"/>
+            <field name="act_to" ref="act_expired"/>
+            <field name="condition">test_expiration()</field>
+        </record>
+        
+        <record id="trans_not_expiration" model="workflow.transition">
+            <field name="act_from" ref="act_expired"/>
+            <field name="act_to" ref="act_to_pay"/>
+            <field name="condition">not test_expiration()</field>
+        </record>
+        
+        <record id="trans_send_to_discount" model="workflow.transition">
+            <field name="act_from" ref="act_expired"/>
+            <field name="act_to" ref="act_to_discount"/>
+            <field name="signal">send_to_discount</field>
+        </record>
+        
+        <record id="trans_cancel_to_discount" model="workflow.transition">
+            <field name="act_from" ref="act_to_discount"/>
+            <field name="act_to" ref="act_expired"/>
+            <field name="signal">cancel_to_discount</field>
+        </record>
+
+        <record id="trans_cancel_2" model="workflow.transition">
+            <field name="act_from" ref="act_to_pay"/>
+            <field name="act_to" ref="act_cancelled"/>
+            <field name="signal">cancel</field>
+            <field name="condition">cancel_seats()</field>
+        </record>
+
+        <!-- expired_cron -->
+        
+        <record id="trans_is_refound" model="workflow.transition">
+            <field name="act_from" ref="act_to_pay"/>
+            <field name="act_to" ref="act_to_refund"/>
+            <field name="signal">remaining_negative</field>
+        </record>
+        
+        <record id="trans_paid_1" model="workflow.transition">
+            <field name="act_from" ref="act_to_pay"/>
+            <field name="act_to" ref="act_paid"/>
+            <field name="signal">remaining_cero</field>
+        </record>
+        
+        <record id="trans_paid_2" model="workflow.transition">
+            <field name="act_from" ref="act_to_discount"/>
+            <field name="act_to" ref="act_paid"/>
+            <field name="signal">remaining_cero</field>
+        </record>
+        
+        <record id="trans_paid_3" model="workflow.transition">
+            <field name="act_from" ref="act_to_refund"/>
+            <field name="act_to" ref="act_paid"/>
+            <field name="signal">remaining_cero</field>
+        </record>
+        
+        <record id="trans_reopen_from_paid" model="workflow.transition">
+            <field name="act_from" ref="act_paid"/>
+            <field name="act_to" ref="act_to_pay"/>
+            <field name="signal">remaining_positive</field>
+        </record>
+        
+        <record id="trans_refound_from_paid" model="workflow.transition">
+            <field name="act_from" ref="act_paid"/>
+            <field name="act_to" ref="act_to_refund"/>
+            <field name="signal">remaining_negative</field>
+        </record>
+        
+        <record id="trans_refound_from_discount" model="workflow.transition">
+            <field name="act_from" ref="act_to_discount"/>
+            <field name="act_to" ref="act_to_refund"/>
+            <field name="signal">remaining_negative</field>
+        </record>
+        
+        <record id="trans_reopen_from_refund" model="workflow.transition">
+            <field name="act_from" ref="act_to_refund"/>
+            <field name="act_to" ref="act_to_pay"/>
+            <field name="signal">remaining_positive</field>
+        </record>
+        
+        <record id="trans_reopen_from_discount" model="workflow.transition">
+            <field name="act_from" ref="act_to_discount"/>
+            <field name="act_to" ref="act_to_pay"/>
+            <field name="signal">remaining_positive</field>
+            <field name="condition">not test_expiration()</field>
+        </record>
+        
+        <record id="trans_to_pay_to_discount" model="workflow.transition">
+            <field name="act_from" ref="act_to_pay"/>
+            <field name="act_to" ref="act_to_discount"/>
+            <field name="signal">send_to_discount</field>
+        </record>
+        
+    </data>
+</openerp>

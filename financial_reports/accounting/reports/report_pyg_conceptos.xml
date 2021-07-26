@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report id="report_pyg" model="fpa.pyg.line" string="Ganancias y pérdidas" report_type="qweb-pdf"
+                name="financial_reports.template_report_pyg" file="financial_reports.template_report_pyg"/>
+
+        <template id="template_report_pyg">
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div align='center'>
+                            <h3>
+                                <span t-field="docs[0].encabezado_id.financial_id.name"/>
+                            </h3>
+                        </div>
+                        <div align='left'>
+                            <h4>Desde:
+                                <span t-field="docs[0].encabezado_id.date_from"/>
+                            </h4>
+                        </div>
+                        <div align='left'>
+                            <h4>Hasta:
+                                <span t-field="docs[0].encabezado_id.date_to"/>
+                            </h4>
+                        </div>
+                        <div align='right'>
+                            <h5>Fecha de Generacion:
+                                <span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            </h5>
+                        </div>
+                        <div align="left">
+                            <h5>
+                                <span t-esc="docs[0].financial_id._get_unidades()"/>
+                            </h5>
+                        </div>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>CUENTA</strong>
+                                    </th>
+                                    <t t-if="docs[0].encabezado_id.financial_id.cc">
+                                        <th>
+                                            <strong>CENTRO DE COSTO</strong>
+                                        </th>
+                                    </t>
+                                    <t t-if="docs[0].encabezado_id.financial_id.cc">
+                                        <th>
+                                            <strong>CENTRO DE COSTO</strong>
+                                        </th>
+                                    </t>
+                                    <th style="text-align: right;">
+                                        <strong>SALDO FINAL</strong>
+                                    </th>
+                                    <t t-if="docs[0].encabezado_id.financial_id.comparative">
+                                        <t t-foreach="docs[0].encabezado_id.financial_id.fiscalyear_ids"
+                                           t-as="fiscalyear">
+                                            <th style="text-align: right;">
+                                                <strong>
+                                                    <span t-field="fiscalyear.fiscalyear_id.name"/>
+                                                </strong>
+                                            </th>
+                                        </t>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- SIN CENTRO DE COSTO -->
+                                <!-- <t t-if="not docs[0].encabezado_id.financial_id.cc"> -->
+                                <t t-foreach="docs[0].encabezado_id.financial_id.concepts_ids.sorted(key=lambda b: b.sequence)"
+                                   t-as="concepts">
+                                    <t t-if="not concepts.resume">
+                                        <t t-if="concepts.before">
+                                            <tr>
+                                                <t t-foreach="docs.sorted(key=lambda b: b.id)" t-as="o">
+                                                    <t t-if="not o.account_id and o.description == concepts.name">
+                                                        <th style="text-align: left;">
+                                                            <strong>
+                                                                <span t-field="concepts.name"/>
+                                                            </strong>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_final"
+                                                                  t-field-options='{"widget": "monetary", "display_currency": "o.company_id.currency_id"}'/>
+                                                        </th>
+                                                    </t>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="concepts.account_ids" t-as="accounts">
+                                            <t t-if="concepts.detail">
+                                                <t t-foreach="docs" t-as="o">
+                                                    <t t-if="o.account_id and o.account_id.id == accounts.id">
+                                                        <tr>
+                                                            <td>
+                                                                <span t-field="o.account_id"/>
+                                                            </td>
+                                                            <t t-if="docs[0].encabezado_id.financial_id.cc">
+                                                                <span t-field="o.analytic_account_id"/>
+                                                            </t>
+                                                            <td style="text-align: right;">
+                                                                <span t-field="o.amount_final"
+                                                                      t-field-options='{"widget": "monetary", "display_currency": "o.company_id.currency_id"}'/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                            </t>
+
+                                        </t>
+                                    </t>
+                                </t>
+                                <!-- </t> -->
+                            </tbody>
+                        </table>
+                        <br/>
+                        <!--  <span><strong>RESUMEN</strong></span>
+                         <br/>
+                         <table class="table table-condensed">
+                             <thead>
+                                 <tr>
+                                     <th>CONCEPTO</th>
+                                     <th style="text-align: right;">MONTO</th>
+                                     <t t-if="docs[0].encabezado_id.financial_id.comparative">
+                                         <t t-foreach="docs[0].encabezado_id.financial_id.fiscalyear_ids" t-as="fiscalyear">
+                                             <th style="text-align: right;">
+                                                 <strong><span t-field="fiscalyear.fiscalyear_id.name"/></strong>
+                                             </th>
+                                         </t>
+                                     </t>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 <t t-foreach="docs.sorted(key=lambda b: b.id)" t-as="o">
+                                     <t t-if="not o.account_id">
+                                         <t t-if="o.description">
+                                             <tr>
+                                                 <th><span t-field="o.description" /></th>
+                                                 <th style="text-align: right;"><span t-field="o.amount_final" t-field-options='{"widget": "monetary", "display_currency": "o.company_id.currency_id"}'/></th>
+                                                     <t t-foreach="docs[0].encabezado_id.financial_id.fiscalyear_ids" t-as="fiscalyear">
+                                                     <t t-if="fiscalyear.amount_name == 'amount_1'">
+                                                         <th style="text-align: right;">
+                                                             <strong><span t-field="o.amount_1"/></strong>
+                                                         </th>
+                                                     </t>
+                                                     <t t-if="fiscalyear.amount_name == 'amount_2'">
+                                                         <th style="text-align: right;">
+                                                             <strong><span t-field="o.amount_2"/></strong>
+                                                         </th>
+                                                     </t>
+                                                     <t t-if="fiscalyear.amount_name == 'amount_3'">
+                                                         <th style="text-align: right;">
+                                                             <strong><span t-field="o.amount_3"/></strong>
+                                                         </th>
+                                                     </t>
+                                                     <t t-if="fiscalyear.amount_name == 'amount_4'">
+                                                         <th style="text-align: right;">
+                                                             <strong><span t-field="o.amount_4"/></strong>
+                                                         </th>
+                                                     </t>
+                                                     <t t-if="fiscalyear.amount_name == 'amount_5'">
+                                                         <th style="text-align: right;">
+                                                             <strong><span t-field="o.amount_5"/></strong>
+                                                         </th>
+                                                     </t>
+                                                 </t>
+                                             </tr>
+                                         </t>
+                                     </t>
+                                 </t>
+                             </tbody>
+                         </table> -->
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

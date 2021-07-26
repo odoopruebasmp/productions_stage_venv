@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+    <menuitem name="Informes Almacen" id="menu_report_avancys_stock" parent="base.menu_reporting" sequence="0"/>
+    <menuitem name="Informes Contables" id="menu_report_avancys" parent="base.menu_reporting" sequence="0"/>   
+    <menuitem name="Impuestos Retenciones" id="menu_report_imp_ret_avancys" parent="base.menu_reporting" sequence="0"/>   
+    <menuitem name="Impresion" id="menu_report_avancys_report" parent="report_odoo_extended.menu_report_avancys"  sequence="101"/>   
+    
+    </data>
+</openerp>

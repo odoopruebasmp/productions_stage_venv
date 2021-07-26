@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        
+        <record id="hr_contract_view_payslips_form_co_prever" model="ir.ui.view">
+            <field name="name">Hr Contract Payslips</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended_co.hr_contract_view_payslips_form_co"/>
+            <field name="arch" type="xml">
+                <field name="bono" position="after">
+                    <field name="distancia_trabajo"/>
+                    <field name="beneficio_dependiente"/>
+                </field>
+            </field>
+        </record>
+        
+		<record id="hr_payroll_extended_prever_view" model="ir.ui.view">
+            <field name='name'>hr.payroll.extended.prever</field>
+            <field name='model'>hr.payroll.prestamo</field>
+            <field name='type'>form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_prestamo_form" />
+            <field name='arch' type='xml'>
+                <xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']/tree/field[@name='cuota']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']/tree/field[@name='date']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+            </field>
+        </record>
+        
+        <record id="hr_obligacion_tributaria_form2_prever" model="ir.ui.view">
+            <field name='name'>hr.payroll.obligacion.tributaria.form2</field>
+            <field name='model'>hr.payroll.obligacion.tributaria</field>
+            <field name='type'>form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_obligacion_tributaria_form2" />
+            <field name='arch' type='xml'>
+                <xpath expr="//form/sheet/notebook/page/field[@name='line_ids']/tree" position="attributes">
+					<attribute name="editable">bottom</attribute>
+				</xpath>
+				<xpath expr="//form/sheet/notebook/page/field[@name='line_ids']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='line_ids']/tree/field[@name='payslip_id']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='line_ids']/tree/field[@name='payslip_period_id']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='line_ids']/tree/field[@name='valor']" position="attributes">
+					<attribute name="readonly">False</attribute>
+				</xpath>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

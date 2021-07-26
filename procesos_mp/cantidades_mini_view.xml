@@ -1,0 +1,63 @@
+<openerp>
+    <data>
+        
+                                           
+        <record model="ir.ui.view" id="cantidades_product_form_view">
+            <field name="name">cantidades.product.form.view</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form version="7.0" string="Candidades Product">  
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="default_code" />
+                            <field name="qty_available" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+                
+                    
+        <record model="ir.ui.view" id="cantidades_product_tree_view">
+            <field name="name">cantidades.product.tree.view</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <tree string="Candidades Product">  	
+                    <field name="name" />
+                    <field name="default_code" />
+                    <field name="qty_available" />
+                </tree>
+            </field>
+        </record>
+                
+                
+        <record id="product_candidades_action" model="ir.actions.act_window">
+            <field name="name">Products Candidates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="context">{'product_candidades':1}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+                
+                
+        <record id="candidate_product_tree_view" model="ir.actions.act_window.view">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="cantidades_product_tree_view"/>
+            <field name="act_window_id" ref="product_candidades_action"/>
+        </record>
+
+        
+        <record id="candidate_product_view" model="ir.actions.act_window.view">
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cantidades_product_form_view"/>
+            <field name="act_window_id" ref="product_candidades_action"/>
+        </record>
+
+        <menuitem action="product_candidades_action" id="product_candidades_id" parent="base.menu_product" />
+        
+    </data>	 
+</openerp>    

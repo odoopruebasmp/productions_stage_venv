@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+          <record model="ir.ui.view" id="view_open_petty_cash_wiz">
+            <field name="name">view.open.petty.cash.wiz</field>
+            <field name="model">open.petty.cash</field>
+            <field name="arch" type="xml">
+                <form string="Abrir caja" version="7.0">
+                    <group>
+                        <field name="type"/>
+                        <field name="employee_id"/>
+                        <field name="ammount"/>
+                    </group>
+                    <footer>
+                        <button name="open_cash" string="Abrir" type="object" class="oe_highlight"/>
+                        o
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_cierre_nomina_wiz" model="ir.actions.act_window">
+            <field name="name">Gestion Caja Menor</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">open.petty.cash</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_expense_petty_cash">
+            <field name="name">Gastos Caja Menor</field>
+            <field name="res_model">hr.expense.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_type':'rembolso_caja_menor'}</field>
+            <field name="domain">[('type','=','rembolso_caja_menor')]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_expense_petty_cash_2">
+            <field name="name">Gastos RRHH</field>
+            <field name="res_model">hr.expense.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain">[('type','!=','rembolso_caja_menor')]</field>
+        </record>
+
+        <menuitem id="menu_open_petty_cash_wiz" action="action_cierre_nomina_wiz"
+                  parent="account.menu_finance_bank_and_cash" name="Gestion Caja Menor"/>
+
+        <menuitem id="menu_hr_expense_petty_cash" action="action_hr_expense_petty_cash"
+                  parent="account.menu_finance_bank_and_cash" name="Legalizacion Caja Menor"/>
+
+        <menuitem id="menu_hr_expense_petty_cash_2" action="action_hr_expense_petty_cash_2"
+                  parent="hr_expense.next_id_49" name="Gastos" sequence="9"/>
+
+    </data>
+
+    <data>
+
+        <record model="ir.ui.view" id="view_account_journal_petty_cash">
+            <field name="name">view.account.journal.petty.cash</field>
+            <field name="model">account.journal</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="default_credit_account_id" position="after">
+                    <field name="petty_payable_account_id" attrs="{'invisible': [('petty_cash', '!=', True)]}"/>
+                    <field name="fondo" attrs="{'invisible': [('petty_cash', '!=', True)]}" readonly="1"/>
+                </field>
+                <field name="group_invoice_lines" position="before">
+                    <field name="petty_cash"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Movimientos" attrs="{'invisible': [('petty_cash', '!=', True)]}">
+                        <button name="update_petty_moves" string="Actualizar movimientos" type="object"/>
+                        <field name="move_ids">
+                            <tree>
+                                <field name="detail"/>
+                                <field name="move_id"/>
+                                <field name="account_id"/>
+                                <field name="journal_id"/>
+                                <field name="debit" sum="total_debit"/>
+                                <field name="credit" sum="total_credit"/>
+                                <field name="date"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="hr_expense_expense_petty_form" model="ir.ui.view">
+            <field name="name">hr.expense.expense.petty.form</field>
+            <field name="model">hr.expense.expense</field>
+            <field name="inherit_id" ref="hr_expense.view_expenses_form"/>
+            <field name="arch" type="xml">
+                 <field name="currency_id" position="after">
+                     <field name="fondo_caja" attrs="{'invisible': [('type', '!=', 'rembolso_caja_menor')]}" readonly="1"/>
+                     <field name="saldo_caja" attrs="{'invisible': [('type', '!=', 'rembolso_caja_menor')]}"/>
+                 </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

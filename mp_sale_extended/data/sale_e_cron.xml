@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+
+        <record model="ir.cron" id="ir_cron_read_sales_e_commerce" >
+            <field name="name">Lectura Ventas E-commerce</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+             <field eval="False" name="doall" />
+            <field eval="'sale.transactions.extended'" name="model" />
+            <field eval="'read_sftp_sales_e_commerce_1'" name="function" />
+            <field eval="'(None,)'" name="args" />
+            <field name="priority">1</field>
+        </record>
+        <record model="ir.cron" id="ir_cron_generate_stock_commerce" >
+            <field name="name">Stock E-commerce Ventas del dia</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'stock.transactions.location.e'" />
+            <field name="function" eval="'generate_sftp_transactions_location_e'" />
+            <field eval="'(False,)'" name="args" />
+        </record>
+
+        <record model="ir.cron" id="ir_cron_generate_payment_customers" >
+            <field name="name">Pagos de Clientes E-commerce</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'transactions.customer.receipts'" />
+            <field name="function" eval="'generate_payment_customer_default'" />
+            <field eval="'(False,)'" name="args" />
+        </record>
+
+
+
+    </data>
+</openerp>

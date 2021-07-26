@@ -1,0 +1,141 @@
+<openerp>
+    <data>
+        
+        <menuitem id="menu_product_avancys_stock" action="product.product_normal_action" name="Product Variants" parent="stock.menu_stock_product" sequence="5"/>
+        <menuitem id="menu_product_avancys_purchase" action="product.product_normal_action" name="Product Variants" parent="purchase.menu_procurement_management_product" sequence="10"/>
+        
+        
+        <record id="product_pricelist_item_tree_view_extended" model="ir.ui.view">
+            <field name="name">product.pricelist.item.tree.2</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_tree_view" />
+            <field name="arch" type="xml">
+                <field name="base" position="after">
+                    <field name="precio_lista"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="product_pricelist_item_form_view_extended" model="ir.ui.view">
+            <field name="name">product.pricelist.item.form.extended</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+            <field name="arch" type="xml">
+                <field name="price_max_margin" position="after">
+                    <group>
+                        <field name="precio_lista"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_account_position_form_2" model="ir.ui.view">
+            <field name="name">account.fiscal.position.form.2</field>
+            <field name="model">account.fiscal.position</field>
+            <field name="inherit_id" ref="account.view_account_position_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tax_ids']/tree/field[@name='tax_dest_id']" position="after">
+                    <field name="option"/>
+                    <field name="valor"/>
+                </xpath>
+                <xpath expr="//field[@name='tax_ids']/form/field[@name='tax_dest_id']" position="after">
+                    <field name="option"/>
+                    <field name="valor"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_tax_form_map" model="ir.ui.view">
+            <field name="name">account.tax.form.map</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <field name='child_depend' position="after">
+                    <field name='check_lines'/>
+                </field>
+                <xpath expr="//notebook/page[@string='Special Computation']/group" position="before">
+                    <group string="Impuesto Segun Ciudad" colspan="4">
+                        <field name="parent_city_id" class="oe_inline"/>
+                        <field name="ciudad" class="oe_inline"/>
+                        <field name="ciiu_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field colspan="4" name="child_cities_ids" nolabel="1">
+                            <tree string="Impuesto Segun Ciudad">
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="ciudad"/>
+                                <field name="ciiu_ids"/>
+                                <field name="type"/>
+                                <field name="amount"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    
+        <record id="view_category_property_form2" model="ir.ui.view">
+            <field name="name">product.category.property.form.inherit2</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//group[@name='parent']/group[@name='account_property']" position="after">
+                        <group string="Impuestos" colspan="2">
+                            <field name="taxes_id" colspan="2" widget="many2many_tags"/>
+                            <field name="supplier_taxes_id" colspan="2" widget="many2many_tags"/>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        
+        <record id="product_normal_form_view5" model="ir.ui.view">
+            <field name="name">product.normal.form.inherit2</field>
+            <field name="model">product.template</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="taxes_id" position="replace">
+                    <field name="taxes_id" colspan="2" attrs="{'readonly':[('sale_ok','=',0)]}" widget="many2many_tags" invisible="True"/>
+                    <field name="taxes_id_1" colspan="2" attrs="{'readonly':[('sale_ok','=',0)]}" widget="many2many_tags"/>
+                </field>                
+                <field name="categ_id" position="replace"/>
+                <label for="categ_id" position="replace">
+                </label>
+                <field name="name" position="after">
+                    <field name="categ_id"/>                 
+                </field>    
+            </field>
+        </record>
+        
+        <record id="view_product_account_purchase_ok_form5" model="ir.ui.view">
+            <field name="name">product.normal.form.inherit3</field>
+            <field name="model">product.template</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="purchase.view_product_account_purchase_ok_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='supplier_taxes_id']" position="replace"> 
+                    <field name="supplier_taxes_id" colspan="2" widget="many2many_tags" attrs="{'readonly':[('purchase_ok','=',0)]}" invisible="True"/> 
+                    <field name="supplier_taxes_id_1" colspan="2" widget="many2many_tags" attrs="{'readonly':[('purchase_ok','=',0)]}"/> 
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ciiu_purchase_order_line_form" model="ir.ui.view">
+            <field name="name">ciiu.purchase.order.line.form</field>
+            <field name="model">purchase.order.line</field>
+            <field name="inherit_id" ref="purchase.purchase_order_line_form"/>
+            <field name="arch" type="xml">
+                <field name="taxes_id" position="after">
+                    <field name="ciiu_id"/>
+                    <field name="city_id"/>
+                </field>
+            </field>
+        </record>
+
+        
+    </data>
+</openerp>

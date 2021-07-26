@@ -1,0 +1,301 @@
+<openerp>
+    <data>
+        
+        <record id="cuota_loan_prepaid_search" model="ir.ui.view">
+            <field name='name'>obligacion.financiera.cuota.prepaid.search</field>
+            <field name='model'>account.loan.prepaid</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Prepago">
+                    <field name="loan_id"/>
+                    <field name="value"/>
+                    <field name="numero_cuotas"/>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="state"/>
+                    <field name="approve_date"/>
+                    <field name="type"/>
+                </search>
+            </field>
+        </record>
+                
+        <record id="cuota_loan_prepaid_tree" model="ir.ui.view">
+            <field name='name'>account.loan.prepaid.tree</field>
+            <field name='model'>account.loan.prepaid</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Obligacion Financieras">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="loan_id"/>
+                    <field name="value"/>
+                    <field name="numero_cuotas"/>
+                    <field name="date"/>
+                    <field name="approve_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="cuota_loan_prepaid_form" model="ir.ui.view">
+            <field name='name'>account.loan.prepaid.form</field>
+            <field name='model'>account.loan.prepaid</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Prepago o Desembolso" version="7.0">
+                    <header>
+                        <button string="Pasar a Borrador" name="draft" states="refused,cancelled" icon="gtk-convert"/>
+                        <button string="Confirmar" name="confirm" states="draft" icon="gtk-yes"/>
+                        <button string="Validar" name="validate" states="confirmed" icon="gtk-apply" />
+                        <button string="Rechazar" name="refuse" states="confirmed" icon="gtk-no" />
+                        <button string="Cancelar" name="cancel"  states="validated,confirmed,refused,done" icon="gtk-cancel"/>
+                        <button string="Realizado" name="done"  states="validated" icon="gtk-yes"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,validated,done,refused,cancelled" statusbar_colors='{"confirmed":"blue","validated":"green","cancelled":"red","refused":"red"}'/>
+                    </header>
+                    <sheet string="Obligacion Financieras">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colpsan="4">
+                            <field name="loan_id" colspan="2" />
+                            <field name="type"/>
+                            <field name="value" colspan="2" />
+                            <field name="numero_cuotas" colspan="2" />
+                            <field name="date" colspan="2" />
+                            <field name="approve_date" colspan="2" />
+                        </group>
+                        <newline />
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        
+        <record id="cuota_loan_prepaid_action" model="ir.actions.act_window">
+            <field name='name'>Prepagos o Desembolsos</field>
+            <field name='res_model'>account.loan.prepaid</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+        
+        <!-- Menu -->
+        
+        <record id="cuota_loan_prepaid_menu" model="ir.ui.menu">
+            <field name="name">Prepagos y Desembolsos</field>
+            <field name="parent_id" ref="menu_account_detail_no1"/>
+            <field name="action" ref="cuota_loan_prepaid_action"/>
+            <field name="sequence">5</field>
+        </record>
+        
+        <!-- DATA -->
+        
+        <record id="mt_prepaid_account_loan_new" model="mail.message.subtype">
+            <field name="name">Nuevo Prepago o Desembolso de Obligacion Financiera</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Borrador Creado</field>
+        </record>
+        <record id="mt_prepaid_account_loan_confirmado" model="mail.message.subtype">
+            <field name="name">Prepago o Desembolso de Obligacion Financiera Confirmado</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Confirmado</field>
+        </record>
+        <record id="mt_prepaid_account_loan_validado" model="mail.message.subtype">
+            <field name="name">Prepago o Desembolso de Obligacion Financiera Validado</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Validado</field>
+        </record>
+        <record id="mt_prepaid_account_loan_rechazado" model="mail.message.subtype">
+            <field name="name">Prepago o Desembolso de Obligacion Financiera Rechazado</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Rechazado</field>
+        </record>
+        <record id="mt_prepaid_account_loan_cancelado" model="mail.message.subtype">
+            <field name="name">Prepago o Desembolso de Obligacion Financiera Cancelado</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Cancelado</field>
+        </record>
+        <record id="mt_prepaid_account_loan_pagado" model="mail.message.subtype">
+            <field name="name">Prepago de Obligacion Financiera Finalizado</field>
+            <field name="res_model">account.loan.prepaid</field>
+            <field name="default" eval="True"/>
+            <field name="description">Prepago o Desembolso de Obligacion Financiera Finalizado</field>
+        </record>
+        
+        <!-- WORKFLOW -->
+        
+        <!-- Workflow definition 
+            1. draft->submitted
+            2. submitted->accepted 
+            3. submitted->refused 
+            4. accepted->refused
+            5. accepted->done
+            6. refused->draft 
+            7. done->accepted
+            8. refused->cancel
+            9. submitted->cancel
+            10. accepted->cancel
+            11. cancel->draft
+        -->
+
+        <record model="workflow" id="wkf_obligacion_financieras_prepaid">
+            <field name="name">hr.wkf.obligaciones.financieras.prepaid</field>
+            <field name="osv">account.loan.prepaid</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_draft"> <!-- draft -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="action">draft()</field>
+            <field name="kind">function</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_confirm"> <!-- submitted -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">confirm()</field>
+            <field name="split_mode">OR</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_validate"> <!-- accepted -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">validate()</field>
+        </record>
+
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_refuse"> <!-- refused -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="name">refuse</field>
+            <field name="kind">function</field>
+            <field name="action">refuse()</field>
+        </record>
+        
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_cancel"> <!-- cancel -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">cancel()</field>
+        </record>
+        
+        <record model="workflow.activity" id="obligacion_financieras_prepaidact_done"> <!-- done -->
+            <field name="wkf_id" ref="wkf_obligacion_financieras_prepaid" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">done()</field>
+        </record>
+        
+        <!--
+            workflow transition
+        -->
+
+        <record model="workflow.transition" id="obligacion_financieras_prepaiddraft2confirm">  <!-- 1. draft->submitted -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_draft" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidconfirm2validate"> <!-- 2. submitted->accepted   -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_confirm" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_validate" />
+            <field name="signal">validate</field>
+        </record>
+
+        <record model="workflow.transition" id="obligacion_financieras_prepaidconfirm2refuse"> <!-- 2. submitted->refused -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_confirm" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidvalidate2confirm"> <!-- 2. accepted->submitted -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_validate" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="obligacion_financieras_prepaidvalidate2refuse"> <!-- 3. accepted->refused -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_validate" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidvalidate2done"> <!-- 3. accepted->done -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_validate" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_done" />
+            <field name="signal">done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidrefuse2draft"> <!-- 4. refused->draft -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_refuse" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaiddone2cancel"> <!-- 5. done->accepted -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_done" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidrefuse2cancel"> <!-- 6. refuse->cancel -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_refuse" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidvalidate2cancel"> <!-- 6. validate->cancel -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_validate" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidconfirm2cancel"> <!-- 6. submitted->cancel -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_confirm" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligacion_financieras_prepaidcancel2draft"> <!-- 6. cancel->draft -->
+            <field name="act_from" ref="obligacion_financieras_prepaidact_cancel" />
+            <field name="act_to" ref="obligacion_financieras_prepaidact_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="seq_obligacion_financieras_number_type" model="ir.sequence.type">
+            <field name="name">Numero Prepago Obligacion Financiera</field>
+            <field name="code">account.loan.prepaid.seq</field>
+        </record>
+        <record id="seq_obligacion_financieras_number" model="ir.sequence">
+            <field name="name">Numero Prepago Obligacion Financiera</field>
+            <field name="code">account.loan.prepaid.seq</field>
+            <field name="prefix">PGO-</field>
+            <field name="padding">10</field>
+        </record>
+    </data>
+</openerp>

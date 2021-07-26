@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_medios_1001" model="fpa.financial.reports">
+            <field name="name">1001 - Pagos o abonos en cuenta y retenciones practicadas</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">M,N,O,P,Q,R,S,T</field>
+            <field name="type">ex</field>
+            <field name="export_type_date">range</field>
+            <field name="application_type">account</field>
+            <field name="tope_min">100000</field>
+            <field name="title">Concepto,Tipo de documento,Número identificacion,Primer apellido del informado,Segundo apellido del informado,Primer nombre del informado,Otros nombres del informado,Razon social del informado,Direccion,Código dpto,Código mcp,País de residencia o domicilio,Pago o abono en cuenta deducible,Pago o abono en cuenta NO deducible,IVA mayor valor del costo o gasto deducible,IVA mayor valor del costo o gasto NO deducible,Retención en la fuente practicada Renta,Retencion en la fuente asumida Renta,Retencion en la fuente practicada IVA Regimen Común,Retencion en la fuente practicada IVA no domiciliados</field>
+            <field name="query">
+                SELECT code,code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,
+                    CASE WHEN primer_nombre IS NULL THEN name ELSE '' END,street,rcs_code,rc_code,rco_code,
+                    SUM(M),SUM(N),SUM(O),SUM(P),SUM(Q),SUM(R),SUM(S),SUM(T)
+                FROM (
+                    SELECT ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code as rcs_code,rc.code as rc_code,rco.code as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='M' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='M' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='M' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='M' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) M,
+                        COALESCE((CASE WHEN ffrccl.col='N' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='N' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='N' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='N' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) N,
+                        COALESCE((CASE WHEN ffrccl.col='O' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='O' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='O' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='O' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) O,
+                        COALESCE((CASE WHEN ffrccl.col='P' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='P' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='P' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='P' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) P,
+                        COALESCE((CASE WHEN ffrccl.col='Q' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='Q' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='Q' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='Q' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) Q,
+                        COALESCE((CASE WHEN ffrccl.col='R' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='R' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='R' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='R' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) R,
+                        COALESCE((CASE WHEN ffrccl.col='S' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='S' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='S' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='S' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) S,
+                        COALESCE((CASE WHEN ffrccl.col='T' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='T' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='T' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='T' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) T
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN account_period ap ON ap.id=aml.period_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id} AND ap.special != True AND aml.company_id={company_id}
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,rco.code,ffrccl.col,ffrccl.type,
+                            fpa.tope_min
+--                     HAVING ABS((ROUND(SUM(aml.debit)) - ROUND(SUM(aml.credit)))) >= COALESCE(fpa.tope_min, 0)
+                    HAVING (ROUND(SUM(aml.debit)) @may= COALESCE(fpa.tope_min,0)) OR
+                           (ROUND(SUM(aml.credit)) @may= COALESCE(fpa.tope_min,0))
+                UNION ALL
+                    SELECT ffrcc.code,'43' as code_dian,'222222222' as ref,NULL as primer_apellido,NULL as segundo_apellido,NULL as primer_nombre,
+                        NULL as otros_nombres,'CUANTÍAS MENORES' as name,NULL as street,NULL as rcs_code,NULL as rc_code,NULL as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='M' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='M' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='M' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='M' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) M,
+                        COALESCE((CASE WHEN ffrccl.col='N' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='N' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='N' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='N' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) N,
+                        COALESCE((CASE WHEN ffrccl.col='O' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='O' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='O' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='O' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) O,
+                        COALESCE((CASE WHEN ffrccl.col='P' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='P' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='P' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='P' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) P,
+                        COALESCE(0, 0) Q,
+                        COALESCE((CASE WHEN ffrccl.col='R' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit),0)
+                            WHEN ffrccl.col='R' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit),0)
+                            WHEN ffrccl.col='R' AND ffrccl.type='b' THEN 0
+                            WHEN ffrccl.col='R' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit),0) END),0) R,
+                        COALESCE(0, 0) S,
+                        COALESCE(0, 0) T
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN account_period ap ON ap.id=aml.period_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id} AND ap.special != True AND aml.company_id={company_id}
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,rco.code,ffrccl.col,ffrccl.type,
+                            fpa.tope_min
+                    HAVING (ROUND(SUM(aml.debit),0) @min COALESCE(fpa.tope_min,0)) AND
+                           (ROUND(SUM(aml.credit),0) @min COALESCE(fpa.tope_min,0))
+                  )
+                as datos
+                GROUP BY code,code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,street,rcs_code,rc_code,rco_code
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_1001_5002" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5002 - Honorarios</field>
+            <field name="code">5002</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5003" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5003 - Comisiones</field>
+            <field name="code">5003</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5004" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5004 - Servicios</field>
+            <field name="code">5004</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5005" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5005 - Arrendamientos</field>
+            <field name="code">5005</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5006" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5006 - Intereses y rendimientos financieros</field>
+            <field name="code">5006</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5007" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5007 - Compra de activos movibles</field>
+            <field name="code">5007</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5008" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5008 - Compra de activos fijos</field>
+            <field name="code">5008</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5010" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5010 - Los pagos por concepto de aportes parafiscales al SENA, cajas de compensacion familiar e ICBF</field>
+            <field name="code">5010</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5011" model="fpa.financial.reports.concepts.columns">
+            <field name="code">5011</field>
+            <field name="name">5011 - Los pagos o abonos en cuenta efectuados a las empresas promotoras de salud EPS y los aportes al Sistema de Riesgos Laborales, incluidos los aportes del trabajador</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5012" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5012 - Los pagos o abonos en cuenta por concepto de aportes obligatorios para pensiones efectuados a los Fondos de Pensiones</field>
+            <field name="code">5012</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5013" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5013 - Las donaciones en dinero efectuadas, a las entidades señaladas en los artículos 125, 1254, 126-2 y 158-1 del Estatuto Tributario y la establecida en el artículo 16 de la Ley 814 de 2003 y demas que determine la ley</field>
+            <field name="code">5013</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5014" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5014 - Las donaciones en activos diferentes a dinero efectuadas a las entidades señaladas en los artículos 125, 125-4, 126-2 y 158-1 del Estatuto Tributario y la establecida en el artículo 16 de la Ley 814 de 2003, y demás que determine la ley</field>
+            <field name="code">5014</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5015" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5015 - El valor de los impuestos solicitados como deducción</field>
+            <field name="code">5015</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />             
+        </record>
+        <record id="c_1001_5016" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5016 - Otros conceptos y deducciones</field>
+            <field name="code">5016</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5018" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5018 - El importe de las primas de reaseguros pagadas o abonadas en cuenta</field>
+            <field name="code">5018</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5019" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5019 - El monto de las amortizaciones realizadas</field>
+            <field name="code">5019</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5020" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5020 - Compra de activos fijos reales productivos sobre los cuales solicito deduccion</field>
+            <field name="code">5020</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5023" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5023 - Pagos o abonos en cuenta al exterior por asistencia tecnica</field>
+            <field name="code">5023</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5024" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5024 - Pagos o abonos en cuenta al exterior por marcas</field>
+            <field name="code">5024</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5025" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5025 - Pagos o abonos en cuenta al exterior por patentes</field>
+            <field name="code">5025</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5026" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5026 - El valor acumulado de los pagos o abonos en cuenta al exterior por regalias</field>
+            <field name="code">5026</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5027" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5027 - El valor acumulado de los pagos o abonos en cuenta al exterior por servicios</field>
+            <field name="code">5027</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5028" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5028 - Devolucion de pagos o abonos en cuenta y retenciones correspondientes a operaciones de años anteriores</field>
+            <field name="code">5028</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5029" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5029 - Cargos diferidos y/o gastos pagados por anticipado por compras</field>
+            <field name="code">5029</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5030" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5030 - Cargos diferidos y/o gastos pagados por anticipado por honorarios</field>
+            <field name="code">5030</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5031" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5031 - Cargos diferidos y/o gastos pagados por anticipado por comisiones</field>
+            <field name="code">5031</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5032" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5032 - Cargos diferidos y/o gastos pagados por servicios</field>
+            <field name="code">5032</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5033" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5033 - Cargos diferidos y/o gastos pagados por anticipado por arrendamientos</field>
+            <field name="code">5033</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5034" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5034 - Cargos diferidos y/o gastos pagados por anticipado por intereses y rendimientos financieros</field>
+            <field name="code">5034</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5035" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5035 - Otros cargos diferidos y/o gastos pagados</field>
+            <field name="code">5035</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5043" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5043 - Participaciones o dividendos pagados o abonados en cuenta en calidad de exigibles</field>
+            <field name="code">5043</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5044" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5044 - Pago por loterías, rifas, apuestas y similares</field>
+            <field name="code">5044</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5045" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5045 - Retención sobre ingresos de tarjetas debito y credito</field>
+            <field name="code">5045</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5046" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5046 - Enajenacion de activos fijos de personas naturajes</field>
+            <field name="code">5046</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5047" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5047 - El importe de los siniestros por lucro cesante pagados o abonados en cuenta</field>
+            <field name="code">5047</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5048" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5048 - El importe de los siniestros por daño emergente pagados o abonados en cuenta</field>
+            <field name="code">5048</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5054" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5054 - Devolucion de retenciones a titulo del impuesto del timbre, correspondientes a operaciones de años anteriores</field>
+            <field name="code">5054</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5055" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5055 - Viáticos</field>
+            <field name="code">5055</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5056" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5056 - Gastos de representacion</field>
+            <field name="code">5056</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5058" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5058 - El valor de los aportes, tasas y contribuciones solicitados como deducción</field>
+            <field name="code">5058</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5059" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5059 - El pago o abono en cuenta realiazado a cada uno de los cooperados, del valor del fondo para revalorizacion de aportes</field>
+            <field name="code">5059</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5060" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5060 - Redicion de inversiones en lo que corresponde al reembolso de capital</field>
+            <field name="code">5060</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5061" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5061 - Las utilidades pagadas o abonadas en cuenta</field>
+            <field name="code">5061</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5064" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5064 - Devoluciones de saldos de aportes pensionales pagados</field>
+            <field name="code">5064</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5065" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5065 - Excedentes pensionales de libre disponibilidad componente de capital pagados</field>
+            <field name="code">5065</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5066" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5066 - El Valor del impuesto al consumo solicitado como deduccion</field>
+            <field name="code">5066</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+        <record id="c_1001_5067" model="fpa.financial.reports.concepts.columns">
+            <field name="name">5067 - El valor acumulado de los pagos o abonos en cuenta al exterior por consultoria</field>
+            <field name="code">5067</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1001')" />
+        </record>
+    </data>
+</openerp>

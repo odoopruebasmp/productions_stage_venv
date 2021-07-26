@@ -1,0 +1,8 @@
+<openerp>
+    <data noupdate="1">
+        <record model="hr.salary.rule.category" id="hr_salary_rule_category_pila">
+            <field name="name">PILA</field>
+            <field name="code">PILA</field>
+        </record>
+    </data>
+</openerp>

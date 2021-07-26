@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--  CUENTAS DE INVENTARIO DE LA COMPAÑIA  -->
+        <record id="view_company_account_inventory_form_avancys" model="ir.ui.view">
+            <field name="name">res.company.account.inventory.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="inventory_account.view_company_sale_cost_invoice_form_avancys"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Auditoria">
+                        <group string="Tolerancia" col="2" colspan="2">                            
+                            <field name="tolerancia"/>
+                        </group>
+                        <group string="Cuentas de Inventario" col="2" colspan="2">                            
+                            <field name="account_inventory_ids" nolabel="1" widget="many2many" domain="[('type','=','other'),('code','ilike','14')]"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!--  WIZARD  -->
+        <record id="view_avancys_validation_wizard" model="ir.ui.view">
+            <field name="name">avancys.validation.wizard.form</field>
+            <field name="model">avancys.validation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Avancys Validation">
+                    <group col="4" colspan="4">
+                        <field name="type" required="1"/>
+                        <field name="company_id" required="1"/>
+                    </group>                    
+                    <notebook>
+                        <page string="Configuracion" attrs="{'invisible': ['|',('type','!=','auditoria'),('company_id','=',False)]}">
+                            <label string="Proceso de auditoria donde el sistema busca errores relacionados con movimientos logisticos y afectacion contable de las cuentas de inventario."/>                            
+                            <group col="4" colspan="4" string="Configuracion">
+                                <field name="config_analytic_global"/>
+                                <field name="picking_opetarion"/> 
+                                <field name="picking_contable"/>
+                                <field name="move_quants"/>
+                                <field name="picking_consu"/>
+                                <field name="cost_zero"/>
+                                <field name="product_detail"/>
+                            </group>              
+                            <group col="4" colspan="4">
+                                <button name="calculation" string="Calcular" type="object" class="oe_highlight" />
+                            </group>
+                        </page>
+                        <page string="Recosteo" attrs="{'invisible': ['|',('type','!=','recosteo'),('company_id','=',False)]}">
+                            <label string="Esta funcion se debe ejecutar con precausion, puede afectar notablemente el informe valorizado y el costo promedio actual. Se debe ejecutar fuera de linea, cuando no este en operacion el sistema, el tiempo de ejecuccion es dependiente de los productos a recostear y la cantidad de transacciones de los mismos. Es importante tener respaldo de la base de datos e informar a los lideres del proyecto y demas personal interesado"/>
+                            <group col="4" colspan="4">
+                                <button name="recosteo" string="Calcular" type="object" class="oe_highlight" />
+                            </group>
+                            <group col="4" colspan="4">
+                                <field name="product_id"/>
+                                <field name="date" required="1"/>
+                            </group>                  
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_avancys_validation_wiz" model="ir.actions.act_window">
+            <field name="name">Import Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">avancys.validation.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_avancys_validation_wizard"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="AVANCYS" id="menu_avancys_validation" parent="base.menu_reporting" sequence="10000000" groups="group_user_validation"/>
+        <menuitem name="EJECUTAR" id="menu_action_avancys_validation_process" parent="menu_avancys_validation" action="action_avancys_validation_wiz" sequence="1" groups="group_manager_validation"/>
+        
+        
+        <!--PROCESO DE VALIDACION-->
+        <record id="view_avancys_validation_form" model="ir.ui.view">
+            <field name="name">avancys.validation.form</field>
+            <field name="model">avancys.validation</field>
+            <field name="arch" type="xml">
+                <form string="Validation" version="7.0">
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="name"/>                        
+                            </h1>
+                            <div name='buttons' class="oe_right">  
+                                <button class="oe_inline oe_stat_button" name="view_validation" type="object" 
+                                icon="fa-bar-chart-o">
+                                <field string="ITEMS" name="count" widget="statinfo"/>
+                            </button>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="create_uid"/>
+                            <field name="create_date"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                        </group>
+                    </sheet>
+                </form>
+           </field>
+        </record>
+        
+        <record id="view_avancys_validation_tree" model="ir.ui.view">
+            <field name="name">avancys.validation</field>
+            <field name="model">avancys.validation</field>
+            <field name="arch" type="xml">
+                <tree string="Validation">
+                    <field name="name"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_avancys_validation" model="ir.actions.act_window">
+            <field name="name">Validation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">avancys.validation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>        
+
+        <menuitem name="VALIDACIONES" id="menu_action_avancys_validation" parent="menu_avancys_validation" action="action_avancys_validation" sequence="0" groups="group_user_validation"/>
+        
+        
+        <!--ITEMS DE VALIDACION-->
+        <record id="view_avancys_validation_line_form" model="ir.ui.view">
+            <field name="name">avancys.validation.line.form</field>
+            <field name="model">avancys.validation.line</field>
+            <field name="arch" type="xml">
+                <form string="Validation Line" version="7.0">
+                    <sheet>
+                        <group>
+                            <h1>
+                                <field name="type"/>                        
+                            </h1>
+                            <div name='buttons' class="oe_right">  
+                                <button class="oe_inline oe_stat_button" name="view_validation" type="object" 
+                                icon="fa-bar-chart-o" string="Vizualizar">
+                            </button>
+                            </div>
+                        </group>
+                        <group col="4" colspan="4">                            
+                            <field name="model"/>
+                            <field name="name"/>
+                            <field name="observaciones"/>
+                            <field name="company_id"/>
+                        </group>
+                        <notebook>                    
+                            <page string='Descripcion'>
+                                <group col="4" colspan="4">
+                                    <field name="period_id"/>
+                                    <field name="amount"/>
+                                    <field name="description"/>
+                                </group>
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+           </field>
+        </record>
+        
+        <record id="avancys_validation_line_search" model="ir.ui.view">
+            <field name="name">avancys.validation.line.search</field>
+            <field name="model">avancys.validation.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="period_id"/>
+                    <field name="type"/>                    
+                    <field name="observaciones"/>
+                    <field name="model"/>
+                    <field name="name"/>
+                    <separator/>
+                    <group expand="1" string="Group By...">
+                        <filter string="Modelo"  name="group_by_model" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'model'}"/>
+                        <filter string="Periodo"  name="group_by_period_id" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'period_id'}"/>
+                        <filter string="Tipo"  name="group_by_type" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_avancys_validation_line_tree" model="ir.ui.view">
+            <field name="name">avancys.validation.line.tree</field>
+            <field name="model">avancys.validation.line</field>
+            <field name="arch" type="xml">
+                <tree string="Validation Line">
+                    <field name="period_id"/>
+                    <field name="type"/>
+                    <field name="observaciones"/>
+                    <field name="model"/>
+                    <field name="name"/>
+                    <field name="amount" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+        
+    </data>
+    
+    <data noupdate="1">
+        <record id="seq_validation_number_type" model="ir.sequence.type">
+            <field name="name">Validacion Avancys</field>
+            <field name="code">validation.avancys</field>
+        </record>
+        <record id="seq_validation_avancys_number" model="ir.sequence">
+            <field name="name">Secuencia de Validacion Avancys</field>
+            <field name="code">validation.avancys</field>
+            <field name="prefix">VALIDATION-</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</openerp>

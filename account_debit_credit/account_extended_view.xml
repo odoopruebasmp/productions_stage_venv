@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_account_account_debit_credit_tree_avancys" model="ir.ui.view">
+            <field name="name">account.account.credit.debit.tree</field>
+            <field name="model">account.account</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="account.view_account_tree"/>
+            <field name="arch" type="xml">
+                <field name="debit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="credit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="balance" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_account_account_debit_credit_list_avancys" model="ir.ui.view">
+            <field name="name">account.account.credit.debit.list</field>
+            <field name="model">account.account</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="arch" type="xml">
+                <field name="debit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="credit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="balance" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+
+  
+ 
+        <record id="view_account_account_debit_credit_form_avancys" model="ir.ui.view">
+            <field name="name">account.account.debit.credit.form</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <field name="debit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="credit" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="balance" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+        
+
+    </data>
+</openerp>

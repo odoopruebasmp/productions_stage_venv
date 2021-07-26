@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>                
+        <record id="group_modify_over_credit_limit" model="res.groups">
+            <field name="name">Aprobacion ventas sin cupo credito</field>
+            <field name="comment">pueden saltarse la restriccion de bloqueo de cupo de credito o facturas vencidas</field>
+            <field name="category_id" ref="base.module_category_sales_management"/>
+        </record>        
+    </data>
+</openerp>

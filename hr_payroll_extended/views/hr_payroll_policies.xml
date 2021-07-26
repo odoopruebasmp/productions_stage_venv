@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <!--Politicas de nomina-->
+
+    <record id="company_payroll_policies" model="ir.ui.view">
+        <field name="name">company_payroll_policies_form</field>
+        <field name="model">res.company</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Politicas Nomina">
+                    <group>
+                        <group string="Politicas de Nomina">
+                            <field name="simple_provisions"/>
+                            <field name="rtf_projection"/>
+                            <field name="ded_round"/>
+                            <field name="rtf_round"/>
+                            <field name="aux_apr_prod"/>
+                            <field name="fragment_vac"/>
+                            <field name="prv_vac_cpt"/>
+                            <field name="aux_prst"/>
+                            <field name="aus_prev"/>
+                            <field name="nonprofit"/>
+                        </group>
+                        <group string="Decreto 558 de 2020/Aporte a pension">
+                            <field name="percentage_total"/>
+                            <field name="percentage_employee"/>
+                            <field name="percentage_employer"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="hr_concept_form" model="ir.ui.view">
+        <field name="name">hr.concept.form</field>
+        <field name="model">hr.concept</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet string="">
+                    <group cols="4">
+                        <group cols="2">
+                            <field name="code" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="fortnight_ap"/>
+                        </group>
+                        <group cols="2">
+                            <field name="category" readonly="1"/>
+                            <field name="partner_type"/>
+                            <field name="partner_other" attrs="{'invisible': [('partner_type','!=','other')], 'required': [('partner_type', '=', 'other')]}"/>
+                        </group>
+                    </group>
+                    <group cols="4" string="Configuración contable">
+                        <group cols="2" string="Débitos">
+                            <field name="reg_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="reg_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="reg_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                        </group>
+                        <group cols="2" string="Créditos">
+                            <field name="reg_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="reg_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="reg_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="int_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                            <field name="apr_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="documentation"/>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_concept_tree" model="ir.ui.view">
+        <field name="name">hr.concept.tree</field>
+        <field name="model">hr.concept</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_concept_search" model="ir.ui.view">
+        <field name="name">hr.concept.search</field>
+        <field name="model">hr.concept</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" domain="" context="{'group_by':'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_payslip_concept_search" model="ir.ui.view">
+        <field name="name">hr.payslip.concept.search</field>
+        <field name="model">hr.payslip.concept</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <group expand="0" string="Group By">
+                    <filter string="Lote" domain="" context="{'group_by':'run_id'}"/>
+                    <filter string="Nomina" domain="" context="{'group_by':'payslip_id'}"/>
+                    <filter string="Categoria" domain="" context="{'group_by':'category'}"/>
+                    <filter string="Origen" domain="" context="{'group_by':'origin'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_concept_log_search" model="ir.ui.view">
+        <field name="name">hr.concept.log.search</field>
+        <field name="model">hr.concept.log</field>
+        <field name="arch" type="xml">
+            <search string="">
+                <field name="name"/>
+                <field name="concept_id"/>
+                <field name="period_id"/>
+                <field name="employee_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Periodo" domain="" context="{'group_by':'period_id'}"/>
+                    <filter string="Detalle" domain="" context="{'group_by':'name'}"/>
+                    <filter string="Concepto" domain="" context="{'group_by':'code'}"/>
+                    <filter string="Empleado" domain="" context="{'group_by':'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_payslip_concept_graph" model="ir.ui.view">
+        <field name="name">hr.payslip.concept.graph</field>
+        <field name="model">hr.payslip.concept</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Conceptos salariales" type="bar">
+                <field name="code"/>
+                <field name="total" operator="+"/>
+            </graph>
+        </field>
+    </record>
+
+
+    <record id="hr_payslip_concept_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.concept.tree</field>
+        <field name="model">hr.payslip.concept</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="run_id"/>
+                <field name="payslip_id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="origin"/>
+                <field name="amount"/>
+                <field name="qty"/>
+                <field name="rate"/>
+                <field name="total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_concept_log_tree" model="ir.ui.view">
+        <field name="name">hr.concept.log.tree</field>
+        <field name="model">hr.concept.log</field>
+        <field name="arch" type="xml">
+            <tree string="">
+                <field name="name"/>
+                <field name="value"/>
+                <field name="code"/>
+                <field name="concept_id"/>
+                <field name="period_id"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+     <record id="hr_vacation_book_tree" model="ir.ui.view">
+        <field name="name">hr.vacation.book.tree</field>
+        <field name="model">hr.vacation.book</field>
+        <field name="arch" type="xml">
+            <tree string="Libro de vacaciones">
+                <field name="contract_id"/>
+                <field name="enjoyed"/>
+                <field name="payed"/>
+                <field name="payslip_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_get_pending_vac" model="ir.actions.server">
+        <field name="name">Calcular dias vacaciones</field>
+        <field name="model_id" ref="model_hr_contract"/>
+        <field name="state">code</field>
+        <field name="code">
+            if context.get('active_model') == 'hr.contract' and context.get('active_ids'):
+                self.get_pend_vac_upd(cr, uid, context['active_ids'], context=context)
+        </field>
+    </record>
+
+    <record id="ir_get_pending_vac" model="ir.values">
+        <field eval="'client_action_multi'" name="key2"/>
+        <field eval="'hr.contract'" name="model"/>
+        <field name="name">Calcular dias vacaciones</field>
+        <field eval="'ir.actions.server,%d'%action_get_pending_vac" name="value"/>
+    </record>
+
+    <record id="hr_payslip_concept_log_graph" model="ir.ui.view">
+        <field name="name">hr.concept.log.graph</field>
+        <field name="model">hr.concept.log</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Log auditoria" type="pivot">
+                <field name="name"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hr_vacation_book_graph" model="ir.ui.view">
+        <field name="name">hr.vacation.book.graph</field>
+        <field name="model">hr.vacation.book</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Libro de vacaciones" type="pivot">
+                <field name="contract_id"/>
+                <field name="enjoyed"  type="measure"/>
+                <field name="payed"  type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hr_concept_action" model="ir.actions.act_window">
+        <field name="name">Conceptos</field>
+        <field name="res_model">hr.concept</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="hr_payslip_concept_action" model="ir.actions.act_window">
+        <field name="name">Conceptos Calculados</field>
+        <field name="res_model">hr.payslip.concept</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph</field>
+    </record>
+
+    <record id="hr_concept_log_action" model="ir.actions.act_window">
+        <field name="name">Log de auditoria</field>
+        <field name="res_model">hr.concept.log</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="context">{'search_default_groupby_code':1}</field>
+    </record>
+
+    <record id="hr_vacation_book_action" model="ir.actions.act_window">
+        <field name="name">Libro de vacaciones</field>
+        <field name="res_model">hr.vacation.book</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph,tree</field>
+        <field name="context">{'search_default_groupby_contract_id':1}</field>
+    </record>
+
+    <menuitem id="menu_hr_concepts" action="hr_concept_action"
+              parent="hr_payroll.payroll_configure" sequence="1"/>
+
+    <menuitem action="hr_payslip_concept_action" id="menu_hr_payslip_concepts"
+              name="Conceptos Calculados" sequence="100" parent="hr_payroll.menu_hr_root_payroll"/>
+
+    <menuitem action="hr_concept_log_action" id="menu_hr_concept_log"
+              name="Log de auditoria" sequence="110" parent="hr_payroll.menu_hr_root_payroll"/>
+
+    <menuitem action="hr_vacation_book_action" id="menu_hr_vacation_book"
+              name="Libro de vacaciones" sequence="120" parent="hr_payroll.menu_hr_root_payroll"/>
+
+</data>
+</openerp>

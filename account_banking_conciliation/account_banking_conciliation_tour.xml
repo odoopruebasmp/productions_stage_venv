@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--Tour-->
+        <record model="avancys.help.tour" id="avancys_tour_banking">
+            <field name="view_type">form</field>
+            <field name="state">active</field>
+            <field name="menu_id" ref="menu_account_parser"/>
+        </record>
+
+        <!--Pasos-->
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_1">
+            <field name="element">label:contains("Formato de banco")</field>
+            <field name="title">Nombre del formato</field>
+            <field name="content">Aqui se define el nombre del formato, generalmente coincide con el nombre del banco</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">bottom</field>
+            <field name="sequence">1</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_2">
+            <field name="element">label:contains("Tipo de separador")</field>
+            <field name="title">Tipo de separador</field>
+            <field name="content">En este campo se define la estructura, eligiendo entre "delimitado" y "ninguno",
+                Los archivos delimitados son aquellos que seccionan sus columnas con símbolos especiales, por ejemplo
+                los archivos CSV o txt con , o ; para definir su estructura, por regla general los archivos delimitados
+                no presentan uniformidad en la cantidad de caracteres en sus lineas.&lt;br/&gt;
+                Seleccionar "Ninguno" si el archivo no tiene separadores y es un archivo plano por coordenadas, es decir,
+                tienen un numero de carcteres fijos por lineas de contenido
+            </field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">bottom</field>
+            <field name="sequence">2</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_3">
+            <field name="element">label:contains("Posicion fecha")</field>
+            <field name="title">Campos de posicion</field>
+            <field name="content">Los campos de posición funcionan exactamente igual, consisten en definir a través de
+                dos números enteros separados por un guion "-" la posición de inicio y final en la que se encuentra el campo.
+                La definición varia de acuerdo a la estructura del archivo, cuando es un archivo &lt;b&gt;delimitado&lt;/b&gt; se
+                especifica la columna, en cambio, cuando se trata de un archivo por coordenadas o plano, se indica la posición
+                absoluta dentro de la linea en la que se encuentra la información (contando los caracteres).
+                Por ejemplo, si tenemos un archivo delimitado CSV, en el que la fecha se encuentre en la primera columna,
+                el valor a asignar al campo seria: 0-1
+                Si se tratara de un archivo plano en el que la fecha se encuentre al inicio de la linea y este abarca 8
+                caracteres el valor a asignar es 0-8
+            </field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">bottom</field>
+            <field name="sequence">3</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_4">
+            <field name="element">	label:contains("Formato de fecha")</field>
+            <field name="title">Formato de fecha</field>
+            <field name="content">Sigue los lineamientos de python en cuanto al formato de fecha
+                %Y - año de 4 dígitos
+                %y - año de 2 dígitos
+                %m - mes de 2 digitos
+                %d - día de 2 dígitos
+                Por ejemplo, si la fecha en el archivo esta estimulada de la siguiente manera: 2017/08/12 el formato a
+                asignar sería %Y/%m/%d Para mayor documentación ver:
+                &lt;a href="//docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior" &gt;Formatos de fecha&lt;/a&gt;
+            </field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">bottom</field>
+            <field name="sequence">4</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_5">
+            <field name="element">label:contains("Largo de linea")</field>
+            <field name="title">Largo de linea</field>
+            <field name="content">Dependiendo de la estructura del archivo se define la cantidad de columnas que contiene
+                (en caso del delimitado) o la cantidad de caracteres (para los planos)</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">top</field>
+            <field name="sequence">5</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_6">
+            <field name="element">label:contains("Signo fuera del valor")</field>
+            <field name="title">Posicion del signo</field>
+            <field name="content">Dado que los archivos generados por los bancos no especifican de manera estándar si se
+                trata de un débito o un crédito a la cuenta, este check se debe marcar cuando en el valor de la
+                transacción no contenga los símbolos + o -</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">left</field>
+            <field name="sequence">6</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_7">
+            <field name="element">label:contains("Declaracion de signo")</field>
+            <field name="title">Signo fuera de valor</field>
+            <field name="content">Se declara en orden los símbolos que se consideran positivos y negativos en ese estricto
+                orden, ejemplo, si el archivo declara con una C y una D los movimientos, considerando que C corresponde a
+                un valor positivo en la cuenta y D a uno negativo se debe asignar C,D</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">bottom</field>
+            <field name="sequence">7</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_8">
+            <field name="element">label:contains("Formato de valor")</field>
+            <field name="title">Formato de valor</field>
+            <field name="content">En algunos archivos el valor tiene diferentes formatos, aqui se especifica si cuenta
+                con separador de decimales, y si lo tiene, si es con punto o coma</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">top</field>
+            <field name="sequence">8</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_9">
+            <field name="element">label:contains("Salto de linea")</field>
+            <field name="title">Salto de linea</field>
+            <field name="content">Dependiendo del tipo de archivo se define el tipo de salto de linea, generalmente los
+                archivos csv cuentan con salto de linea \r\n mientras los planos son \n</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">top</field>
+            <field name="sequence">9</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+        <record model="avancys.help.tour.step" id="avancys_tour_banking_10">
+            <field name="element">label:contains("Dominio adicional")</field>
+            <field name="title">Dominio adicional &lt;b&gt; AVANZADO&lt;/b&gt;</field>
+            <field name="content">En este campo se definen los parametros para realizar la busqueda exacta al momento de
+                conciliar los movimientos del extracto con los movimientos contables. Ejemplo, si se quiere agregar al
+                dominio de busqueda el campo ref del extracto para hacer match con el campo name de los movimientos
+                contables se aplicaria asi: &lt;name,=,ref&gt;  Siempre definiendo primero el campo del movimiento contable
+                y abriendo nuevas etiquetas por cada criterio</field>
+            <field name="backdrop" eval="False"/>
+            <field name="placement">right</field>
+            <field name="sequence">10</field>
+            <field name="tour_id" ref="avancys_tour_banking"/>
+        </record>
+
+    </data>
+</openerp>

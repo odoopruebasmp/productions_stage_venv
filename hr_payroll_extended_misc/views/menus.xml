@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<menuitem id="menu_fpa_financial_reports" name="Informes" parent="base.menu_reporting" sequence="-1"/>
+		<menuitem action="action_financial_reports" id="menu_fpa_generate_financial_reports" name="Generar/Consultar" parent="menu_fpa_financial_reports" sequence="10" groups="group_user_report_accounting_reports"/>
+		<menuitem id="menu_fpa_financial_reports_conf" name="Configuración" parent="menu_fpa_financial_reports" sequence="100" groups="group_conf_report_accounting_reports"/>
+		<menuitem id="menu_fpa_generate_financial_reports_period_range" action="action_financial_reports_period_range" name="Rango de periodos" parent="menu_fpa_financial_reports_conf" sequence="10"/>
+		<menuitem id="menu_fpa_generate_financial_reports_period" action="action_financial_reports_period" name="Periodo" parent="menu_fpa_financial_reports_conf" sequence="10"/>
+	</data>
+</openerp>

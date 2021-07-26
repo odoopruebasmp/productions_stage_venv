@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    
+    <record id="purchase_order_transport_form_extended" model="ir.ui.view">
+        <field name="name">purchase.order.transport.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="transport" invisible="1"/>
+            </field>
+            <page string='Deliveries &amp; Invoices' position="replace"/>
+            <notebook position="inside">
+                <page string='Facturacion'>
+                    <group>
+                        <field name="invoice_method"/>
+                        <field name="invoiced"/>
+                        
+                        <!-- En la pestana de anticipos -->
+                        <field name="payment_term_id" widget="selection"/>
+                        
+                        <field name="fiscal_position" attrs="{'readonly': [('invoiced','=', True)]}"/>
+                        <field name="validator" groups="base.group_no_one"/>
+                        <field name="date_approve" groups="base.group_no_one"/>
+                    </group>
+                </page>
+                <page string='Informacion Envio'>
+                    <group>
+                        <field name="dest_address_id" string="Customer Address" on_change="onchange_dest_address_id(dest_address_id)" groups="stock.group_locations"/>
+                        <field name="origin_id"/>
+                        <field name="location_id" groups="stock.group_locations"/>
+                        <field name="shipped" groups="base.group_no_one"/>
+                        <field name='calculate_method' attrs="{'required': [('transport','=',True)]}"/>
+                        <field name='weight'/>
+                        <separator string="Servicios de transporte" colspan="4"/>
+                        <field name='transport_order_line_ids' nolabel="1" colspan="4">
+                            <tree>
+                                <field name='product_id' />
+                                <field name='name' />
+                                <field name='date_planned' />
+                                <field name='order_currency_id' />
+                                <field name='price_unit' />
+                                <field name='taxes_id' />
+                                <field name='price_subtotal' sum="Total"/>
+                                <field name='local_subtotal' sum="Total Local"/>
+                            </tree>
+                        </field>
+                        <separator string="Remisiones Relacionadas" colspan="4"/>
+                        <field name='stock_picking_ids' nolabel="1" colspan="4">
+                        <tree>
+                            <field name='name' />
+                            <field name='transport_order_id'/>
+                            <field name='invoice_state' />
+                            <field name='date' />
+                            <field name='max_date'/>
+                            <field name='weight' sum="Total Weight"/>
+                            <field name='state' />
+                        </tree> 
+                        </field>
+                    </group>
+                </page>
+                <page string='Productos a transportar'>
+                    <button string="Prorratear Costo Transporte" type="object" name="prorate_cost"/>
+                    <group>
+                        <field name='local_subtotal_transport' />
+                    </group>
+                    <field name='transport_stock_move_ids' domain="[('state','in',['waiting','confirmed','assigned']),('transport_id','=',False),('location_id','=',origin_id),('location_dest_id','=',location_id)]">
+                        <tree>
+                            <field name='origin' />
+                            <field name='product_id' />
+                            <field name='product_uom_qty' />
+                            <field name='product_uom' string="Unidad de compra"/>
+                            <field name='product_qty' />
+                            <field name='product_uos' string="Unidad de almacenaje"/>
+                            <field name='weight' sum="Total Weight"/>
+                            <field name='price_unit_total' sum="Total Price"/>
+                            <field name='transport_cost' sum="Total Transport Cost"/>
+                            <field name='total_cost' sum="Total Cost"/>
+                            <field name='location_id' invisible="1"/>
+                            <field name='location_dest_id' invisible="1"/>
+                            <field name='state'/>
+                        </tree> 
+                    </field>
+                    <separator string="Remisiones de Transporte"/>
+                    <field name='stock_picking_transport_ids'>
+                        <tree>
+                            <field name='name' />
+                            <field name='invoice_state' />
+                            <field name='date' />
+                            <field name='max_date'/>
+                            <field name='weight' sum="Total Weight"/>
+                            <field name='state' />
+                        </tree> 
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+        
+    <record id="action_purchase_transport_service" model="ir.actions.act_window">
+        <field name="name">Transporte</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('transport','=',True)]</field>
+        <field name="context">{'default_transport':True, 'transport':True}</field>
+    </record>
+    
+    <menuitem id='menu_transport_tree' name='Transporte'
+        action='action_purchase_transport_service' parent='purchase.menu_procurement_management' />
+
+	</data>
+</openerp>

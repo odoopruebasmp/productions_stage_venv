@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_sales_import_mp_inherited" model="ir.ui.view">
+            <field name="name">sale.order.import.mp.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref='sales_import_mp.view_sales_import_mp' />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position='after'>
+                    <field name='qty_availble' />
+                    <field name='proposed_qty' />
+                </xpath>
+                <xpath expr="//field[@name='sale_net_price_diff']" position='after'>
+                    <field name='qty_availble' />
+                    <field name='proposed_qty' />
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_shop_form" model="ir.ui.view">
+            <field name="name">sale.shop</field>
+            <field name="model">sale.shop</field>
+            <field name="arch" type="xml">
+                <form string="Sales Shop" version="7.0">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1><field name="name"/></h1>
+                    <group name="shop">
+                        <group>
+                            <field name="payment_default_id"/>
+                            <field domain="[('type','=','sale')]" name="pricelist_id" groups="product.group_sale_pricelist"/>
+                        </group>
+                        <group>
+                            <field name="project_id" groups="analytic.group_analytic_accounting"/>
+                            <field name='shop_ean' placeholder="e.g. 5901235543457"/>
+                        </group>
+                    </group>
+                </form>
+           </field>
+        </record>
+        
+        <record id="view_shop_tree" model="ir.ui.view">
+            <field name="name">sale.shop</field>
+            <field name="model">sale.shop</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Shop">
+                    <field name="name"/>
+                    <field name="pricelist_id" groups="product.group_sale_pricelist"/>
+                    <field name="project_id" groups="analytic.group_analytic_accounting"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_shop_form" model="ir.actions.act_window">
+            <field name="name">Shop</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.shop</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_shop_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new sale shop.
+              </p><p>
+                Each quotation or sales order must be linked to a shop. The
+                shop also defines the warehouse from which the products will be
+                delivered for each particular sales.
+              </p>
+            </field>
+        </record>
+        
+
+        <menuitem name="Import Sale Order" id="menu_sale_order_import" parent="base.menu_sales" action="action_sale_import_wiz"/>
+          
+        <record id="view_pos_extra_form" model="ir.ui.view">
+            <field name="name">view.pos.extra.form</field>
+            <field name="model">pos.extra</field>
+            <field name="arch" type="xml">
+                <form string="Extra POS Qty" version="7.0">
+                    <field name="ean_punto_de_venta" />
+                    <field name='nombre_punto_de_venta'/>
+                    <field name="cantidad_pto_vta" /> 
+                    <field name="precio_bruto" />
+                    <field name="precio_neto" />
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="view_pos_extra_tree" model="ir.ui.view">
+            <field name="name">view.pos.extra.tree</field>
+            <field name="model">pos.extra</field>
+            <field name="arch" type="xml">
+                <tree string="Extra POS Qty" version="7.0">
+                    <field name="ean_punto_de_venta" />
+                    <field name='nombre_punto_de_venta'/>
+                    <field name="cantidad_pto_vta" /> 
+                    <field name="precio_bruto" />
+                    <field name="precio_neto" />
+                </tree>
+            </field>
+        </record>
+        
+
+        <record id="view_sales_import_mp" model="ir.ui.view">
+            <field name="name">sale.order.import.mp</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref='sale.view_order_form'/>
+            <field name="priority">19</field>
+            <field name="arch" type="xml">
+                <!--<xpath expr="/form/header/button[@name='invoice_cancel']" position='after'>
+                    <button name="show_red_lines" string="Show Red Order Lines" type="object" class="oe_highlight" />
+                    <button name="show_all_lines" string="Show All Order Lines" type="object" class="oe_highlight" />
+                </xpath>-->
+                <field name="currency_id" position='after'>
+                    <field name='order_type'/>
+                    <field name='type_cross'/>
+                    <field name='picking_type_cross' attrs="{'invisible':[('type_cross','!=','remision')], 'required':[('type_cross','=','remision')]}"/>
+                    <field name='location_id' attrs="{'invisible':[('type_cross','=','remision')]}"/>                    
+                    <field name='min_ship_date'/>
+                    <field name='max_ship_date'/>
+                    <field name='net_price' invisible="1"/>
+                </field><!--
+                <page string="Other Information" position='after'>
+                    <page string='Promotional Agreement'>
+                        <field name='agreement'/>
+                    </page>
+                </page>-->
+                <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position='after'>
+                    <field name='active' invisible="1"/>
+                    <field name='sale_net_price_diff'/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree" position='replace'>
+                    <tree colors="red:sale_net_price_diff!=0.0">
+                        <!--<field name="despacho"/>-->
+                        <field name="product_id"/>
+                        <field name="state" invisible="1"/>
+                        <field name="sale_net_price_diff" invisible="1" />
+                        <field name="ean_del_tem"/>
+                        <field name="plu_lineas"/>
+                        <field name="product_uom_qty"/>
+                        <!--<field name="ean_punto_de_venta"/>-->
+                        <!--<field name="nombre_punto_de_venta"/>-->
+                        <field name="precio_bruto"/>
+                        <field name="precio_neto"/>
+                        <field name="price_unit"/>
+                        <field name="discount" groups="sale.group_discount_per_so_line" string="MP Descuento"/>
+                        <field name="sale_neto"/>
+                        <field name="price_subtotal" string="MP Subtotal"/>
+                    </tree>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position='attributes'>
+                    <attribute name='string'>MP Precio Bruto</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='precio_neto']" position='attributes'>
+                    <attribute name='string'>CEN Precio Neto</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='precio_bruto']" position='attributes'>
+                    <attribute name='string'>CEN Precio Bruto</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        
+        <record id="view_sales_import_mp_partner" model="ir.ui.view">
+            <field name="name">sale.order.import.mp.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref='base.view_partner_form'/>
+            <field name="arch" type="xml">
+                <field name="email" position='after'>
+                    <field name='partner_ean' placeholder="e.g. 5901234123564"/>
+                </field>
+            </field>
+        </record>
+        
+
+        <!--<record id="view_sales_import_mp_sale_shop" model="ir.ui.view">
+            <field name="name">sale.order.import.mp.sale.shop</field>
+            <field name="model">sale.shop</field>
+            <field name="inherit_id" ref='sale.view_shop_form'/>
+            <field name="arch" type="xml">
+                <field name="company_id" position='after'>
+                    <field name='shop_ean' placeholder="e.g. 5901235543457"/>
+                </field>
+            </field>
+        </record>-->
+        
+        
+        <record id="view_sales_import_mp_stock_location" model="ir.ui.view">
+            <field name="name">sale.order.import.mp.stock.location</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref='stock.view_location_form'/>
+            <field name="arch" type="xml">
+                <field name="active" position='after'>
+                    <field name='stock_ean' placeholder="e.g. 5901234165457"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_sales_import_mp_stock_picking_type" model="ir.ui.view">
+            <field name="name">stock.picking.type.mp</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref='stock.view_picking_type_form'/>
+            <field name="arch" type="xml">
+                <field name="warehouse_id" position='after'>
+                    <field name='cross_docking'/>
+                </field>
+            </field>
+        </record>
+
+        
+        <record id="sale_order_imp_view_inherit" model="ir.ui.view">
+            <field name="name">sale_order_imp_view_inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form//field[@name='name']" position='after'>
+                    <label for="pos_extra_ids" string="POS Extra" />
+                    <field name="pos_extra_ids" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='name']" position='before'>
+                    <group>
+                        <field name="qty_pto_vta"/>
+                    </group>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Evento">
+                        <group colspan="4">
+                            <field name="event_id"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        
+        <record id="stock_move_imp_view_inherit_id" model="ir.ui.view">
+            <field name="name">stock.move.imp.view.inherit.name</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@string='Reserved Quants']" position="before">                    
+                    <separator/>
+                    <label for="pos_extra_ids" string="POS Extra" />
+                    <field name="pos_extra_ids" colspan='4' nolabel='1'/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_stock_picking_mp_dos" model="ir.ui.view">
+            <field name="name">stock.picking.mp</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref='inventory_account.view_picking_form_inventory_account'/>
+            <field name="arch" type="xml">
+                <field name="owner_id" position='after'>
+                    <label string="N O.C."/>
+                    <field name='n_oc'/>
+                    <field name='type_code' invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        
+        <record id="stock_picking_imp_view_inherit_id" model="ir.ui.view">
+            <field name="name">stock.picking.imp.view.inherit.name</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name='cliente_id'/>
+                </field>
+                <field name="name" position="before">
+                    <field name='type_cross'/>
+                </field>
+                <field name="max_date" position="after">
+                    <field name='min_ship_date'/>
+                    <field name='max_ship_date'/>
+                </field>
+            </field>
+        </record>
+        
+        
+        <record id="stock_picking_mp_inherit_search" model="ir.ui.view">
+            <field name="name">stock.picking.imp.view.mp.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="before">
+                    <field name='cliente_id'/>
+                    <field name='n_oc'/>
+                </field>
+            </field>
+        </record>
+        
+
+        <record id="product_pricelist_item_form_view_inherited" model="ir.ui.view">
+            <field name="name">view.product.pricelist.item.inherited</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price_max_margin']" position="after">
+                    <field name="discount"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

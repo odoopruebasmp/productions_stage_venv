@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="avancys_votes_form_view">
+            <field name="name">avancys.form</field>
+            <field name="model">avancys.votes</field>
+            <field name="arch" type="xml">
+                <form string="Formulario de votos">
+                    <header>
+                        <button name="votar" type="object" string="Votar" states="borrador" class="oe_highlight" confirm="¿Está seguro que desea votar?"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group string='Votaciones'>
+    	                        <field name="notes" attrs="{'readonly':[('state','=','procesado')]}"/>
+                                <field name="idea_ids" attrs="{'readonly':[('state','=','procesado')]}"/>
+                                <field name="create_uid" readonly="True"/>
+                                <field name="dates"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="avancys_votes_tree_view">
+            <field name="name">avancys.tree</field>
+            <field name="model">avancys.votes</field>
+            <field name="arch" type="xml">
+                <tree string="Lista de votos">
+                    <field name="notes"/>
+                    <field name="idea_ids"/>
+                    <field name="create_uid"/>
+                    <field name="dates"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="avancys_votes_list_action">
+            <field name="name">Votos</field>
+            <field name="res_model">avancys.votes</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crea el primer voto
+                </p>
+            </field>
+        </record>
+    </data>
+</openerp>

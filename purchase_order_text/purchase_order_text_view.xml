@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_purchase_order_text_form">
+            <field name="name">purchase.order.text</field>
+            <field name="model">purchase.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="after" invisible="True" alignment="left">
+                    <newline/>
+                    <field name="amount_in_word" invisible="True" alignment="left"/>
+                    <newline/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

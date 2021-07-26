@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record model="ir.ui.view" id="sale_margin_sale_order_extended">
+            <field name="name">sale.order.margin.view.extended.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='margin']" position="attributes">
+                    <attribute name="groups">stock_extended.group_stock_extended_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="sale_margin_sale_order_extended_form">
+            <field name="name">sale.order.margin.view.extended.form.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form//field[@name='purchase_price']" position="attributes">
+                    <attribute name="groups">stock_extended.group_stock_extended_manager</attribute>
+                </xpath> 
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="sale_margin_sale_order_extended_tree">
+            <field name="name">sale.order.margin.view.extended.form.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="attributes">
+                    <attribute name="groups">stock_extended.group_stock_extended_manager</attribute>
+                </xpath> 
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="invoice_line_margin_extended_form">
+            <field name="name">account.invoice.line.margin.view.extended.form</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Gestion del Margen">
+                        <group string="Informacion" colspan="6" col="4">
+                            <field name="partner_id2"/>
+                            <field name="partner_shipping_id"/>
+                            <field name="date"/>
+                            <field name="period_id"/>
+                            <field name="state"/>
+                            <field name="type"/>
+                        </group>
+                        <group string="Unitarios" colspan="6" col="4">
+                            <field name="price_neto"/>
+                            <field name="discount_line"/>                            
+                            <field name="cost"/>                            
+                            <field name="margin"/>
+                            <field name="margin_p"/>
+                        </group>
+                        <group string="Totales" colspan="6" col="4">
+                            <field name="price_neto_t"/>
+                            <field name="cost_t"/>
+                            <field name="margin_t"/>
+                        </group>
+                        <group string="Import Cost" colspan="4" col="4">
+                            <field name="cost_file"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_account_invoice_line_report_search" model="ir.ui.view">
+            <field name="name">account.invoice.line.report.search</field>
+            <field name="model">account.invoice.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Analisis de Facturas">
+                    <field name="product_id"/>
+                    <field name="partner_id2"/>
+                    <field name="partner_shipping_id"/>   
+                    <field name="account_id"/>
+                    <field name="invoice_id"/>
+                    <field name="account_analytic_id"/>
+                    <field name="division_id"/>
+                    <field name="category_id"/>
+                    <field name="subcategory_id"/>
+                    <field name="state"/>
+                    <field name="period_id"/>   
+                    <field name="type_product"/>
+                    <separator/>
+                    <filter string="Facturas" name="invoice" domain="['|',('type','=','Facturas'),('type','=','Facturas Proveedor')]"/>
+                    <filter string="Devoluciones" name="return" domain="['|',('type','=','Devoluciones'),('type','=','Devoluciones Proveedor')]"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Almacenables" name="type_product1" domain="[('type_product','=','product')]"/>
+                    <filter string="Consumibles" name="type_product2" domain="[('type_product','=','consu')]"/>
+                    <filter string="Servicios" name="type_product3" domain="[('type_product','=','service')]"/>
+                    <separator orientation="vertical"/>
+                    <group string="Group By">
+                        <filter string="Partner" name="partner_id2" context="{'group_by':'partner_id2'}"/>
+                        <filter string="Producto" name="product_id" context="{'group_by':'product_id'}"/>
+                        <filter string="Tipo Producto" name="type_product" context="{'group_by':'type_product'}"/>
+                        <filter string="Division" name="division_id" context="{'group_by':'division_id'}"/>
+                        <filter string="Categoria" name="category_id" context="{'group_by':'category_id'}"/>
+                        <filter string="Subcategoria" name="subcategory_id" context="{'group_by':'subcategory_id'}"/>
+                        <filter string="Factura" name="invoice_id" context="{'group_by':'invoice_id'}"/>
+                        <filter string="Centro de Costo" name="account_analytic_id" context="{'group_by':'account_analytic_id'}"/>
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                        <filter string="Date" name="date" context="{'group_by':'date'}"/>
+                        <filter string="Periodo" name="period_id" context="{'group_by':'period_id'}"/>
+                        <filter string="Comercial" name="user_id" context="{'group_by':'user_id'}"/>
+                        <filter string="Tipo Documento" name="type" context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_account_invoice_line_sale_report_graph" model="ir.ui.view">
+            <field name="name">account.invoice.line.report.graph</field>
+            <field name="model">account.invoice.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Facturas" type="pivot" stacked="True">
+                    <field name="price_neto_t" type="measure"/>
+                    <field name="cost_t" type="measure"/>
+                    <field name="margin_t" type="measure"/>
+                    <field name="margin_p" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="view_account_invoice_line_purchase_report_graph" model="ir.ui.view">
+            <field name="name">account.invoice.line.report.graph</field>
+            <field name="model">account.invoice.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Facturas" type="pivot" stacked="True">
+                    <field name="price_neto_t" type="measure"/>
+                    <field name="cost_t" type="measure"/>
+                    <field name="margin_t" type="measure"/>
+                    <field name="margin_p" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="action_account_invoice_line_sale_report_all" model="ir.actions.act_window">
+            <field name="name">Analisis de Ventas</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('state','not in',['cancel','draft']),'|',('type','=','Facturas'),('type','=','Devoluciones')]</field>
+            <field name="graph_view_id" ref="view_account_invoice_line_sale_report_graph"/>
+            <field name="search_view_id" ref="view_account_invoice_line_report_search"/>            
+        </record>
+        
+        <record id="action_account_invoice_line_purchase_report_all" model="ir.actions.act_window">
+            <field name="name">Analisis de Compras</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('state','not in',['cancel','draft']),'|',('type','=','Facturas Proveedor'),('type','=','Devoluciones Proveedor')]</field>
+            <field name="graph_view_id" ref="view_account_invoice_line_purchase_report_graph"/>
+            <field name="search_view_id" ref="view_account_invoice_line_report_search"/>            
+        </record>
+        
+        <menuitem action="action_account_invoice_line_sale_report_all" id="menu_action_account_invoice_line_sale_report_all" parent="account.menu_finance_receivables" sequence="1000" string="Analisis de Facturas" groups="stock_extended.group_stock_extended_manager"/>
+        
+        <menuitem action="action_account_invoice_line_purchase_report_all" id="menu_action_account_invoice_line_purchase_report_all" parent="account.menu_finance_payables" sequence="1000" string="Analisis de Facturas" groups="stock_extended.group_stock_extended_manager"/>
+        
+    </data>
+</openerp>

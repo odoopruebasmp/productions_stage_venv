@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_wizard_report_prueba_avancys_sql_report" model="ir.ui.view">
+            <field name="name">Balance Pruebas</field>
+            <field name="model">wizard.report.prueba.avancys.sql.report</field>
+            <field name="arch" type="xml">
+                <form string="Balance Pruebas">
+                    <group>
+                        <field name="nivel"/>
+                        <field name="movimientos"/>
+                    </group>
+                    <footer>
+                        <group colspan="6" col="6">
+                            <button name="imprimir_bg_pdf" string="Balance General (PDF)" type="object" class="oe_highlight" groups="report_odoo_extended.group_manager_report_avancys_contable"/>
+                            <button name="imprimir_pg_pdf" string="Perdidas y Ganancia (PDF)" type="object" class="oe_highlight" groups="report_odoo_extended.group_manager_report_avancys_contable"/>
+                            <button name="imprimir_bp_pdf" string="Balance Pruebas (PDF)" type="object" class="oe_highlight" groups="report_odoo_extended.group_user_report_avancys_contable"/>                        
+                            <button name="imprimir_calc" string="Balance Pruebas (EXCEL)" type="object" groups="report_odoo_extended.group_user_report_avancys_contable"/>
+                            <button name="imprimir_calc_saldos_pdf" string="Inventario y Balance (PDF)" type="object" class="oe_highlight" groups="report_odoo_extended.group_user_report_avancys_contable"/>
+                            <button name="imprimir_calc_saldos" string="Inventario y Balance (EXCEL)" type="object" groups="report_odoo_extended.group_user_report_avancys_contable"/>    
+                        </group>
+                        <group colspan="4" col="4">
+                            <button string=" " class="oe_highlight" special="cancel" />
+                        </group>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_imprimir_balance_pruebas" model="ir.actions.act_window">
+            <field name="name">Balance Pruebas</field>
+            <field name="res_model">wizard.report.prueba.avancys.sql.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem name="Balance / Inventario" action="action_imprimir_balance_pruebas" id="menu_action_imprimir_balance_pruebas" -->
+            <!-- parent="menu_report_avancys_report" sequence="10" groups="report_odoo_extended.group_user_report_avancys_contable"/> -->
+        
+        
+        
+        <!-- PERDIDAS Y GANANCIAS -->
+        <report
+            id="reporte_perdidas_ganancias"
+            model="account.report.balance.avancys.line.sql"
+            string="Reporte Perdidas Ganancias"
+            report_type="qweb-pdf"
+            name="report_odoo_extended.template_reporte_perdida_ganancia"
+            file="report_odoo_extended.template_reporte_perdida_ganancia"
+        />
+        
+        <template id="template_reporte_perdida_ganancia">
+            <div class="header">
+                <t t-jquery="div.header" t-operation="replace">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 45px;"/>
+                            </div>
+                        </div>
+                        <div class="row zero_min_height">
+                            <div class="col-xs-12">
+                                <div style="border-bottom: 1px solid black;"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div t-field="res_company.partner_id.name"/>
+                                <span>NIT. </span><span t-field="res_company.partner_id.ref"/><span t-field="res_company.partner_id.dev_ref"/>
+                                <div t-field="res_company.street" style="border-bottom: 1px solid black;"/>
+                            </div>
+                        </div>
+                    </div>                
+                </t>
+            </div>
+            <div class="footer">
+                <t t-jquery="div.footer" t-operation="replace">    
+
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul class="list-inline">
+                        <li t-if="res_company.phone">Teléfono: <span t-field="res_company.phone"/></li>
+                        <li t-if="res_company.fax and res_company.phone">&amp;bull;</li>
+                        <li t-if="res_company.fax">Fax: <span t-field="res_company.fax"/></li>
+                        <li t-if="res_company.email">&amp;bull;</li>
+                        <li t-if="res_company.email">Email: <span t-field="res_company.email"/></li>
+                        <li t-if="res_company.website">&amp;bull;</li>
+                        <li t-if="res_company.website">Website: <span t-field="res_company.website"/></li>
+                        <p><span>Página:</span><span class="page"/>/<span class="topage"/></p>
+                    </ul>
+                </div>
+
+                </t>
+            </div>
+            
+            <div class="page">
+                <div align='center'><h3><span>PERDIDAS Y GANANCIAS</span></h3></div>
+                <span></span>
+                <table style="border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Fecha Impresion:</span></td>
+                            <td align='center' style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Fecha  de Consulta:</span></td>
+                            <td align='center' style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span t-field="docs[0].encabezado_id.date_to"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div align='center'><h3><span> </span></h3></div>
+                <span></span>
+                <table style="border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Codigo</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Nombre</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Saldo</span></td>
+                        </tr>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <td style="font-size:10px"><span t-field="o.code" /></td>
+                                <td style="font-size:10px"><span t-field="o.name" /></td>
+                                <td style="font-size:9px"><span>$ </span><span t-field="o.amount_consulta"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/><br/>
+                <br/><br/>
+                <p style="page-break-after:always;"></p>
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" align='center'><h3><span>RESUMEN PERDIDAS Y GANANCIAS</span></h3></td>
+                        </tr>
+                        <tr>
+                            <td align='left'><span style="font-weight: bold;">Total Ingresos</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].encabezado_id.general_id.amount_ingresos"/></td>
+                        </tr>
+                        <tr>                            
+                            <td align='left'><span style="font-weight: bold;">Total Gastos</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].encabezado_id.general_id.amount_gastos"/></td>
+                        </tr>
+                        <tr>                            
+                            <td align='left'><span style="font-weight: bold;">Total Costos de Venta</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].encabezado_id.general_id.amount_costos"/></td>
+                        </tr>                        
+                        <t t-if="docs[0].encabezado_id.general_id.amount_costos_produccion > 0">                            
+                            <tr>                           
+                                <td align='left'><span style="font-weight: bold;">Total Costos de Operaciones y Produccion</span></td>
+                                <td align='right'><span> $ </span><span t-field="docs[0].encabezado_id.general_id.amount_costos_produccion"/></td>
+                            </tr>
+                        </t>
+                        <tr>                            
+                            <td align='left'><span style="font-weight: bold;">Utilidad o Perdida</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].encabezado_id.general_id.amount_utilidad"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/><br/>
+                <style>
+                    p{ 
+                        width: 300px;
+                        text-align: center;
+                        border-top-width:thin;
+                        border-top-style:solid;
+                        border-top-color:black;                                    
+                    }
+                </style>
+                <table class="table table-hover">                                
+                    <tr>
+                        <th style="margin-left: 25 mm"> 
+                            <p> Representante Legal </p>
+                        </th>
+                        <th style="margin-left: 55 mm">
+                            <p> Contador Publico </p>
+                        </th>
+                        <th style="margin-left: 85 mm">
+                            <p> Revisor Fiscal </p>
+                        </th>
+                    </tr>
+                </table>
+            </div>    
+        </template>
+        
+        
+        
+        
+        <!-- BALANCE GENERAL-->
+        <report
+            id="reporte_balance_general"
+            model="account.report.balance.general.line"
+            string="Reporte Balance General"
+            report_type="qweb-pdf"
+            name="report_odoo_extended.template_reporte_balance_general"
+            file="report_odoo_extended.template_reporte_balance_general"
+        />
+        
+        <template id="template_reporte_balance_general">
+            <div class="header">
+                <t t-jquery="div.header" t-operation="replace">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 45px;"/>
+                            </div>
+                        </div>
+                        <div class="row zero_min_height">
+                            <div class="col-xs-12">
+                                <div style="border-bottom: 1px solid black;"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div t-field="res_company.partner_id.name"/>
+                                <span>NIT. </span><span t-field="res_company.partner_id.ref"/><span t-field="res_company.partner_id.dev_ref"/>
+                                <div t-field="res_company.street" style="border-bottom: 1px solid black;"/>
+                            </div>
+                        </div>
+                    </div>                
+                </t>
+            </div>
+            <div class="footer">
+                <t t-jquery="div.footer" t-operation="replace">    
+
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul class="list-inline">
+                        <li t-if="res_company.phone">Teléfono: <span t-field="res_company.phone"/></li>
+                        <li t-if="res_company.fax and res_company.phone">&amp;bull;</li>
+                        <li t-if="res_company.fax">Fax: <span t-field="res_company.fax"/></li>
+                        <li t-if="res_company.email">&amp;bull;</li>
+                        <li t-if="res_company.email">Email: <span t-field="res_company.email"/></li>
+                        <li t-if="res_company.website">&amp;bull;</li>
+                        <li t-if="res_company.website">Website: <span t-field="res_company.website"/></li>
+                        <p><span>Página:</span><span class="page"/>/<span class="topage"/></p>
+                    </ul>
+                </div>
+
+                </t>
+            </div>
+            
+            <div class="page">
+                <div align='center'><h3><span>BALANCE GENERAL</span></h3></div>
+                <span></span>
+                <table style="border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Fecha Impresion:</span></td>
+                            <td align='center' style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Fecha  de Consulta:</span></td>
+                            <td align='center' style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span t-field="docs[0].encabezado_id.date_to"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div align='center'><h3><span> </span></h3></div>
+                <span></span>
+                <table style="border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Codigo</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Nombre</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Saldo</span></td>
+                        </tr>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <td style="font-size:10px"><span t-field="o.code" /></td>
+                                <td style="font-size:10px"><span t-field="o.name" /></td>
+                                <td style="font-size:9px"><span>$ </span><span t-field="o.amount_final"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/><br/>
+                <br/><br/>
+                <p style="page-break-after:always;"></p>
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" align='center'><h3><span>RESUMEN BALANCE GENERAL</span></h3></td>
+                        </tr>
+                        <tr>
+                            <td align='left'><span style="font-weight: bold;">Total Activo</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_activo"/></td>
+                        </tr>
+                        <tr>                            
+                            <td align='left'><span style="font-weight: bold;">Total Pasivo + Patrimonio</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_pasivo_patrimonio"/></td>
+                        </tr>
+                        <tr>                            
+                            <td align='left'><span style="font-weight: bold;">Utilidad</span></td>
+                            <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_utilidad"/></td>
+                        </tr>
+                        <t t-if="docs[0].general_id.amount_activo_pasivo_patrimonio > 0">                            
+                            <tr>                            
+                                <td align='left'><span style="font-weight: bold;">Diferencias Activo - (Pasivo + Patrimonio)</span></td>
+                                <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_activo_pasivo_patrimonio"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/><br/>
+                <t t-if="docs[0].general_id.amount_activo_pasivo_patrimonio > 0">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td colspan="2" align='center'><h3><span>CUENTAS DE ORDEN</span></h3></td>
+                            </tr>
+                            <tr>
+                                <td align='left'><span style="font-weight: bold;">Total Orden Deudoras</span></td>
+                                <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_orden_deudoras"/></td>
+                            </tr>
+                            <tr>                            
+                                <td align='left'><span style="font-weight: bold;">Total Orden Acreedoras</span></td>
+                                <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_orden_acreedoras"/></td>
+                            </tr>
+                            <tr>                            
+                                <td align='left'><span style="font-weight: bold;">Total Cuentas de Orden</span></td>
+                                <td align='right'><span> $ </span><span t-field="docs[0].general_id.amount_deudoras_acreedoras"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+                <br/><br/>
+                <style>
+                    p{ 
+                        width: 300px;
+                        text-align: center;
+                        border-top-width:thin;
+                        border-top-style:solid;
+                        border-top-color:black;                                    
+                    }
+                </style>
+                <table class="table table-hover">                                
+                    <tr>
+                        <th style="margin-left: 25 mm"> 
+                            <p> Representante Legal </p>
+                        </th>
+                        <th style="margin-left: 55 mm">
+                            <p> Contador Publico </p>
+                        </th>
+                        <th style="margin-left: 85 mm">
+                            <p> Revisor Fiscal </p>
+                        </th>
+                    </tr>
+                </table>
+            </div>    
+        </template>
+        
+
+        
+        
+        
+       <!-- BALANCE DE PRUEBAS-->
+        <report
+            id="reporte_balance"
+            model="account.report.balance.avancys.line.sql"
+            string="Reporte Balance"
+            report_type="qweb-pdf"
+            name="report_odoo_extended.template_reporte_balance"
+            file="report_odoo_extended.template_reporte_balance"
+        />
+        
+        <template id="template_reporte_balance">
+            <div class="header">
+                <div align='center'><h3><span t-esc="res_company.name"/></h3></div>
+                <div align='center'><h2><span t-esc="res_company.vat"/></h2></div>
+                <div align='center'><h3><span>BALANCE DE PRUEBAS</span></h3></div>
+                <div align='left'><h4>Desde:<span t-field="docs[0].encabezado_id.date_from" /></h4></div>
+                <div align='left'><h4>Hasta:<span t-field="docs[0].encabezado_id.date_to"/></h4></div>
+                <div align='right'><h5>Fecha de Generacion:<span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/></h5></div>
+                <div align='center'></div>
+            </div>
+            <div class="page">
+                <span>&#160;</span>
+                <table style="border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Codigo</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Nombre</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Tercero</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Saldo Inicial</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Debito</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Credito</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Saldo Final</span></td>
+                        </tr>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <t t-if="not o.partner_id">
+                                    <td><span t-field="o.code" /></td>
+                                    <td><span t-field="o.name" /></td>
+                                </t>
+                                <td style="font-size:8px"><span>$</span><span t-field="o.partner_name"/></td>
+                                <td style="font-size:8px"><span>$</span><span t-field="o.amount_inicial"/></td>
+                                <td style="font-size:8px"><span>$</span><span t-field="o.debit"/></td>
+                                <td style="font-size:8px"><span>$</span><span t-field="o.credit"/></td>
+                                <td style="font-size:8px"><span>$</span><span t-field="o.amount_final"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table> 
+            </div>    
+        </template>
+
+        
+        
+        
+        <!--INVENTARIO Y BALANCE-->
+        <report
+            id="reporte_balance_inventario"
+            model="account.report.balance.avancys.line.sql"
+            string="Reporte Inventario y Balance "
+            report_type="qweb-pdf"
+            name="report_odoo_extended.template_reporte_inventario"
+            file="report_odoo_extended.template_reporte_inventario"
+        />
+        
+        <template id="template_reporte_inventario">
+            <div class="header">
+                    <div align='center'><h3><span t-esc="res_company.name"/></h3></div>
+                    <div align='center'><h2><span t-esc="res_company.vat"/></h2></div>
+                    <div align='center'><h3><span>INVENTARIO Y BALANCE</span></h3></div>
+                    <div align='left'><h4>Desde:<span t-field="docs[0].encabezado_id.date_from" /></h4></div>
+                    <div align='left'><h4>Hasta:<span t-field="docs[0].encabezado_id.date_to"/></h4></div>
+                   <div align='right'><h5>Fecha de Generacion:<span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/></h5></div>
+                    <div align='center'> </div>
+            </div> 
+            <div class="page">                
+                <span>&#160;</span>
+                <table style="border-right: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black; border-top: 1px solid black; width:100%; font-size:11px">
+                    <tbody>
+                        <tr>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Codigo</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Nombre</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Tercero</span></td>
+                            <td align='center' style="background-color:#EBEBEB; border-right: 1px solid black; border-bottom: 1px solid black"><span style="font-weight: bold;">Saldo</span></td>
+                        </tr>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                                <t t-if="not o.partner_id">
+                                    <td><span t-field="o.code" /></td>
+                                    <td><span t-field="o.name" /></td>
+                                </t>
+                                <t t-if="o.partner_id">
+                                    <td></td>
+                                    <td></td>
+                                </t>
+                                <td><span t-field="o.partner_name" /></td>
+                                <td><span t-field="o.amount_inicial" /><span>$ </span></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table> 
+            </div>    
+        </template>
+        
+        
+        
+        <!--REPORTES EN EXCEL-->
+        <record model='ir.actions.report.xml' id='reporte_balance_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Balance de Prueba</field>
+          <field name='report_rml'>report_odoo_extended/reporte_balance.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_balance_aeroo</field>
+          <field name='model'>account.report.balance.avancys.line.sql</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+        <record model='ir.actions.report.xml' id='reporte_inventario_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Libro Inventario y Balances</field>
+          <field name='report_rml'>report_odoo_extended/reporte_inventario.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_inventario_aeroo</field>
+          <field name='model'>account.report.balance.avancys.line.sql</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+    
+    </data>
+</openerp>

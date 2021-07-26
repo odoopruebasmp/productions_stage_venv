@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        
+        
+        <record id="hr_dotacion_view_tree" model="ir.ui.view">
+            <field name="name">hr.dotacion.tree</field>
+            <field name="model">hr.dotacion</field>
+            <field name="arch" type="xml">
+                <tree string="Dotaciones">
+                    <field name="name"/>
+                    <field name="dotacion_id"/>
+                    <field name="product_id"/>
+                    <field name="prodlot_id"/>
+                    <field name="document"/>
+                </tree>
+            </field>
+        </record>
+        
+      
+        <record id="hr_dotacion_view_form" model="ir.ui.view">
+            <field name="name">hr.dotacion.form</field>
+            <field name="model">hr.dotacion</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Dotaciones" version="7.0">
+                    <sheet string="Equipos e Infraestructura">
+                        <group col="4" string="Informacion General">     
+                            <field name="name"/>
+                            <field name="dotacion_id"/>
+                        </group>
+                        <group>  
+                            <field name="product_id"/>
+                            <field name="prodlot_id"/>
+                        </group>
+                        <group>  
+                            <field name="document"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+         
+                  
+        <record id="hr_dotacion_view_search" model="ir.ui.view">
+            <field name='name'>hr.dotacion.search</field>
+            <field name='model'>hr.dotacion</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Dotaciones">
+                    <field name="dotacion_id"/>
+                    <field name="product_id"/>
+                    <field name="prodlot_id"/>
+                    <field name="document"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product_id" string="Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="group_dotacion_id" string="Empleado" icon="terp-partner" domain="[]" context="{'group_by':'dotacion_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+       
+        <record id="open_hr_dotacion" model="ir.actions.act_window">
+           <field name="name">Dotaciones</field>
+           <field name="res_model">hr.dotacion</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="main_dotacion" parent="hr.menu_hr_root" name="Dotaciones" sequence="3" groups="base.group_hr_user"/>
+        <menuitem action="open_hr_dotacion" id="main_dotacion_action" name="Dotaciones" parent="main_dotacion" sequence="4" groups="base.group_hr_user"/>    
+
+        <record id="hr_capacitaciones_view_tree" model="ir.ui.view">
+            <field name="name">hr.capacitaciones.tree</field>
+            <field name="model">hr.capacitaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Capacitaciones">
+                    <field name="capacitacion_id"/>
+                    <field name="name"/>                                  
+                    <field name="type"/>
+                    <field name="partner_id"/>                                  
+                    <field name="size" placeholder="Horas"/>
+                    <field name="date_start"/>                                  
+                    <field name="date_stop"/>
+                    <field name="adj_capacitacion"/>        
+                </tree>
+            </field>
+         </record>
+        
+      
+         <record id="hr_capacitaciones_view_form" model="ir.ui.view">
+            <field name="name">hr.capacitaciones.form</field>
+            <field name="model">hr.capacitaciones</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Capacitaciones" version="7.0">
+                    <sheet string="Equipos e Infraestructura">
+                        <group col="4" colspan="4" string="Informacion General">
+                            <field name="name"/>  
+                            <field name="capacitacion_id"/>    
+                            <field name="type"/>
+                        </group>
+                        <group>                            
+                            <field name="partner_id"/>                                  
+                            <field name="size" placeholder="Horas"/>
+                        </group>
+                        <group> 
+                            <field name="date_start"/>                                  
+                            <field name="date_stop"/>
+                        </group>
+                        <group> 
+                            <field name="adj_capacitacion"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+         
+                  
+         <record id="hr_capacitaciones_view_search" model="ir.ui.view">
+            <field name='name'>hr.capacitaciones.search</field>
+            <field name='model'>hr.capacitaciones</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Capacitaciones">                          
+                    <field name="type"/>
+                    <field name="partner_id"/>
+                    <field name="capacitacion_id"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_type" string="Tipo" icon="terp-partner" domain="[]" context="{'group_by':'type'}"/>
+                        <filter name="group_partner_id" string="Tercero" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="group_capacitacion_id" string="Empleado" icon="terp-partner" domain="[]" context="{'group_by':'capacitacion_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hr_capacitaciones_graph">
+            <field name="name">Capacitaciones</field>
+            <field name="model">hr.capacitaciones</field>
+            <field name="arch" type="xml">
+                <graph string="Capacitaciones" type="bar">
+                    <field name="type"/>
+                    <field name="capacitacion_id"/>
+                    <field name="partner_id"/>    
+                </graph>
+            </field>
+        </record>
+       
+         <record id="open_hr_capacitaciones" model="ir.actions.act_window">
+            <field name="name">Capacitaciones</field>
+            <field name="res_model">hr.capacitaciones</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+         </record>
+        
+        <menuitem id="main_capacitaciones" parent="hr.menu_hr_root" name="Capacitaciones" sequence="4" groups="base.group_hr_user"/>
+        <menuitem action="open_hr_capacitaciones" id="main_capacitaciones_action" name="Capacitaciones" parent="main_capacitaciones" sequence="1" groups="base.group_hr_user"/>    
+        
+        <!-- HR EMPLOYEE INHERITED FORM -->        
+        <record model="ir.ui.view" id="hr_employee_extended_agroz_view">
+            <field name="name">hr.employee.extended.agroz.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="priority" eval="0"/>
+            <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='address_home_id']" position="after">
+                        <field name="lugar_exp"/>
+                    </xpath>
+                    <field name="work_phone" position="after">
+                        <group string="Actualizacion">
+                            <field name="write_date"/>
+                        </group>
+                    </field>
+                    <field name="user_id" position="after">
+                        <group string="Informacion Interna">
+                            <field name="codigo"/>
+                            <field name="type_employee"/>
+                        </group>
+                    </field>
+                    <notebook position="inside" >
+                        <page string="Informacion del Temporal" attrs="{'invisible':[('type_employee','!=','externo')]}" groups="base.group_hr_user">
+                            <group colspan="4">
+                                 <field name="temp_empresa"/>
+                                 <field name="temp_date_ini"/>
+                                 <field name="temp_date_start"/>
+                                 <field name="temp_salario"/>
+                            </group>
+                            <group colspan="4">
+                                 <field name="temp_arl" domain="[('arl','=',True)]"/>
+                                 <field name="temp_eps" domain="[('eps','=',True)]"/>
+                                 <field name="temp_ccf" domain="[('cajacomp','=',True)]"/>
+                             </group>
+                         </page>
+                        <page string="Documentación" groups="base.group_hr_user"> 
+                             <group string="Adjuntos" colspan="4">
+                                 <field name="adj_ced"/>
+                                 <field name="adj_hv"/>
+                                 <field name="adj_lm"/>
+                                 <field name="adj_db"/>
+                                 <field name="adj_pj"/>
+                                 <field name="adj_ps"/>
+                                 <field name="adj_adp"/>
+                                 <field name="adj_fh"/>
+                                 <field name="adj_ri"/>
+                             </group>
+                             <group string="Visita Domiciliaria" colspan="4">
+                                 <field name="date_vis_ini"/>
+                                 <field name="date_vis_end"/>
+                                 <field name="visita"/>
+                             </group>
+                            <group string="Observaciones" colspan="4">
+                                 <field name="adj_obser" nolabel="1"/>
+                             </group>
+                         </page>
+                         <page string="Estudios y capacitaciones" groups="base.group_hr_user"> 
+                            <field name="capacitacion_id" nolabel="1">
+                                <tree string="Estudios y Capacitaciones" editable="bottom">
+                                    <field name="name"/>                                  
+                                    <field name="type"/>
+                                    <field name="partner_id"/>                                  
+                                    <field name="size" placeholder="Horas"/>
+                                    <field name="date_start"/>                                  
+                                    <field name="date_stop"/>
+                                    <field name="adj_capacitacion"/>                                    
+                                </tree>
+                            </field>
+                         </page>
+                         <page string="Referencias" groups="base.group_hr_user"> 
+                            <field name="referencias_ids" nolabel="1">
+                                <tree string="Referencias y Recomendaciones" editable="bottom">
+                                    <field name="name"/>                                  
+                                    <field name="type"/>
+                                    <field name="rela"/>                                  
+                                    <field name="tele"/>
+                                </tree>
+                            </field>
+                         </page>
+                         <page string="Informacion Familiar" groups="base.group_hr_user"> 
+                            <field name="familiar_ids" nolabel="1">
+                                <tree string="Informacion Familiar" editable="bottom">
+                                    <field name="name"/>                                  
+                                    <field name="type_id"/>
+                                    <field name="document"/>
+                                    <field name="parent"/>   
+                                    <field name="date"/>                                    
+                                </tree>
+                            </field>
+                         </page>
+                     </notebook>
+                </field>
+        </record> 
+               
+        
+        <!-- JOB INHERITED FORM -->    
+        <record model="ir.ui.view" id="hr_job_agroz_form">
+            <field name="name">hr.job.agroz.form</field>
+            <field name="model">hr.job</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+                <field name="department_id" position="after">
+                    <field name="criticidad"/>
+                </field>
+            </field>
+        </record>
+        
+         
+        
+        <!-- CONTRACT INHERITED FORM -->    
+        <record model="ir.ui.view" id="hr_contract_agroz_form">
+            <field name="name">hr.contract.agroz.form</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <field name="employee_id" position="before">
+                    <field name="termino" invisible="1"/>
+                </field>
+                <notebook position="inside" >
+                    <page string="Dotaciones" groups="base.group_hr_user">
+                        <field name="dotacion_ids" nolabel="1">
+                            <tree string="Dotaciones" editable="bottom">
+                                <field name="name"/>                                  
+                                <field name="product_id"/>
+                                <field name="prodlot_id"/>
+                                <field name="document"/>                               
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="hr_contract_agroz_tree">
+            <field name="name">hr.contract.agroz.tree</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_end" position="after">
+                    <field name="termino" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        
+        
+        <!-- PARTNER INHERITED FORM -->    
+        <record model="ir.ui.view" id="res_partner_agroz_form">
+            <field name="name">res.partner.view.agroz.form</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="partner_extended.view_partner_form_extended"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref_type']" position="after">
+                    <field name="lugar_exp"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

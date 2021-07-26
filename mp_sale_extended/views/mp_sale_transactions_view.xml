@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="view_form_prouct_category_inherited">
+            <field name="name">product.category</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="stock_account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                   <xpath expr="//field[@name='property_stock_journal']" position="after">
+                    <group col="4" colspan="4">
+                            <group name="integrated_yuju" string="Integracion Yuju">
+                                    <field name="id_category_yuju"/>
+                                    <field name="name_category_yuju"/>
+                            </group>
+                        </group>
+                   </xpath>
+
+              
+            </field>
+        </record>
+
+   <record model="ir.ui.view" id="view_form_transactions_sales_e">
+            <field name="name">sale.transactions.extended.view.form</field>
+            <field name="model">sale.transactions.extended</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Ventas E-commerce" >
+                    <header><button name="integrated_sftp_sale_2" type="object" string="Integrar Manualmente" class="oe_highlight"  attrs="{'invisible':[('status_transaction', '!=', 'error')]}" />
+                    </header>
+                    <sheet string="Ventas E-commerce">
+                    <div class="oe_title">
+                    </div>
+                        <group col="2" colspan="2" string="Datos de Pedido">
+                            <field name="name"/>
+                            <field name="sales_channel"/>
+                            <field name="sale_odoo"/>
+                            <field name="number_sale_yuju"/>
+                            <field name="number_sale"/>
+                            <field name="date_transaccion"/>
+                            <field name="date_created_tr"/>
+                            <field name="name_file_server"/>
+                        </group>
+
+                        <group col="2" colspan="2" string="Datos de Cliente">
+                            <field name="customer"/>
+                        </group>
+
+                         <group col="2" colspan="2" string="Datos de Pago">
+                                <field name="id_transactions_payment"/>
+                         </group>
+
+                         <group col="2" string="Excepciones">
+                                <field name="status_transaction"/>
+                        </group>
+                         <group col="2">
+                            <field name="tranctions_sales_ids" widget="one2many_list" nolabel="1">
+                                <tree >
+                                        <field name="name"/>
+                                        <field name="date_transaction"/>
+                                        <field name="description_transaction"/>
+                                    </tree>
+                                </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_tree_transactions_sales_e">
+            <field name="name">sale.transactions.extended.view.tree</field>
+            <field name="model">sale.transactions.extended</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Ventas E-commerce" create="false" delete="false">
+                        <field name="name"/>
+                        <field name="sales_channel"/>
+                        <field name="sale_odoo"/>
+                        <field name="number_sale_yuju"/>
+                        <field name="number_sale"/>
+                        <field name="date_transaccion"/>
+                        <field name="status_transaction"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_transactions_sales_e">
+            <field name="name">Ventas E-commerce</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.transactions.extended</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_managment_control_sftp_tree" model="ir.actions.act_window.view">
+                <field name="sequence" eval="1"/>
+                <field name="view_mode">tree</field>
+                <field name="view_id" ref="mp_sale_extended.view_tree_transactions_sales_e"/>
+                <field name="act_window_id" ref="action_transactions_sales_e"/>
+        </record>
+
+
+        <record id="action_managment_control_sftp_form" model="ir.actions.act_window.view">
+                <field eval="2" name="sequence"/>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="mp_sale_extended.view_form_transactions_sales_e"/>
+                <field name="act_window_id" ref="action_transactions_sales_e"/>
+        </record>
+
+        <!-- Menu de Ventas E-commerce -->
+        <menuitem id="mp_sale_extended.transactions_sales_e" name="Transacciones E-commerce" parent="base.menu_base_partner" sequence="15" groups="mp_sale_extended.group_manager_mp_sale_extended,mp_sale_extended.group_user_mp_sale_extended"/>
+        <!-- Sub menu de Ventas E-commerce -->
+        <menuitem name='Ventas E-commerce' id='mp_sale_extended.menu_sales_transactions_e' parent='mp_sale_extended.transactions_sales_e' sequence='23' action="action_transactions_sales_e" groups="mp_sale_extended.group_manager_mp_sale_extended,mp_sale_extended.group_user_mp_sale_extended"/>
+
+    <!-- TRANSACIONES RECIBOS DE CLIENTE-->    
+       <record model="ir.ui.view" id="view_form_transactions_customer_receipts">
+                <field name="name">transactions.customer.receipts.view.form</field>
+                <field name="model">transactions.customer.receipts</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Transacciones Recibos de Cliente" >
+                        <header></header>
+                        <sheet string="Transacciones Recibos de Cliente">
+                            <group col="2" colspan="2">
+                                <field name="name"/>
+                                <field name="date_transaction"/>
+                                <field name="sale_number_transaction"/>
+                                <field name="date_payment_tr"/>
+                                <field name="method_paid"/>
+                                <field name="payment_references"/>                                
+                                <field name="shipping_cost" />
+                                <field name="total"/>
+                                <field name="paid_total"/>
+                                <field name="marketplace_fee"/>
+                                <field name="seller_shipping_cost"/>
+                                <field name="amount_invoice"/>
+                            </group>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
+            
+            <record model="ir.ui.view" id="view_tree_transactions_customer_receipts">
+                <field name="name">transactions.customer.receipts.view.tree</field>
+                <field name="model">transactions.customer.receipts</field>
+                <field name="type">tree</field>
+                <field name="arch" type="xml">
+                    <tree string="Recibos de Cliente">
+                            <field name="name"/>
+                            <field name="date_transaction"/>
+                            <field name="sale_number_transaction"/>
+                            <field name="date_payment_tr"/>
+                            <field name="method_paid"/>
+                            <field name="shipping_cost" sum="Total Tax Included"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_transactions_customer_receipts">
+                <field name="name">Recibos de Clientes</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">transactions.customer.receipts</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+            </record>
+
+            <record id="action_transactions_customer_receipts_tree" model="ir.actions.act_window.view">
+                    <field name="sequence" eval="1"/>
+                    <field name="view_mode">tree</field>
+                    <field name="view_id" ref="mp_sale_extended.view_tree_transactions_customer_receipts"/>
+                    <field name="act_window_id" ref="action_transactions_customer_receipts"/>
+            </record>
+
+
+            <record id="action_transactions_customer_receipts_form" model="ir.actions.act_window.view">
+                    <field eval="2" name="sequence"/>
+                    <field name="view_mode">form</field>
+                    <field name="view_id" ref="mp_sale_extended.view_form_transactions_customer_receipts"/>
+                    <field name="act_window_id" ref="action_transactions_customer_receipts"/>
+            </record>
+
+            <!-- Sub menu de Ubicacioon de Inventario -->
+            <menuitem name='Recibos de clientes' id='mp_sale_extended.menu_transactions_customer_receipts' parent='mp_sale_extended.transactions_sales_e' sequence='24' action="action_transactions_customer_receipts" groups="mp_sale_extended.group_manager_mp_sale_extended,mp_sale_extended.group_user_mp_sale_extended"/>
+
+
+
+    <!-- TRANSACIONES UBICACION DEDICADA-->
+
+       <record model="ir.ui.view" id="view_form_stock_transactions_location_e">
+                <field name="name">stock.transactions.location.e.view.form</field>
+                <field name="model">stock.transactions.location.e</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Transacciones Stock E-commerce">
+                        <header>
+                            <button name="generate_sftp_transactions_location_e" type="object" string="Generar txt Stock" class="oe_highlight"/>
+                        </header>
+                        <sheet string="Transacciones Ubicacion E-commerce">
+                            <group col="2" colspan="2">
+                                <field name="name"/>
+                                <field name="date_transaction"/>
+                            </group>
+                            <group col="2">
+                                <field name="products_t_ids" widget="one2many_list" nolabel="1">
+                                   
+                                        <tree >
+                                            <field name="product_id"/>
+                                            <field name="codigo_barras"/>
+                                            <field name="stock_qty_disponible"/>
+                                            <field name="stock_qty_report"/>
+                                            <field name="stock_location_id"/>                                        
+                                        </tree>
+                                    
+                                    
+                                </field>
+                            </group>
+
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
+            
+            <record model="ir.ui.view" id="view_tree_stock_transactions_location_e">
+                <field name="name">stock.transactions.location.e.view.tree</field>
+                <field name="model">stock.transactions.location.e</field>
+                <field name="type">tree</field>
+                <field name="arch" type="xml">
+                    <tree string="Stock E-commerce">
+                            <field name="name"/>
+                            <field name="date_transaction"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_stock_transactions_location_e">
+                <field name="name">Ubicacion E-commerce</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">stock.transactions.location.e</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+            </record>
+
+            <record id="action_stock_transactions_location_e_tree" model="ir.actions.act_window.view">
+                    <field name="sequence" eval="1"/>
+                    <field name="view_mode">tree</field>
+                    <field name="view_id" ref="mp_sale_extended.view_tree_stock_transactions_location_e"/>
+                    <field name="act_window_id" ref="action_stock_transactions_location_e"/>
+            </record>
+
+
+            <record id="action_stock_transactions_location_e_form" model="ir.actions.act_window.view">
+                    <field eval="2" name="sequence"/>
+                    <field name="view_mode">form</field>
+                    <field name="view_id" ref="mp_sale_extended.view_form_stock_transactions_location_e"/>
+                    <field name="act_window_id" ref="action_stock_transactions_location_e"/>
+            </record>
+
+            <!-- Sub menu de Ubicacioon de Inventario -->
+            <menuitem name='Trasnacciones Stock' id='mp_sale_extended.menu_tock_transactions_location_e' parent='mp_sale_extended.transactions_sales_e' sequence='25' action="action_stock_transactions_location_e" groups="mp_sale_extended.group_manager_mp_sale_extended,mp_sale_extended.group_user_mp_sale_extended"/>
+
+
+    <!-- Trasnaccion Productos -->
+       <record model="ir.ui.view" id="view_form_transactions_products">
+                <field name="name">transactions.products.view.form</field>
+                <field name="model">transactions.products</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Transacciones Productos"  create="false" edit="false" delete="false">
+                        <header>
+                        </header>
+                        <sheet string="Transacciones Productos">
+                            <group col="2" colspan="2">
+                                <field name="name"/>
+                                <field name="date_transaction"/>
+                                <field name="id_product"/>
+                                <field name="type_transaction"/>
+                                <field name="observacion_transaction"/>
+                                <field name="name_file_transaction"/>
+                                <!--<field name="ean_codigo"/>
+                                <field name="default_code"/>-->
+                                
+                            </group>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
+            
+            <record model="ir.ui.view" id="view_tree_transactions_products">
+                <field name="name">transactions.products.view.tree</field>
+                <field name="model">transactions.products</field>
+                <field name="type">tree</field>
+                <field name="arch" type="xml">
+                    <tree string="Productos"  create="false" edit="false" delete="false">
+                            <field name="name"/>
+                            <field name="date_transaction"/>
+                            <field name="id_product"/>
+                            <field name="type_transaction"/>
+                    </tree>
+                </field>
+            </record>
+
+            <record model="ir.actions.act_window" id="action_transactions_products">
+                <field name="name">Transacciones Productos</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">transactions.products</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+            </record>
+
+            <record id="action_transactions_products_tree" model="ir.actions.act_window.view">
+                    <field name="sequence" eval="1"/>
+                    <field name="view_mode">tree</field>
+                    <field name="view_id" ref="mp_sale_extended.view_tree_transactions_products"/>
+                    <field name="act_window_id" ref="action_transactions_products"/>
+            </record>
+
+
+            <record id="action_transactions_products_form" model="ir.actions.act_window.view">
+                    <field eval="2" name="sequence"/>
+                    <field name="view_mode">form</field>
+                    <field name="view_id" ref="mp_sale_extended.view_form_transactions_products"/>
+                    <field name="act_window_id" ref="action_transactions_products"/>
+            </record>
+
+            <!-- Sub menu de Transacciones de Productos -->
+            <menuitem name='Transacciones Productos' id='mp_sale_extended.menu_transactions_products' parent='mp_sale_extended.transactions_sales_e' sequence='27' action="action_transactions_products" groups="mp_sale_extended.group_manager_mp_sale_extended,mp_sale_extended.group_user_mp_sale_extended" />
+
+
+
+
+    </data>
+</openerp>
+

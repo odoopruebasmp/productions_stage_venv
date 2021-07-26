@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <report id="account.account_account_balance"
+                string="Trial Balance"
+                model="account.account"
+                name="account.account.balance11"
+                rml="addons/account_trial_balance/report/trial_balance_report.rml" auto="False" header="False" />
+
+        <report id="account_account_balance_with_details"
+                string="Trial Balance With Details"
+                model="account.account"
+                name="account.account.balance.with.details"
+                rml="addons/account_trial_balance/report/trial_balance_with_details_report.rml" auto="False" header="False" />
+
+    </data>
+</openerp>

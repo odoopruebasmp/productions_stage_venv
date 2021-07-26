@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="account_report_cartera_avancys_view" model="ir.ui.view">
+            <field name="name">Cartera por Tercero</field>
+            <field name="model">account.report.cartera.avancys</field>
+            <field name="arch" type="xml">
+            <form string="Report Options">
+                <label string=""/> 
+                <group col="4">
+                   <field name="print_report"/>
+                   <field name="company_id" invisible="1"/>
+                   <field name="chart_account_id" widget='selection'/>
+                   <field name="type"/>
+                   <field name="currency_id"/>
+                   <field name="date" />
+                   <field name="rate" attrs="{'invisible': ['|','|',('currency_id','=',False),('date','=',False),('print_report','=','print')],'required': [('currency_id','!=',False)]}"/>
+                </group> 
+                <notebook tabpos="up" colspan="4">
+                    <page string="Parametros del Informe">
+                        <group string="Terceros">
+                            <field name="partner_ids"/>
+                        </group> 
+                        <group string="Cuentas">
+                            <field name="account_ids"/>
+                        </group> 
+                        <!--<group string="Diarios">
+                            <field name="journal_ids"/>
+                        </group> -->
+                    </page> 
+                </notebook> 
+                <footer> 
+                    <button name="calcular" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    o  
+                    <button string="Cancelar" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_account_report_cartera_avancys" model="ir.actions.act_window">
+            <field name="name">Cartera</field>
+            <field name="res_model">account.report.cartera.avancys</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_report_cartera_avancys_view"/>
+            <field name="target">new</field>
+        </record>
+             
+        <menuitem name="Tesoreria y Cartera" id="menu_report_cartera_sql_avancys" parent="menu_report_avancys" action="action_account_report_cartera_avancys" sequence="7" groups="report_odoo_extended.group_cartera_report_avancys_contable"/>
+      
+        <record id="view_account_report_cartera_avancys_line_tree" model="ir.ui.view">
+            <field name="name">account.report.cartera.avancys.line.tree</field>
+            <field name="model">account.report.cartera.avancys.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="company_id"/>
+                    <field name="account_id"/>
+                    <field name="partner_id"/>
+                    <field name="invoice"/>
+                    <field name="supplier_invoice"/>
+                    <field name="fecha_elaboracion"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="numero_dias_expedicion"/>
+                    <field name="numero_dias_vencidos"/>
+                    <field name="en_mora"/>
+                    <field name="rango"/>
+                    <field name="valor_facturado"/>
+                    <field name="valor_residual"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_report_cartera_avancys_line_filter" model="ir.ui.view">
+            <field name="name">account.report.cartera.avancys.line.filter</field>
+            <field name="model">account.report.cartera.avancys.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Cartera">
+                    <field name="account_id"/>
+                    <field name="company_id"/>
+                    <field name="partner_id"/>
+                    <field name="invoice"/>
+                    <field name="supplier_invoice"/>
+                    <field name="fecha_elaboracion"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="numero_dias_expedicion"/>
+                    <field name="numero_dias_vencidos"/>
+                    <field name="en_mora"/>
+                    <field name="valor_facturado"/>
+                    <field name="valor_residual"/>
+                    <field name="rango"/>
+                    <filter string="En Mora" name="en_mora" domain="[('en_mora','=',True)]"/>
+                    <filter string="Sin Mora" name="en_mora" domain="[('en_mora','=',False)]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="company_id" string="Compañia" icon="terp-partner" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter name="group_code" string="Cuentas" icon="terp-partner" domain="[]" context="{'group_by':'account_id'}"/>
+                        <filter name="group_partner_name" string="Tercero" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="group_invoice" string="Factura" icon="terp-partner" domain="[]" context="{'group_by':'invoice'}"/>
+                        <filter name="group_supplier_invoice" string="Factura proveedor" icon="terp-partner" domain="[]" context="{'group_by':'supplier_invoice'}"/>
+                        <filter name="group_rango" string="Rango" icon="terp-partner" domain="[]" context="{'group_by':'rango'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>        
+        
+        <record id="view_account_report_cartera_avancys_line_graph" model="ir.ui.view">
+            <field name="name">account.report.cartera.avancys.line.graph</field>
+            <field name="model">account.report.cartera.avancys.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Informe cartera de Prueba" type="pivot" stacked="True">
+                    <field name="account_id"/>
+                    <field name="rango" type="col"/>
+                    <field name="valor_facturado" type="measure" string="V. Facturado"/>
+                    <field name="valor_residual" type="measure" string="V. Adeudado"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="account_report_cartera_avancys_form_view" model="ir.ui.view">
+            <field name="name">Cartera por Tercero</field>
+            <field name="model">account.report.cartera.avancys.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="4">
+                        <field name="account_id"/>
+                        <field name="partner_id"/>
+                        <field name="invoice"/>
+                        <field name="supplier_invoice"/>
+                        <field name="fecha_elaboracion"/>
+                        <field name="fecha_vencimiento"/>
+                        <field name="numero_dias_expedicion"/>
+                        <field name="numero_dias_vencidos"/>
+                        <field name="en_mora"/>
+                        <field name="date"/>
+                        <field name="valor_facturado"/>
+                        <field name="valor_residual"/>
+                        <field name="currency_facturado"/>
+                        <field name="currency_residual"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+        
+        <record id="action_account_report_cartera_avancys_line_indicator" model="ir.actions.act_window">
+            <field name="name">Informe Cartera</field>
+            <field name="res_model">account.report.cartera.avancys.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        
+        
+        <!--FORMATO-FORMATO-FORMATO-FORMATO-FORMATO-->
+        <record model='ir.actions.report.xml' id='reporte_tesoreria_cartera_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Informe Tesoreria y Cartera</field>
+          <field name='report_rml'>report_odoo_extended/reporte_tesoreria_cartera.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_tesoreria_cartera_aeroo</field>
+          <field name='model'>account.report.cartera.avancys.line</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+        <!--FORMATO-BASICO-BASICO-BASICO-FORMATO-->
+        <record model='ir.actions.report.xml' id='reporte_tesoreria_cartera_basico_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Informe Tesoreria y Cartera</field>
+          <field name='report_rml'>report_odoo_extended/reporte_tesoreria_cartera_basico.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_tesoreria_cartera_basico_aeroo</field>
+          <field name='model'>account.report.cartera.avancys.line</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+    </data>
+</openerp>

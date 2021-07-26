@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>	
+	
+        <record id="view_stock_inventory_transaction_form" model="ir.ui.view">
+            <field name="name">stock.inventory.transaction.form</field>
+            <field name="model">stock.inventory</field>
+            <field name="inherit_id" ref="stock.view_inventory_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <group string="Account Transaction" nolabel="1" colspan="4">                        
+                        <field name="partner_id2" attrs="{'required': ['|',('account_transaction_in_id','!=',False),('account_transaction_out_id','!=',False)]}"/>
+                        <field name="journal_id" attrs="{'required': ['|',('account_transaction_in_id','!=',False),('account_transaction_out_id','!=',False)]}"/>
+                        <field name="account_transaction_in_id" domain="[('type', '!=', 'view' )]"/>
+                        <field name="account_transaction_out_id" domain="[('type', '!=', 'view' )]"/>
+                        <field name="account_analytic_id" domain="[('type', '!=', 'view' )]"/>
+                    </group>
+                </field>
+	<field name="date" position="after">
+                    <group nolabel="1" colspan="4">
+                        <field name="account_move_id" readonly="1"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+	
+    </data>
+</openerp>

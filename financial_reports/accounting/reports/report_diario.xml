@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+        <report file="financial_reports.template_report_diario"
+                id="report_diario"
+                model="fpa.diario.line"
+                name="financial_reports.template_report_diario"
+                report_type="qweb-pdf"
+                string="Diario"/>
+
+
+        <record id="report_diario" model="ir.actions.report.xml">
+            <field name="paperformat_id"
+                   ref="paperformat_horizontal_reports"/>
+        </record>
+
+		<template id="template_report_diario">
+                        <style>
+                pre {
+                font-size:10px;
+                font-family: monospace;
+                white-space: pre;
+                margin: 0em 0;
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                background: #FFFFFF;
+                }
+                #corners2 {
+                background-color: #78CDD9;
+                padding: 80px;
+                font-weight: bold;
+                color: #000000;
+                font-size:10px;
+                }
+                #borderless{
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                }
+
+                #corners {
+                border-radius: 25px 25px;
+                background: #FFFFFF;
+                padding: 0px;
+                width: 100%;
+                heigth: 10%;
+                color: #000000;
+                font-weight: bold;
+                }
+
+            </style>
+
+            <div class="page" style="font-size:10px;margin-top: 0px">
+                <table class="table-striped" style="font-size:12px;width: 100%; margin-top: 10px; margin-bottom: 30px">
+                    <thead id="corners">
+                        <tr>
+                            <th style="text-align: left;vertical-align: text-bottom;" >
+                                <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 60px;"/>
+                            </th>
+                            <th style="text-align: left;">
+                                <span t-field="docs[0].encabezado_id.chart_account_id.company_id.name"/>
+                                <br/>
+                                NIT:
+                                 <span t-field="docs[0].encabezado_id.company_id.partner_id.ref"/> - <span t-field="docs[0].encabezado_id.company_id.partner_id.dev_ref"/>
+                                <br/>
+                                <span t-esc="docs[0].financial_id._get_unidades()"/>
+                               de
+                               <span t-field="docs[0].encabezado_id.chart_account_id.company_id.currency_id.name"/>
+                            </th>
+                            <th style="text-align: right;">
+                                Fecha de generación:
+                <span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <br/>Desde: <span t-field="docs[0].encabezado_id.date_from"/> - Hasta: <span t-field="docs[0].encabezado_id.date_to"/>
+                            <br/>PUC:<span t-field="docs[0].account_id.parent_zero"/>
+                            </th>
+                        </tr>
+
+                    </thead>
+                </table>
+
+                        <div align="center">
+                            <h4>
+                                <strong><span t-field="docs[0].encabezado_id.financial_id.name"/></strong>
+                            </h4>
+                        </div>
+                         <table class="table-striped" style="font-size:100%;width: 100%; margin-top: 10px; margin-bottom: 30px">
+							<thead id="corners2">
+								<tr>
+									<th style="text-align: center;">
+										<strong>FECHA</strong>
+									</th>
+									<th style="text-align: center;">
+										<strong>CUENTA</strong>
+									</th>
+									<th style="text-align: center;">
+										<strong>DIARIO</strong>
+									</th>
+									<th style="text-align: right;">
+										<strong>Débito</strong>
+									</th>
+									<th style="text-align: right;">
+										<strong>Crédito</strong>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-as="o" t-foreach="docs">
+									<t t-if="o.nivel != 99">
+										<tr>
+                                            <td align="left">
+                                                <span t-field="o.fecha"/>
+                                            </td>
+                                            <td align="left">
+                                                <span t-field="o.account_id"/>
+                                            </td>
+                                            <td align="left">
+                                                <span t-field="o.journal_id"/>
+                                            </td>
+                                            <td align="right">
+                                                <span t-field="o.debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                            </td>
+                                            <td align="right">
+                                                <span t-field="o.credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                            </td>
+										</tr>
+									</t>
+									<t t-if="o.nivel == 99">
+										<tr>
+											<td align="left">
+												<span t-field="o.fecha"/>
+											</td>
+											<td align="left">
+												<span t-field="o.account_id"/>
+											</td>
+											<td align="left">
+												<span t-field="o.journal_id"/>
+											</td>
+											<td align="right">
+												<span t-field="o.debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+											</td>
+											<td align="right">
+												<span t-field="o.credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+											</td>
+										</tr>
+									</t>
+								</t>
+							</tbody>
+						</table>
+					</div>
+				<div class="footer" style="margin-top: 55 PX">
+                <div align="center">
+                    <small>
+                        <strong>
+                            <span>Pagina</span>
+                            <span class="page"/>
+                            de
+                            <span class="topage"/>
+                        </strong>
+                    </small>
+                </div>
+            </div>
+
+		</template>
+	</data>
+</openerp>

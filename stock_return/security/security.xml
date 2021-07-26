@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        
+        <!-- Grupos de permisos para el modulo de Devoluciones-->
+        <record model="ir.module.category" id="module_category_devolution">
+            <field name="name">Devoluciones</field>
+        </record>
+        
+        <record model="res.groups" id="group_user_devolution">
+            <field name="name">Usuario Devoluciones</field>
+            <field name="category_id" ref="module_category_devolution"/>
+            <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+        </record>
+                
+        <record model="res.groups" id="group_coordinador_devolution">
+            <field name="name">Coordinador Devoluciones</field>
+            <field name="category_id" ref="module_category_devolution"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_devolution'))]"/>
+        </record>
+        
+    </data>
+</openerp>

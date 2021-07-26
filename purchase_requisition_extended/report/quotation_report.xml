@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+        auto="False" 
+        id="quotation_report_id" 
+        model="purchase.quotation.supplier" 
+        name="purchase.quotation.supplier" 
+        rml="purchase_requisition_extended/report/cotizacion.rml" 
+        string="Cotizacion"/>
+    </data>
+</openerp>

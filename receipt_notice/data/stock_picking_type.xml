@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="sequence_spt_novelty" model="ir.sequence">
+            <field name="name">Novedades Avisos de Recibo</field>
+            <field name="prefix">NOV/TX/</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">standard</field>
+            <field eval="True" name="active"/>
+        </record>
+
+        <record id="novelty_location" model="stock.location">
+            <field name="name">Novedades Avisos de Recibo</field>
+            <field name="usage">inventory</field>
+            <field eval="True" name="active"/>
+        </record>
+
+        <record id="novelty_picking_type" model="stock.picking.type">
+            <field name="name">Novedades Avisos de Recibo</field>
+            <field name="sequence_id" ref="sequence_spt_novelty"/>
+            <field name="code">internal</field>
+            <field name="default_location_ref_id" ref="novelty_location"/>
+        </record>
+
+    </data>
+</openerp>

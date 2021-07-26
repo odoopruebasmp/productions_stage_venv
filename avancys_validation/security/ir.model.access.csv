@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+,,,,,,,
+access_avancys_validation,avancys.validation,model_avancys_validation,group_user_validation,1,1,0,0
+access_avancys_validation_line,avancys.validation.line,model_avancys_validation_line,group_user_validation,1,1,0,0
+access_avancys_validation_wizard,avancys.validation.wizard,model_avancys_validation_wizard,group_user_validation,1,1,1,0

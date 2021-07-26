@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_import_file_move_quant_wiz" model="ir.ui.view">
+            <field name="name">import.file.move.quant.wiz</field>
+            <field name="model">import.file.move.quant</field>
+            <field name="arch" type="xml">
+                <form string="Import XLSX File" version="7.0">
+                    <group>
+                        <field name="type_operation"/>
+                    </group>
+                    <group>
+                        <field name="feedback" attrs="{'invisible': [('type_operation','!=','saldos')]}"/>
+                        <field name="feedforward"/>
+                    </group>
+                    <group>                        
+                        <field name="location_abastecimiento" domain="[('usage','=','supplier')]" attrs="{'invisible': [('type_operation','!=','saldos')]}"/>
+                        <field name="location_desecho" domain="[('usage','=','customer')]" attrs="{'invisible': [('type_operation','!=','saldos')]}"/>
+                        <field name="company_id"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="file" attrs="{'invisible': [('type_operation','!=','saldos')]}"/>
+                        <field name="product_id" attrs="{'invisible': [('type_operation','=','saldos')]}"/>
+                    </group>
+                    <footer>
+                        <button name="import_order" string="Import" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_import_file_move_quant_wiz" model="ir.actions.act_window">
+            <field name="name">Import Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.file.move.quant</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_import_file_move_quant_wiz"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="Update Inventory" id="menu_import_move_quant" parent="report_odoo_extended.menu_report_avancys_stock" sequence="4"/>
+        <menuitem name="Update Inventory" id="import_move_quant" parent="menu_import_move_quant" action="action_import_file_move_quant_wiz" sequence="10000"/>
+        
+        <record model='ir.actions.report.xml' id='reporte_stock_quant_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Informe de Inventarios SQL</field>
+          <field name='report_rml'>update_move_quant/reporte_stock_quant.ods</field>
+          <field name='report_name'>update_move_quant.reporte_stock_quant_aeroo</field>
+          <field name='model'>import.file.move.quant</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+    </data>
+</openerp>

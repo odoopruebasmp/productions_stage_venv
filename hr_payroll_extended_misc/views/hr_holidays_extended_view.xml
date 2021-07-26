@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- DESPIDOS MASIVOS -->
+        <record id="holydays_status_days_limite_extended_view" model="ir.ui.view">
+            <field name="name">hr.holidays.status.view</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_payroll_extended.view_edit_holiday_status_extended_form"/>
+            <field name="arch" type="xml">
+                <field name="vacaciones" position="before">
+                    <field name="days_limit" attrs="{'invisible': [('vacaciones','!=', False)],'required': [('schedule_limit','!=', False)]}"/>
+                    <field name="schedule_limit" attrs="{'invisible': [('vacaciones','!=', False)],'required': [('days_limit','>', 0)]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

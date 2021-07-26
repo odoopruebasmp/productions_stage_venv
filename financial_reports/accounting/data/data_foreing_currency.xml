@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_foreing_currency_data" model="fpa.financial.reports">
+            <field name="name">CONVERSION ESTADOS DE RESULTADOS</field>
+            <field name="categ">oth</field>
+            <field name="action">action_fpa_foreing_currency</field>
+            <field name="model_wzr">fpa.foreing.currency.wizard</field>
+            <field name="model">fpa.foreing.currency.line</field>
+            <field name="formato">xlsx</field>
+            <field name="template">financial_reports.template_foreing_currency</field>
+            <field name="tree">view_fpa_foreing_currency_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">#,##0</field>
+            <field name="numeric">D,E,F,G,H,I,J,K,L,M,N,O,P</field>
+            <field name="sign">False</field>
+            <field name="type">con</field>
+            <field name="analyze">True</field>
+            <field name="domain">[('user_id','=',%s),('account_id','!=',False),('company_id','=',%s),('financial_id','=',%s)]</field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="view">wizard_fpa_foreing_currency_view</field>
+            <field name="title">Concepto,Codigo,Cuenta,Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre,Saldo final</field>
+            <field name="fields">concepto,code,cuenta,january,february,march,april,june,july,august,september,october,november,december,amount_final</field>
+            <field name="consulta">select cl.id from fpa_foreing_currency_line cl WHERE c.user_id = {user_id} AND cl.company_id = {company_id}  AND cl.financial_id = {financial_id} ORDER BY cl.cuenta asc
+            </field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name), aa.code, COALESCE(it.value,aa.name) as cuenta,COALESCE(fcl.january,0),COALESCE(fcl.february,0),COALESCE(fcl.march,0),COALESCE(fcl.april,0),COALESCE(fcl.may,0),COALESCE(fcl.june,0),COALESCe(fcl.july,0),COALESCE(fcl.august,0),COALESCE(fcl.september,0),COALESCE(fcl.october,0),COALESCE(fcl.november,0),COALESCe(fcl.december,0),COalesce(fcl.amount_final,0), fcl.bold
+                                            from fpa_foreing_currency_line fcl
+                                            left join fpa_financial_reports_concepts ffrc on ffrc.id = fcl.concepts_id
+                                            left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id = ffrc.id AND itc.lang = '{lang}'
+                                            left join account_account aa on aa.id = fcl.account_id
+                                            left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                                            WHERE fcl.user_id = {user_id} AND fcl.company_id = {company_id} AND fcl.financial_id = {financial_id}
+                                        ORDER BY fcl.sequence, aa.code NULLS FIRST, aa.code asc
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,58 @@
+td .concept-name {
+    min-width: 120px;
+    max-width: 120px;
+
+}
+
+td .concept-code {
+    min-width: 80px;
+    max-width: 80px;
+}
+
+td .concept-category {
+    min-width: 90px;
+    max-width: 90px;
+}
+
+td .concept-amount {
+    min-width: 75px;
+    max-width: 75px;
+    text-align: right;
+}
+
+td .concept-qty {
+    min-width: 45px;
+    max-width: 45px;
+    text-align: right;
+}
+
+td .concept-rate {
+    min-width: 50px;
+    max-width: 50px;
+    text-align: right;
+}
+
+td .concept-total {
+    min-width: 85px;
+    max-width: 85px;
+    text-align: right;
+}
+
+table .concept {
+    margin-bottom: 0 !important;
+    font-size: 9px;
+}
+
+.panel {
+    margin-bottom: -18px!important;
+    max-width: 549px;
+    border: 0;
+
+}
+
+.panel-heading {
+    display: inline-flex;
+    min-width: 250px;
+    max-width: 250px;
+}
+

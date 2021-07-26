@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_company_electronic_invoice_policies_form" model="ir.ui.view">
+            <field name="name">res.company.electronic.invoice.policies.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="inventory_account.view_company_sale_cost_invoice_form_avancys"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@string='Validacion de factura de venta']" position="after">
+                    <group string="Facturación Electrónica">
+                        <field name="electronic_invoice"/>
+                        <field name="ei_automatic_gen" attrs="{'invisible': [('electronic_invoice','=',False)]}"/>
+                        <field name="ei_automatic_read" attrs="{'invisible': [('electronic_invoice','=',False)]}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_company_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">res.company.electronic.invoice.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field eval="20" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Report Configuration']" position="after">
+                    <page string="Factura Electrónica" groups="electronic_invoice.group_admin_electronic_invoice"
+                          attrs="{'invisible': [('electronic_invoice', '=', False)]}">
+                        <group>
+                            <group>
+                                <field name="ei_database"/>
+                            </group>
+                            <group>
+                                <field name="ei_server_type"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Servidor SFTP">
+                                <group>
+                                    <group>
+                                        <field name="sftp_url" placeholder="xxx.xxx.xxx.xxx" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="sftp_user" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="ei_temporal_files" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="sftp_port" placeholder="22" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="sftp_pwd" password="True" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <h3 class="oe_grey">Nota:</h3><br/>
+                                    <ul class="oe_grey">
+                                        <li>Configure las credenciales del servidor SFTP y dirección local de transferencia de archivos</li>
+                                    </ul>
+                                </group>
+                            </page>
+                            <page string="Emisión de Factura">
+                                <group>
+                                    <group>
+                                        <field name="ei_write_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/IN" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="ei_voucher_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/OUT/Comprobantes" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="ei_ack_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/OUT/Acuse_Recibo" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="ei_dian_result_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/OUT/Dian_Result" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="ei_error_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/OUT/Error" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                        <field name="ei_decision_folder" placeholder="/INVOICE/PRODUCCION/NIT/NIT_01/OUT/Aceptacion_y_rechazo" attrs="{'required': [('electronic_invoice', '=', True)]}"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <h3 class="oe_grey">Nota:</h3><br/>
+                                    <ul class="oe_grey">
+                                        <li>Configure las rutas del proceso de Emisión de Factura Electrónica</li>
+                                    </ul>
+                                </group>
+                            </page>
+                            <page string="Políticas">
+                                <group>
+                                    <group>
+                                        <field name="xml_automatic_generation"/>
+                                        <field name="attach_invoice_xml"/>
+                                    </group>
+                                    <group>
+                                        <field name="send_cus_po"/>
+                                        <field name="send_remission"/>
+                                        <field name="send_cus_att"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Parametrización">
+                                <group string="Actualizacion UBL">
+                                    <field name="ubl_upgrade_date"
+                                        required="1"
+                                        help='Fecha a partir de la cual se actualizo UBL a la version 2.1'/>
+                                </group>
+                                <group string="Tipo de Operación">
+                                    <field name="ei_operation_type"/>
+                                </group>
+                                <group string="XML">
+                                    <group style="width: 50%">
+                                        <field name="cts_one_xml" placeholder="COD1|COD2"/>
+                                    </group>
+                                    <group>
+                                        <h3 class="oe_grey">Notas:</h3><br/>
+                                        <ul class="oe_grey">
+                                            <li>CTS_1: Diligencie este campo según los códigos pactados con Carvajal. Primero indique el código cuando la factura es NACIONAL, después separado por el caracter | y sin dejar espacios indique el código cuando la factura es de EXPORTACIÓN</li>
+                                        </ul>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">res.partner.electronic.invoice.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Factura Electrónica" groups="electronic_invoice.group_user_electronic_invoice, electronic_invoice.group_admin_electronic_invoice"
+                          attrs="{'invisible': [('type', 'not in', ('default','contact'))]}">
+                        <group>
+                            <group>
+                                <field name="electronic_invoice"/>
+                            </group>
+                            <group>
+                                <field name="ei_partner_address" attrs="{'invisible': [('electronic_invoice','=',False)]}"/>
+                            </group>
+                        </group>
+                        <group attrs="{'invisible': [('electronic_invoice','=',False)]}">
+                            <group string="Obligaciones del contribuyente">
+                                <field name="tributary_obligations_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <!-- <group string="Usuarios Aduaneros">
+                                <field name="customs_obligations_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </group> -->
+                        </group>
+                        <h3 class="oe_grey" attrs="{'invisible': [('electronic_invoice','=',False)]}">Nota:</h3>
+                        <ul class="oe_grey" attrs="{'invisible': [('electronic_invoice','=',False)]}">
+                            <li>Diligencie la información según el código y nombre especificado por la DIAN</li>
+                            <li>Campo 53 - 54 formato RUT DIAN</li>
+                        </ul>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="product_uom_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">product.uom.electronic.invoice.form</field>
+            <field name="model">product.uom</field>
+            <field name="inherit_id" ref="product.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rounding']" position="after">
+                    <field name="ei_uom_code" groups="electronic_invoice.group_admin_electronic_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_tax_code_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">account.tax.code.electronic.invoice.form</field>
+            <field name="model">account.tax.code</field>
+            <field name="inherit_id" ref="account.view_tax_code_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="ei_code" groups="electronic_invoice.group_admin_electronic_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_journal_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">account.journal.electronic.invoice.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_account_journal_form_2"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Cash Registers']" position="after">
+                    <page string="Factura Electrónica" groups="electronic_invoice.group_admin_electronic_invoice">
+                        <group>
+                            <group>
+                                <field name="invoice_resolution"/>
+                                <field name="invoice_prefix"/>
+                                <field name="ei_start_invoice"/>
+                                <field name="ei_end_invoice"/>
+                            </group>
+                            <group>
+                                <field name="ei_start_date"/>
+                                <field name="ei_end_date"/>
+                            </group>
+                        </group>
+                        <group string="Pago">
+                            <field name="ei_payment_method" attrs="{'required': [('type', '=', 'sale')]}"/>
+                        </group>
+                        <group string="Configuración XML">
+                            <group style="width: 50%">
+                                <field name="not_one_xml"
+                                       placeholder="Somos grandes contribuyentes Res DIAN XXXXXXX \n Responsable de regimen comun \n CIIU XXXX.\n Retenedores de IVA."/>
+                                <field name="not_five_xml"
+                                       placeholder="LA PRESENTE FACTURA DE VENTA SE ASIMILA EN TODOS SUS EFECTOS A LA LETRA DE CAMBIO CÓDIGO DE COMERCIO ARTICULO 774 NUMERAL 6"/>
+                            </group>
+                            <group>
+                                <h3 class="oe_grey">Notas:</h3>
+                                <br/>
+                                <ul class="oe_grey">
+                                    <li>NOT_1: Digite el mensaje que llevara la nota principal del campo NOT del XML.
+                                        Use | para indicar salto de línea
+                                    </li>
+                                </ul>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_order_form_ei" model="ir.ui.view">
+            <field name="name">sale.order.form.ei</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='logistics']/field[@name='order_policy']" position="after">
+                    <field name="pol_send_cus_po" invisible="1"/>
+                    <field name="cus_po_name" invisible="1"/>
+                    <field name="customer_po" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'progress'])], 'invisible': [('pol_send_cus_po', '=', False)]}" filename="cus_po_name"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_tree_sale_ei" model="ir.ui.view">
+            <field name="name">invoice.tree.sale.ei</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_analytic_avancys.invoice_tree_sale"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="ei_state"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_invoice_tree_ei" model="ir.ui.view">
+            <field name="name">account.invoice.tree.ei</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="ei_state"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account_invoice_electronic_invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.electronic.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[@string='Invoice Lines']/group/field[@name='payment_term']" position="attributes">
+                    <attribute name="required">True</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[@string='Other Info']" position="after">
+                    <page string="Factura Electrónica" groups="electronic_invoice.group_admin_electronic_invoice, electronic_invoice.group_user_electronic_invoice">
+                        <button name="ei_write_folder" type="object" string="Generar XML" class="oe_highlight avancys-btn-purple"
+                                attrs="{'invisible': ['|', ('ei_state', 'not in', ('pending','dian_rejec','supplier_rejec')), ('state','not in',('open','paid'))]}"/>
+                        <button name="ei_account_invoice_documents" type="object" string="Leer archivos relacionados"
+                                class="oe_highlight avancys-btn-purple" attrs="{'invisible': ['|', ('ei_state', 'in', ('cus_rejec','cus_accep')), ('state','not in',('open','paid'))]}"
+                                help="Leer archivos XML-PDF generados para esta factura y Log de error en caso de existir"/>
+                        <group>
+                            <group>
+                                <field name="ei_cufe" attrs="{'invisible': ['|', ('type', '!=', 'out_invoice')]}"/>
+                                <field name="ei_cude" attrs="{'invisible': [('type', '=', 'out_invoice')]}"/>
+                                <field name="contingency_invoice" attrs="{'invisible': ['|', ('type', '!=', 'out_invoice'), ('ei_state','!=','pending')]}"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="ei_state"/>
+                                    <field name="pol_send_cus_att" invisible="1"/>
+                                    <field name="cus_att_name" invisible="1"/>
+                                    <field name="customer_att" attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('pol_send_cus_att', '=', False)]}" filename="cus_att_name"/>
+                                </group>
+                                <group>
+                                    <button name="%(electronic_invoice.action_chg_ei_state_view)d"
+                                        type="action" class="oe_link" attrs="{'invisible': [('ei_state', '=', 'pending')]}"
+                                        groups="electronic_invoice.group_admin_electronic_invoice" icon="gtk-refresh"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group string="Factura Contigencia" attrs="{'invisible': [('contingency_invoice','=',False)]}">
+                            <group>
+                                <field name="ci_transcription" attrs="{'required': [('contingency_invoice','=',True)]}"/>
+                                <field name="ci_identifier" attrs="{'required': [('contingency_invoice','=',True)]}"/>
+                            </group>
+                            <group>
+                                <field name="ci_start_date" attrs="{'required': [('contingency_invoice','=',True)]}"/>
+                                <field name="ci_end_date" attrs="{'required': [('contingency_invoice','=',True)]}"/>
+                            </group>
+                        </group>
+                        <group string="Registro Escritura">
+                            <field name="ei_order_log_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="name_file"/>
+                                    <field name="description"/>
+                                    <field name="transaction_date"/>
+                                    <field name="type_doc"/>
+                                    <field name="type_log"/>
+                                    <field name="document_state"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_filter_ei" model="ir.ui.view">
+            <field name="name">view.account.invoice.filter.ei</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@help='My Invoices']" position="after">
+                    <filter string="FE Rechazada" domain="[('ei_state','=','cus_rejec')]" help="Facturas Electrónicas rechazadas por el cliente"/>
+                </xpath>
+                <xpath expr="//group/filter[@string='Status']" position="after">
+                    <filter string="Estado FE" context="{'group_by':'ei_state'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ei_order_log_tree" model="ir.ui.view">
+            <field name="name">log.order.tree</field>
+            <field name="model">ei.order.log</field>
+            <field name="arch" type="xml">
+                <tree string="Registro Órdenes FE" create="false">
+                    <field name="name"/>
+                    <field name="type_log"/>
+                    <field name="name_file"/>
+                    <field name="picking_id"/>
+                    <field name="transaction_date"/>
+                    <field name="document_state"/>
+                    <field name="state"/>
+                    <field name="type_doc"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="ei_order_log_form" model="ir.ui.view">
+            <field name="name">ei.order.log.form</field>
+            <field name="model">ei.order.log</field>
+            <field name='type'>form</field>
+            <field name="arch" type="xml">
+                <form string="Gestion de Novedades" create="false" edit="false">
+                    <header>
+                        <button string="Cerrar" type="object" name="chg_state" class="oe_highlight" states="open" groups="electronic_invoice.group_admin_electronic_invoice"/>
+                        <button string="Abrir" type="object" name="chg_state" class="oe_highlight" states="close" groups="electronic_invoice.group_admin_electronic_invoice"/>
+                        <field name="state" widget="statusbar" states="open,close" clickable="True"/>
+                    </header>
+                    <sheet>
+                        <h2>
+                            <label string="Referencia"/>
+                            <field name="name" class="oe_inline"/>
+                        </h2>
+                        <group>
+                            <group>
+                                <field name="type_log"/>
+                                <field name="type_doc"/>
+                                <field name="transaction_date"/>
+                            </group>
+                            <group>
+                                <field name="name_file"/>
+                                <field name="document_state"/>
+                                <field name="picking_id" attrs="{'invisible': [('type_log', '!=', 'txt')]}"/>
+                                <field name="invoice_id" attrs="{'invisible': [('type_log', '=', 'txt')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Descripcion" >
+                                <field name="description"/>
+                            </page>
+                            <page string="Contenido" attrs="{'invisible': ['|',('type_log', '=', 'logpdf'),('type_log', '=', 'logxml'),('type_log', '=', 'logHost')]}">
+                                <field name="data"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+        <record id="ei_order_log_search" model="ir.ui.view">
+            <field name='name'>ei.order.log.search</field>
+            <field name='model'>ei.order.log</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Analisis">
+                    <field name="name"/>
+                    <field name="type_log"/>
+                    <field name="name_file"/>
+                    <field name="picking_id"/>
+                    <field name="transaction_date"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_transaction_date" string="Fecha" context="{'group_by':'transaction_date'}"/>
+                        <filter name="group_type_log" string="Tipo" context="{'group_by':'type_log'}"/>
+                        <filter name="group_document_state" string="Estado Documento" context="{'group_by':'document_state'}"/>
+                        <filter name="group_type_log_fac" string="Factura Electrónica" domain="[('type_doc', '=', 'ei')]" context="{'group_by':'type_doc'}"/>
+                        <filter name="group_type_log_de" string="Nota Débito" domain="[('type_doc', '=', 'nd')]" context="{'group_by':'type_doc'}"/>
+                        <filter name="group_type_log_er" string="Nota Crédito" domain="[('type_doc', '=', 'nc')]" context="{'group_by':'type_doc'}"/>
+                        <filter name="group_type_log_ad" string="Archivos Adjuntos" domain="[('type_doc', '=', 'ad')]" context="{'group_by':'type_doc'}"/>
+                        <filter name="group_type_log_lg" string="Erroneos" domain="[('type_doc', '=', 'lg')]" context="{'group_by':'type_doc'}"/>
+                        <filter name="group_type_log_lg" string="Tipo de Documento" context="{'group_by':'type_doc'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="ei_order_log_graph" model="ir.ui.view">
+            <field name="name">ei.order.log.graph</field>
+            <field name="model">ei.order.log</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Facturas" type="pivot" stacked="True">
+                    <field name="type_log"/>
+                    <field name="transaction_date"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_log_orders_to_invoice_transfer" model="ir.actions.act_window">
+            <field name="name">Novedades Abiertas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ei.order.log</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','open')]</field>
+            <field name="context">{'search_default_group_transaction_date': 1}</field>
+        </record>
+
+        <record id="action_log_orders_to_invoice_no_transfer" model="ir.actions.act_window">
+            <field name="name">Novedades Cerradas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ei.order.log</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','close')]</field>
+            <field name="context">{'search_default_group_transaction_date': 1}</field>
+        </record>
+
+        <record id="action_log_orders_to_invoice" model="ir.actions.act_window">
+            <field name="name">Novedades</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ei.order.log</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_group_state': 1, 'search_default_group_transaction_date': 1}</field>
+        </record>
+
+        <!--FIX IMP TODO-->
+        <menuitem name="Novedades FE" id="menu_sale_invoicing_novedades" parent="account.menu_finance_receivables" sequence="1000"/>
+        <menuitem name="Abiertas" action="action_log_orders_to_invoice_transfer" id="menu_sale_log_order_invoice_transfer" parent="menu_sale_invoicing_novedades" sequence="0"/>
+        <menuitem name="Cerradas" action="action_log_orders_to_invoice_no_transfer" id="menu_sale_log_order_invoice_no_transfer" parent="menu_sale_invoicing_novedades" sequence="1"/>
+        <menuitem name="Estadisticas" action="action_log_orders_to_invoice" id="menu_sale_log_order_invoice" parent="menu_sale_invoicing_novedades" sequence="2"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record model="ir.module.category" id="module_account_niif">
+            <field name="name">Gestion NIIF</field>
+        </record>
+        
+        <record model="res.groups" id="group_user_niif">
+            <field name="name">Usuario</field>
+            <field name="category_id" ref="module_account_niif"/>
+        </record>
+        
+        <record model="res.groups" id="group_manager_niif">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_account_niif"/>
+            <field name="implied_ids" eval="[(4, ref('group_user_niif'))]"/>
+        </record>             
+        
+    </data>
+</openerp>

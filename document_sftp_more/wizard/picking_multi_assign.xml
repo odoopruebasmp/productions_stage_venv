@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<openerp>
+    <data>
+        <record id="picking_multi_assign_view_form" model="ir.ui.view">
+            <field name="name">Envio multiple por SFTP</field>
+            <field name="model">picking.multi.assign</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group string="Comprobar disponibilidad">
+                        <group>
+                            <field name="pickings" nolabel="1" />
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="assign_pickings" string="Comprobar disponibilidad" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <act_window id="picking_multi_assign_action" multi="True" key2="client_action_multi" name="Comprobar Disponibilidad" res_model="picking.multi.assign" src_model="stock.picking" view_mode="form" target="new" view_type="form" />
+    </data>
+</openerp>

@@ -1,0 +1,1349 @@
+<openerp>
+    <data>
+
+        <template id="hr_payroll_extended_css_backend" name="hr_payroll_extendecx_css_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/hr_payroll_extended/static/src/css/hr_payroll_extended.css"/>
+                <script type="text/javascript" src="/hr_payroll_extended/static/src/js/hr_payroll_extended.js"/>
+            </xpath>
+        </template>
+        
+        <record id="search_payslip_run_move_line" model="ir.ui.view">
+            <field name="name">Payslip Run Move Line</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="period_id" position="after">  
+                    <field name="payslip_run_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="search_payslip_run_move" model="ir.ui.view">
+            <field name="name">Payslip Run Move</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_filter"/>
+            <field name="arch" type="xml">
+                <field name="period_id" position="after">  
+                    <field name="payslip_run_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_payslip_type_tree" model="ir.ui.view">
+            <field name="name">hr.payslip.type.tree</field>
+            <field name="model">hr.payslip.type</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name" />
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_payslip_concept_form" model="ir.ui.view">
+            <field name="name">hr.payslip.concept.form</field>
+            <field name="model">hr.payslip.concept</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="concept_id"/>
+                            <field name="category"/>
+                            <field name="origin"/>
+                            <field name="ex_rent"/>
+                            <field name="afc"/>
+                        </group>
+                        <group>
+                            <field name="payslip_id" invisible="1"/>
+                            <field name="employee_id"/>
+                            <field name="contract_id"/>
+                            <field name="run_id"/>
+                            <field name="period_id"/>
+                            <field name="date"/>
+                            <field name="computation"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="qty"/>
+                        </group>
+                        <group>
+                            <field name="total"/>
+                            <field name="rate"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Log Auditoria">
+                            <field name="concept_log">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="value"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_hr_planilla_type_form" model="ir.ui.view">
+            <field name="name">hr.payslip.type.form</field>
+            <field name="model">hr.payslip.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de planilla">
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="holiday_status_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Conceptos">
+                            <field name="concept_ids" widget="many2many" editable="bottom">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="fortnight_ap"/>
+                                    <field name="category"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_salary_change_tree" model="ir.ui.view">
+            <field name="name">hr.contract.salary.change.tree</field>
+            <field name="model">hr.contract.salary.change</field>
+            <field name="arch" type="xml">
+                <tree string="Cambio Salario">
+                    <field name="contract_id"/>
+                    <field name="wage"/>
+                    <field name="date"/>
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_salary_change_tree" model="ir.actions.act_window">
+            <field name="name">Cambio Salario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.contract.salary.change</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem action="action_salary_change_tree" id="hr_menu_salary_change_tree" parent="hr_contract.next_id_56" sequence="8"/>
+
+        <record id="hr_contract_type_view_form_extended_co" model="ir.ui.view">
+            <field name="name">hr.contract.type.view.form.extended.co</field>
+            <field name="model">hr.contract.type</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_type_view_form"/>
+            <field name="arch" type="xml">
+                <form position="replace">
+                    <form>
+                        <sheet>
+                            <field name="name" readonly="1"/>
+                            <group cols="4">
+                                <group cols="2">
+                                    <field name="type_class"/>
+                                    <field name="section"/>
+                                </group>
+                                <group cols="2">
+                                    <field name="term"/>
+                                </group>
+                            </group>
+                        </sheet>
+                    </form>
+                </form>
+            </field>
+        </record>
+        <record id="view_partner_form_payroll_extended" model="ir.ui.view">
+            <field name="name">view.partner.form.payroll_extended</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="partner_extended.view_partner_form_extended" />
+            <field name="arch" type="xml">
+                <notebook position="inside" >
+                     <page string="Recursos Humanos" attrs="{'invisible': [('type','in',['sucursal','invoice','delivery'])]}">
+                        <group name="empleado">
+                            <field name="employee_id" domain="[('partner_id','=',active_id)]" attrs="{'invisible': [('is_company','=', True)]}"
+                                   context="{'search_default_partner_id':[active_id], 'default_partner_id': active_id}" />
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="view_hr_payroll_structure_list_view_extended" model="ir.ui.view">
+            <field name="name">hr.payroll.structure.tree.extended</field>
+            <field name="model">hr.payroll.structure</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payroll_structure_list_view"/>
+            <field name="arch" type="xml">
+                <field name="rule_ids" position="replace">
+                    <field name="parent_id"/>
+                </field>
+                <field name="company_id" position="replace">
+                    <field name="tipo_nomina"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_hr_employee_grade_form_extended" model="ir.ui.view">
+            <field name="name">hr.payroll.structure.form.extended</field>
+            <field name="model">hr.payroll.structure</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_employee_grade_form"/>
+            <field name="arch" type="xml">
+                <field name='sequence' position="replace"/>
+                <page string="Salary Rules" position="after">
+                    <page string="Cuentas Reglas Salariales">
+                        <button name="button_compute_rules" string="(Actualizar)" type="object" />
+                        <field name="rules_account_ids">
+                            <tree editable='True' >
+                                <field name="salary_rule_id"/>
+                                <field name="account_credit_structure_property"/>
+                                <field name="account_debit_structure_property"/>
+                                <field name="analytic_account_id_structure_property"/>
+                                <field name="analytic_journal_id_structure_property"/>
+                                <field name="utilizar_cuenta_padre"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Cuentas Novedades">
+                        <field name="novedades_account_ids">
+                            <tree editable='True' >
+                                <field name="novedad_category_id" required="1"/>
+                                <field name="account_credit_structure_property"/>
+                                <field name="account_debit_structure_property"/>
+                                <field name="analytic_account_id_structure_property"/>
+                                <field name="analytic_journal_id_structure_property"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Cuentas Conceptos Fijos">
+                        <field name="oblicaciones_account_ids">
+                            <tree editable='True' >
+                                <field name="obligacion_category_id" required="1"/>
+                                <field name="account_credit_structure_property"/>
+                                <field name="account_debit_structure_property"/>
+                                <field name="analytic_account_id_structure_property"/>
+                                <field name="analytic_journal_id_structure_property"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Cuentas Horas Extra">
+                        <field name="extra_account_ids">
+                            <tree editable='True' >
+                                <field name="extra_hour_type_id" required="1"/>
+                                <field name="account_credit_structure_property"/>
+                                <field name="account_debit_structure_property"/>
+                                <field name="analytic_account_id_structure_property"/>
+                                <field name="analytic_journal_id_structure_property"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Contratos Relacionados">
+                        <field name="contract_types"/>
+                    </page>
+                </page>
+                <field name="company_id" position="replace">
+                    <field name="tipo_nomina"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="hr_salary_rule_form_extended" model="ir.ui.view">
+            <field name="name">hr.salary.rule.form.extended</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+            <field name="arch" type="xml">            
+                <field name="amount_select" position="after" >
+                    <field name="anticipos" />
+                    <field name="neto" />
+                    <field name="salvaguarda" attrs="{'invisible': [('neto','=', False)],'required': [('neto','=', True)]}"/>
+                    <field name="novedad_category_id" attrs="{'invisible': [('neto','=', False)],'required': [('neto','=', True)]}"/>
+                </field>
+                <xpath expr="//field[@name='quantity']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('amount_select','in',('code','method'))], 'required':[('amount_select','not in',('code','method'))]}</attribute>
+                </xpath>
+                <field name='amount_python_compute' position='replace'>
+                    <field colspan="4" name="amount_python_compute" groups='hr_payroll_extended.group_mod_salary_rules'
+                           attrs="{'invisible':[('amount_select','!=','code')], 'required':[('amount_select','=','code')]}"/>
+                </field>
+                <page string="Description" position="before">
+                    <page string="Cuentas Relacionadas">
+                        <field name="rules_account_ids">
+                            <tree editable="top" >
+                                <field name="structure_id"/>
+                                <field name="account_credit_structure_property"/>
+                                <field name="account_debit_structure_property"/>
+                                <field name="analytic_account_id_structure_property"/>
+                                <field name="analytic_journal_id_structure_property"/>
+                                <field name="utilizar_cuenta_padre"/>
+                                <field name="parent_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+                <notebook position='after'>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="hr_salary_rule_list_extended2" model="ir.ui.view">
+            <field name="name">hr.salary.rule.list.extended2</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_list"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="note"/>
+                </field>
+                <field name='sequence' position="replace"/>
+            </field>
+        </record>
+        
+        <record id="view_hr_rule_filter_extended" model="ir.ui.view">
+            <field name="name">hr.salary.rule.select.extended</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_rule_filter"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="note" string="Nota" filter_domain="[('note','ilike',self)]" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_hr_payslip_filter_extended" model="ir.ui.view">
+            <field name="name">hr.payslip.tree.extended</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>
+            <field name="arch" type="xml">
+                <field name="date_from" position="after">
+                    <field name="liquid_date"/>
+                    <field name="liquidacion_date"/>                    
+                    <field name="payslip_period_id"/>
+                </field>
+                <field name="employee_id" position="after">
+                    <field name="contract_id" />
+                    <field name="tipo_nomina" />
+                </field>
+                <filter name="state" position="before">
+                    <filter string="Tipo Nomina" name="group_by_tipo_nomina" icon="terp-stock_effects-object-colorize" context="{'group_by':'tipo_nomina'}"/>
+                    <filter string="Contrato" name="group_by_contract_id" icon="terp-stock_effects-object-colorize" context="{'group_by':'contract_id'}"/>
+                    <filter string="Fecha Contabilizacion" name="group_by_liquid_date" icon="terp-stock_effects-object-colorize" context="{'group_by':'liquid_date'}"/>
+                    <filter string="Fecha Liquidacion" name="group_by_liquidacion_date" icon="terp-stock_effects-object-colorize" context="{'group_by':'liquidacion_date'}"/>
+                    <filter string="Periodo" name="group_by_payslip_period_id" icon="terp-stock_effects-object-colorize" context="{'group_by':'payslip_period_id'}"/>
+                </filter>
+            </field>
+        </record>
+        
+        <record id="view_hr_payslip_tree_extended" model="ir.ui.view">
+            <field name="name">hr.payslip.tree.extended</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_from" position="replace">
+                </field>
+                <field name="date_to" position="replace">
+                    <field name="liquid_date"/>
+                    <field name="liquidacion_date"/>
+                    <field name="payslip_period_id"/>
+                </field>
+                <field name="employee_id" position="after">
+                    <field name="contract_id" />
+                    <field name="tipo_nomina" />
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_contract_payroll_ext_tree">
+            <field name="name">hr.contract.payroll.ext.tree</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_end" position="after">
+                    <field name="fix_end"/>
+                    <field name="deadline"/>
+                </field>
+                <tree position="attributes">
+                    <attribute name="colors" translation="off">blue:0&lt;deadline&lt;30</attribute>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_contract_payroll_ext_search">
+            <field name="name">hr.contract.payroll.ext.search</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+            <field name="arch" type="xml">
+                <field name="date_start" position="before">
+                    <field name="deadline"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="hr_contract_view_payslips_form" model="ir.ui.view">
+            <field name="name">Hr Contract Payslips</field>
+            <field name="model">hr.contract</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//sheet" position="before">
+                        <header>
+                            <button name="create_payslip" string="Liquidar contrato" type="object" class="oe_highlight" states="in_progress"/>
+                            <button name="contract_return" string="Reintegrar contrato" type="object" states="done"
+                                    help="Reversa el proceso de liquidación. La nómina de tipo liquidación creada al pulsar el botón de 'Liquidar Contrato' debe encontrarse en estado borrador."/>
+                            <field name="state" widget="statusbar"/>
+
+                        </header>
+                    </xpath>
+                    <page string="Work Permit" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </page>
+                    <field name="wage" position="after">
+                        <field name="fiscal_type_id"/>
+                        <field name="days_history"/>
+                        <field name="apr_prod_date"/>
+                        <field name="skip_aux_trans"/>
+                        <field name="term" readonly="1"/>
+                        <field name="smmlv"/>
+                        <field name="ded_limit"/>
+                        <field name="part_time"/>
+                        <field name="high_risk"/>
+                    </field>
+                    <field name="date_start" position="after">
+                        <field name="fix_end"/>
+                    </field>
+                    <field name="employee_id" position="attributes">
+                        <attribute name="on_change">onchange_employee(employee_id)</attribute>
+                    </field>
+                    <field name="employee_id" position="after">
+                        <field name="cuidad_contract"/>
+                        <field name="cuidad_desempeno"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </field>
+                    <field name="working_hours" position="before">
+                        <field name="contract_days" attrs="{'invisible': [('type_id','=','fijo')]}"/>
+                        <field name="vacations_calendar_id"/>
+                    </field>
+                    <field name="working_hours" position="after">
+                        <field name="calendar_type"/>
+                        <separator string="Liquidar"/><newline />
+                        <group colspan="4">
+                            <field name="date_end" string="Fecha liquidación"/>
+                            <field name="payslip_period_id"/>
+                            <field name="separation_type"/>
+                        </group>
+                        <group colspan="4" string="Deducibles">
+                            <field name="ded_dependents"/>
+                            <field name="ded_living"/>
+                            <field name="ded_prepaid"/>
+                        </group>
+                    </field>
+                    <!--<field name="job_id" position="replace"/>-->
+                    <notebook position="inside">
+                        <page string="Prorrogas" attrs="{'invisible': ['|', ('fix_end', '=', False),('term', '!=', 'fijo')]}">
+                            <button name="extend_contract" string="Prorrogar" type="object"/>
+                            <field name="extension_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                </tree>
+                            </field>
+                            
+                        </page>
+                        <page string="Control de Cambios">
+                            <label for="wage_historic_ids"/>
+                            <field name="wage_historic_ids" nolabel="1" colspan="4">
+                                <tree string="Salaio" editable="top">
+                                    <field name="wage"/>
+                                    <field name="date"/>
+                                    <field name="user_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Libro de vacaciones">
+                            <group>
+                                <field name="pending_vac"/>
+                                <button name="get_pend_vac_upd" string="Actualizar dias pendientes" type="object" class="oe_highlight avancys-btn"/>
+
+                                <field name="vac_book" nolabel="1" colspan="4">
+                                    <tree editable="top">
+                                        <field name="licences"/>
+                                        <field name="enjoyed"/>
+                                        <field name="payed"/>
+                                        <field name="payslip_id"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Historial Nominas">
+                            <field name="slip_ids" nolabel="1" colspan="4">
+                                <tree string="Historial Nominas">
+                                    <field name="number"/>
+                                    <field name="name"/>
+                                    <field name="payslip_period_id"/>
+                                    <field name="liquid_date"/>
+                                    <field name="liquidacion_date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="registro_dias" string="Registro Dias" invisible="1">
+                            <!-- TODO arreglar estos campos -->
+                            <!-- <group name="dias_de_trabajo" string="Dias de Trabajo">
+                                <field name="days_of_work" string="Dias de trabajo"/>
+                                <field name="days_of_year"/>
+                            </group> -->
+                        </page>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+        <record id="hr_payroll_view_payslip_form" model="ir.ui.view">
+            <field name="name">hr.payslip.extended.form</field>
+            <field name="model">hr.payslip</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_account.view_hr_payslip_inherit_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <sheet position="replace">
+
+                            <div class="oe_right oe_button_box">
+                                <button name="%(hr_payroll.act_payslip_lines)d" string="Payslip Computation Details" type="action"/>
+                            </div>
+                            <div class="oe_title">
+                                <label for="employee_id" class="oe_edit_only"/>
+                                <h1><field name="employee_id" on_change="onchange_employee_id(employee_id, contract_id, context)"/></h1>
+                            </div>
+                            <group col="4">
+                                <field name="contract_id" required="1" on_change="onchange_employee_id(employee_id, contract_id, context)"
+                                       context="{'default_employee_id': employee_id}"/>
+                                <field name="number"/>
+                                <field name="payslip_period_id" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="name"/>
+                                <field name="liquid_date" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+                                <field name="liquidacion_date" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+                                <field name="credit_note" invisible="1"/>
+                                <field name="tipo_nomina" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <!-- invisibles -->
+                                <field name="struct_id" invisible="1"/>
+                            </group>
+                            <notebook>
+                                <page string="Conceptos">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="panel panel-success">
+                                                  <div class="panel-heading"><b><i class="fa fa-dollar"/> Devengos</b></div>
+                                                  </div>
+                                                <field name="earning_ids" widget="many2many_kanban">
+                                                <kanban quick_create="false">
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="total"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                             <!-- Table -->
+                                                             <table class="table table-hover concept">
+                                                                <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                    <td class="concept-code"><field name="code"/></td>
+                                                                    <td class="concept-category"><field name="category"/></td>
+                                                                    <td class="concept-amount"><field name="amount"/></td>
+                                                                    <td class="concept-qty"><field name="qty"/></td>
+                                                                    <td class="concept-rate"><field name="rate"/>%</td>
+                                                                    <td class="concept-total"><b><field name="total"/></b></td>
+                                                                </tr>
+                                                            </table>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                                </field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="panel panel-info">
+                                                  <div class="panel-heading"><b><i class="fa fa-foursquare"/> Aportes</b></div>
+                                                  </div>
+                                                <field name="contribution_ids" widget="many2many_kanban">
+                                                <kanban quick_create="false">
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="total"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                             <!-- Table -->
+                                                             <table class="table table-hover concept">
+                                                                <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                    <td class="concept-code"><field name="code"/></td>
+                                                                    <td class="concept-category"><field name="category"/></td>
+                                                                    <td class="concept-amount"><field name="amount"/></td>
+                                                                    <td class="concept-qty"><field name="qty"/></td>
+                                                                    <td class="concept-rate"><field name="rate"/>%</td>
+                                                                    <td class="concept-total"><b><field name="total"/></b></td>
+                                                                </tr>
+                                                            </table>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                                </field>
+                                            </div>
+                                        </div>
+                                     <hr/>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                                <div class="panel panel-danger">
+                                                  <div class="panel-heading "><b><i class="fa fa-minus-square"/> Deducciones</b></div>
+                                                  </div>
+                                                <field name="deduction_ids" widget="many2many_kanban">
+                                                <kanban quick_create="false">
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="total"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                             <!-- Table -->
+                                                             <table class="table table-hover concept">
+                                                                <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                    <td class="concept-code"><field name="code"/></td>
+                                                                    <td class="concept-category"><field name="category"/></td>
+                                                                    <td class="concept-amount"><field name="amount"/></td>
+                                                                    <td class="concept-qty"><field name="qty"/></td>
+                                                                    <td class="concept-rate"><field name="rate"/>%</td>
+                                                                    <td class="concept-total"><b><field name="total"/></b></td>
+                                                                </tr>
+                                                            </table>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                                </field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="panel panel-warning">
+                                                  <div class="panel-heading "><b><i class="fa fa-signal"/> Provisiones</b></div>
+                                                  </div>
+                                                <field name="provision_ids" widget="many2many_kanban">
+                                                <kanban quick_create="false">
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="total"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                             <!-- Table -->
+                                                             <table class="table table-hover concept">
+                                                                <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                    <td class="concept-code"><field name="code"/></td>
+                                                                    <td class="concept-category"><field name="category"/></td>
+                                                                    <td class="concept-amount"><field name="amount"/></td>
+                                                                    <td class="concept-qty"><field name="qty"/></td>
+                                                                    <td class="concept-rate"><field name="rate"/>%</td>
+                                                                    <td class="concept-total"><b><field name="total"/></b></td>
+                                                                </tr>
+                                                            </table>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                                </field>
+                                            </div>
+                                        </div>
+                                     <hr/>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading"><b><i class="fa fa-money"/> Neto a pagar</b>
+                                                </div>
+                                            </div>
+                                            <field name="neto" widget="many2many_kanban">
+                                                    <kanban quick_create="false">
+                                                        <field name="name"/>
+                                                        <field name="code"/>
+                                                        <field name="total"/>
+                                                        <templates>
+                                                            <t t-name="kanban-box">
+                                                                 <!-- Table -->
+                                                                 <table class="table table-hover concept">
+                                                                    <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                        <td class="concept-code"><field name="code"/></td>
+                                                                        <td class="concept-category"><field name="category"/></td>
+                                                                        <td class="concept-amount"><field name="amount"/></td>
+                                                                        <td class="concept-qty"><field name="qty"/></td>
+                                                                        <td class="concept-rate"><field name="rate"/>%</td>
+                                                                        <td class="concept-total"><b><field name="total"/></b></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </t>
+                                                        </templates>
+                                                    </kanban>
+                                                </field>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="panel panel-default">
+                                              <div class="panel-heading"><b><i class="fa fa-asterisk"/> Otros</b></div>
+                                              </div>
+                                            <field name="other_ids" widget="many2many_kanban">
+                                                <kanban quick_create="false">
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="total"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                             <!-- Table -->
+                                                             <table class="table table-hover concept">
+                                                                <tr><td class="concept-name"> <a type="open"><field name="name"/></a></td>
+                                                                    <td class="concept-code"><field name="code"/></td>
+                                                                    <td class="concept-category"><field name="category"/></td>
+                                                                    <td class="concept-amount"><field name="amount"/></td>
+                                                                    <td class="concept-qty"><field name="qty"/></td>
+                                                                    <td class="concept-rate"><field name="rate"/>%</td>
+                                                                    <td class="concept-total"><b><field name="total"/></b></td>
+                                                                </tr>
+                                                            </table>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                            </field>
+                                        </div>
+                                        </div>
+                                        <hr/>
+                                        <div id="detalle" style="padding-top: 20px;">
+                                             <field name="concept_ids">
+                                                <tree>
+                                                    <field name="name"/>
+                                                    <field name="code"/>
+                                                    <field name="category"/>
+                                                    <field name="origin"/>
+                                                    <field name="amount"/>
+                                                    <field name="qty"/>
+                                                    <field name="rate"/>
+                                                    <field name="total"/>
+                                                </tree>
+                                            </field>
+                                        </div>
+                                </page>
+
+                                <page string="Dias y Horas de Trabajo">
+                                    <separator string="Calculo de Dias y Horas"/>
+                                    <field name="worked_days_line_ids">
+                                        <tree string="Dias de Trabajo" colors="green:symbol == '+';red:symbol == '-' ">
+                                            <field name="name"/>
+                                            <field name="code"/>
+                                            <field name="number_of_hours"/>
+                                            <field name="number_of_days"/>
+                                            <field name="symbol"/>
+                                            <field name="contract_id" invisible="1"/>
+                                            <field name="sequence" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Ausencias del Periodo"/>
+                                    <field name="leave_ids" colspan="4">
+                                        <tree string="Leave Requests">
+                                            <field name="holiday_status_id"/>
+                                            <field name="name"/>
+                                            <field name="date_from"/>
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp" />
+                                            <field name="number_of_days_in_payslip" sum="Total Days"/>
+                                            <field name="approve_date"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Detalle de las Ausencias del Periodo"/>
+                                    <field name="leave_days_ids" nolabel="1" colspan="4">
+                                        <tree string="Dias de Ausencia">
+                                            <field name="sequence" invisible="1"/>
+                                            <field name="name"/>
+                                            <field name="week_day"/>
+                                            <field name="hours_payslip" widget="float_time" sum="Total Hours"/>
+                                            <field name="days_payslip" sum="Total Days"/>
+                                            <field name="holiday_id"/>
+                                            <field name="holiday_status_id"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Salary Computation" >
+                                    <field name="line_ids" colspan="4" nolabel="1">
+                                        <tree string="Salary Structure" editable="bottom" colors="blue:total == 0">
+                                            <field name="name"/>
+                                            <field name="code"/>
+                                            <field name="category_id"/>
+                                            <field name="sequence" invisible="1"/>
+                                            <field name="quantity" sum="Total cantidad"/>
+                                            <field name="rate" sum="Total porcentaje"/>
+                                            <field name="amount" sum="Total valor"/>
+                                            <field name="total" sum="Total"/>
+                                        </tree>
+                                        <form string="Payslip Line">
+                                            <group col="4">
+                                                <field name="name"/>
+                                                <field name="code"/>
+                                                <field name="category_id"/>
+                                                <field name="sequence"/>
+                                                <field name="quantity" />
+                                                <field name="rate" />
+                                                <field name="amount" />
+                                                <field name="total" />
+                                                <field name="salary_rule_id"/>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </page>
+                                <!--<page string="Details By Salary Rule Category">-->
+                                    <!--<field name="details_by_salary_rule_category" context="{'group_by':'category_id'}" domain="[('appears_on_payslip', '=', True)]">-->
+                                        <!--<tree string="Payslip Lines" colors="blue:total == 0">-->
+                                            <!--<field name="category_id"/>-->
+                                            <!--<field name="name"/>-->
+                                            <!--<field name="code"/>-->
+                                            <!--<field name="total" sum="Total"/>-->
+                                        <!--</tree>-->
+                                    <!--</field>-->
+                               <!--</page>-->
+                               <page string="Other Information">
+                                    <group>
+                                        <group string="Miscellaneous">
+                                            <field name="company_id" groups="base.group_multi_company"/>
+                                            <field name="payslip_run_id" domain="[('state','=','draft')]"/>
+                                            <field name="force_ibc"/>
+                                        </group>
+                                        <group name="accounting" string="Accounting">
+                                            <field name="paid" readonly="1"/>
+                                            <field name="period_id" readonly="1"/> 
+                                            <field name="journal_id"/> 
+                                            <field name="move_id" readonly="1"/>
+                                        </group>
+                                    </group>
+                                    <div colspan="4">
+                                        <field name="note" Placeholder="Add an internal note..."/>
+                                    </div>
+                               </page>
+                               <page string="Horas Extras" attrs="{'invisible': [('extrahours_total_ids','=', False)]}">
+                                    <separator string="Total Horas Extra"/>
+                                    <field name="extrahours_total_ids">
+                                        <tree>
+                                            <field name="type_id"/>
+                                            <field name="valor" sum="Total Valor"/>
+                                            <field name="cantidad" sum="Total Cantidad"/>
+                                            <field name="total" sum="Total"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Detalle Horas Extra"/>
+                                    <field name="extrahours_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="type_id"/>
+                                            <field name="date_start"/>
+                                            <field name="date_end"/>
+                                            <field name="approve_date"/>
+                                            <field name="duracion" sum="Total Duracion"/>
+                                            <field name="total" sum="Total"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Novedades" attrs="{'invisible': [('novedades_total_ids','=', False)]}">
+                                    <separator string="Total Novedades"/>
+                                    <field name="novedades_total_ids">
+                                        <tree>
+                                            <field name="category_id"/>
+                                            <field name="cantidad" sum="Total Cantidad"/>
+                                            <field name="total" sum="Total"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Detalle Novedades"/>
+                                    <field name="novedades_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="category_id"/>
+                                            <field name="date"/>
+                                            <field name="approve_date"/>
+                                            <field name="cantidad" sum="Total Cantidad"/>
+                                            <field name="valor" sum="Total Valor"/>
+                                            <field name="total" sum="Total"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Prestamos" attrs="{'invisible': [('prestamos_total_ids','=', False)]}">
+                                    <separator string="Total Prestamos"/>
+                                    <field name="prestamos_total_ids">
+                                        <tree>
+                                            <field name="category_id"/>
+                                            <field name="deuda" sum="Total Deuda"/>
+                                            <field name="cuota" sum="Total Cuota"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Detalle Prestamos"/>
+                                    <field name="prestamos_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="category_id"/>
+                                            <field name="date"/>
+                                            <field name="deuda" sum="Total Deuda"/>
+                                            <field name="numero_cuotas"/>
+                                            <field name="cuota" sum="Total Cuota"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Conceptos Fijos" attrs="{'invisible': [('obligaciones_ids','=', False)]}">
+                                    <field name="obligaciones_ids">
+                                        <tree>
+                                            <field name="obligacion_id"/>
+                                            <field name="category_id"/>
+                                            <field name="valor" sum="Total"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Anticipos Vencidos" attrs="{'invisible': [('advance_ids','=', False)]}">
+                                    <separator string="Pagos Anticipos"/>
+                                    <field name="advance_total_ids">
+                                        <tree editable="top">
+                                            <field name="advance_id"/>
+                                            <field name="amount_total" sum="Total"/>
+                                            <field name="amount_discount" sum="Total Descontado" attrs="{'readonly': [('manual','=', False)]}"/>
+                                            <field name="manual"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <separator string="Detalle Anticipo"/>
+                                    <field name="advance_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="description"/>
+                                            <field name="pay_date"/>
+                                            <field name="expire_date"/>
+                                            <field name="remaining" sum="Total"/>
+                                            <field name="state" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+
+
+                    </sheet>
+                    <button name="compute_sheet" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </button>
+                    <button name="refund_sheet" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </button>
+                    <button name="draft" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </button>
+                    <button name="cancel_sheet" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </button>
+                    <button name="hr_verify_sheet" position="replace">
+                        <button name="compute_slip" string="Calcular" states="draft" type="object" class="oe_highlight"/>
+                        <button name="close_slip" string="Causar" states="draft" type="object" class="oe_highlight avancys-btn-purple"/>
+                        <button name="draft_slip" string="Pasar a borrador" states="posted,done" type="object" class="oe_highlight avancys-btn-purple"/>
+                        <button name="action_quotation_send" string="Enviar por Correo" states="done" type="object"/>
+                        <button name="draft_sheet" string="Restablecer como borrador" type="object" states="cancel" class="oe_highlight"/>
+                    </button>
+                    <notebook position="after">
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+        <!-- *********************** Payslip Period *************** -->
+        <record model="ir.ui.view" id="payslip_period_tree_view">
+            <field name="name">payslip.period.tree.view</field>
+            <field name="model">payslip.period</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Payslip Period">
+                    <field name="name"/>
+                    <field name="bm_type"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="start_period"/>
+                    <field name="end_period"/>					
+                    <field name="schedule_pay"/>					
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="payslip_period_form_view">
+            <field name="name">payslip.period.form.view</field>
+            <field name="model">payslip.period</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payslip Period">
+                    <group>
+                        <field name="name"/>
+                        <field name="bm_type" attrs="{'invisible': [('schedule_pay','!=','bi-monthly')], 'required':[('schedule_pay','=','bi-monthly')]}"/>
+                        <newline/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="start_period"/>
+                        <field name="end_period"/>						
+                        <field name="schedule_pay"/>	
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="payslip_period_search_view">
+            <field name="name">payslip.period.search.view</field>
+            <field name="model">payslip.period</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Payslip Period">
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="start_period"/>
+                    <field name="end_period"/>
+                    <field name="schedule_pay"/>
+                </search>
+            </field>
+        </record>
+        <record id = "action_payslip_period_tree" model="ir.actions.act_window">
+           <field name="name">Payslip Period</field>
+           <field name="res_model">payslip.period</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="hr_payslip_type_action" model="ir.actions.act_window">
+            <field name="name">Tipos de nomina</field>
+            <field name="res_model">hr.payslip.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="contract_to_expire_action" model="ir.actions.act_window">
+            <field name="name">Contratos a expirar</field>
+            <field name="res_model">hr.contract</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                [('term','=','fijo'),('state','=','in_progress'),('fix_end','&lt;=',(context_today()+datetime.timedelta(days=45)).strftime('%Y-%m-%d'))]
+            </field>
+        </record>
+
+
+        <menuitem id="payslip_period" parent="hr_payroll.payroll_configure" action="action_payslip_period_tree" name="Payslip Period"/>
+        <menuitem id="payslip_type" parent="hr_payroll.payroll_configure" action="hr_payslip_type_action" name="Tipos de nomina"/>
+        <menuitem id="contract_to_expire" parent="hr.menu_hr_main" action="contract_to_expire_action" name="Contratos a vencer" sequence="30"/>
+
+        <record id="hr_payroll_run_view_form4" model="ir.ui.view">
+            <field name="name">hr.payslip.run.view.form</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+            <field name="arch" type="xml">
+                <button name="close_payslip_run" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="draft_payslip_run" position="replace">
+                    <button name="draft_payslip_run" states="terminated" string="Cancelar old" type="object" class="oe_highlight"/>
+                    <button name="action_quotation_send" type="object" string="Notificacion por Correo" class="oe_highlight" confirm="¿Está seguro que desea enviar masivamente los desprendibles de nomina?"/>
+                    <button name="reckon_run" states="draft" string="Calcular" type="object" class="oe_highlight avancys-btn-purple"/>
+                    <button name="close_run" states="draft" string="Causar" type="object" class="oe_highlight avancys-btn-purple"/>
+                    <button name="draft_run" states="posted,close" string="Pasar a borrador" type="object" class="oe_highlight avancys-btn-purple"/>
+                </button>
+                <h1 position="after">
+                    <group col="4">
+                        <field name="date_end" invisible="1"/>
+                        <field name="date_start" invisible="1"/>
+                        <field name="payslip_period" required="True" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <field name="date" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        <field name="date_liquidacion" attrs="{'readonly': [('state','!=','draft')]}"/>
+                    </group>
+                </h1>
+                <field name="credit_note" position="replace">
+                    <field name="credit_note" invisible="1"/>
+                    <field name="tipo_nomina" attrs="{'readonly': [('state','!=','draft')]}" />
+                    <field name="analytic_account_id" attrs="{'readonly': [('state','!=','draft')]}" domain="[('type','=','normal')]"/>
+                    <field name="bank_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                </field>
+                <sheet position="after">
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </sheet>
+            </field>
+        </record>
+        
+        <record id="hr_payslip_run_tree_inherit_2" model="ir.ui.view">
+            <field name="name">hr.payslip.run.tree.inherit.2</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_payroll_account.hr_payslip_run_tree_inherit"/>
+            <field name="arch" type="xml">
+                <field name="credit_note" position="replace">
+                    <field name="credit_note" invisible="1"/>
+                </field>
+                <field name="date_end" position="replace">
+                    <field name="date_end" invisible="1"/>
+                </field>
+                <field name="date_start" position="replace">
+                    <field name="date_start" invisible="1"/>
+                </field>
+                <field name="name" position="after">
+                    <field name="tipo_nomina" />
+                    <field name="analytic_account_id" domain="[('type','=','normal')]"/>
+                </field>
+                <field name="state" position="before">
+                    <field name="date"/>
+                    <field name="date_liquidacion"/>
+                    <field name="payslip_period"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="hr_payslip_run_filter2" model="ir.ui.view">
+            <field name="name">hr.payslip.run.search2</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_filter"/>
+            <field name="arch" type="xml">
+                <field name="date_start" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="date_end" position="replace">
+                    <field name="payslip_period"/>
+                    <field name="date"/>
+                    <field name="date_liquidacion"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Estado" name="group_by_state" context="{'group_by': 'state'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Periodo" name="group_by_payslip_period" context="{'group_by': 'payslip_period'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Tipo Nomina" name="group_by_tipo_nomina" context="{'group_by': 'tipo_nomina'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Centro Costo" name="group_by_analytic_account_id" context="{'group_by': 'analytic_account_id'}" icon="terp-stock_effects-object-colorize"/>
+                    </group>
+                </field>
+                <field name="name" position="after">
+                    <field name="tipo_nomina" />
+                    <field name="analytic_account_id" domain="[('type','=','normal')]"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_employee_tree_extended" model="ir.ui.view">
+            <field name="name">hr.employee.tree.extended</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="identification_id" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_employee_filter_extended" model="ir.ui.view">
+            <field name="name">hr.employee.filter.extended</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="identification_id" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_employee_form_extended2" model="ir.ui.view">
+            <field name="name">hr.employee.form.extended2</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_employee"/>
+            <field name="arch" type="xml">
+                <label for="state" groups="base.group_hr_attendance" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </label>
+                <div groups="base.group_hr_attendance" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </div>
+                <notebook position="inside">
+                    <page string="Cambios de cargo">
+                        <field name="job_log" readonly="1">
+                            <tree>
+                                <field name="prev_job"/>
+                                <field name="new_job"/>
+                                <field name="date"/>
+                                <field name="create_uid"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_employee_form_extended3" model="ir.ui.view">
+            <field name="name">hr.employee.form.extended3</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2"/>
+            <field name="arch" type="xml">
+                <group string="Contract" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </group>
+            </field>
+        </record>
+        
+        <record id="view_employee_form_extended4" model="ir.ui.view">
+            <field name="name">hr.employee.form.extended4</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_holidays.view_employee_form_leave_inherit"/>
+            <field name="arch" type="xml">
+                <group string="Leaves" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </group>
+            </field>
+        </record>
+        
+        <record id="resource_resource_form_extended" model="ir.ui.view">
+            <field name="name">resource.resource.form.extended4</field>
+            <field name="model">resource.resource</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="resource.resource_resource_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace">
+                    <field name="partner_id" attrs="{'required':[('resource_type','=','user')]}"/>
+                    <field name="user_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_employee_form_extended" model="ir.ui.view">
+            <field name="name">hr.employee.form.extended</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <group string="Citizenship &amp; Other Info" position="attributes">
+                    <attribute name="string">Informacion Adicional</attribute>
+                </group>
+                <field name="name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="name" position="after">
+                    <field name="partner_id" required="True" on_change="onchange_partner(partner_id)" domain="[('is_company','=', False),('employee_id','=',False)])" />
+                </field>
+                <field name="address_home_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="passport_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="country_id" position="replace">
+                    <field name="rh"/>
+                </field>
+                <field name="identification_id" position="replace"/>
+                <field name="birthday" position="after">
+                    <field name="country_id"/>
+                </field>
+                <field name="address_home_id" position="after">
+                    <field name="identification_id" />
+                    <field name="home_address" />
+                    <field name="home_phone" />
+                    <field name="home_mobile_phone" />
+                </field>
+                <notebook position="inside">
+                    <page string="Contratos">
+                        <group>
+                            <field name="contract_id" />
+                        </group>
+                        <field name="contract_ids" readonly="True">
+                            <field name="name"/>
+                            <field name="type_id"/>
+                            <field name="job_id"/>
+                            <field name="schedule_pay"/>
+                            <field name="working_hours"/>
+                            <field name="analytic_account_id" domain="[('type','=','normal')]"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="view_hr_payslip_line_filter_extended" model="ir.ui.view">
+            <field name="name">hr.payslip.line.select.extended</field>
+            <field name="model">hr.payslip.line</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="payslip_period_id"/>
+                    <field name="payslip_run_id"/>
+                    <field name="slip_id"/>
+                    <field name="employee_id"/>
+                    <field name="code"/>
+                    <field name="salary_rule_id"/>
+                </field>
+                <filter string="Employees" position="replace"/>
+                <filter string="Salary Rule Category" position="replace">
+                    <filter string="Periodo" name="period_id_group" context="{'group_by':'payslip_period_id'}"/>
+                    <filter string="Procesamiento Nomina" name="payslip_run_id_group" context="{'group_by':'payslip_run_id'}"/>
+                    <filter string="Empleado" name="employee_id_group" context="{'group_by':'employee_id'}"/>
+                    <filter string="Nomina" name="nomina_id_group" context="{'group_by':'slip_id'}"/>
+                    <filter string="Categoria Salarial" name="category_id_group" context="{'group_by':'category_id'}"/>
+                    <filter string="Codigo" name="code_group" context="{'group_by':'code'}"/>
+                    <filter string="Regla Salarial" name="salary_rule_id_group" context="{'group_by':'salary_rule_id'}"/>
+                </filter>
+            </field>
+        </record>
+        
+        <record id="view_hr_payslip_line_tree_extended" model="ir.ui.view">
+            <field name='name'>hr.payslip.line.tree.extended</field>
+            <field name='model'>hr.payslip.line</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_line_tree"/>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <field name="employee_id" position="replace">
+                    <field name="payslip_period_id"/>
+                    <field name="payslip_run_id"/>
+                    <field name="slip_id"/>
+                    <field name="employee_id"/>
+                    <field name="code"/>
+                    <field name="salary_rule_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_hr_payslip_line_graph_extended_new" model="ir.ui.view">
+            <field name="name">hr.payslip.line.graph.extended.new</field>
+            <field name="model">hr.payslip.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Registros Salariales" type="bar">
+                    <field name="code"/>
+                    <field name="total" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        
+
+        <!-- WORKFLOW -->
+        
+        <record id="t6" model="workflow.transition">
+            <field name="act_from" ref="hr_payroll.act_done"/>
+            <field name="act_to" ref="hr_payroll.act_cancel"/>
+            <field name="signal">cancel_sheet</field>
+        </record>
+        
+        <record id="hr_payroll.act_done" model="workflow.activity">
+            <field name="flow_stop" eval="False" />
+        </record>
+        
+    </data>
+</openerp>

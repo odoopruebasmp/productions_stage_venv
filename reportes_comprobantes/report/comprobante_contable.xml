@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+<template id="comprobante_contables_generico_report">
+
+    <t t-call="report.html_container" t-foreach="docs" t-as="o">
+
+        <!-- encabezado del documento -->
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height: 40px;"/>
+                    </div>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="col-xs-5" style="font-size:12px">
+                        <div><span t-field="o.company_id.name" /><span class="pull-right"> NIT: <span t-field="o.company_id.partner_id.ref" />-<span t-field="o.company_id.partner_id.dev_ref" /></span></div>
+                        <div><span t-field="o.company_id.street" /></div>
+                        <div><span t-field="o.company_id.city" /> / <span t-field="o.company_id.state_id" /></div>
+                        <div><span t-field="o.company_id.country_id" /></div>
+                        <div>Telefono: <span class="pull-right" t-field="o.company_id.phone" /></div>
+                        <div>Sitio WEB: <span class="pull-right" t-field="o.company_id.website" /></div>
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+            </div>
+
+
+                <!-- cuerpo del documento -->
+                <div class="page">
+                    <!-- Datos basicos del movimiento -->
+                    <div style="margin-left:1mm">
+                        <div><span t-field="o.journal_id.name"/> No. <span t-field="o.name"/></div>
+                        <div>FECHA: <span t-field="o.date"/></div>
+                        <div>DESCRIPCION: <span t-field="o.ref"/></div>
+                        <div> </div>
+                    </div>
+                    <div>
+                        <table class="table table-condensed" style="margin:0px 0px 0px 0px" t-if="o.line_id">
+                            <thead>
+                                <tr>
+                                    <th align='center'>CUENTA</th>
+                                    <th align='center'>DETALLE</th>
+                                    <th align='center'>TERCERO</th>
+                                    <th align='center'>DEBITO</th>
+                                    <th align='center'>CREDITO</th>
+                                    <th align='center'>CUENTA ANALITICA</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td><b> </b></td>
+                                    <td><b> </b></td>
+                                    <td><b>Total</b></td>
+                                    <td align='right'><b><t t-esc="'{0:,.0f}'.format(sum((line.debit > 0 and line.debit or 0) for line in o.line_id))"/></b></td>
+                                    <td align='right'><b><t t-esc="'{0:,.0f}'.format(sum((line.credit > 0 and line.credit or 0) for line in o.line_id))"/></b></td>
+                                    <td><b> </b></td>
+                                </tr>
+                            </tfoot>
+                            <tbody t-foreach="o.line_id" t-as="l">
+                                <tr>
+                                    <td><span t-field="l.account_id.code"/></td>
+                                    <td><span t-field="l.name"/></td>
+                                    <td><span t-field="l.partner_id.name"/></td>
+                                    <td align='right'><span t-field="l.debit"/></td>
+                                    <td align='right'><span t-field="l.credit"/></td>
+                                    <td><span t-field="l.analytic_account_id.name"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+         </t>
+    </template>
+</data>
+</openerp>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+           <record model="ir.ui.view" id="hr_leave_mass_approve_form_view">
+                <field name="name">hr.leave.mass.approve.form</field>
+                <field name="model">hr.leave.mass.approve</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Validacion/Confirmacion Masiva">
+                        <label string="Validacion/Confirmacion Masiva"/>
+                        <separator colspan="4"/>
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" name="cancel_mass_leave"
+	                            string="Cancelar" type="object" />
+	                        <button icon="gtk-go-forward"
+	                            string="Confirmar" name="confirm_mass_leave" type="object" />
+	                        <button icon="gtk-go-forward"
+	                            string="Validar" name="validate_mass_leave" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_leave_mass_approve"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.holidays"
+            view_mode="form" target="new" view_type="form" />
+            
+            <act_window id="action_leave_mass_approve_novedades"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.payroll.novedades"
+            view_mode="form" target="new" view_type="form" />
+            
+            <act_window id="action_leave_mass_approve_extra_hours"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.payroll.extrahours"
+            view_mode="form" target="new" view_type="form" />
+            
+            <act_window id="action_leave_mass_approve_obligacion"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.payroll.obligacion.tributaria"
+            view_mode="form" target="new" view_type="form" />
+            
+            <act_window id="action_leave_mass_approve_prestamo"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.payroll.prestamo"
+            view_mode="form" target="new" view_type="form" />
+            
+            
+            <act_window id="action_leave_mass_approve_prestamo"
+            key2="client_action_multi" name="Validacion/Confirmacion Masiva"
+            res_model="hr.leave.mass.approve" src_model="hr.payroll.prestamo"
+            view_mode="form" target="new" view_type="form" />
+            
+            <record model="ir.ui.view" id="hr_extra_mass_compute_form_view">
+                <field name="name">hr.extra.mass.compute.form</field>
+                <field name="model">hr.extra.mass.compute</field>
+                <field name="type">form</field>
+                <field name="arch" type="xml">
+                    <form string="Calcular Valor">
+                        <label string="Calcular Valor"/>
+                        <separator colspan="4"/>
+                        <group colspan="4" col="4">
+	                        <button icon="gtk-cancel" special="cancel"
+	                            string="Cancel" />
+	                        <button icon="gtk-go-forward"
+	                            string="Calcular" name="compute_mass_extra_hours" type="object" />
+                        </group>
+                    </form>
+                </field>
+            </record>
+            
+            <act_window id="action_mass_compute_extra_hours"
+            key2="client_action_multi" name="Calcular Valor"
+            res_model="hr.extra.mass.compute" src_model="hr.payroll.extrahours"
+            view_mode="form" target="new" view_type="form" />
+            
+    </data>
+</openerp>

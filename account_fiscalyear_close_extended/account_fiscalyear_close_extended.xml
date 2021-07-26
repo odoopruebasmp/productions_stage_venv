@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_company_form_pyg_account" model="ir.ui.view">
+            <field name="name">res.company.config.pyg.account</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_company_form_avancys"/>
+            <field name="arch" type="xml">
+                <field name="account_pg_pyg_id" position="after">
+                    <field name="account_pg_pyg_niff_id"/>
+                    <field name="account_pg_perdida_niif_id"/>
+                    <field name="account_pg_ganancia_niif_id"/>
+                </field>
+            </field>
+        </record>
+        <record id="view_account_journal_form_extended" model="ir.ui.view">
+            <field name="name">account.journal.close.extended</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="loss_account_id" position="after">
+                    <field name="account_pg_pyg_id"/>
+                    <field name="account_pg_pyg_niff_id"/>
+                    <field name="account_pg_perdida_niif_id"/>
+                    <field name="account_pg_ganancia_niif_id"/>
+                </field>
+            </field>
+        </record>
+        <record id="view_account_fiscalyear_openperiod" model="ir.ui.view">
+            <field name="name">account.fiscalyear.openperiod.form</field>
+            <field name="model">account.fiscalyear.openperiod</field>
+            <field name="arch" type="xml">
+                <form string="Generar asiento de cierre de año fiscal">
+                    <separator string="Generar asiento de cierre"/>
+                    <label string="Este asistente permite generar de forma automatica el asiento de cierre de año fiscal, cancelando cuentas de ingreso, gasto y costo segun el metodo de cierre configurado en el tipo de cuenta."/>
+                    <newline/>
+                    <field name="glob_analytic" invisible="1"/>
+                    <group col="4">
+                        <field domain="[('state','=','draft')]" name="fy_id"/>
+                        <field name="journal_id" domain="[('niif','=',False),('type','=','situation')]"/>
+                        <field name="journal_niif_id" domain="[('niif','=',True),('type','=','situation')]"/>
+                        <field domain="[('fiscalyear_id','=',fy_id),('special','=', True)]" name="period_id"/>
+                        <field name="report_name"/>
+                        <!--<field name="analytic_id" attrs="{'required': [('glob_analytic','=',True)],'invisible': [('glob_analytic','=',False)]}"/>-->
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" name="close_period_extended" string="Create" type="object"/>or
+
+                        <button class="oe_link" special="cancel" string="Cancel"/></footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_fiscalyear_openperiod" model="ir.actions.act_window">
+            <field name="name">Generar asiento de cierre</field>
+            <field name="res_model">account.fiscalyear.openperiod</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_fiscalyear_openperiod"/>
+            <field name="target">new</field>
+        </record>
+        <record id="view_account_fiscalyear_asentar" model="ir.ui.view">
+            <field name="name">account.fiscalyear.asentar.form</field>
+            <field name="model">account.fiscalyear.asentar</field>
+            <field name="arch" type="xml">
+                <form string="Asentar comprobantes de cierre de año fiscal">
+                    <separator string="Asentar comprobantes de cierre"/>
+                    <label string="Seleccione el año de cierre en el cual desea asentar los comprobantes."/>
+                    <newline/>
+                    <group col="4">
+                        <field domain="[('state','=','draft')]" name="fy_id"/>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" name="asentar" string="Asentar" type="object"/>or
+
+                        <button class="oe_link" special="cancel" string="Cancel"/></footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_fiscalyear_asentar" model="ir.actions.act_window">
+            <field name="name">Asentar comprobante de cierre</field>
+            <field name="res_model">account.fiscalyear.asentar</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_fiscalyear_asentar"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="action_account_fiscalyear_openperiod" id="menu_wizard_fy_openperiod" parent="account.menu_account_end_year_treatments"/>
+        <record id="view_account_move_close_tree" model="ir.ui.view">
+            <field name="name">account.move.close.tree</field>
+            <field name="model">account.move.close</field>
+            <field name="arch" type="xml">
+                <tree string="Asientos de apertura/cierre">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_account_move_close_form" model="ir.ui.view">
+            <field name="name">account.move.close.form</field>
+            <field name="model">account.move.close</field>
+            <field name="arch" type="xml">
+                <form string="Asientos de apertura/cierre">
+                    <!--        <sheet string="Presupuesto">-->
+                    <header>
+                        <!--<button class="oe_highlight" name="done" states="draft" string="Asentar" type="object"/>
+                        <button name="cancel" states="done" string="Cancelar" type="object"/>-->
+                        <field name="state" statusbar_visible="draft,done" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="ref"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="period_id"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="account_move_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detalle">
+                            <field colspan="4" name="line_ids" nolabel="1" readonly="True">
+                                <tree string="Detalle">
+                                    <field name="name"/>
+                                    <field name="account_id"/>
+                                    <field name="account_niif_id"/>
+                                    <field name="company_id"/>
+                                    <field name="debit" sum="Debito"/>
+                                    <field name="credit" sum="Credito"/>
+                                    <field name="date"/>
+                                    <field name="date_maturity"/>
+                                    <field name="journal_id"/>
+                                    <field name="period_id"/>
+                                    <field name="partner_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <!--        </sheet>-->
+                </form>
+            </field>
+        </record>
+        <record id="view_account_move_close_line_tree" model="ir.ui.view">
+            <field name="name">account.move.close.line.tree</field>
+            <field name="model">account.move.close.line</field>
+            <field name="arch" type="xml">
+                <tree string="Movimientos">
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <field name="account_niif_id"/>
+                    <field name="company_id"/>
+                    <field name="debit" sum="Debito"/>
+                    <field name="credit" sum="Credito"/>
+                    <field name="saldo" sum="Saldo"/>
+                    <field name="date"/>
+                    <field name="date_maturity"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <field name="partner_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="act_account_move_close_line" model="ir.actions.act_window">
+            <field name="name">Asientos de cierre/apertura</field>
+            <field name="res_model">account.move.close.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_group_move_id': 1}</field>
+            <field name="view_id" ref="view_account_move_close_line_tree"/>
+            <field name="target">current</field>
+        </record>
+        <act_window context="{'default_move_id': active_id,'search_default_slip_id': active_id}" domain="[('move_id','=',active_id)]" id="act_detail_account_move_close" name="Registros contables" res_model="account.move.close.line" src_model="account.move.close"/>
+        <record id="view_account_move_close_line" model="ir.ui.view">
+            <field name="name">account.move.close.line.search</field>
+            <field name="model">account.move.close.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Movimientos apertura/cierre">
+                    <field filter_domain="['|',('name','ilike',self),('ref','ilike',self)]" name="name" string="Nombre"/>
+                    <filter string="FISCAL" domain="[('move_id','not like','NIIF')]" help="Movimientos fiscales" icon="terp-project"/>
+                    <filter string="NIIF" domain="[('move_id','like','NIIF')]" help="Movimientos NIIF" icon="terp-project"/>
+                    <field name="move_id"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="period_id"/>
+                    <group col="8" colspan="4" expand="0" string="Group By">
+                        <filter context="{'group_by':'account_id'}" icon="terp-camera_test" name="account_id" string="Cuenta"/>
+                        <filter context="{'group_by':'account_niif_id'}" icon="terp-camera_test" name="account_niif_id" string="Cuenta NIIF"/>
+                        <filter context="{'group_by':'partner_id'}" icon="terp-folder-yellow" name="partner_id" string="Tercero"/>
+                        <filter context="{'group_by':'journal_id'}" icon="terp-folder-yellow" name="journal_id" string="Diario"/>
+                        <filter context="{'group_by':'period_id'}" icon="terp-folder-yellow" name="period_id" string="Periodo"/>
+                        <filter context="{'group_by':'name'}" icon="terp-folder-yellow" name="name" string="Nombre"/>
+                        <filter context="{'group_by':'move_id'}" icon="terp-folder-yellow" name="group_move_id" string="Movimiento"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="view_account_fiscalyear_close_state_extended" model="ir.ui.view">
+            <field name="name">account.fiscalyear.close.state.extended</field>
+            <field name="model">account.fiscalyear.close.state</field>
+            <field name="inherit_id" ref="account.view_account_fiscalyear_close_state"/>
+            <field name="arch" type="xml">
+        <form string="Close states of Fiscal year and periods" position="replace">
+            <form string="Proceso de cierre de año fiscal" groups="account_fiscalyear_close_extended.group_cierre_contable_extended">
+                        <separator string="******* ALERTA *******"/>
+                        <label string="¿ESTA USTED SEGURO QUE DESEA CERRAR EL AÑO FISCAL? RECUERDE QUE AL CERRARLO NO PODRA REVERSAR LA OPERACION, USTED PUEDE CONSULTAR LOS INFORMES FINANCIEROS SIN CERRAR EL AÑO FISCAL."/>
+                        <newline/>
+                        <separator string="*** DEBE REALIZAR UNA COPIA DE SEGURIDAD DE LA BASE ANTES DE REALIZAR ESTE PROCEDIMIENTO ***"/>
+                                <group col="4">
+                        <field name="seguro"/>
+                                </group>
+                        <group>
+                            <field domain="[('state','=','draft'),('end_journal_period_id','!=',False)]" name="fy_id" attrs="{'invisible': [('seguro','=',False)]}"/>
+                        </group>
+                        <footer>
+                            <button icon="terp-locked" string="Close Fiscal Year" name="data_save" type="object" class="oe_highlight"/>
+                            or
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </form>
+        </form>
+       </field>
+        </record>
+        <!-- CERRAR CUENTAS -->
+         <record id="view_account_fiscalyear_close_account" model="ir.ui.view">
+            <field name="name">account.fiscalyear.close.account.form</field>
+            <field name="model">account.fiscalyear.close.account</field>
+            <field name="arch" type="xml">
+                <form string="Cierre de cuentas contables">
+                    <separator string="Cierre de cuentas contables"/>
+                    <label string="Este asistente permite realizar un asiento de cierre de cuentas contables. Usted debe seleccionar las cuentas a cerrar, la cuenta destino y tercero destino. Esta opción se usa comunmente para cerrar cuentas de impuestos."/>
+                    <newline/>
+                    <group>
+                        <field name="account_id"/>
+                        <field name="partner_id"/>
+                        <field name="journal_id"/>
+                        <field name="period_id"/>
+                        <!--<field name="analytic_account_id"/>-->
+                        <field name="date_maturity"/>
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="partner"/>
+                    </group>
+                    <group>
+                        <field name="account_ids"/>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" name="close_account" string="Cerrar" type="object"/> o
+                        <button class="oe_link" special="cancel" string="Cancel"/></footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_fiscalyear_close_account" model="ir.actions.act_window">
+            <field name="name">Cerrar cuentas contables</field>
+            <field name="res_model">account.fiscalyear.close.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_fiscalyear_close_account"/>
+            <field name="target">new</field>
+        </record>
+
+        
+        <menuitem groups="account_fiscalyear_close_extended.group_cierre_contable_extended" string="Cierre de ejercicio" id="account.menu_account_end_year_treatments" parent="account.menu_finance_periodical_processing" sequence="25"/>
+
+        <menuitem action="account.action_account_open_closed_fiscalyear" groups="account_fiscalyear_close_extended.group_opciones_desactivados" id="account.menu_wizard_account_open_closed_fiscalyear" parent="account.menu_account_end_year_treatments" sequence="18"/>
+        <menuitem action="account.action_account_period_tree" id="account.menu_action_account_period_close_tree" parent="account.menu_account_end_year_treatments" sequence="0" groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+        <menuitem action="action_account_fiscalyear_openperiod" id="menu_wizard_fy_openperiod" name="Generar comprobante de cierre" parent="account.menu_account_end_year_treatments" sequence="10" groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+        <menuitem action="account.action_account_fiscalyear_close" id="account.menu_wizard_fy_close" parent="account.menu_account_end_year_treatments" sequence="20" groups="account_fiscalyear_close_extended.group_opciones_desactivados"/>
+        <menuitem action="act_account_move_close_line" id="menu_account_move_close" name="Verificar asientos" parent="account.menu_account_end_year_treatments" sequence="30" groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+        <menuitem action="action_account_fiscalyear_asentar" id="menu_account_asentar_cierre" name="Asentar comprobantes" parent="account.menu_account_end_year_treatments" sequence="35" groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+        <menuitem action="account.action_account_fiscalyear_close_state" id="account.menu_wizard_fy_close_state" parent="account.menu_account_end_year_treatments" sequence="40" groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+        <menuitem action="action_account_fiscalyear_close_account" 
+            id="action_account_fiscalyear_close_account_menu" 
+            parent="account.menu_account_end_year_treatments" 
+            name="Cerrar cuentas" 
+            sequence="40" 
+            groups="account_fiscalyear_close_extended.group_cierre_contable_extended"/>
+    </data>
+</openerp>

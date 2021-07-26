@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="avancys_authentication_tree" model="ir.ui.view">
+        <field name="name">avancys.authentication.tree</field>
+        <field name="model">avancys.authentication</field>
+        <field name="arch" type="xml">
+            <tree string="Autenticacion">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="activation_code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="avancys_authentication_action" model="ir.actions.act_window">
+        <field name="name">avancys.authentication.action</field>
+        <field name="res_model">avancys.authentication</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="avancys_authentication_menu" action="avancys_authentication_action"
+              parent="base.menu_res_company_global" sequence="10" name="Autenticacion"/>
+
+</data>
+</openerp>

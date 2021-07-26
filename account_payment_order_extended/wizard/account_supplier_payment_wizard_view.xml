@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="acc_supp_pay_wizard_view" model="ir.ui.view">
+            <field name="name">acc.supp.pay.wizard.view</field>
+            <field name="model">account.suppier.payment.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Suppier Payment" version="7.0">
+                <group>
+                    <field name="name" invisible="1" />
+                    <field name="date_order" attrs="{'invisible':[('name','!=',False)]}"/>
+                    <field name="file_text" filename="name" attrs="{'invisible':[('name','=',False)]}"/>
+                </group>
+                
+                <footer>
+                    <button name="do_process" string="Generate File" type="object" attrs="{'invisible':[('name','!=',False)]}"/>
+                    <button name="generate_file" string="Generar archivo" type="object" class="oe_highlight" attrs="{'invisible':[('name','!=',False)]}"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_supp_pay_wizard" model="ir.actions.act_window">
+            <field name="name">Pago Proveedor Archivo Banco</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="context">{'type':'payment'}</field>
+            <field name="domain">[('default_type','=','payment')]</field>
+            <field name="res_model">account.suppier.payment.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="acc_supp_pay_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <!--<record model="ir.values" id="supp_pay_pay_wizard">-->
+            <!--<field name="name">Pago Proveedor Archivo Banco</field>-->
+            <!--<field name="context">{'type':'payment'}</field>-->
+            <!--<field name="domain">[('type','=','payment')]</field>-->
+            <!--<field name="key2">client_action_multi</field>-->
+            <!--<field name="value" eval="'ir.actions.act_window,' + str(ref('action_supp_pay_wizard'))" />-->
+            <!--<field name="key">action</field>-->
+            <!--<field name="model">account.voucher</field>-->
+        <!--</record>-->
+
+        <record model="ir.values" id="supp_masive_pay_pay_wizard">
+            <field name="name">Pago Proveedor Archivo Banco</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_supp_pay_wizard'))" />
+            <field name="key">action</field>
+            <field name="model">payment.order</field>
+        </record>
+        
+        <record model="ir.values" id="supp_advance_pay_wizard">
+            <field name="name">Anticipo Proveedor Archivo Banco</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_supp_pay_wizard'))" />
+            <field name="key">action</field>
+            <field name="model">purchase.advance.supplier</field>
+        </record>
+        
+    </data>
+</openerp>

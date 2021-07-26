@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="avancys_partner1" model="res.partner">
+            <field name="name">Votante1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">votante1@avancys.com</field>
+            <field name="street">Calle 5</field>
+            <field name="city">Bogota</field>
+            <field name="zip">1234</field>
+            <field name="country_id" ref="base.co"/>
+        </record>
+       <record id="user1" model="res.users">
+            <field name="partner_id" ref="avancys.avancys_partner1"/>
+            <field name="login">votante1</field>
+            <field name="password">votante1</field>
+            <field name="signature">Sr Votante1</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('avancys.group_idea_manager')])]"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="avancys_partner2" model="res.partner">
+            <field name="name">Votante2</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">votante2@avancys.com</field>
+            <field name="street">Calle 5</field>
+            <field name="city">Bogota</field>
+            <field name="zip">1234</field>
+            <field name="country_id" ref="base.co"/>
+        </record>
+       <record id="user2" model="res.users">
+            <field name="partner_id" ref="avancys.avancys_partner2"/>
+            <field name="login">votante2</field>
+            <field name="password">votante2</field>
+            <field name="signature">Sr Votante2</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('avancys.group_idea_manager')])]"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="avancys_partner3" model="res.partner">
+            <field name="name">Votante3</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">votante3@avancys.com</field>
+            <field name="street">Calle 5</field>
+            <field name="city">Bogota</field>
+            <field name="zip">1234</field>
+            <field name="country_id" ref="base.co"/>
+        </record>
+       <record id="user3" model="res.users">
+            <field name="partner_id" ref="avancys.avancys_partner3"/>
+            <field name="login">votante3</field>
+            <field name="password">votante3</field>
+            <field name="signature">Sr Votante3</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('avancys.group_idea_manager')])]"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="avancys_partner4" model="res.partner">
+            <field name="name">Votante4</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">votante4@avancys.com</field>
+            <field name="street">Calle 5</field>
+            <field name="city">Bogota</field>
+            <field name="zip">1234</field>
+            <field name="country_id" ref="base.co"/>
+        </record>
+       <record id="user4" model="res.users">
+            <field name="partner_id" ref="avancys.avancys_partner4"/>
+            <field name="login">votante4</field>
+            <field name="password">votante4</field>
+            <field name="signature">Sr Votante4</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('avancys.group_idea_manager')])]"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="avancys_partner5" model="res.partner">
+            <field name="name">Votante5</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">votante5@avancys.com</field>
+            <field name="street">Calle 5</field>
+            <field name="city">Bogota</field>
+            <field name="zip">1234</field>
+            <field name="country_id" ref="base.co"/>
+        </record>
+       <record id="user5" model="res.users">
+            <field name="partner_id" ref="avancys.avancys_partner5"/>
+            <field name="login">votante5</field>
+            <field name="password">votante5</field>
+            <field name="signature">Sr Votante5</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('avancys.group_idea_manager')])]"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+    </data>
+</openerp>

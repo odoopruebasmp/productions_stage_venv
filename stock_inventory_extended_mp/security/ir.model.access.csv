@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_picking_wave,stock.picking.wave.stock.users,model_stock_picking_wave_extended,group_user_despachos,1,1,1,0
+access_product_product_wave,stock.product.product.wave stock users,model_product_product_wave,group_user_despachos,1,1,1,0
+access_stock_picking_wave_tarifa,stock.picking.wave.stock.tarifa.users,model_stock_picking_wave_tarifa,group_user_despachos,1,1,1,0
+access_stock_picking_wave_invoice,Stock.picking.wave.invoice,model_stock_picking_wave_invoice,group_user_despachos,1,1,1,0

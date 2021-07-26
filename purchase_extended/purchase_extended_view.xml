@@ -1,0 +1,84 @@
+<openerp>
+    <data>
+        <record id="purchase.trans_draft_confirmed" model="workflow.transition">
+            <field name="condition">valid_invoice_method()</field>
+        </record>
+        
+        <record id="purchase.trans_draft_sent" model="workflow.transition">
+            <field name="condition">valid_invoice_method()</field>
+        </record>
+        
+        
+        <!--ORDENES DE COMPRA-->    
+        <record id="view_purchase_order_form_date_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.date</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">                    
+                <field name="date_order" position="before">
+                    <label for="minimum_planned_date" string="Fechas Planificadas" help="Estas fechas se calculan de forma automatica teniendo en cuenta las lineas de la orden de compra, calculando la menor y la mayor fecha planificada."/>
+                    <div>
+                        <field name="minimum_planned_date" class="oe_inline"/> - <field name="maximum_planned_date" class="oe_inline"/>
+                    </div>
+                </field>
+                
+            </field>
+        </record>
+        
+        <!--ANALISIS DE COMPRAS-->
+        <record id="view_purchase_order_line_report_graph" model="ir.ui.view">
+            <field name="name">purchase.order.line.report.graph</field>
+            <field name="model">purchase.order.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Facturas" type="pivot" stacked="True">
+                    <field name="product_qty" type="measure"/>
+                    <field name="price_unit" type="measure"/>
+                    <field name="price_subtotal" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="action_purchase_order_line_report_all" model="ir.actions.act_window">
+            <field name="name">Analisis de Compras</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('order_id.state','not in',['cancel','draft'])]</field>
+            <field name="graph_view_id" ref="view_purchase_order_line_report_graph"/>           
+        </record>
+        
+        
+        
+        <!--ANALISIS DE INVENTARIO EN TRANSITO-->
+        <record id="view_stock_move_transit_report_graph" model="ir.ui.view">
+            <field name="name">stock.move.report.transit.graph</field>
+            <field name="model">stock.move</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Inventario en Transito" type="pivot" stacked="True">
+                    <field name="product_qty" type="measure"/>
+                </graph>
+            </field>
+        </record>        
+        
+        <record id="action_stock_move_report_all" model="ir.actions.act_window">
+            <field name="name">Inventario en Transito</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+            <field name="domain">[('state','not in',['cancel','draft','done']),('picking_type_id.code','in',['incoming'])]</field>
+            <field name="graph_view_id" ref="view_stock_move_transit_report_graph"/>           
+        </record>
+
+        <menuitem  id="Informes" string="Informes" parent="base.menu_purchase_root" sequence="99" groups="purchase.group_purchase_user"/>
+        <menuitem action="action_purchase_order_line_report_all" id="menu_action_purchase_order_line_report_all" parent="Informes" sequence="0" string="Analisis de Compras" groups="purchase.group_purchase_user"/>
+        <menuitem action="action_stock_move_report_all" id="menu_action_stock_move_report_all" parent="Informes" sequence="1" string="Inventario en Transito" groups="purchase.group_purchase_user"/>
+        
+    </data>
+</openerp>
+

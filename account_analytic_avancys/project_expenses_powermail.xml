@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+        <record id="poweremail_core_accounts_administrator_1" model="poweremail.core_accounts">
+			<field eval="1" name="dont_auto_down_attach"/>
+			<field name="iserver_type">imap</field>
+			<field name="email_id">notificaciones@longportsecurity.com</field>
+			<field eval="0" name="smtptls"/>
+			<field eval="25" name="smtpport"/>
+			<field name="isuser">notificaciones@longportsecurity.com</field>
+			<field name="send_pref">html</field>
+			<field name="state">approved</field>
+			<field eval="0" name="smtpssl"/>
+			<field eval="0" name="isssl"/>
+			<field name="smtpuname">notificaciones@longportsecurity.com</field>
+			<field eval="[(6,0,[])]" name="allowed_groups"/>
+			<field name="company">no</field>
+			<field eval="0" name="rec_headers_den_mail"/>
+			<field name="smtppass">Lp0P3NeRp,2@I2</field>
+			<field name="user" ref="base.user_root"/>
+			<field name="smtpserver">smtp.everyone.net</field>
+			<field name="name">Notificaciones OpenERP</field>
+		</record>
+		<record id="poweremail_templates_enviar" model="poweremail.templates">
+			<field eval="0" name="save_to_drafts"/>
+			<field eval="0" name="use_filter"/>
+			<field name="def_subject">Nueva Legalizacion [${object.name or 'n/a' }] - Empleado [${object.employee_id.name}]</field>
+			<field name="def_to">${object.employee_id.parent_id.work_email}</field>
+			<field name="enforce_from_account" ref="poweremail_core_accounts_administrator_1"/>
+			<field eval="[(6,0,[])]" name="allowed_groups"/>
+			<field eval="1" name="auto_email"/>
+			<field eval="[(6,0,[])]" name="table_required_fields"/>
+			<field name="def_body_html">Hola,
+                Tiene una legalización para aprobar
+                ${object.name or 'n/a' } - Empleado ${object.employee_id.name}
+            </field>
+			<field name="object_name" ref="hr_expense.model_hr_expense_expense"/>
+			<field eval="0" name="single_email"/>
+			<field eval="0" name="send_on_create"/>
+            <field eval="0" name="send_on_write"/>
+            <field eval="0" name="use_sign"/>
+			<field name="template_language">mako</field>
+			<field name="name">Legalizacion Para Aprobar</field>
+			<field name="model_int_name">hr.expense.expense</field>
+            <field name="attached_wkf" ref="hr_expense.wkf_expenses"/>
+            <field name="attached_activity" ref="hr_expense.act_confirm"/>
+        </record>
+        <record id="poweremail_templates_aprobada" model="poweremail.templates">
+			<field eval="0" name="save_to_drafts"/>
+			<field eval="0" name="use_filter"/>
+			<field name="def_subject">Legalizacion Aprobada [${object.name or 'n/a' }] - Empleado [${object.employee_id.name}]</field>
+			<field name="def_to">${object.employee_id.work_email}</field>
+			<field name="enforce_from_account" ref="poweremail_core_accounts_administrator_1"/>
+			<field eval="[(6,0,[])]" name="allowed_groups"/>
+			<field eval="1" name="auto_email"/>
+			<field eval="[(6,0,[])]" name="table_required_fields"/>
+			<field name="def_body_html">Hola,
+                Se aprobo su legalizacion
+                ${object.name or 'n/a' } - Empleado ${object.employee_id.name}
+            </field>
+			<field name="object_name" ref="hr_expense.model_hr_expense_expense"/>
+			<field eval="0" name="single_email"/>
+			<field eval="0" name="send_on_create"/>
+            <field eval="0" name="send_on_write"/>
+            <field eval="0" name="use_sign"/>
+			<field name="template_language">mako</field>
+			<field name="name">Legalizacion Aprobada</field>
+			<field name="model_int_name">hr.expense.expense</field>
+            <field name="attached_wkf" ref="hr_expense.wkf_expenses"/>
+            <field name="attached_activity" ref="hr_expense.act_accepted"/>
+        </record>
+        <record id="poweremail_templates_rechazar" model="poweremail.templates">
+			<field eval="0" name="save_to_drafts"/>
+			<field eval="0" name="use_filter"/>
+			<field name="def_subject">Legalizacion Rechazada [${object.name or 'n/a' }] - Empleado [${object.employee_id.name}]</field>
+			<field name="def_to">${object.employee_id.work_email}</field>
+			<field name="enforce_from_account" ref="poweremail_core_accounts_administrator_1"/>
+			<field eval="[(6,0,[])]" name="allowed_groups"/>
+			<field eval="1" name="auto_email"/>
+			<field eval="[(6,0,[])]" name="table_required_fields"/>
+			<field name="def_body_html">Hola,
+                Se rechazo su legalizacion
+                ${object.name or 'n/a' } - Empleado ${object.employee_id.name}
+            </field>
+			<field name="object_name" ref="hr_expense.model_hr_expense_expense"/>
+			<field eval="0" name="single_email"/>
+			<field eval="0" name="send_on_create"/>
+            <field eval="0" name="send_on_write"/>
+            <field eval="0" name="use_sign"/>
+			<field name="template_language">mako</field>
+			<field name="name">Legalizacion Rechazada</field>
+			<field name="model_int_name">hr.expense.expense</field>
+            <field name="attached_wkf" ref="hr_expense.wkf_expenses"/>
+            <field name="attached_activity" ref="hr_expense.act_refused"/>
+        </record>
+
+        <record id="hr_expense.t2" model="workflow.transition">
+        <field name="wkf_id" ref="hr_expense.wkf_expenses"/>
+        <field name="act_from" ref="hr_expense.act_confirm"/>
+        <field name="act_to" ref="hr_expense.act_accepted"/>
+        <field name="signal">validate</field>
+        <field name="condition">verificacionDirector()</field>
+        </record>
+        
+	</data>
+</openerp>

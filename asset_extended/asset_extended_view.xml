@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        
+        <!-- Inherited from view of product -->
+        <record model="ir.ui.view" id="inherit_product_form_view">
+            <field name="name">inherit.product.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='sale_ok']" position="after">
+                    <field name="is_asset"/>
+                    <label for ="is_asset"/>
+                </xpath>
+                <xpath expr="//field[@name='lst_price']" position="after">
+                    <field name="aseet_category_id" attrs="{'invisible':[('is_asset','=',False)],'required':[('is_asset','=',True)]}" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherited from view of Asset Category-->
+        <record model="ir.ui.view" id="inherit_account_asset_form_view">
+            <field name="name">inherit.account.asset.form</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="product_id" domain="[('is_asset', '=', True)]" context="{'default_is_asset': True}" options='{"quick_create": false}'/>
+                    <field name="prodlot_id" context="{'default_product_id': product_id}" domain="[('product_id', '=', product_id)]"/>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="asset_type" />
+                    <field name="total_value" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

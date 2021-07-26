@@ -1,0 +1,19 @@
+journal_id,period_id,narration,ref,date,line_id/name,line_id/date,line_id/ref,line_id/ref1,line_id/ref2,line_id/partner_id,line_id/account_id,line_id/debit,line_id/credit,line_id/analytic_account_id,line_id/date_maturity
+SALDOS INICIALES,00/2015,SALDOS INICIALES,SALDOS INICIALES,2015-01-01,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,,800123456,13050505,900000,0,,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,,800123456,13050505,800000,0,,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,,800123456,13050505,700000,0,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,,800123456,13050505,0,900000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 08 -12,800123456,13050505,0,800000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 09 -12,800123456,13050505,0,700000,,2015-02-01
+SALDOS INICIALES,00/2015,SALDOS INICIALES,SALDOS INICIALES,2015-01-01,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,,800123456,13050505,900000,0,,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,,800123456,13050505,800000,0,,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,,800123456,13050505,700000,0,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,,800123456,13050505,0,900000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 08 -12,800123456,13050505,0,800000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 09 -12,800123456,13050505,0,700000,,2015-02-01
+SALDOS INICIALES,00/2015,SALDOS INICIALES,SALDOS INICIALES,2015-01-01,Fondo De Empleados UNE NIT:811018807,2015-01-01,CONTRATO: 239318,PH Cupos Institucionales,,800123456,13050505,900000,0,,2015-02-01
+,,,,,Coocervunion NIT:890982364,2015-01-01,CONTRATO: 237334,PH Cupos Institucionales,,800123456,13050505,800000,0,,2015-02-01
+,,,,,Cooperativa Universitaria Bolivariana NIT:890907038,2015-01-01,CONTRATO: 236024,PH Cupos Institucionales,,800123456,13050505,700000,0,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,,800123456,13050505,0,900000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 08 -12,800123456,13050505,0,800000,,2015-02-01
+,,,,,Avancop Cooperativa de ahorro y Credito NIT:890981212,2015-01-01,CONTRATO: 236017,PH Cupos Institucionales,Cuota 09 -12,800123456,13050505,0,700000,,2015-02-01

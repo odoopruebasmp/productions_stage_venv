@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+        <!--Email template -->
+        <record id="email_template_edi_requisition1" model="email.template">
+            <field name="name">Requisition - Send by Email</field>
+            <field name="email_from">${object.company_id.email}</field>
+            <field name="subject">${object.name}</field>
+            <field name="model_id" ref="purchase_requisition.model_purchase_requisition"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Hola</p>
+    
+    <p>Esta es una requisicion que se creo para el centro de costo ${object.project_id.name} de la compania ${object.company_id.name}</p>
+    
+    <p>Puede seguir el siguiente link para aprobar y desaprobar: </p>
+    <h3 id="right">
+    <script type="text/javascript">
+    document.write(location.href);
+    </script>
+    </h3>
+    </div>
+</div>
+            ]]></field>
+        </record>
+        
+        <record id="email_template_edi_requisition" model="email.template">
+            <field name="name">Requisition Quotation Supplier Extended- Send by Email</field>
+            <field name="email_from">${object.company_id.email}</field>
+            <field name="subject">Solicitud del Presupuesto ${object.name}</field>
+            <field name="user_signature">True</field>
+            <field name="email_recipients">${object.supplier_id.id}</field>
+            <field name="partner_to">${object.supplier_id.id}</field>
+            <field name="model_id" ref="purchase_requisition_extended.model_purchase_quotation_supplier"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Un saludo muy cordial</p>
+    
+    <p>Por medio de la presente, me comunico con ustedes, para solicitar un presupuesto para los productos especificados en el archivo adjunto, de igual forma que las condiciones que se encuentran en el mismo.
+
+Sin más por el momento, me despido, no sin asegurarles mi preferencia hacia su empresa. Me despido cordialmente.
+
+    <p>${object.company_id.name}</p>    
+</div>
+            ]]></field>
+        </record>
+        
+    </data>
+</openerp>

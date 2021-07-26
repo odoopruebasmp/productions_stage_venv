@@ -1,0 +1,121 @@
+<openerp>
+    <data>
+        
+        <record id="view_invoice_line_form_account_analytic_mp" model="ir.ui.view">
+            <field name="name">account.invoice.line.form.account.analytic.mp</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="before" >
+                    <field name="iva" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_return_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.return.picking.form.inherit</field>
+            <field name="model">stock.return.picking</field>
+            <field name="inherit_id" ref="stock.view_stock_return_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group" position="inside">
+                    <field name="numero_dap"/>
+                    <field name='guia_retorno'/>
+                    <field name="mpp" />
+                </xpath>
+            </field>
+        </record>
+        
+        
+        <record id="view_move_search_inherit" model="ir.ui.view">
+            <field name="name">stock.move.search.inherit</field>
+            <field name="model">stock.move</field>
+            <field eval="3" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Stock Moves">
+                    <field name="origin" filter_domain="['|',('origin','ilike',self),('picking_id','ilike',self)]" string="Reference"/>
+                    <field name="date" groups="base.group_no_one"/>
+                    <field name="product_id"/>
+                    <field name="name" string="Location" filter_domain="['|',('location_id','ilike',self),('location_dest_id','ilike',self)]"/>
+                    <field name="partner_id" string="Partner"  filter_domain="[('picking_id.partner_id','child_of',self)]"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Product" name="by_product" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        
+        <record id="view_stock_move_gourp_view" model="ir.ui.view">
+            <field name="name">stock.move.form.group.view</field>
+            <field name="model">stock.move</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Moves">
+                    <field name="product_id" />
+                    <field name="product_qty"/>
+                    <field name="product_uom" />
+                    <field name="product_uos" />
+                    <field name="location_id" />
+                    <field name="location_dest_id" />
+                    <field name="date" />
+                    <field name="date_expected"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+
+        <record id="view_stock_move_search_view" model="ir.ui.view">
+            <field name="name">stock.move.search.group.view</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_id"/>
+                    <filter name="group_by_product" string="By Product" context="{'group_by':'product_id'}"/>
+                </search>
+            </field>
+        </record>
+    
+    
+        <record id="view_partner_form_product_mp" model="ir.ui.view">
+            <field name="name">res.partner.form.product.mp</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                  <field name="zona_id" />
+                </field>
+            </field>
+        </record>
+        
+
+        <record id="view_res_partner_tree_product_mp" model="ir.ui.view">
+            <field name="name">res.partner.tree.product.mp</field>
+            <field name="model">res.partner</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                   <field name="zona_id" />
+                </field>
+            </field>
+        </record>
+
+        
+        <record id="view_partner_search_product_mp" model="ir.ui.view">
+            <field name="name">res.partner.search.product.mp</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Persons" position="after">
+                    <filter string="Zona" name="zona_id" domain="[]"/>
+                </filter>
+
+                <filter string="Salesperson" position="after">
+                    <filter string="Zona" context="{'group_by': 'zona_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+     </data>
+</openerp>

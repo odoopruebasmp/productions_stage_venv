@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_equivalente_niif" model="fpa.financial.reports">
+            <field name="name">EQUIVALENTE NIIF</field>
+            <field name="categ">co</field>
+            <field name="export">TRUE</field>
+            <field name="formato">xlsx</field>
+            <field name="formato">xlsx</field>
+            <field name="tope_min">0</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">E,F,G,H</field>
+            <field name="type">sco</field>
+            <field name="title">Cuenta GOLGAAP,Nombre Cuenta COLGAAP,Cuenta NIIF,Nombre Cuenta NIIF,Saldo inicial,Debito,Credito,Saldo final</field>
+            <field name="query">select code1, name1, code2, name2, SUM(coalesce(si,0)) as si, SUM(coalesce(debit,0)) as debit, SUM(coalesce(credit,0)) as credit, SUM(coalesce(si-debit-credit,0)) as sf FROM ( SELECT aa.code as code1, aa.name as name1, aa2.code as code2, aa2.name as name2, 0.0 as si, COALESCE(SUM(aml.debit),0) as debit, COALESCE(SUM(aml.credit),0) as credit FROM account_account aa INNER JOIN account_account_consol_rel aacr on aacr.parent_id= aa.id
+                            INNER JOIN account_account aa2 on aa2.id = aacr.child_id
+                            LEFT JOIN account_move_line aml ON aml.account_id = aa.id and aml.date between '{date_from}' and '{date_to}'
+                            GROUP BY aa.code, aa.name, aa2.code, aa2.name
+                        UNION
+                        SELECT aa.code, aa.name, aa2.code, aa2.name, COALESCE(SUM(aml.debit-aml.credit),0) as si, 0.0 as debit, 0.0 as credit FROM account_account aa
+                            INNER JOIN account_account_consol_rel aacr on aacr.parent_id= aa.id
+                            INNER JOIN account_account aa2 on aa2.id = aacr.child_id
+                            LEFT JOIN account_move_line aml ON aml.account_id = aa.id and aml.date @min '{date_from}'
+                            GROUP BY aa.code, aa.name, aa2.code, aa2.name
+                            )  as a GROUP BY code1, name1, code2, name2
+                            ORDER BY code1</field>
+        </record>
+    </data>
+</openerp>

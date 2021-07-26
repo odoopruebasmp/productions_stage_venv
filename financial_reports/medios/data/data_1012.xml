@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_medios_1012" model="fpa.financial.reports">
+            <field name="name">1012 - Información de declaraciones tributarias, acciones, inversiones en bonos títulos valores y cuentas de ahorro y cuentas corrientes</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field>
+            <field name="type">ex</field>
+            <field name="export_type_date">cut</field>
+            <field name="application_type">account</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">K</field>
+            <field name="title">Concepto,Tipo de documento,NIT Informado,DV,Primer apellido del informado,Segundo apellido del informado,Primer nombre del informado,Otros nombres del informado,Razon social informado,Pais de Residencia o domicilio,Valor al 31-12</field>
+            <field name="query">
+                SELECT code,code_dian,ref,dev_ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,
+                    CASE WHEN primer_nombre IS NULL THEN name ELSE '' END,rco_code,
+                    SUM(K)
+                FROM (
+                    SELECT ffrcc.code,rdt.code_dian,rp.ref,rp.dev_ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code as rco_code,
+                        (CASE WHEN ffrccl.col='K' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit), 0) ELSE 0 END) K
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date @min= '{date_to}' AND fpa.id={financial_id} AND aml.company_id={company_id} --'{date_from}'
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code,ffrccl.col,ffrccl.type,fpa.tope_min,rp.dev_ref
+                    HAVING ((ROUND(SUM(aml.debit),0) @may= COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.credit),0)=0) OR
+                            (ROUND(SUM(aml.credit),0) @may= COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.debit),0)=0)) AND
+                           ROUND(SUM(aml.debit-aml.credit), 0) != 0
+                UNION ALL
+                    SELECT ffrcc.code,'43' as code_dian,'222222222' as ref,'7' as dev_ref,NULL as primer_apellido,NULL as segundo_apellido,NULL primer_nombre,
+                            NULL as otros_nombres,'CUANTÍAS MENORES' as name,NULL as rco_code,
+                        (CASE WHEN ffrccl.col='K' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit), 0) ELSE 0 END) K
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date @min= '{date_to}' AND fpa.id={financial_id} AND aml.company_id={company_id} --'{date_from}'
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code,ffrccl.col,ffrccl.type,fpa.tope_min,rp.dev_ref
+                    HAVING ((ROUND(SUM(aml.debit),0) @min COALESCE(fpa.tope_min, 0) AND ROUND(SUM(aml.credit),0)=0) OR
+                            (ROUND(SUM(aml.credit),0) @min COALESCE(fpa.tope_min, 0) AND ROUND(SUM(aml.debit),0)=0)) AND
+                           ROUND(SUM(aml.debit-aml.credit), 0) != 0)
+                as datos
+                GROUP BY code,code_dian,ref,dev_ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,rco_code
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_1012_1110" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1110 - Saldos en cuentas corrientes y/o ahorro poseídas en el país</field>
+            <field name="code">1110</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1115" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1115 - Saldos en cuentas corrientes y/o ahorros poseídas en el exterior</field>
+            <field name="code">1115</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1200" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1200 - Valor patrimonial de los bonos</field>
+            <field name="code">1200</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1201" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1201 - Valor patrimonial de los certificados de depósito</field>
+            <field name="code">1201</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1202" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1202 - Valor patrimonial de los títulos</field>
+            <field name="code">1202</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1203" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1203 - Valor patrimonial de los derechos fiduciarios</field>
+            <field name="code">1203</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1204" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1204 - Valor patrimonial de las demás inversiones poseídas</field>
+            <field name="code">1204</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+        <record id="c_1012_1205" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1205 - Valor patrimonial de las acciones o aportes</field>
+            <field name="code">1205</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1012')" />             
+        </record>
+    </data>
+</openerp>
+

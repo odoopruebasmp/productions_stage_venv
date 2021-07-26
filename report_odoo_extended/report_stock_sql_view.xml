@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--WIZARD-WIZARD-WIZARD-WIZARD-->
+        
+        <record id="stock_report_sql_wizard_view" model="ir.ui.view">
+            <field name="name">Informe de Inventario SQL</field>
+            <field name="model">stock.report.sql.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Report Options">
+                <label string=""/>
+                <group col="4">
+                    <field name="print_report"/>
+                    <field name="report_option"/>
+                    <field name="cost_option"/>
+                </group>
+                <group col="4">
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </group>
+                <notebook>
+                    <page string="Opciones">
+                        <group col="6">
+                            <field name="group_product_ids"/>
+                            <field name="group_location_ids" attrs="{'invisible': [('report_option','!=','location')]}"/>
+                            <field name="warehouse_id" attrs="{'invisible': [('report_option','!=','warehouse')]}"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="calcular_report" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    <button name="calcular_diferencias" string="Diferencias" type="object" default_focus="1" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_stock_report_sql_wizard" model="ir.actions.act_window">
+            <field name="name">Analisis de Inventarios SQL</field>
+            <field name="res_model">stock.report.sql.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="stock_report_sql_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="Informe Valorizado" id="menu_stock_report_sql" parent="menu_report_avancys_stock" action="action_stock_report_sql_wizard" sequence="2" groups="report_odoo_extended.group_user_report_avancys_stock"/>
+         
+        <record id="stock_report_sql_group_product_view" model="ir.ui.view">
+            <field name="name">Agrupacion de Productos</field>
+            <field name="model">stock.report.sql.group.product</field>
+            <field name="arch" type="xml">
+            <form string="Grupo de Productos">
+                <group>
+                   <field name="name"/>
+                </group>
+                <notebook>
+                    <page string="Productos">                 
+                        <field name="product_ids" domain="[('type','=','product')]"/>
+                    </page>
+                </notebook>
+            </form>
+            </field>
+        </record>
+        
+        <record id="stock_report_sql_group_location_view" model="ir.ui.view">
+            <field name="name">Agrupacion de Ubicaciones</field>
+            <field name="model">stock.report.sql.group.location</field>
+            <field name="arch" type="xml">
+            <form string="Grupo de Ubicaciones">
+                <group>
+                   <field name="name"/>
+                </group>
+                <notebook>
+                    <page string="Ubicaciones">                 
+                        <field name="location_ids" domain="[('usage','=','internal')]"/>
+                    </page>
+                </notebook>
+            </form>
+            </field>
+        </record>
+        
+        
+        <record model='ir.actions.report.xml' id='reporte_stock_sql_aeroo'>
+          <field name='report_type'>aeroo</field>
+          <field name='in_format'>oo-ods</field>
+          <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+          <field name='multi' eval='False'/>
+          <field name='name'>Informe de Inventarios SQL</field>
+          <field name='report_rml'>report_odoo_extended/reporte_stock_sql.ods</field>
+          <field name='report_name'>report_odoo_extended.reporte_stock_sql_aeroo</field>
+          <field name='model'>stock.report.sql.line</field>
+          <field name='type'>ir.actions.report.xml</field>
+          <field name='attachment_use' eval='False'/>
+          <field name='tml_source'>file</field>
+          <field name='styles_mode'>default</field>
+          <field name='parser_state'>default</field>
+        </record>
+        
+        
+        <record id="view_stock_report_sql_line_tree" model="ir.ui.view">
+            <field name="name">stock.report.sql.line.tree</field>
+            <field name="model">stock.report.sql.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Informe Inventarios">
+                    <field name="product_id"/>
+                    <field name="product_category"/>
+                    <field name="warehouse_id"/>
+                    <field name="location_id"/>
+                    <field name="product_qty_start"/>
+                    <field name="product_qty_in"/>
+                    <field name="product_qty_out"/>
+                    <field name="product_qty_end"/>
+                    <field name="company_id" invisible='1'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_report_sql_line_filter" model="ir.ui.view">
+            <field name="name">account.report.balance.avancys.line.filter.dos</field>
+            <field name="model">stock.report.sql.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Informe Inventarios">
+                    <field name="product_id"/>
+                    <field name="product_ref"/>
+                    <field name="product_category"/>
+                    <field name="location_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="company_id"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product_id" string="Nombre Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="group_product_ref" string="Referencia Producto" icon="terp-partner" domain="[]" context="{'group_by':'product_ref'}"/>
+                        <filter name="group_product_category" string="Linea" icon="terp-partner" domain="[]" context="{'group_by':'product_category'}"/>
+                        <separator orientation="horizontal"/>
+                        <filter name="group_warehouse_id" string="Bodega" icon="terp-partner" domain="[]" context="{'group_by':'warehouse_id'}"/>
+                        <filter name="group_location_id" string="Ubicacion" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                        <filter name="group_company_id" string="Compañia" icon="terp-partner" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>        
+        
+        
+        <record id="view_stock_report_sql_line_graph" model="ir.ui.view">
+            <field name="name">stock.report.sql.line.graph</field>
+            <field name="model">stock.report.sql.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Inventarios" type="pivot" stacked="True">
+                    <field name="warehouse_id"/>                
+                    <field name="product_qty_start" type="measure"/>                    
+                    <field name="product_qty_in" type="measure"/>
+                    <field name="product_qty_out" type="measure"/>
+                    <field name="product_qty_end" type="measure"/>                   
+                    <field name="cost_total_start" type="measure"/>
+                    <field name="cost_total_end" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+
+        <record id="action_stock_report_sql_line" model="ir.actions.act_window">
+            <field name="name">Analisis de Inventarios</field>
+            <field name="res_model">stock.report.sql.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        
+    </data>
+</openerp>

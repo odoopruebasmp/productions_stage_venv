@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report file="financial_reports.template_mayor_balance" id="report_mayor_balance" model="fpa.mayor.balance.line"
+                name="financial_reports.template_mayor_balance" report_type="qweb-pdf" string="Mayor y balance"/>
+        <record id="paperformat_legal_landscape2" model="report.paperformat">
+            <field name="name">Papel Mayor y Balance</field>
+            <field eval="True" name="default"/>
+            <field name="format">custom</field>
+            <field name="page_height">216</field>
+            <field name="page_width">280</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">6</field>
+            <field name="margin_left">1</field>
+            <field name="margin_right">1</field>
+            <field eval="False" name="header_line"/>
+            <field name="header_spacing">1</field>
+            <field name="dpi">100</field>
+        </record>
+        <record id="report_mayor_balance" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="paperformat_legal_landscape2"/>
+        </record>
+        <template id="template_mayor_balance">
+              <style>
+                pre {
+                font-size:10px;
+                font-family: monospace;
+                white-space: pre;
+                margin: 0em 0;
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                background: #FFFFFF;
+                }
+                #corners2 {
+                background-color: #9DC7E5;
+                padding: 80px;
+                font-weight: bold;
+                color: #000000;
+                font-size:10px;
+                }
+                #borderless{
+                border-top-style: none;
+                border-left-style: none;
+                border-right-style: none;
+                border-bottom-style: none;
+                }
+
+                #corners {
+                border-radius: 0px 0px;
+                background: #FFFFFF;
+                padding: 0px;
+                width: 100%;
+                heigth: 10%;
+                color: #000000;
+                font-weight: semi-bold;
+                }
+
+            </style>
+            <div class="page" style="font-size:10px;margin-top: 0px">
+                <table class="table-striped" style="font-size:12px;width: 100%; margin-top: 10px; margin-bottom: 30px">
+                    <thead id="corners">
+                        <tr>
+                            <th style="text-align: left;vertical-align: text-bottom;" >
+                                <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 60px;"/>
+                            </th>
+                            <th style="text-align: left;">
+                                <span t-field="docs[0].encabezado_id.chart_account_id.company_id.name"/>
+                                <br/>
+                                NIT:
+                                 <span t-field="docs[0].encabezado_id.company_id.partner_id.ref"/> - <span t-field="docs[0].encabezado_id.company_id.partner_id.dev_ref"/>
+                                <br/>
+                                <span t-esc="docs[0].financial_id._get_unidades()"/>
+                               de
+                               <span t-field="docs[0].encabezado_id.chart_account_id.company_id.currency_id.name"/>
+                            </th>
+                            <th style="text-align: right;">
+                                Fecha de generación:
+                <span t-esc="(datetime.datetime.now()-relativedelta(hours=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <br/>Desde: <span t-field="docs[0].encabezado_id.date_from"/> - Hasta: <span t-field="docs[0].encabezado_id.date_to"/>
+                            <br/>PUC:<span t-field="docs[0].account_id.parent_zero"/>
+                            </th>
+                        </tr>
+
+                    </thead>
+                </table>
+
+                <div align="center">
+                            <h4>
+                                <strong><span t-field="docs[0].encabezado_id.financial_id.name"/></strong>
+                            </h4>
+                        </div>
+                <table class="table-striped" style="font-size:100%;width: 100%; margin-top: 10px; margin-bottom: 30px">
+                    <thead id="corners2">
+                                <tr>
+                                    <th style="text-align: center;">
+                                        <strong>Concepto</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong>Codigo</strong>
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <strong></strong>
+                                    </th>
+                                    <th style="text-align: right;">
+                                        <strong>Saldo Inicial debito</strong>
+                                    </th>
+                                    <th style="text-align: right;">
+                                        <strong>Saldo Inicial credito</strong>
+                                    </th>
+
+                                    <th style="text-align: right;">
+                                        <strong>Debito</strong>
+                                    </th>
+                                    <th style="text-align: right;">
+                                        <strong>Credito</strong>
+                                    </th>
+                                    <th style="text-align: right;">
+                                        <strong>Saldo Final debito</strong>
+                                    </th>
+                                    <th style="text-align: right;">
+                                        <strong>Saldo Final credito</strong>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-as="concepts" t-foreach="docs[0].financial_id.concepts_ids.sorted(key=lambda b: b.sequence)">
+                                    <t t-if="not concepts.resume">
+                                        <t t-if="concepts.before">
+                                            <tr style="font-size:100%;">
+                                                <t t-as="o" t-foreach="docs.sorted(key=lambda b: b.concepts_id)">
+                                                    <t t-if="o.concepts_id.id == concepts.id and not o.account_id">
+                                                        <th colspan="3" style="text-align: left;">
+                                                            <span t-field="concepts.name"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_inicial_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_inicial_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_final_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_final_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+
+                                                    </t>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-as="o" t-foreach="docs">
+                                        <t t-if="concepts.detail">
+                                            <t t-if="o.concepts_id.id == concepts.id and o.account_id">
+                                                <tr>
+                                                    <td align="center"/>
+                                                    <td align="left">
+                                                        <span t-field="o.account_id"/>
+                                                    </td>
+                                                    <td align="left">
+                                                        <span t-field="o.partner_id"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-field="o.amount_inicial_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-field="o.amount_inicial_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+
+                                                    <td align="right">
+                                                        <span t-field="o.debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-field="o.credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-field="o.amount_final_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span t-field="o.amount_final_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                    </td>
+
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <t t-if="not concepts.resume">
+                                        <t t-if="not concepts.before">
+                                            <tr style="font-size:100%;">
+                                                <t t-as="o" t-foreach="docs.sorted(key=lambda b: b.concepts_id)">
+                                                    <t t-if="o.concepts_id.id == concepts.id and not o.account_id">
+                                                        <th colspan="3" style="text-align: left;">
+                                                            <span t-field="concepts.name"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_inicial_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_inicial_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_final_debit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+                                                        <th style="text-align: right;">
+                                                            <span t-field="o.amount_final_credit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.company_id.currency_id&quot;}"/>
+                                                        </th>
+
+                                                    </t>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+            <div class="footer" style="margin-top: 55 PX">
+                <div align="center">
+                    <small>
+                        <strong>
+                            <span>Pagina</span>
+                            <span class="page"/>
+                            de
+                            <span class="topage"/>
+                        </strong>
+                    </small>
+                </div>
+            </div>
+
+
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="confirm_quote_wiz_id" model="ir.ui.view">
+            <field name="name">confirm.quote.wiz.form</field>
+            <field name="model">confirm.quote.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Quotation" version='7.0'>
+                    <footer>
+                        <button name='confirm_multi_quote' type='object' string='Confirm' />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <act_window id="wizard_action_confirm_quote" name="Confirm Quotation"
+            res_model="confirm.quote.wiz" src_model='sale.order' 
+            target="new" view_mode="form" view_type="form" multi="True"
+            key2="client_action_multi"/>
+        
+        
+        
+    </data>
+</openerp>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="ir_cron_view_extended" model="ir.ui.view">
+            <field name="name">ir.cron.view.extended</field>
+            <field name="model">ir.cron</field>
+            <field name="inherit_id" ref="base.ir_cron_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@string='Action to Trigger']" position="before">
+                    <button name="manual_read" type="object" string="Ejecución Manual"
+                            class="oe_highlight" groups="base.group_no_one"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_receipt_notice_form" model="ir.ui.view">
+            <field name="name">res.partner.receipt.notice.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="electronic_invoice.res_partner_electronic_invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Factura Electrónica']/group/group" position="after">  <!--TODO validar-->
+                    <group>
+                        <field name="cop_rn" invisible="1"/>
+                        <field name="receipt_notice" attrs="{'invisible': ['|',('electronic_invoice','=',False),('cop_rn','=',False)]}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_company_receipt_notice_form" model="ir.ui.view">
+            <field name="name">res.company.receipt.notice.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="electronic_invoice.res_company_electronic_invoice_form"/>
+            <field eval="20" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='send_remission']" position="before">
+                    <field name="receipt_notice"/>
+                </xpath>
+                <xpath expr="//page[@string='Servidor SFTP']/group" position="attributes">
+                    <attribute name="string">Factura Electrónica</attribute>
+                </xpath>
+                <xpath expr="//page[@string='Servidor SFTP']/group" position="after">
+                    <group string="Avisos de Recibo">
+                        <group>
+                            <field name="rn_sftp_url" placeholder="xxx.xxx.xxx.xxx" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                            <field name="rn_sftp_user" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                            <field name="rn_temporal_files" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="rn_sftp_port" placeholder="22" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                            <field name="rn_sftp_pwd" password="True" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@string='Factura Electrónica']/notebook/page[@string='Emisión de Factura']" position="after">
+                    <page string="Aviso de Recibo" attrs="{'invisible': [('receipt_notice', '=', False)]}">
+                        <group>
+                            <group>
+                                <field name="rn_read_folder" placeholder="/FacturaElectronica/AvisoRecibo/Avisos" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                                <field name="rn_error_folder" placeholder="/FacturaElectronica/AvisoRecibo/Erroneos" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                                <field name="stock_picking_id_key" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                            </group>
+                            <group>
+                                <field name="rn_process_folder" placeholder="/FacturaElectronica/AvisoRecibo/Procesados" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                                <field name="novelty_location_id" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                                <field name="product_id_key" attrs="{'required': [('receipt_notice', '=', True)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <h3 class="oe_grey">Nota:</h3><br/>
+                            <ul class="oe_grey">
+                                <li>Configure las rutas para el proceso de Avisos de Recibo</li>
+                            </ul>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_picking_receipt_notice_form" model="ir.ui.view">
+            <field name="name">stock.picking.receipt.notice.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_confirm']" position="before">
+                    <button name="ei_stock_picking_recadv" type="object" string="Leer Aviso Recibo" class="oe_highlight"
+                            attrs="{'invisible': ['|', ('state', '!=', 'done'), ('picking_invoice_id', '!=', False)]}"
+                            groups="receipt_notice.group_user_receipt_notice, receipt_notice.group_admin_receipt_notice"/>
+                </xpath>
+                <xpath expr="//button[@name='do_enter_transfer_details']" position="after">
+                    <button name="%(receipt_notice.action_create_refund_picking_wizard)d" type="action" string="Cerrar Novedad" class="oe_highlight"
+                            attrs="{'invisible': ['|','|',('novelty_state', '!=', 'open'),('state', '!=', 'done'),('novelty_id', '!=', False)]}"
+                            groups="receipt_notice.group_user_receipt_notice, receipt_notice.group_admin_receipt_notice"/>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="novelty_id" attrs="{'invisible': [('novelty_id','=',False)]}"/>
+                    <field name="refund_document_id" attrs="{'invisible': [('refund_document_id','=',False)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="novelty_state" attrs="{'invisible': [('novelty_state','=',False)]}"/>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Aviso de recibo" groups="receipt_notice.group_user_receipt_notice, receipt_notice.group_admin_receipt_notice" >
+                        <group>
+                            <group string="Aviso de Recibo">
+                                <field name="receipt_notice" string="Referencia"/>
+                                <field name="delivery_order"/>
+                                <field name="order_lines"/>
+                                <field name="transaction_date"/>
+                                <button name="%(receipt_notice.action_create_full_novelty_picking_wizard)d" type="action" string="Novedad" class="oe_link"
+                                        attrs="{'invisible': ['|', ('state', '!=', 'done'),('novelty_id', '!=', False)]}" icon="gtk-cancel"
+                                        groups="receipt_notice.group_admin_receipt_notice"/>
+                            </group>
+                            <group string="Emision de Factura">
+                                <field name="document_date"/>
+                                <field name="cust_accep_number"/>
+                                <field name="recadv_file"/>
+                                <field name="rn_transaction_status"/>
+                                <field name="electronic_invoice" invisible='1'/>
+                            </group>
+                        </group>
+                        <group string="Registro Lectura">
+                            <field name="rn_order_log_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="name_file"/>
+                                    <field name="description"/>
+                                    <field name="transaction_date"/>
+                                    <field name="type_doc"/>
+                                    <field name="type_log"/>
+                                    <field name="document_state"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="stock_picking_type_receipt_notice_form" model="ir.ui.view">
+            <field name="name">stock.picking.type.receipt.notice.form</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='return_picking_type_id']" position="after">
+                    <field name="novelty_picking_type_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_move_receipt_notice_tree" model="ir.ui.view">
+            <field name="name">stock.move.receipt.notice.tree</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="colors">grey:scrapped == True; red: novelty_state=='pending'; green: novelty_state=='in_progress'; blue: novelty_state=='done'</attribute>
+                </xpath>
+                <field name="product_uos_qty" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="product_uom_qty" position="after">
+                    <field name="received_amount"/>
+                    <field name="novelty_amount"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="novelty_state" invisible="1"/>
+                    <button name="change_move_nov_state" icon="gtk-find" type="object" attrs="{'invisible': [('novelty_state', '!=', 'pending')]}"
+                                            help="Cambiar estado novedad de producto a 'En Progreso de revision'"/>
+                    <button name="change_move_nov_state" icon="gtk-apply" type="object" attrs="{'invisible': [('novelty_state', '!=', 'in_progress')]}"
+                                            help="Indicar que la novedad fue resuelta"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="stock_move_receipt_notice_form" model="ir.ui.view">
+            <field name="name">stock.move.receipt.notice.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="received_amount" string='Cantidad (Recibida)' attrs="{'invisible': [('received_amount','=',0), ('novelty_amount','=',0)]}"/>
+                    <field name="novelty_amount" attrs="{'invisible': [('novelty_amount','=',0),('received_amount','=',0)]}"/>
+                </xpath>
+                <xpath expr="//group[@string='Locations']" position="replace">
+                    <group>
+                        <group string="Locations" groups="stock.group_locations">
+                            <field name="location_id" domain="[('usage','&lt;&gt;','view')]"/>
+                            <field name="location_dest_id" domain="[('usage','&lt;&gt;','view')]"/>
+                        </group>
+                        <group string="Causal Novedad">
+                            <field name="note" style="width: 300%"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_move_account_receipt_notice_form" model="ir.ui.view">
+            <field name="name">stock.move.account.receipt.notice.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock_account.view_move_picking_from_stockaccount_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_state']" position="after">
+                    <field name="novelty_state" attrs="{'invisible': [('novelty_state','=',False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_picking_receipt_notice_tree" model="ir.ui.view">
+            <field name="name">stock.picking.receipt.notice.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <tree colors="red: novelty_state=='open'; green: novelty_state=='in_progress'; blue: novelty_state=='done'" string="Lista de Novedades">
+                    <field name="name"/>
+                    <field name="state" string="Estado Transferencia"/>
+                    <field name="location_id"/>
+                    <field name="location_dest_id"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="origin"/>
+                    <field name="novelty_state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_picking_internal_search_receipt_notice" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search.receipt.notice</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@string='Group By']/filter[@string='Status']" position="after">
+                    <filter string="Estado Novedades" name="novelty_state" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'novelty_state'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="novelty_transactions" model="ir.actions.act_window">
+            <field name="name">Novedades AR</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('picking_type_id.name', 'like', 'Electrónica')]</field>
+            <field name="context">{"search_default_novelty_state":1}</field>
+            <field name="view_id" ref="stock_picking_receipt_notice_tree"/>
+        </record>
+
+        <menuitem id="novelty_menu" name="Novedades Avisos Recibo" parent="stock.menu_traceability" sequence="30" action="novelty_transactions"
+                  groups="receipt_notice.group_admin_receipt_notice"/>
+
+        <record id="ei_order_log_search_rn" model="ir.ui.view">
+            <field name="name">ei.order.log.search.rn</field>
+            <field name="model">ei.order.log</field>
+            <field name="inherit_id" ref="electronic_invoice.ei_order_log_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_document_state']" position="after">
+                    <filter name="group_type_log_avi" string="Aviso de Recibo" domain="[('type_doc', '=', 'rn')]" context="{'group_by':'type_doc'}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

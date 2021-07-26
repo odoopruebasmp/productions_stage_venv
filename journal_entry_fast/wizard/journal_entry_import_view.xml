@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_journal_entry_import_fast_wiz" model="ir.ui.view">
+            <field name="name">journal.entry.wiz.fast</field>
+            <field name="model">journal.entry.import.fast</field>
+            <field name="arch" type="xml">
+                <form string="Import Journal entries" version="7.0">
+                    <group>
+			<field name='company_id' required='1'/>
+                        <field name="file" required='1'/>
+                        <field name="force_validate"/>
+                    </group>
+                    <footer>
+                        <button name="import_csv" string="Import" type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_journal_entry_fast_wiz" model="ir.actions.act_window">
+            <field name="name">Import Journal Entries Fast</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">journal.entry.import.fast</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_journal_entry_import_fast_wiz" />
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

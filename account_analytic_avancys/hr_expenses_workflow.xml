@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="hr_expense.act_done" model="workflow.activity">
+            <field name="wkf_id" ref="hr_expense.wkf_expenses"/>
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">action_move_create()</field>
+        </record>
+        
+        <record id="act_to_refund" model="workflow.activity">
+            <field name="wkf_id" ref="hr_expense.wkf_expenses"/>
+            <field name="name">Por Reembolsar</field>
+            <field name="kind">function</field>
+            <field name="action">wf_to_refund()</field>
+        </record>
+
+        <record id="trans_to_refund" model="workflow.transition">
+            <field name="act_from" ref="hr_expense.act_accepted"/>
+            <field name="act_to" ref="act_to_refund"/>
+            <field name="signal">done</field>
+            <field name="condition">es_rembolsable()</field>
+        </record>
+
+        <record id="hr_expense.t8" model="workflow.transition">
+            <field name="condition">not es_rembolsable()</field>
+        </record>
+        
+        <record id="trans_done_refund" model="workflow.transition">
+            <field name="act_from" ref="act_to_refund"/>
+            <field name="act_to" ref="hr_expense.act_done"/>
+            <field name="signal">done</field>
+        </record>
+        
+        <record id="trans_done_done" model="workflow.transition">
+            <field name="act_from" ref="hr_expense.act_done"/>
+            <field name="act_to" ref="hr_expense.act_done"/>
+            <field name="signal">done</field>
+        </record>
+        
+        <record id="trans_regret_refund" model="workflow.transition">
+            <field name="act_from" ref="act_to_refund"/>
+            <field name="act_to" ref="hr_expense.act_accepted"/>
+            <field name="signal">regret</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+
+        <record id="trans_regret_done" model="workflow.transition">
+            <field name="act_from" ref="hr_expense.act_done"/>
+            <field name="act_to" ref="hr_expense.act_accepted"/>
+            <field name="signal">regret</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+
+    </data>
+</openerp>

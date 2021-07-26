@@ -1,0 +1,461 @@
+<openerp>
+    <data>
+        
+        <record id="ir_cron_anticipo_vencido_cron" model="ir.cron">
+            <field name="name">Anticipo Vencido y Alerta</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'hr.payroll.advance'" name="model"/>
+            <field eval="'anticipo_vencido_cron'" name="function"/>
+        </record>
+        
+        <record id="view_company_form_advance" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_company_form_avancys"/>
+            <field name="arch" type="xml">
+                <field name="journal_expense_ids" position="after" >
+                    <field name="vencimiento_anticipo"/>
+                    <field name="giro_anticipo"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="payroll_anticipos_form_view">
+            <field name="name">payroll.advance.form</field>
+            <field name="model">hr.payroll.advance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Anticipos Empleado" version="7.0">
+                    <header>
+                        <button string="Cambiar a borrador" name="back_to_draft" states="refused"/>
+                        <button string="Mandar a aprobar" name="draft_send_for_approval" states="draft"/>
+                        <button string="Aprobacion Director del Empleado" name="approval_accept" states="waiting_approval"/>
+                        <button string="Aprobacion Director Financiero" name="financial_approval_accept" states="waiting_financial_approval" groups="account.group_account_manager"/>
+                        <button string="Rechazar" name="refuse" states="waiting_approval,waiting_financial_approval"/>
+                        <button string="Aprobacion con Firmas" name="signature_accept" states="waiting_signature"/>
+                        <button string="Generar comprobante egreso" name="generate_account_move" states="validated"/>
+                        <button string="Cancelar" name="cancel" states="validated,to_pay"/>
+                        <button string="Descontar de Nomina" name="send_to_discount" states="expired"/>
+                        <button string="Cancelar Descuento por Nomina" name="cancel_to_discount" states="to_discount"/>
+                        
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval,waiting_financial_approval,wf_waiting_signature,validated,to_pay" />
+                    </header>
+                    <sheet string="Anticipos Empleado">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colspan="4">
+                            <field name="employee_id"/>
+                            <field name="contract_id"/>
+                            <field name="parent_id"/>
+                            <newline/>
+                            <field name="currency_id" colspan="2" on_change="onchange_currency_id(currency_id, company_id, pay_date, state, context)"/>
+                            <field name="tasa_cambio" colspan="2" attrs="{'invisible': [('multicurrency','=', False)]}"/>
+                            <field name="amount"/>
+                            <field name="total_local"/>
+                            <field name="analytic_account_id"/>
+                            <field name="multicurrency" invisible="True"/>
+                            <field name="company_id" invisible="True" on_change="onchange_currency_id(currency_id, company_id, pay_date, state, context)"/>
+                        </group>
+                        <group col="4" colspan="4">
+                            <field name="request_date" />
+                            <field name="start_date" />
+                            <field name="approve_date" />
+                            <field name="end_date"/>
+                            <field name="expire_date" />
+                        </group>
+                        <notebook>
+                            <page string="Descripcion">
+                                <field name="description" colspan="4" nolabel="True"/>
+                            </page>
+                            <page string="Contabilidad" groups="account.group_account_invoice">
+                                <group>                                    
+                                    <field name="journal_advance_id" invisible="True"/>
+                                    <field name="journal_bank_id"/>
+                                    <field name="pay_date" on_change="onchange_currency_id(currency_id, company_id, pay_date, state, context)"/>
+                                    <field name="accounting_date" />
+                                    <field name="account_recivable_id" />
+                                    <field name="move_validate_id" />
+                                    <field name="move_egress_id" />
+                                    <field name="ref" attrs="{'readonly':[('state','!=','validated')]}"/>                                    
+                                    <field name="reconcile_id" attrs="{'invisible': [('reconcile_id','=', False)]}"/>
+                                    <field name="reconcile_partial_id" attrs="{'invisible': [('reconcile_partial_id','=', False)]}" />
+                                    <field name="account_payable_id" attrs="{'invisible': [('move_refund_id','=', False)]}"/>
+                                    <field name="move_refund_id" attrs="{'invisible': [('move_refund_id','=', False)]}"/>
+                                    <field name="reconcile_refund_id" attrs="{'invisible': [('reconcile_refund_id','=', False)]}"/>
+                                    <field name="reconcile_partial_refund_id" attrs="{'invisible': [('reconcile_partial_refund_id','=', False)]}"/>                                    
+                                </group>
+                            </page>
+                            <page string="Balance" attrs="{'invisible': [('state','in', ['draft','waiting_approval','waiting_financial_approval','waiting_signature','validated','refused','cancelled'])]}">
+                                <group>
+                                    <field name="remaining"/>
+                                    <separator string="Legalizaciones"/>
+                                    <field name="expense_ids" colspan="4" nolabel="1" context="{'default_employee_id':employee_id, 'default_advance_id':active_id}">
+                                        <tree string="Legalizaciones">
+                                            <field name="name"/>
+                                            <field name="create_date"/>
+                                            <field name="date_valid"/>
+                                            <field name="date"/>
+                                            <field name="currency_id"/>
+                                            <field name="amount" sum="Total"/>
+                                            <field name="total_local" sum="Total Local"/>
+                                            <field name="state"/>
+                                        </tree> 
+                                    </field>
+                                    <separator string="Nominas"/>
+                                    <field name="advance_payslip_ids" colspan="4" nolabel="1" context="{'default_employee_id':employee_id, 'default_advance_id':active_id}">
+                                        <tree string="Nominas">
+                                            <field name="payslip_id"/>
+                                            <field name="period_id"/>
+                                            <field name="amount_total" sum="Total"/>
+                                            <field name="amount_discount" sum="Total Descontado"/>
+                                            <field name="manual"/>
+                                            <field name="state"/>
+                                        </tree> 
+                                    </field>
+                                    <!-- vouchers? -->
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="payroll_anticipos_tree_view">
+            <field name="name">hr.payroll.advance.tree</field>
+            <field name="model">hr.payroll.advance</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Anticipos Empleado">
+                    <field name="name" />
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="currency_id"/>
+                    <field name="amount"/>
+                    <field name="tasa_cambio"/>
+                    <field name="moneda_local" invisible="True"/>
+                    <field name="remaining" />
+                    <field name="parent_id" />
+                    <field name="journal_advance_id" />
+                    <field name="journal_bank_id" />
+                    <field name="request_date"/>
+                    <field name="approve_date"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="pay_date" />
+                    <field name="expire_date" />
+                    <field name="description"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="hr_prestamos_advance_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.advance.search</field>
+            <field name='model'>hr.payroll.advance</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Anticipos Empleado">
+                    <field name="name" filter_domain="[('name','ilike',self)]"/>
+                    <field name="description" filter_domain="[('description','ilike',self)]"/>
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="analytic_account_id"/>
+                    <field name="currency_id"/>
+                    <field name="tasa_cambio"/>
+                    <field name="amount"/>
+                    <field name="journal_advance_id" />
+                    <field name="journal_bank_id" />
+                    <field name="request_date"/>
+                    <field name="approve_date"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="state"/>
+                    <field name="moneda_local" />
+                    <field name="pay_date" />
+                    <field name="expire_date" />
+                    <field name="remaining" />
+                    <field name="parent_id" />
+                    
+                    
+                    <filter string="Mis Anticipos" domain="[('employee_id.user_id','=',uid)]"  help="Muestra solo mis anticipo" icon="terp-personal"/>
+                    <filter string="Director de" domain="[('parent_id.user_id','=',uid)]"  help="Muestra solo los anticipos de los cuales soy director" icon="terp-personal"/>
+                    
+                    <filter name="borrador" string="Borrador" domain="[('state','=','draft')]" icon="terp-camera_test"/>
+                    <filter name="pendiente_aprobacion" string="Pendiente Aprobacion" domain="[('state','=','waiting_approval')]"/>
+                    <filter name="aprobacion_financiera" string="Pendiente Aprobacion Financiera" domain="[('state','=','waiting_financial_approval')]"/>
+                    <filter name="proceso_firma" string="Proceso Firmas" domain="[('state','=','waiting_signature')]"/>
+                    <filter name="validado" string="Validado" domain="[('state','=','validated')]"/>
+                    <filter name="por_legalizar" string="Por Legalizar" domain="[('state','=','to_pay')]"/>
+                    <filter name="legalizado" string="Legalizado" domain="[('state','=','paid')]"/>
+                    <filter name="vencido" string="Vencido" domain="[('state','=','expired')]"/>
+                    <filter name="descontar" string="Para Descontar" domain="[('state','=','to_discount')]"/>
+                    <filter name="descontado" string="Descontado" domain="[('state','=','discount')]"/>
+                    <filter name="rechazado" string="Rechazado" domain="[('state','=','refused')]"/>
+                    <group expand="0" string="Agrupar por...">
+                        <filter string="Estado" context="{'group_by': 'state'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Centro Costo" context="{'group_by': 'analytic_account_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Moneda" context="{'group_by': 'currency_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Diario Anticipo" context="{'group_by': 'journal_advance_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Diario Banco" context="{'group_by': 'journal_bank_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Empleado" context="{'group_by': 'employee_id'}" icon="terp-stock_effects-object-colorize"/>
+                        <filter string="Director" context="{'group_by': 'parent_id'}" icon="terp-stock_effects-object-colorize"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_payroll_advance_tree_view">
+            <field name="name">Anticipos Empleado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('massive','!=',True)]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_payroll_advance_massive">
+            <field name="name">Anticipos Empleado Masivos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('massive','=',True)]</field>
+        </record>
+        
+        <menuitem name="Anticipos Empleado" parent="hr.menu_hr_root" id="menu_open_advance" sequence="13"/>
+        
+        <record id="hr_advance_menu" model="ir.ui.menu">
+            <field name="name">Anticipos Empleado</field>
+            <field name="parent_id" ref="menu_open_advance"/>
+            <field name="action" ref="action_payroll_advance_tree_view"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="hr_advance_menu_massive" model="ir.ui.menu">
+            <field name="name">Anticipos Empleado Masivos</field>
+            <field name="parent_id" ref="menu_open_advance"/>
+            <field name="action" ref="action_payroll_advance_massive"/>
+            <field name="sequence">11</field>
+        </record>
+        
+        <record model="ir.ui.view" id="hr_expense_view_expenses_form_hr_advance">
+            <field name="name">hr.expense.view.expenses.form.hr.advance</field>
+            <field name="model">hr.expense.expense</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_expenses_form_55"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="advance_id" domain="[('state','=','to_pay'),('employee_id','=',employee_id)]" attrs="{'invisible': [('type','!=', 'anticipo')], 'required': [('type','==', 'anticipo')]}"/>
+                    <!-- not reliable information -->
+                    <!-- <field name="advance_difference" attrs="{'invisible': [('type','!=', 'anticipo')]}"/> -->
+                </xpath>
+                
+                <field name="tasa_cambio" position="replace">
+                    <field name="tasa_cambio" attrs="{'invisible': ['|',('multicurrency','=', False),('type','=', 'anticipo')],'required': [('multicurrency','=',True),('type','!=', 'anticipo')]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_expenses_tree_extended_za" model="ir.ui.view">
+            <field name="name">hr.expense.expense.tree.extended.za</field>
+            <field name="model">hr.expense.expense</field>
+            <field name="inherit_id" ref="hr_expense.view_expenses_tree" />
+            <field name="arch" type="xml">
+                <field name="employee_id" position="before">
+                    <field name="id" string="No."/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_expenses_form_55_za" model="ir.ui.view">
+            <field name="name">hr.expense.expense.tre.form.za</field>
+            <field name="model">hr.expense.expense</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_expenses_form_55" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree[@string='Lineas de Gastos']/field[@name='date_value']" position="before">
+                    <field name="ref2" string="Ref2"/>
+                </xpath>
+                <field name="employee_id" position="before">
+                    <field name="id" string="No." />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_expenses_line_tree_extended_za" model="ir.ui.view">
+            <field name="name">hr.expense.line.tre.ext.za</field>
+            <field name="model">hr.expense.line</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_expenses_line_tree_extended" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_value']" position="before">
+                    <field name="ref2" string="Ref2"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- DATA -->
+        <record id="mt_advance_new" model="mail.message.subtype">
+            <field name="name">Nuevo Anticipo</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Anticipo Creado</field>
+        </record>
+        <record id="mt_advance_waiting_approval" model="mail.message.subtype">
+            <field name="name">Anticipo esperando aprobacion de director</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Anticipo esperando aprobacion de director</field>
+        </record>
+        <record id="mt_advance_waiting_financial_approval" model="mail.message.subtype">
+            <field name="name">Anticipo esperando aprobacion de financiero</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Anticipo esperando aprobacion de financiero</field>
+        </record>
+        <record id="mt_advance_validated" model="mail.message.subtype">
+            <field name="name">Anticipo Validado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Anticipo Validado</field>
+        </record>
+        <record id="mt_advance_refused" model="mail.message.subtype">
+            <field name="name">Anticipo Rechazado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Anticipo Rechazado</field>
+        </record>
+        <record id="mt_to_pay_cancelled" model="mail.message.subtype">
+            <field name="name">Anticipo Cancelado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="6"/>
+            <field name="description">Anticipo Cancelado</field>
+        </record>
+        <record id="mt_advance_paid" model="mail.message.subtype">
+            <field name="name">Anticipo Legalizado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="description">Anticipo Legalizado</field>
+        </record>
+        <record id="mt_to_pay_validated" model="mail.message.subtype">
+            <field name="name">Anticipo Por Legalizar</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="8"/>
+            <field name="description">Anticipo Por Legalizar</field>
+        </record>
+        <record id="mt_to_pay_reembolso" model="mail.message.subtype">
+            <field name="name">Anticipo Por Reembolsar</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="9"/>
+            <field name="description">Anticipo Por Reembolsar</field>
+        </record>
+        <record id="mt_advance_expired" model="mail.message.subtype">
+            <field name="name">Anticipo Expirado</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="10"/>
+            <field name="description">Anticipo Expirado</field>
+        </record>
+        <record id="mt_advance_to_discount" model="mail.message.subtype">
+            <field name="name">Anticipo Para Descontar de Nomina</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="11"/>
+            <field name="description">Anticipo Para Descontar de Nomina</field>
+        </record>
+        <record id="mt_advance_discount" model="mail.message.subtype">
+            <field name="name">Anticipo Descontado de nomina</field>
+            <field name="res_model">hr.payroll.advance</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="12"/>
+            <field name="description">Anticipo Descontado de nomina</field>
+        </record>
+
+        <!--Workflow de anticipo en menu more-->
+
+        <record id="action_generate_account_move_advance" model="ir.actions.server">
+            <field name="name">Generar comprobantes</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_ids'):
+                    self.wf_to_pay(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_waiting_approval_advance" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.payroll.advance'" name="model"/>
+            <field name="name">Generar comprobantes</field>
+            <field eval="'ir.actions.server,%d'%action_generate_account_move_advance" name="value"/>
+        </record>
+
+        <record id="action_to_discount_advance" model="ir.actions.server">
+            <field name="name">Descontar de nomina</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_ids'):
+                    self.wf_to_discount(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_to_discount_advance" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.payroll.advance'" name="model"/>
+            <field name="name">Descontar de nomina</field>
+            <field eval="'ir.actions.server,%d'%action_to_discount_advance" name="value"/>
+        </record>
+
+        <record id="action_draft_advance" model="ir.actions.server">
+            <field name="name">Pasar a borrador</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="state">code</field>
+            <field name="code">
+                if context.get('active_ids'):
+                    self.cancel_seats(cr, uid, context['active_ids'], context=context)
+                    self.wf_draft(cr, uid, context['active_ids'], context=context)
+            </field>
+        </record>
+
+        <record id="ir_action_draft_advance" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'hr.payroll.advance'" name="model"/>
+            <field name="name">Pasar a borrador</field>
+            <field eval="'ir.actions.server,%d'%action_draft_advance" name="value"/>
+        </record>
+    
+    </data>
+    <data noupdate="1">
+        <!-- secuencia -->
+        
+        <record id="seq_advance_number_type" model="ir.sequence.type">
+            <field name="name">Numero Anticipo</field>
+            <field name="code">payroll.advance.number</field>
+        </record>
+        <record id="seq_advance_number" model="ir.sequence">
+            <field name="name">Numero Anticipo</field>
+            <field name="code">payroll.advance.number</field>
+            <field name="prefix">ANT-</field>
+            <field name="padding">10</field>
+        </record>
+
+    </data>
+</openerp>

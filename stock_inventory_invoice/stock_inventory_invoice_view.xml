@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_inventory_invoice_form_inherit" model="ir.ui.view">
+            <field name="name">stock.inventory_invoice.form.inherit</field>
+            <field name="model">stock.inventory</field>
+            <field name="inherit_id" ref="stock.view_inventory_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">                
+                    <button name="create_invoice" states="done" string="Crear Factura" type="object" class="oe_highlight" groups="stock.group_stock_manager"/>                                                      
+                </xpath>
+                <field name="filter" position="after">
+                    <field name="account_invoice_id" groups="stock.group_stock_manager" attrs="{'invisible':[('account_invoice_id','=',False)]}" />
+                </field>
+                <field name="account_invoice_id" position="after">
+                    <button name="deletebdinvoice"  string="Eliminar Factura" type="object" groups="stock.group_stock_manager"  attrs="{'invisible':[('account_invoice_id','=',False)]}"  />
+                </field>
+            </field>
+        </record>                        
+    </data>
+</openerp>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record model="ir.ui.view" id="view_account_asset_asset_form_variables2">
+            <field name="name">account.asset.asset.form2</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="replace">
+	                <field name="category_id" on_change="onchange_category_id(category_id, purchase_value, salvage_value, tax_ids, company_id, purchase_date, context)" required="1" />
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_company_inherit_form_asset_extended">
+            <field name="name">res.company.form.inherit.asset.extended</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_company_inherit_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="after">
+	                <field name="uvt_number" />
+                </field>
+            </field>
+        </record>
+    
+    </data>
+</openerp>

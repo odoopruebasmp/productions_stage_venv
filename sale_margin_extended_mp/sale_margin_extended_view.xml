@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!--FACTURA -->
+        <record id="invoice_form_avancys_compute_cost" model="ir.ui.view">
+            <field name="name">account.invoice.compute.cost.form</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <button name="action_invoice_sent" position="after">
+                    <button name="compute_cost" string="Compute Costo" type="object" attrs="{'invisible':[('state', '!=', 'paid')]}" class="oe_highlight"/>
+                </button>
+            </field>
+        </record>
+        
+        
+        <!--FABRICANTE EN LINEAS DE FACTURA-->
+        <record id="view_account_invoice_line_report_search_mp" model="ir.ui.view">
+            <field name="name">account.invoice.line.report.search.mp</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="sale_margin_extended.view_account_invoice_line_report_search"/>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <field name="period_id" position="after">
+                    <field name="type_product" invisible="1"/>
+                    <field name="categ_cadenas" invisible="1"/>
+                    <field name="categ_proveedor" invisible="1"/>
+                    <field name="evento"/>
+                    <field name="fabricante_id"/>
+                    <field name="country_fabricante_id"/>
+                </field>
+                <filter string="Devoluciones" position="after">
+                    <separator orientation="vertical"/>
+                    <filter string="Almacenables" name="type_product1" domain="[('type_product','=','product')]"/>
+                    <filter string="Consumibles" name="type_product2" domain="[('type_product','=','consu')]"/>
+                    <filter string="Servicios" name="type_product3" domain="[('type_product','=','service')]"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Nacional" name="type_compra1" domain="[('type_compra','=','nacional')]"/>
+                    <filter string="Importado" name="type_compra2" domain="[('type_compra','=','importado')]"/>
+                </filter>
+                <group string="Group By" position="inside" >
+                    <separator orientation="vertical"/>
+                    <filter string="Fabricante" name="fabricante_id" context="{'group_by':'fabricante_id'}"/>
+                    <filter string="Pais Fabricante" name="country_fabricante_id" context="{'group_by':'country_fabricante_id'}"/>
+                    <filter string="Tipo Compra" name="type_compra" context="{'group_by':'type_compra'}"/>
+                    <filter string="Categoria Proveedor" name="categ_proveedor" context="{'group_by':'categ_proveedor'}"/>
+                    <filter string="Categoria Cadenas" name="categ_cadenas" context="{'group_by':'categ_cadenas'}"/>
+                    <filter string="Categoria Proveedor" name="categ_proveedor" context="{'group_by':'categ_proveedor'}"/>
+                </group>
+            </field>
+        </record>
+        
+        
+        <!--FABRICANTE EN FACTURA-->
+        <record id="view_account_invoice_fabricante_tree" model="ir.ui.view">
+            <field name="name">account.invoice.tree.fabricante</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="fabricante_id" invisible="1"/>
+                    <field name="country_fabricante_id" invisible="1"/>
+                </field>
+            </field>
+        </record>        
+        <record id="view_account_invoice_line_report_search_mp" model="ir.ui.view">
+            <field name="name">account.invoice.fabricante.search.mp</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <field name="period_id" position="after">
+                    <field name="fabricante_id"/>
+                    <field name="country_fabricante_id"/>
+                </field>
+                <group expand="0" string="Group By" position="inside" >
+                    <separator orientation="vertical"/>
+                    <filter string="Fabricante" name="fabricante_id" context="{'group_by':'fabricante_id'}"/>
+                    <filter string="Pais Fabricante" name="country_fabricante_id" context="{'group_by':'country_fabricante_id'}"/>
+                </group>
+            </field>
+        </record>
+        
+        
+        <!--FABRICANTE EN MOVIMIENTOS DE INVENTARIO-->
+        <record id="view_stock_move_fabricante_tree" model="ir.ui.view">
+            <field name="name">stock.move.tree.fabricante</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="before">
+                    <field name="fabricante_id" invisible="1"/>
+                    <field name="country_fabricante_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_stock_move_report_search_mp" model="ir.ui.view">
+            <field name="name">stock.move.fabricante.search.mp</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_search"/>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="fabricante_id"/>
+                    <field name="country_fabricante_id"/>
+                </field>
+                <group expand="0" string="Group By" position="inside" >
+                    <separator orientation="vertical"/>
+                    <filter string="Fabricante" name="fabricante_id" context="{'group_by':'fabricante_id'}"/>
+                    <filter string="Pais Fabricante" name="country_fabricante_id" context="{'group_by':'country_fabricante_id'}"/>
+                </group>
+            </field>
+        </record>
+        
+        
+    </data>
+</openerp>

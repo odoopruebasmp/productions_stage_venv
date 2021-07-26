@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_company_form_hr_co_planilla" model="ir.ui.view">
+            <field name="name">res.company.form.planilla</field>
+            <field name="model">res.company</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended_co.view_company_form_hr_co"/>
+            <field name="arch" type="xml">
+                <field name="arl_id" position="after">
+                    <field name="aportante_exonerado"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_hr_planilla_type_form_planilla" model="ir.ui.view">
+            <field name="name">hr.payslip.type.form.planilla</field>
+            <field name="model">hr.payslip.type</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.view_hr_planilla_type_form"/>
+            <field name="arch" type="xml">
+                <field name="holiday_status_id" position="after">
+                    <field name="planilla_type_id" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_account_analytic_account_form_extended_planilla" model="ir.ui.view">
+            <field name="name">account.analytic.account.form.extended.planilla</field>
+            <field name="model">account.analytic.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_analytic_avancys.view_account_analytic_account_form_extended" />
+            <field name="arch" type="xml">
+                <field name="cc5" position="after" >
+                   <field name="centro_trabajo_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="hr_payroll_view_payslip_form_planilla" model="ir.ui.view">
+            <field name="name">hr.payslip.extended.form.planilla</field>
+            <field name="model">hr.payslip</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_payroll_view_payslip_form"/>
+            <field name="arch" type="xml">
+                <page string="Conceptos Fijos" position="after">
+                    <page string="Planilla Aportes">
+                        <group colspan="4" col="2">
+                            <field name="correcciones" attrs="{'readonly': [('state','!=','draft')]}" />
+                        </group>
+                        <group colspan="4" col="2">
+                            <field name="ing" readonly="1"/>
+                            <field name="ret" readonly="1"/>
+                            <field name="tde" readonly="1"/>
+                            <field name="tae" readonly="1"/>
+                            <field name="tdp" readonly="1"/>
+                            <field name="tap" readonly="1"/>
+                            <field name="vct" readonly="1"/>
+                            <field name="vst" readonly="1"/>
+                            <field name="vsp" readonly="1"/>
+                            <field name="sln" readonly="1"/>
+                            <field name="lma" readonly="1"/>
+                            <field name="ige" readonly="1"/>
+                            <field name="irp" readonly="1"/>
+                            <field name="vac" readonly="1"/>
+                            <field name="avp" readonly="1"/>
+                        </group>
+                    </page>
+                </page>
+            </field>
+        </record>
+        
+        <record id="hr_payroll_run_view_form_planilla" model="ir.ui.view">
+            <field name="name">hr.payslip.run.view.form.planilla</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_payroll_run_view_form4"/>
+            <field name="arch" type="xml">
+                <field name="analytic_account_id" position="after">
+                    <field name="time_of_process" attrs="{'invisible':[('file_name','=',False)]}"/>
+                    <field name="file_name" invisible="1" />
+                    <field name="file_text" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                </field>
+            </field>
+        </record>
+            
+    </data>
+</openerp>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--WIZARD-WIZARD-WIZARD-WIZARD-->
+
+        <record id="stock_report_quants_wizard_view" model="ir.ui.view">
+            <field name="name">Quants</field>
+            <field name="model">stock.report.quants.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Report Quants">
+                <label string=""/>
+                <group>
+                    <group>
+                        <field name="print_report"/>
+                        <field name="date_start"/>
+                    </group>
+                    <group>
+                        <field name="loc_type"/>
+                        <field name="date_end"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Opciones">
+                        <group col="6">
+                            <field name="group_product_ids"/>
+                            <field name="group_location_ids"/>
+                        </group>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="calc_report" string="Calcular" type="object" default_focus="1" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_stock_report_quants_wizard" model="ir.actions.act_window">
+            <field name="name">Quants</field>
+            <field name="res_model">stock.report.quants.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="stock_report_quants_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Informe Quants" id="menu_stock_report_quants" parent="menu_report_avancys_stock" action="action_stock_report_quants_wizard" sequence="3" groups="report_odoo_extended.group_user_report_avancys_stock"/>
+
+
+        <record model='ir.actions.report.xml' id='reporte_stock_quants_aeroo'>
+            <field name='report_type'>aeroo</field>
+            <field name='in_format'>oo-ods</field>
+            <field name='out_format' eval="ref('report_aeroo.report_mimetypes_ods_ods')"/>
+            <field name='multi' eval='False'/>
+            <field name='name'>Informe de Quants</field>
+            <field name='report_rml'>report_odoo_extended/reporte_stock_quants.ods</field>
+            <field name='report_name'>report_odoo_extended.reporte_stock_quants_aeroo</field>
+            <field name='model'>stock.report.quants.line</field>
+            <field name='type'>ir.actions.report.xml</field>
+            <field name='attachment_use' eval='False'/>
+            <field name='tml_source'>file</field>
+            <field name='styles_mode'>default</field>
+            <field name='parser_state'>default</field>
+        </record>
+
+        <record id="view_stock_report_quants_line_tree" model="ir.ui.view">
+            <field name="name">stock.report.quants.line.tree</field>
+            <field name="model">stock.report.quants.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Informe Quants">
+                    <field name="product"/>
+                    <field name="ref"/>
+                    <field name="qty"/>
+                    <field name="location_id"/>
+                    <field name="lot"/>
+                    <field name="pack"/>
+                    <field name="date"/>
+                    <field name="cost"/>
+                    <field name="cost_total"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_report_quants_line_filter" model="ir.ui.view">
+            <field name="name">stock.report.quants.line.filter</field>
+            <field name="model">stock.report.quants.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Informe Quants">
+                    <field name="product"/>
+                    <field name="ref"/>
+                    <field name="qty"/>
+                    <field name="location_id"/>
+                    <field name="lot"/>
+                    <field name="pack"/>
+                    <field name="date"/>
+                    <field name="cost"/>
+                    <field name="cost_total"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter name="group_product" string="Producto" icon="terp-partner" domain="[]" context="{'group_by':'product'}" help="Agrupar por nombre del producto"/>
+                        <filter name="group_ref" string="Referencia" icon="terp-partner" domain="[]" context="{'group_by':'ref'}" help="Agrupar por referencia del producto"/>
+                        <filter name="group_date" string="Fecha" icon="terp-partner" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="group_lot" string="Lote" icon="terp-partner" domain="[]" context="{'group_by':'lot'}"/>
+                        <filter name="group_cost" string="Costo" icon="terp-partner" domain="[]" context="{'group_by':'cost'}"/>
+                        <separator orientation="horizontal"/>
+                        <filter name="group_location_id" string="Ubicacion" icon="terp-partner" domain="[]" context="{'group_by':'location_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_stock_report_quants_line_graph" model="ir.ui.view">
+            <field name="name">stock.report.quants.line.graph</field>
+            <field name="model">stock.report.quants.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Quants" type="pivot" stacked="True">
+                    <field name="ref"/>
+                    <field name="location_id"/>
+                    <field name="qty" type="measure"/>
+                    <field name="lot" type="measure"/>
+                    <field name="pack" type="measure"/>
+                    <field name="cost" string="Costo Promedio" type="measure"/>
+                    <field name="cost_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_stock_report_quants_line" model="ir.actions.act_window">
+            <field name="name">Analisis de Quants</field>
+            <field name="res_model">stock.report.quants.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="paperformat_continua" model="report.paperformat">
+      <field name="name">Forma Continua</field>
+      <field eval="True" name="default"/>
+      <field name="format">custom</field>
+      <field name="page_height">275</field>
+      <field name="page_width">220</field>
+      <field name="margin_top">16</field>
+      <field name="margin_bottom">25</field>
+      <field name="margin_left">20</field>
+      <field name="margin_right">20</field>
+      <field eval="False" name="header_line"/>
+      <field name="header_spacing">0</field>
+      <field name="dpi">80</field>
+    </record>
+
+    <record id="report_continua" model="ir.actions.report.xml">
+      <field name="model">payment.order</field>
+      <field name="paperformat_id" ref="paperformat_continua"/>
+      <field name="report_name">account_payment.report_paymentorder2</field>
+      <field name="report_type">qweb-html</field>
+      <field name="name">FORMA CONTINUA BBGTA</field>
+    </record>
+
+    <report file="account_payment.report_paymentorder2" id="report_continua" model="payment.order" name="account_payment.report_paymentorder2" report_type="qweb-html" string="Forma Continua BBGTA"/>
+
+    <template id="account_payment.report_paymentorder2">
+      <t t-foreach="docs" t-as="o">
+        <div class="page">
+          <t t-foreach="docs" t-as="o">
+            <style>
+              H4 {
+                width: 2170mm;
+                font-size: 5mm;
+                margin: 4mm 0 2mm;
+                text-align: left;
+                font-family: sans-serif;
+                text-transform: uppercase;
+              }
+              #fecha {
+                margin-left: 200mm;
+                margin-top: 22mm;
+                letter-spacing: 8mm;
+                font-weight: normal;
+              }
+              .cantidad {
+                letter-spacing: 1.5mm;
+                margin-left: 18mm;
+                font-weight: normal;
+              }
+              #nombre {
+                margin-top: 4mm;
+                margin-left: 45mm;
+                letter-spacing: 1.5mm;
+                width: 300mm;
+                font-weight: normal;
+              }
+              #moneda {
+                letter-spacing: 1.5mm;
+                margin-top: 0;
+                margin-left: 45mm;
+                width: 300mm;
+                line-height: 12mm;
+                font-weight: normal;
+              }
+              .table {
+                margin-left: 20mm;
+              }
+            </style>
+
+            <!-- cuerpo del documento -->
+            <!-- Datos y valores del cheque -->
+            <div style="page-break-after:always;" t-foreach="o.line_ids " t-as="lines">
+              <table class="table" width="2170mm">
+                <tr t-if="lines.amount_currency &gt; 0">
+                  <td>
+                    <H4>
+                      <div id="fecha"><span t-field="lines.date" t-field-options="{&quot;format&quot;: &quot;yyyyMMdd&quot;}"/><span/><span class="cantidad" t-field="lines.amount_currency"/></div>
+                    </H4>
+                  </td>
+                </tr>
+              </table>
+              <H4>
+                <div id="nombre"><span t-field="lines.other_partner_id.name"/></div>
+              </H4>
+              <H4>
+                <div id="moneda"><span t-field="lines.amount_to_text"/></div>
+              </H4>
+              <!-- Datos del comprobante -->
+              <H4 style="margin-top:90mm"></H4>
+              <table class="table" style="font-size:20px; letter-spacing: 0.5mm;" width="800px">
+                <tr t-if="lines.amount_currency &gt; 0">
+                  <td></td>
+                  <td style="line-height:2mm" align="left" colspan="2"><span t-field="lines.communication"/></td>
+                  <td style="line-height:5mm" align="center" colspan="2"><span t-field="lines.move_line_id.account_id"/></td>
+                  <td style="line-height:15mm" align="right" colspan="2"><span t-field="lines.amount_currency"/></td>
+                </tr>
+              </table>
+            </div>
+          </t>
+        </div>
+      </t>
+    </template>
+  </data>
+</openerp>

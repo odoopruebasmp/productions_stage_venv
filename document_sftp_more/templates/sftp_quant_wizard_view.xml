@@ -1,0 +1,39 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="form_sftp_quant_wizard">
+            <field name="name">form.sftp.quant.wizard</field>
+            <field name="model">sftp.quant.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Realizar compare">
+                    <H4>
+                        <FONT COLOR="Gray">Seleccionar productos, ubicaciones o lotes que desea comparar
+                        </FONT>
+                    </H4>
+                    <group>
+                        <field name="product_ids" domain="[('type','=','product')]"/>
+                        <field name="location_ids" domain="[('usage','=','internal'),('state_dlx','!=',False)]"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" type="object"
+                                string="Confirmar" class="oe_highlight"/>
+                        or
+                        <button special="Cancelar" string="Cancel"/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sftp_quant_wizard">
+            <field name="name">Realizar compare</field>
+            <field name="res_model">sftp.quant.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="form_sftp_quant_wizard"/>
+            <field name="usage">menu</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_sftp_quant_wizard" parent="menu_parent_sftp_more" name="Realizar Compare"
+                  action="action_sftp_quant_wizard"/>
+    </data>
+</openerp>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="assets_backend" name="avancys_help_backend"  inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/avancys_help/static/src/css/avancys_help.css"/>
+            <link rel="stylesheet" href="/avancys_help/static/src/css/bootstrap-tour.min.css"/>
+
+            <script type="text/javascript" src="/avancys_help/static/src/js/bootstrap-tour.min.js"/>
+            <script type="text/javascript" src="/avancys_help/static/src/js/avancys_help.js"/>
+        </xpath>
+    </template>
+
+     <template id="assets_backend2" name="avancys_help_backend2"  inherit_id="web.menu">
+         <!--<xpath expr="//div[@id='oe_main_menu_placeholder']" position="inside">-->
+         <xpath expr="//ul[@class='nav navbar-nav navbar-right oe_systray']" position="inside">
+             <a type="button" class="btn" id="avancys_help_button" onclick="OpenHelp()" data-toggle="modal" data-target="#avancyshelp"><span style="color:white" class="glyphicon glyphicon-question-sign"></span></a>
+        </xpath>
+    </template>
+
+
+
+
+    <template id="assets_backend3" name="avancys_help_backend3"  inherit_id="web.webclient_bootstrap">
+         <xpath expr="//div[@class='openerp openerp_webclient_container']" position="inside">
+             <div class="modal fade" id="avancyshelp" role="dialog">
+                    <div class="modal-dialog">
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">x</button>
+                                  <h4 class="modal-title">Ayuda</h4>
+                                </div>
+                              <div class="modal-body">
+                                  <p>Este es el asistente de ayuda de Avancys</p>
+                                  <p id="modbodycont">Contenido</p>
+
+                                  <iframe width="480" height="320" id="tutorialvideo" src="" frameborder="0" allowfullscreen="1"/>
+
+                              </div>
+                              <div class="modal-footer">
+                                  <a type="button" class="btn btn-info" onclick="OpenTutorial()" data-dismiss="modal">Tutorial</a>
+                                  <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+
+
+        </xpath>
+    </template>
+
+    
+    <record id="ir_ui_menu_help_form" model="ir.ui.view">
+        <field name="name">ir.ui.menu.help.form</field>
+        <field name="model">ir.ui.menu</field>
+        <field name="inherit_id" ref="base.edit_menu_access"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="after">
+                <field name="video_url"/>
+            </field>
+            <notebook position="inside">
+                <page string="Tours">
+                    <field name="tour_ids">
+                        <tree>
+                            <field name="view_type"/>
+                            <field name="state"/>
+                            <field name="step_ids" widget="x2many_counter"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="avancys_help_tour_form" model="ir.ui.view">
+        <field name="name">avancys.help.tour.form</field>
+        <field name="model">avancys.help.tour</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="activate" states="inactive" string="Activar" type="object" class="oe_highlight"/>
+                    <button name="inactivate" states="active" string="Desactivar" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" clickeable="True"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="view_type"/>
+                    </group>
+                    <notebook>
+                        <page string="Steps">
+                            <field name="step_ids">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="element"/>
+                                    <field name="title"/>
+                                    <field name="content"/>
+                                    <field name="backdrop"/>
+                                    <field name="placement"/>
+                                    <field name="advanced"/>
+                                </tree>
+                            </field>
+
+                        </page>
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="avancys_help_tour_step_form" model="ir.ui.view">
+        <field name="name">avancys.help.tour.step.form</field>
+        <field name="model">avancys.help.tour.step</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group colspan="2">
+                        <group cols="1">
+                            <field name="element"/>
+                            <field name="title"/>
+                            <field name="content"/>
+                        </group>
+                        <group cols="1">
+                            <field name="backdrop"/>
+                            <field name="placement"/>
+                            <field name="advanced"/>
+                        </group>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    
+
+</data>
+</openerp>

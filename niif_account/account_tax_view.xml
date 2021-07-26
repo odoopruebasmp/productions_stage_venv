@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_account_acccount_niif_tax_extended" model="ir.ui.view">
+            <field name="name">account.account.niif.tax</field>
+            <field name="model">account.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="tax_niif" attrs="{'invisible': [('niif','=',True)]}"/>
+                    <field name="name_tax_niif" attrs="{'required': [('tax_niif','=',True)], 'invisible': [('tax_niif','!=',True)]}"/>
+                    <field name="type_tax_niif" attrs="{'required': [('tax_niif','=',True)], 'invisible': [('tax_niif','!=',True)]}"/>
+                    <field name="porcentaje_tax" attrs="{'required': [('tax_niif','=',True)], 'invisible': [('tax_niif','!=',True)]}"/>
+                    <field name="account_tax_niif_ids" widget="many2many_tags" attrs="{'required': [('tax_niif','=',True)], 'invisible': [('tax_niif','!=',True)]}"/>                    
+                </field>
+            </field>
+        </record>    
+        
+        
+        <!--IMPUESTO DIFERIDO-->        
+        <record id="view_politica_tax_niif_tree" model="ir.ui.view">
+            <field name="name">politica.tax.niif.tree</field>
+            <field name="model">politica.tax.niif</field>
+            <field name="arch" type="xml">
+                <tree string='Impuesto Diferido'>
+                    <field name='name'/>
+                    <field name='date_start'/>
+                    <field name='date_end'/>
+                    <field name='description'/>
+                    <field name='state'/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_politica_tax_niif_form" model="ir.ui.view">
+            <field name="name">politica.tax.niif.form</field>
+            <field name="model">politica.tax.niif</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" icon="gtk-go-forward" states="borrador"/>
+                        <button string="Calcular" name="calcular" states="ejecucion" type="object" icon="STOCK_REFRESH"/>
+                        <button string="Contabilizar" name="contabilizar" states="ejecucion" type="object"/>                        
+                        <button string="Recalcular" name="recalcular" states="terminado" type="object"/>
+                        <button string="Cancelar" name="cancelar" states="borrador,ejecucion," type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,ejecucion,terminado,cancelar" states="borrador,ejecucion,terminado,cancelar"/>
+                    </header>
+                    <group>
+                        <h1>
+                            <field name="name"/>                        
+                        </h1>                            
+                    </group>
+                    <separator/>
+                    <group colspan="2" col="2">
+                        <field name='company_id'/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name='date'/>
+                        <field name='journal_id'/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name='date_start'/>
+                        <field name='date_end'/>
+                    </group>                
+                    <notebook colspan="4" attrs="{'invisible': [('state','=','borrador')]}">
+                        <page string="Movimientos">
+                            <field name="line_ids" nolabel="1" mode="tree" colspan="4">
+                                <tree editable="Bottom" delete="false" mode="tree" colors="red:aplica == 'aplica' ">
+                                    <field name='name'/>
+                                    <field name='name_fiscal'/>
+                                    <field name='name_niif'/>
+                                    <field sum="Total" name='amount_fiscal'/>
+                                    <field sum="Total" name='amount_niif'/>
+                                    <field sum="Total" name='amount_base'/>
+                                    <field name='type_tax_niif'/>
+                                    <field name='porcentaje_tax'/>
+                                    <field sum="Total" name='amount'/>
+                                    <field sum="Total" name='amount_activo'/>
+                                    <field sum="Total" name='amount_pasivo'/>
+                                    <field name='aplica'/>
+                                </tree>
+                            </field>
+                            <field name='description'/>
+                        </page>
+                        <page string="Afectacion Contable" attrs="{'invisible': [('state','!=','terminado')]}">
+                            <group colspan="2" col="2">
+                                <field name='move_id'/>
+                            </group>  
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_politica_tax_niif" model="ir.actions.act_window">
+            <field name="name">Impuesto Diferido</field>
+            <field name="res_model">politica.tax.niif</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>            
+        </record>
+                
+        <!--PROCESO-->
+        <menuitem id="menu_politica_tax_niif" name="Impuesto Diferido" parent="menu_process_niif" sequence="10"/>
+        <menuitem action="action_politica_tax_niif" id="menu_politica_tax_niif_action" name="Impuesto Diferido" parent="menu_politica_tax_niif" sequence="1"/>
+        
+        
+        <!--IMPUESTO DIFERIDO-->        
+        <record id="view_politica_tax_niif_line_tree" model="ir.ui.view">
+            <field name="name">politica.tax.niif.line.tree</field>
+            <field name="model">politica.tax.niif.line</field>
+            <field name="arch" type="xml">
+                <tree string='Impuesto Diferido' colors="red:aplica == 'aplica' ">
+                    <field name='name'/>
+                    <field name='name_fiscal'/>
+                    <field name='name_niif'/>
+                    <field sum="Total" name='amount_fiscal'/>
+                    <field sum="Total" name='amount_niif'/>
+                    <field sum="Total" name='amount_base'/>
+                    <field name='type_tax_niif'/>
+                    <field name='porcentaje_tax'/>
+                    <field sum="Total" name='amount'/>
+                    <field sum="Total" name='amount_activo'/>
+                    <field sum="Total" name='amount_pasivo'/>
+                    <field name='aplica'/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_politica_tax_niif_line_graph" model="ir.ui.view">
+            <field name="name">politica.tax.niif.line.graph</field>
+            <field name="model">politica.tax.niif.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Impuesto Diferido" type="pivot" stacked="True" colors="red:aplica == 'aplica' ">
+                    <field name='name'/>
+                    <field name='amount_fiscal' type="measure"/>
+                    <field name="amount_niif" type="measure"/>
+                    <field name="amount_base" type="measure"/>
+                    <field name="porcentaje_tax" type="measure"/>
+                    <field name="amount" type="measure"/>
+                    <field name="amount_activo" type="measure"/>
+                    <field name="amount_pasivo" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        
+        
+    </data>
+</openerp>

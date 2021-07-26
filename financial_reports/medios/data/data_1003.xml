@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_medios_1003" model="fpa.financial.reports">
+            <field name="name">1003 - Retenciones en la fuente que le practicaron</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field> <!--Tope mínimo no aplica-->
+            <field name="type">ex</field>
+            <field name="export_type_date">range</field>
+            <field name="application_type">account</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">M,N</field>
+            <field name="title">Concepto,Tipo de documento,Número identificación del informado,DV,Primer apellido del informado,Segundo apellido del informado,Primer nombre del informado,Otros nombres del informado,Razon social informado,Direccion,Código del Departamento,Código del Municipio,Valor acumulado del pago o abono sujeto a Retención en la fuente,Retención que le practicaron</field>
+            <field name="query">
+                SELECT code,code_dian,ref,dev_ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,
+                    CASE WHEN primer_nombre IS NULL THEN name ELSE '' END,street,rcs_code,rc_code,SUM(M),SUM(N)
+                FROM (
+                    SELECT ffrcc.code,rdt.code_dian,rp.ref,rp.dev_ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code as rcs_code,rc.code as rc_code,
+                        (CASE WHEN ffrccl.col='M' AND ffrccl.type='b' THEN ROUND(SUM(aml.base_amount), 0) ELSE 0 END) M,
+                        (CASE WHEN ffrccl.col='N' AND ffrccl.type='sf' THEN ROUND(SUM(aml.debit-aml.credit), 0) ELSE 0 END) N
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country_state rcs ON rcs.id = state_id
+                        LEFT JOIN res_city rc ON rc.id = rp.city_id
+                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id} AND aml.company_id={company_id}
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.dev_ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rp.street,rcs.code,rc.code,ffrccl.col,ffrccl.type
+                    HAVING SUM(aml.debit) @may 0 OR SUM(aml.credit) @may 0)
+                as datos
+                GROUP BY code,code_dian,ref,dev_ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,street,rcs_code,rc_code
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_1003_1301" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1301 - Retenciones por salarios, prestaciones y demás pagos laborales</field>
+            <field name="code">1301</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />
+        </record>
+        <record id="c_1003_1302" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1302 - Retención por ventas</field>
+            <field name="code">1302</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1303" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1303 - Retención por servicios</field>
+            <field name="code">1303</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1304" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1304 - Retención por honorarios</field>
+            <field name="code">1304</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1305" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1305 - Retención por comisiones</field>
+            <field name="code">1305</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1306" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1306 - Retención por intereses y rendimientos financiero</field>
+            <field name="code">1306</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1307" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1307 - Retención por arrendamientos</field>
+            <field name="code">1307</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1308" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1308 - Retención por otros conceptos</field>
+            <field name="code">1308</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1307" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1307 - Retención por arrendamientos</field>
+            <field name="code">1307</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1308" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1308 - Retención por otros conceptos</field>
+            <field name="code">1308</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1309" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1309 - Retenciones en la fuente en el impuesto sobre las ventas</field>
+            <field name="code">1309</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1310" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1310 - Retención por dividendos y participaciones</field>
+            <field name="code">1310</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1311" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1311 - Retención por enajenación de activos fijos de personas naturales ante oficinas de tránsito y otras entidades autorizadas</field>
+            <field name="code">1311</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1312" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1312 - Retención por ingresos de tarjetas débito y crédito</field>
+            <field name="code">1312</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1313" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1313 - Retención por loterías, rifas, apuestas y similares</field>
+            <field name="code">1313</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+        <record id="c_1003_1314" model="fpa.financial.reports.concepts.columns">
+            <field name="name">1314 - Retención por impuesto de timbre</field>
+            <field name="code">1314</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1003')" />             
+        </record>
+    </data>
+</openerp>

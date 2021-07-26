@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="hr_payroll_pila_tree" model="ir.ui.view">
+            <field name="name">hr.payroll.pila.tree</field>
+            <field name="model">hr.payroll.pila</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="PILA" delete="false">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="payslip_period_id"/>
+                    <field name="slip_ids"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_payroll_pila_form" model="ir.ui.view">
+            <field name="name">hr.payroll.pila.form</field>
+            <field name="model">hr.payroll.pila</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="PILA">
+                    <header>
+                        <button name="add_slip" string="Agregar nominas" states="draft" type="object" icon="gtk-add"/>
+                        <button name="generate_file" string="Generar archivo" states="draft" type="object"
+                                icon="STOCK_EXECUTE" class="oe_highlight"/>
+                        <button name="done" string="Realizar" states="draft" type="object" icon="terp-camera_test"/>
+                        <button name="cancel" string="Cancelar" states="done,draft" type="object" icon="gtk-cancel"/>
+                        <button name="set_to_draft" string="Pasar a borrador" states="cancel" type="object"
+                                icon="STOCK_EDIT"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,done,cancel"/>
+                    </header>
+                    <sheet string="PILA"> <!-- class="oe_form_sheet_width_wider"-->
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name"/>
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="type" attrs="{'readonly': [('file','!=', False)]}"/>
+                            <field name="payslip_period_id" attrs="{'readonly': [('file','!=', False)]}"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="file" filename="file_name" attrs="{'invisible':[('file_name','=',False)]}"/>
+                        </group>
+                        <notebook>
+                            <page string="Nóminas">
+                                <field name="slip_ids"/>
+                            </page>
+                            <page string="Notas">
+                                <field name="notes" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_hr_payroll_pila" model="ir.actions.act_window">
+            <field name="name">PILA</field>
+            <field name="res_model">hr.payroll.pila</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <record id="view_hr_config_settings_pila" model="ir.ui.view">
+            <field name="name">hr settings PILA</field>
+            <field name="model">hr.config.settings.pila</field>
+            <field name="arch" type="xml">
+                <form string="Configure PILA" class="oe_form_configuration">
+                    <header>
+                        <button string="Aplicar" type="object" name="execute_pila" class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <separator string="Notificaciones"/>
+                    <group>
+                        <label for="id" string="Pago PILA"/>
+                        <div>
+                            <div>
+                                <label for="day_pila"/>
+                                <field name="day_pila" class="oe_inline"/>
+                            </div>
+                            <div>
+                                <label for="users_pila"/>
+                                <field name="users_pila" widget="many2many_tags"
+                                       options="{'no_create_edit': True}" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_hr_config_pila" model="ir.actions.act_window">
+            <field name="name">Configure PILA</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.config.settings.pila</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_hr_payroll_pila" name="PILA"
+                  parent="hr.menu_hr_root" sequence="40"/>
+
+        <menuitem id="menu_hr_payroll_pila_vc" name="Ver/Generar" action="act_hr_payroll_pila"
+                  parent="menu_hr_payroll_pila" sequence="10" groups="hr_payroll_planilla_aportes.group_user_pila"/>
+
+        <menuitem id="menu_hr_payroll_pila_conf" name="Configuración"
+                  parent="menu_hr_payroll_pila" sequence="10"/>
+
+        <menuitem action="action_hr_config_pila" id="menu_hr_payroll_setting_pila_conf" name="General"
+                  parent="menu_hr_payroll_pila_conf" sequence="10"
+                  groups="hr_payroll_planilla_aportes.group_conf_pila"/>
+
+        <!--<record id="hr_paislip_pila_form" model="ir.ui.view">-->
+            <!--<field name="name">hr.payslip.pila.form</field>-->
+            <!--<field name="model">hr.payslip</field>-->
+            <!--<field name="type">form</field>-->
+            <!--<field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<field name="payslip_run_id" position="after">-->
+                    <!--<field name="pila_id"/>-->
+                <!--</field>-->
+            <!--</field>-->
+        <!--</record>-->
+    </data>
+</openerp>

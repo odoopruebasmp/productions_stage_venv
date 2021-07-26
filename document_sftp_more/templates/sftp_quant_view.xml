@@ -1,0 +1,62 @@
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="action_sftp_quant">
+            <field name="name">Sftp compare</field>
+            <field name="res_model">sftp.quant</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Crea el primer stock compare</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_sftp_quant" parent="menu_parent_sftp_more" name="Stock Compare"
+                  action="action_sftp_quant"/>
+
+        <record model="ir.ui.view" id="tree_sftp_quant">
+            <field name="name">tree.sftp.quant</field>
+            <field name="model">sftp.quant</field>
+            <field name="arch" type="xml">
+                <tree string="Stock compare">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="bool_product"/>
+                    <field name="bool_location"/>
+                    <field name="bool_send"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="form_sftp_quant">
+            <field name="name">form.sftp.quant</field>
+            <field name="model">sftp.quant</field>
+            <field name="arch" type="xml">
+                <form string="Course Form">
+                    <header>
+                        <button string="Enviar SFTP" type="object" name="action_send"
+                                class="oe_highlight" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                            <field name="bool_send"/>
+                        </group>
+                        <notebook>
+                            <page string="Lineas calculadas">
+                                <field name="sftp_line">
+                                    <tree string="Productos">
+                                        <field name="product_id"/>
+                                        <field name="location_id"/>
+                                        <field name="lot_id"/>
+                                        <field name="qty"/>
+                                        <field name="uom_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

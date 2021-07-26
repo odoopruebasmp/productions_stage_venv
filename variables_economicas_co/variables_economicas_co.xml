@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- VISTAS -->
+        <record id="view_variable_tree" model="ir.ui.view">
+            <field name="name">variables.economicas.tree</field>
+            <field name="model">variables.economicas</field>
+            <field name="arch" type="xml">
+                <tree string="Variables Economicas">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="currency_id"/>
+                    <field name="valores_ids"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_variable_form2" model="ir.ui.view">
+            <field name="name">variables.economicas.form</field>
+            <field name="model">variables.economicas</field>
+            <field name="arch" type="xml">
+                <form string="Variables Economicas">
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="currency_id"/>
+                        <field name="valores_ids" nolabel="1" colspan="4">
+                            <tree string="Valores" editable="top" colspan="4">
+                                <field name="valor"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_variables_economicas_tree" model="ir.actions.act_window">
+            <field name="name">Variables Econominas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">variables.economicas</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <!-- RETEFUENTE -->
+        
+        <record id="view_variable_retefuente_tree" model="ir.ui.view">
+            <field name="name">variables.economicas.retefuente.tree</field>
+            <field name="model">variables.economicas.retefuente</field>
+            <field name="arch" type="xml">
+                <tree string="Variables Retefuente">
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_retefuente_form3" model="ir.ui.view">
+            <field name="name">variables.economicas.retefuente.form</field>
+            <field name="model">variables.economicas.retefuente</field>
+            <field name="arch" type="xml">
+                <form string="Retefuente" version="7.0">
+                    <group>
+                        <field name="name" colspan="2"/>
+                        <newline/>
+                        <field name="date_from" colspan="2"/>
+                        <field name="date_to" colspan="2"/>
+                    </group>
+                    <notebook>
+                        <page string="Rango Impuesto">
+                            <group>
+                                <field name="valores_ids" nolabel="1">
+                                    <tree string="Valores UVT" editable="top">
+                                        <field name="valor_desde"/>
+                                        <field name="valor_hasta"/>
+                                        <field name="valor_impuesto"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Tarifa Marginal">
+                            <group>
+                                <field name="marginal_ids" nolabel="1">
+                                    <tree string="Tarifa Marginal" editable="top">
+                                        <field name="valor_desde"/>
+                                        <field name="valor_hasta"/>
+                                        <field name="ajuste"/>
+                                        <field name="tarifa"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_variables_retefuente_tree" model="ir.actions.act_window">
+            <field name="name">Retefuente</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">variables.economicas.retefuente</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="filter" eval="True"/>
+        </record>
+        
+        <menuitem id="variables_config_menu" name="Variables Economicas" parent="base.menu_config" sequence="29"/>
+        <menuitem id="variables_config_menu_economicas" name="Variables Economicas" parent="variables_config_menu" sequence="1" action="action_variables_economicas_tree" />
+        <menuitem id="variables_config_menu_retefuente" name="Retefuente" parent="variables_config_menu" sequence="2" action="action_variables_retefuente_tree" />
+
+    </data>
+    
+</openerp>

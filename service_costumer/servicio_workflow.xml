@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="wkf_service" model="workflow">
+            <field name="name">service.costumer.basic</field>
+            <field name="osv">service.costumer</field>
+            <field name="on_create">True</field>
+        </record>
+
+        
+        <!-- Activity -->        
+        <record id="act_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+       <record id="act_confirm" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">confirmar()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_recept" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">recept</field>
+            <field name="kind">function</field>
+            <field name="action">recepcionar()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_open" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">open</field>
+            <field name="kind">function</field>
+            <field name="action">abrir()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_diagnostico" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">diagnostico</field>
+            <field name="kind">function</field>
+            <field name="action">diagnosticar()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_despachado" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">despachado</field>
+            <field name="kind">function</field>
+            <field name="action">despachar()</field>
+            <field name="split_mode">XOR</field>
+        </record>
+        
+        <record id="act_close" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_service"/>
+            <field name="name">close</field>
+            <field name="kind">function</field>
+            <field name="action">cerrar()</field>
+            <field name="join_mode">XOR</field>
+            <field name="flow_stop">True</field>
+        </record>
+        
+        
+        <!-- Transistion -->
+        <record id="trans_draft_confirm" model="workflow.transition">
+            <field name="act_from" ref="act_draft"/>
+            <field name="act_to" ref="act_confirm"/>
+            <field name="signal">confirmar</field>
+        </record>   
+        
+        <record id="trans_confirm_recept" model="workflow.transition">
+            <field name="act_from" ref="act_confirm"/>
+            <field name="act_to" ref="act_recept"/>
+            <field name="signal">recepcionar</field>
+        </record>  
+        
+        <record id="trans_recept_open" model="workflow.transition">
+            <field name="act_from" ref="act_recept"/>
+            <field name="act_to" ref="act_open"/>
+            <field name="signal">selection</field>
+        </record>
+        
+        <record id="trans_open_diagnostico" model="workflow.transition">
+            <field name="act_from" ref="act_open"/>
+            <field name="act_to" ref="act_diagnostico"/>
+            <field name="signal">diagnosticar</field>
+        </record>
+        
+        <record id="trans_diagnostico_despachado" model="workflow.transition">
+            <field name="act_from" ref="act_diagnostico"/>
+            <field name="act_to" ref="act_despachado"/>
+            <field name="signal">despachar</field>
+        </record>
+                
+        <record id="trans_despachado_close" model="workflow.transition">
+            <field name="act_from" ref="act_despachado"/>
+            <field name="act_to" ref="act_close"/>
+            <field name="signal">close</field>
+        </record>
+        
+        
+        <!-- DATA -->        
+        <record id="mt_draft" model="mail.message.subtype">
+            <field name="name">Solicitud de Servicio Nuevo</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Solicitud de Analisis Nueva</field>
+        </record>
+        <record id="mt_confirm" model="mail.message.subtype">
+            <field name="name">Servicio Confirmado</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Servicio Revisado y Confirmada</field>
+        </record>
+        <record id="mt_recept" model="mail.message.subtype">
+            <field name="name">Servicio Recepcionado</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Producto Recepcionado</field>
+        </record>
+        <record id="mt_open" model="mail.message.subtype">
+            <field name="name">Servicio en Revision</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Servicio en Revision</field>
+        </record>
+        <record id="mt_diagnostico" model="mail.message.subtype">
+            <field name="name">Servicio en Diagnostico</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Servicio para Diagnostico</field>
+        </record>
+        <record id="mt_despachado" model="mail.message.subtype">
+            <field name="name">Servicio despachado</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="6"/>
+            <field name="description">Servicio Despachado</field>
+        </record>
+        <record id="mt_close" model="mail.message.subtype">
+            <field name="name">Servicio Cerrada</field>
+            <field name="res_model">service.costumer</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="7"/>
+            <field name="description">Servicio Cerrada</field>
+        </record>
+        
+        
+    </data>
+</openerp>

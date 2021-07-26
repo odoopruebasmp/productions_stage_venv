@@ -1,0 +1,215 @@
+<openerp>
+    <data>
+        
+        
+        <record id="view_fpa_financial_reports_niif_tree" model="ir.ui.view">
+            <field name="name">fpa.financial.reports.niif.tree</field>
+            <field name="model">fpa.financial.reports</field>
+            <field name="inherit_id" ref="financial_reports.view_fpa_financial_reports_tree"/>
+            <field name="arch" type="xml">
+                <button name="generate" position="before">
+                    <field name="update_niif"/>
+                </button>
+            </field>
+        </record>
+        
+        <!-- cronjob -->     
+        <record model="ir.cron" id="cron_update_move_niif">
+            <field name="name">Actualizacion Moves NIIF</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'res.company'"/>
+            <field name="function" eval="'update_move_niif'"/>
+            <field name="args">([])</field>
+        </record>
+        
+        <record id="view_account_move_line_niif_form_inherit2" model="ir.ui.view">
+            <field name="name">account.move.line.form.inherit2</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='account_id']" position="after">
+                    <field name="account_niif_id" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_move_niif_form_inherit2" model="ir.ui.view">
+            <field name="name">account.move.form.inherit2</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/notebook/page/field[@name='line_id']/tree/field[@name='account_id']" position="after">
+                    <field name="account_niif_id" readonly="1"/>
+                </xpath>
+                <field name="journal_id" position="attributes">
+                    <attribute name="domain">[('niif','=',False)]</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_account_account_niif_form_inherit2" model="ir.ui.view">
+            <field name="name">account.account.form.inherit2</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='reconcile']" position="after">
+                    <field name="niif" />
+                    <field name="deterioro_cartera" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_line_niif_massive" model="ir.ui.view">
+            <field name="name">Generar movimientos niif</field>
+            <field name="model">wizard.move.line.niif.massive</field>
+            <field name="arch" type="xml">
+                <form string="Generar movimientos niif">
+                    <separator string="Generar movimientos contables NIIF"/>
+                        <label string="Este asistente te permitira generar movimientos contables para niif según mapeo de cuentas contables."/>
+                        <newline/>                    
+                    <group colspan="6" col="6">
+                        <field name="update"/>
+                        <field name="parent_zero"/> 
+                        <field name="clean"/>                        
+                    </group>    
+                    <group attrs="{'invisible':[('update','!=',True),('clean','!=',True)]}" colspan="4" col="4">
+                        <field name="date_from" attrs="{'required':['|',('update','=',True),('clean','=',True)]}"/>
+                        <field name="date_to" attrs="{'required':['|',('update','=',True),('clean','=',True)]}"/>
+                    </group>
+                    <group attrs="{'invisible':[('update','!=',True),('clean','!=',True)]}" colspan="4" col="4">
+                        <field name="account_id"/>
+                        <field name="journal_id"/>
+                    </group>
+                    <footer>
+                        <button name="generar" string="Generar" type="object" class="oe_highlight"  />
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_move_line_niif_massive" model="ir.actions.act_window">
+            <field name="name">Generar movimientos niif</field>
+            <field name="res_model">wizard.move.line.niif.massive</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Generar Movimientos NIIF" action="act_move_line_niif_massive" id="menu_move_line_niif_massive" parent="niif_account.menu_process_config" sequence="10"/>
+        
+        
+        
+        <!--COMPROBANTES CONTABLES NIIF-->        
+        <record id="view_account_move_niif_form" model="ir.ui.view">
+            <field name="name">account.move.niif.form</field>
+            <field name="model">account.move</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string='Politica Line' version='7.0'>
+                    <sheet>
+                        <header>
+                            <button name="button_validate" states="draft" string="Post" type="object" class="oe_highlight" groups="account.group_account_invoice"/>
+                            <button name="button_cancel" states="posted" string="Cancel Entry" type="object" groups="account.group_account_invoice"/>
+                            <field name="state" widget="statusbar"/>
+                        </header>
+                        <label for="name" class="oe_edit_only" attrs="{'invisible':[('name','=','/')]}"/>
+                        <h1>
+                            <field name="name" readonly="True" attrs="{'invisible':[('name','=','/')]}"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="journal_id" domain="[('niif','=',True)]"/>
+                                <field name="period_id" domain="[('state','=','draft')]"/>
+                                <field name="company_id" required="1" groups="base.group_multi_company"/>
+                                <field name="partner_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="ref" attrs="{'readonly':[('state','=','posted')]}"/>
+                                <field name="date"/>
+                                <field name="to_check"/>
+                                <field name="amount" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Journal Items">
+                                <field name="line_id" widget="one2many_list" context="{'line_id': line_id , 'journal_id': journal_id }">
+                                    <tree colors="blue:state == 'draft';black:state == 'posted'" editable="top" string="Journal Items">
+                                        <field name="name"/>
+                                        <field name="partner_id" required="1" domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"/>
+                                        <field name="account_id" invisible="1"/>
+                                        <field name="account_niif_id" required="1" domain="[('niif','=',True),('type','in',['other','consolidation']),('company_id', '=', parent.company_id)]" on_change="onchange_niif(account_niif_id)"/>
+                                        <field name="date"/>
+                                        <field name="date_maturity"/>
+                                        <field name="period_id"/>
+                                        <field name="debit" sum="Total Debit"/>
+                                        <field name="credit" sum="Total Credit"/>
+                                        <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                                <field name="narration" colspan="4" placeholder="Add an internal note..." nolabel="1" height="50"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        
+        <!--COMPROBANTES CONTABLES NIIF-->  
+        <record id="account.action_account_moves_all_a" model="ir.actions.act_window">
+            <field name="domain">[('journal_id.niif','=',False)]</field>
+        </record>
+        <record id="account.action_move_journal_line" model="ir.actions.act_window">
+            <field name="res_model">account.move</field>
+            <field name="domain">[('journal_id.niif','=',False)]</field>
+        </record>
+        
+        <record id="view_account_move_line_niif_tree" model="ir.ui.view">
+            <field name="name">account.move.line.niif.tree</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <tree string="Registros NIIF">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="date"/>
+                    <field name="period_id" invisible="1"/>
+                    <field name="journal_id"/>
+                    <field name="account_id"/>
+                    <field name="partner_id"/>
+                    <field name="debit" sum="Total"/>
+                    <field name="credit" sum="Total"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_move_line_niif" model="ir.actions.act_window">
+            <field name="name">Comprobantes NIIF</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree,form</field>
+            <field name="domain">[('journal_id.niif','=',True)]</field>
+            <field name="view_id" ref="view_account_move_line_niif_tree"/>
+        </record>
+        
+        <record id="action_move_niif" model="ir.actions.act_window">
+            <field name="name">Comprobantes NIIF</field>
+            <field name="res_model">account.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('journal_id.niif','=',True)]</field>
+            <field name="view_id" ref="view_account_move_niif_form"/>
+        </record>
+        
+        <!--COMPROBANTES NIIF-->
+        <menuitem id="menu_move_menu_niif" name="Comprobantes NIIF" parent="account.menu_finance_entries" sequence="6"/>
+        <menuitem action="action_move_line_niif" id="menu_move_line_niif" name="Registros NIIF" parent="menu_move_menu_niif" sequence="1"/>
+        <menuitem action="action_move_niif" id="menu_move_niif" name="Comprobantes NIIF" parent="menu_move_menu_niif" sequence="5"/>
+
+    </data>
+</openerp>

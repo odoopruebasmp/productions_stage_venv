@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        
+        <record id="hr_payroll_extended_mp_view" model="ir.ui.view">
+            <field name='name'>hr.payroll.extended.mp</field>
+            <field name='model'>hr.payroll.prestamo</field>
+            <field name='type'>form</field>
+            <field name="inherit_id" ref="hr_payroll_extended.hr_prestamo_form"/>
+            <field name='arch' type='xml'>
+                <xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']/tree/field[@name='cuota']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']/tree/field[@name='date']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page/field[@name='cuotas_ids']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+                <field name="numero_cuotas" position="before">
+                    <field name="type_dicount" attrs="{'readonly':[('state','!=','draft')]}"/> 
+                </field>
+            </field>
+        </record>
+                
+    </data>
+</openerp>

@@ -1,0 +1,426 @@
+<openerp>
+    <data>
+        
+        <menuitem name="Concepto Fijo" parent="hr.menu_hr_root" id="menu_open_obligacion_tributaria" sequence="22"/>
+        
+        <record model="ir.ui.view" id="payroll_obligacion_tributaria_category_form_view">
+            <field name="name">hr.payroll.obligacion.tributaria.category.form</field>
+            <field name="model">hr.payroll.obligacion.tributaria.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Categoria de Concepto Fijo" version="7.0">
+                    <sheet string="Categoria de Concepto Fijo">
+                        <group col="4" colpsan="4">
+                            <field name="name" colpsan="2"/>
+                            <field name="code" colpsan="2"/>
+                        </group>
+                        <notebook>
+                            <page string="Descripcion">
+                                <field name="descripcion"/>
+                            </page>
+                            <page string="Contabilidad">
+                                <group>
+                                    <field name="concept_category"/>
+                                    <field name="worked_days_depends"/>
+                                    <field name="partner_type"/>
+                                    <field name="partner_other" attrs="{'invisible':[('partner_type', '!=', 'other')], 'required': [('partner_type', '=', 'other')]}"/>
+                                    <field name="ex_rent" attrs="{'invisible':[('concept_category', 'in', ['contributions', 'subtotals', 'provisions'])]}"/>
+                                    <field name="ded_rent"/>
+                                    <field name="afc"/>
+                                </group>
+                                <group cols="4">
+                                     <group cols="2" string="Débitos">
+                                       <field name="reg_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="reg_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="reg_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_adm_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_com_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_ope_debit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                     </group>
+                                     <group cols="2" string="Créditos">
+                                       <field name="reg_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="reg_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="reg_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="int_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_adm_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_com_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                       <field name="apr_ope_credit" domain="[('type','!=','view'), ('type','!=','consolidation')]"/>
+                                     </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="payroll_obligacion_tributaria_type_tree_view">
+            <field name="name">hr.payroll.obligacion.tributaria.category.tree</field>
+            <field name="model">hr.payroll.obligacion.tributaria.category</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Categoria Concepto Fijo">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="descripcion" />
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window"
+            id="action_payroll_obligacion_tributaria_category_tree_view">
+            <field name="name">Categoria Concepto Fijo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="payroll_obligacion_tributaria_type_tree_view" />
+        </record>
+        
+        <record id="hr_obligacion_tributaria_category_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.obligacion.tributaria.category.search</field>
+            <field name='model'>hr.payroll.obligacion.tributaria.category</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Categorias de Concepto Fijo">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="descripcion" />
+                </search>
+            </field>
+        </record>
+        
+        <menuitem id="payroll_obligacion_tributaria_category_menu" name="Categorias de Concepto Fijo"
+            parent="menu_open_obligacion_tributaria"
+            action="action_payroll_obligacion_tributaria_category_tree_view" sequence="21" />
+        
+        <record id="hr_obligacion_tributaria_search" model="ir.ui.view">
+            <field name='name'>hr.payroll.obligacion.tributaria.search</field>
+            <field name='model'>hr.payroll.obligacion.tributaria</field>
+            <field name='type'>search</field>
+            <field name='arch' type='xml'>
+                <search string="Buscar Concepto Fijo">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="valor" widget="monetary"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="approve_date"/>
+                    <field name="state"/>
+                    <field name="category_id"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        
+        <record id="hr_obligacion_tributaria_tree" model="ir.ui.view">
+            <field name='name'>hr.payroll.obligacion.tributaria.tree</field>
+            <field name='model'>hr.payroll.obligacion.tributaria</field>
+            <field name='type'>tree</field>
+            <field name='arch' type='xml'>
+                <tree string="Concepto Fijo">
+                    <field name="employee_id"/>
+                    <field name="contract_id"/>
+                    <field name="valor" widget="monetary"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="approve_date"/>
+                    <field name="state"/>
+                    <field name="category_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="hr_obligacion_tributaria_form2" model="ir.ui.view">
+            <field name='name'>hr.payroll.obligacion.tributaria.form2</field>
+            <field name='model'>hr.payroll.obligacion.tributaria</field>
+            <field name='type'>form</field>
+            <field name='arch' type='xml'>
+                <form string="Concepto Fijo" version="7.0">
+                    <header>
+                        <button string="Pasar a Borrador" name="draft" states="refused,cancelled" icon="gtk-convert"/>
+                        <button string="Confirmar" name="confirm" states="draft" icon="gtk-yes"/>
+                        <button string="Validar" name="validate" states="confirmed" icon="gtk-apply" groups="base.group_hr_user" />
+                        <button string="Rechazar" name="refuse" states="confirmed" icon="gtk-no" groups="base.group_hr_user" />
+                        <button string="Cancelar" name="cancel"  states="validated,confirmed,refused" icon="gtk-cancel"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,validated,refused,cancelled" statusbar_colors='{"confirmed":"blue","validated":"green","cancelled":"red","refused":"red"}'/>
+                    </header>
+                    <sheet string="Concepto Fijo">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group col="4" colpsan="4">
+                            <field name="employee_id" colspan="2" />
+                            <field name="contract_id" colspan="2" />
+                            <field name="date_from" colspan="2" />
+                            <field name="approve_date" colspan="2" />
+                            <field name="bm_type" colspan="2" />
+                            <field name="date_to" colspan="2" />
+                            <newline />
+                            <label for="costo" string="Valor Monetario"/>
+                            <div>
+                                <field name="valor" widget="monetary" options="{'currency_field': 'moneda_local'}" class="oe_inline" />
+                                <field name="moneda_local" class="oe_inline"/>
+                            </div>
+                            <newline />
+                            <field name="category_id" />
+                        </group>
+                        <newline />
+                        <group>
+                            <field name="description"/>
+                        </group>
+                        <newline />
+                        <notebook colspan="4">
+                            <page string="Aplicadas en">
+                                <field name="line_ids" nolabel="1">
+                                    <tree>
+                                        <field name="payslip_id"/>
+                                        <field name="payslip_period_id"/>
+                                        <field name="valor"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_obligacion_tributaria_graph" model="ir.ui.view">
+            <field name="name">hr.payroll.obligacion.tributaria.graph</field>
+            <field name="model">hr.payroll.obligacion.tributaria</field>
+            <field name="arch" type="xml">
+                <graph string="Concepto Fijo">
+                    <field name="category_id"/>
+                    <field name="valor" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record id="hr_obligacion_tributaria_action" model="ir.actions.act_window">
+            <field name='name'>Concepto Fijo</field>
+            <field name='res_model'>hr.payroll.obligacion.tributaria</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form,graph</field>
+        </record>
+        
+        <record id="hr_obligacion_tributaria_menu" model="ir.ui.menu">
+            <field name="name">Concepto Fijo</field>
+            <field name="parent_id" ref="menu_open_obligacion_tributaria"/>
+            <field name="action" ref="hr_obligacion_tributaria_action"/>
+            <field name="sequence">10</field>
+        </record>
+        
+        <!-- DATA -->
+        
+        <record id="mt_obligacion_new" model="mail.message.subtype">
+            <field name="name">Nueva Concepto Fijo</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="1"/>
+            <field name="description">Concepto Fijo Creada</field>
+        </record>
+        <record id="mt_obligacion_confirmada" model="mail.message.subtype">
+            <field name="name">Concepto Fijo Confirmada</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="2"/>
+            <field name="description">Concepto Fijo Confirmada</field>
+        </record>
+        <record id="mt_obligacion_validada" model="mail.message.subtype">
+            <field name="name">Concepto Fijo Validada</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="3"/>
+            <field name="description">Concepto Fijo Validada</field>
+        </record>
+        <record id="mt_obligacion_rechazada" model="mail.message.subtype">
+            <field name="name">Concepto Fijo Rechazad</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="4"/>
+            <field name="description">Concepto Fijo Rechazada</field>
+        </record>
+        <record id="mt_obligacion_cancelada" model="mail.message.subtype">
+            <field name="name">Concepto Fijo Cancelada</field>
+            <field name="res_model">hr.payroll.obligacion.tributaria</field>
+            <field name="default" eval="True"/>
+            <field name="sequence" eval="5"/>
+            <field name="description">Concepto Fijo Cancelada</field>
+        </record>
+
+    <!-- WORKFLOW -->
+        
+        <!-- Workflow definition 
+            1. draft->submitted
+            2. submitted->accepted 
+            2. submitted->refused 
+            3. accepted->refused
+            3. accepted->done
+            4. refused->draft 
+            5. done->accepted
+            6. refused->cancel
+            6. submitted->cancel
+            6. accepted->cancel
+            6. cancel->draft
+        -->
+
+        <record model="workflow" id="wkf_obligaciones">
+            <field name="name">hr.wkf.obligaciones</field>
+            <field name="osv">hr.payroll.obligacion.tributaria</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="obligaciones_act_draft"> <!-- draft -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="flow_start">True</field>
+            <field name="kind">function</field>
+            <field name="name">draft</field>
+            <field name="action">draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="obligaciones_act_confirm"> <!-- submitted -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">confirm()</field>
+            <field name="split_mode">OR</field>
+        </record>
+
+        <record model="workflow.activity" id="obligaciones_act_validate"> <!-- accepted -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">validate()</field>
+        </record>
+
+        <record model="workflow.activity" id="obligaciones_act_refuse"> <!-- refused -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="name">refuse</field>
+            <field name="kind">function</field>
+            <field name="action">refuse()</field>
+        </record>
+        
+        <record model="workflow.activity" id="obligaciones_act_cancel"> <!-- cancel -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">cancel()</field>
+        </record>
+        
+        <record model="workflow.activity" id="obligaciones_act_done"> <!-- done -->
+            <field name="wkf_id" ref="wkf_obligaciones" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">done()</field>
+        </record>
+        
+        <!--
+            workflow transition
+        -->
+
+        <record model="workflow.transition" id="obligaciones_draft2confirm">  <!-- 1. draft->submitted -->
+            <field name="act_from" ref="obligaciones_act_draft" />
+            <field name="act_to" ref="obligaciones_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="obligaciones_confirm2validate"> <!-- 2. submitted->accepted   -->
+            <field name="act_from" ref="obligaciones_act_confirm" />
+            <field name="act_to" ref="obligaciones_act_validate" />
+            <field name="signal">validate</field>
+        </record>
+
+        <record model="workflow.transition" id="obligaciones_confirm2refuse"> <!-- 2. submitted->refused -->
+            <field name="act_from" ref="obligaciones_act_confirm" />
+            <field name="act_to" ref="obligaciones_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_validate2confirm"> <!-- 2. accepted->submitted -->
+            <field name="act_from" ref="obligaciones_act_validate" />
+            <field name="act_to" ref="obligaciones_act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="obligaciones_validate2refuse"> <!-- 3. accepted->refused -->
+            <field name="act_from" ref="obligaciones_act_validate" />
+            <field name="act_to" ref="obligaciones_act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_validate2done"> <!-- 3. accepted->done -->
+            <field name="act_from" ref="obligaciones_act_validate" />
+            <field name="act_to" ref="obligaciones_act_done" />
+            <field name="signal">done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_refuse2draft"> <!-- 4. refused->draft -->
+            <field name="act_from" ref="obligaciones_act_refuse" />
+            <field name="act_to" ref="obligaciones_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_done2validate"> <!-- 5. done->accepted -->
+            <field name="act_from" ref="obligaciones_act_done" />
+            <field name="act_to" ref="obligaciones_act_validate" />
+            <field name="signal">cancel_done</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_refuse2cancel"> <!-- 6. refuse->cancel -->
+            <field name="act_from" ref="obligaciones_act_refuse" />
+            <field name="act_to" ref="obligaciones_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_validate2cancel"> <!-- 6. validate->cancel -->
+            <field name="act_from" ref="obligaciones_act_validate" />
+            <field name="act_to" ref="obligaciones_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_confirm2cancel"> <!-- 6. submitted->cancel -->
+            <field name="act_from" ref="obligaciones_act_confirm" />
+            <field name="act_to" ref="obligaciones_act_cancel" />
+            <field name="signal">cancel</field>
+            <field name="condition">True</field>
+        </record>
+        
+        <record model="workflow.transition" id="obligaciones_cancel2draft"> <!-- 6. cancel->draft -->
+            <field name="act_from" ref="obligaciones_act_cancel" />
+            <field name="act_to" ref="obligaciones_act_draft" />
+            <field name="signal">draft</field>
+            <field name="condition">True</field>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="seq_obligaciones_number_type" model="ir.sequence.type">
+            <field name="name">Numero obligaciones</field>
+            <field name="code">payroll.obligaciones.number</field>
+        </record>
+        <record id="seq_obligaciones_number" model="ir.sequence">
+            <field name="name">Numero obligaciones</field>
+            <field name="code">payroll.obligaciones.number</field>
+            <field name="prefix">OBL-</field>
+            <field name="padding">10</field>
+        </record>
+    </data>
+</openerp>

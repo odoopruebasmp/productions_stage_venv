@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+   <record model="ir.ui.view" id="view_form_managment_control_sftp">
+            <field name="name">managment.control.sftp.view.form</field>
+            <field name="model">managment.control.sftp</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Configurar SFTP">
+                    <header>
+                    </header>
+                    <sheet string="Configurar SFTP">
+                        <group col="2" colspan="2">
+                            <field name="name"/>
+                            <field name="type_test"/>
+                            <field name="host"/>
+                            <field name="port"/>
+                            <field name="user"/>
+                            <field name="password"  password="True"/>
+                            <field name="active"/>
+                            <field name="key_required" invisible="1"/>
+                            <field name="key_password" invisible="1"/>
+                            <field name="key_bin" invisible="1"/>
+                            <field name="path_access"/>
+                            <field name="path_access_temp"/>                            
+                            <field name="path_access_read"/>
+                            <field name="path_access_process"/>
+                            <field name="path_access_error"/>
+                        </group>
+
+                         <notebook>
+                            <page string="Ventas" name="sale_e">
+                                <group>
+                                    <group>
+                                        <field name="id_warehouse_inventory"/>
+                                        <field name="id_ubicacion_inventory"/>
+                                        <field name="bln_price_pricelist"/>                                            
+                                        <field name="id_price_list"/>    
+                                        <field name="id_price_list_version"/>                                            
+                                        <field name="id_sale_default"/>
+                                        <field name="bln_validate_sales_orders"/>
+                                        
+                                        <field name="id_ml_mk"/>
+                                        <field name="id_linio_mk"/>
+                                    </group>
+                                </group>
+
+
+                                <field name="id_managment_sales_stock_ids" widget="one2many_list" nolabel="1">
+
+                                       <tree editable="bottom">
+                                            <field name="id_prefix_integracion"/>
+                                            <field name="name_prefix"/>
+                                            <field name="sales_full"/>                                            
+                                            <field name="id_ubicacion_inventory"/>
+                                            <field name="team_sales"/>                                            
+                                            <field name="labels_team_sales" widget="many2many_tags"/>
+                                            
+                                       </tree>                                
+                                </field>
+                                
+                            </page>
+
+                            <page string="Cliente" name="customer_e">
+                                <group>
+                                    <group>
+                                        <field name="id_property_paymet_term"/>
+                                        <field name="id_position_fiscal_customer"/>
+                                        <field name="id_position_fiscal_vendors"/>
+                                        <field name="id_property_account_payable"/>
+                                        <field name="id_property_account_receivable"/>    
+                                        <field name="tributary_obligations_ids"/>                                       
+                                               
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Inventario" name="stock_e">
+                                <group>
+                                    <group>
+                                        <field name="id_transactions_stock"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Productos" name="product_e">
+                                <group>
+                                    <group>
+                                        <field name="bln_active_create_product"/>
+                                        <field name="bln_active_update_product"/>
+                                    </group>
+                                </group>
+                            </page>
+                             <page string="Pagos Clientes" name="payment_recepit">
+                                <group>
+                                    <group col="2">
+                                        <field name="id_journal_payment_default"/>
+                                    </group>
+
+                                </group>
+                                <group>
+                                    <group col="4">
+                                         <field name="id_payment_customer_ids" widget="one2many_list" nolabel="1">
+
+                                           <tree editable="bottom">
+                                                <field name="id_account_advance"/>
+                                                <field name="txt_account_advance"/>
+                                                <field name="id_account_analytic"/>
+                                           </tree>
+                                    
+                                             </field>
+
+                                    </group>
+                                </group>
+                            </page>
+
+
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_tree_managment_control_sftp">
+            <field name="name">managment.control.sftp.view.tree</field>
+            <field name="model">managment.control.sftp</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Configurar SFTP">
+                    <field name="name" />
+                    <field name="type_test"/>
+                    <field name="host"/>
+                    <field name="port"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_managment_control_sftp">
+            <field name="name">Configurar SFTP</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">managment.control.sftp</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_managment_control_sftp_tree" model="ir.actions.act_window.view">
+                <field name="sequence" eval="1"/>
+                <field name="view_mode">tree</field>
+                <field name="view_id" ref="mp_sale_extended.view_tree_managment_control_sftp"/>
+                <field name="act_window_id" ref="action_managment_control_sftp"/>
+        </record>
+
+
+        <record id="action_managment_control_sftp_form" model="ir.actions.act_window.view">
+                <field eval="2" name="sequence"/>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="mp_sale_extended.view_form_managment_control_sftp"/>
+                <field name="act_window_id" ref="action_managment_control_sftp"/>
+        </record>
+
+        <!-- Menu de configuracion -->
+        <menuitem id="mp_sale_extended.sftp_sales_e_config" name="SFTP E-commerce" parent="base.menu_config" sequence="18"/>
+
+        <menuitem name='Sftp E-commerce' id='mp_sale_extended.menu_config_sftp_se' parent='mp_sale_extended.sftp_sales_e_config' sequence='23' action="action_managment_control_sftp" groups="mp_sale_extended.group_manager_mp_sale_extended" />
+
+
+
+    </data>
+</openerp>

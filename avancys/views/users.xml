@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="avancys_votes_person_graph_view">
+            <field name="name">avancys_users.graph</field>
+            <field name="model">avancys.users</field>
+            <field name="arch" type="xml">
+                <graph string="Votos por usuario">
+                    <field name="votes" type="row"/>
+                    <field name="notes" type="measure"/>
+                    <field name="create_uid" type="col" />
+                </graph>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="avancys_graph_list_action">
+            <field name="name">Usuarios</field>
+            <field name="res_model">avancys.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_fpa_auxiliar_taxes_view" model="ir.ui.view">
+            <field name="name">Auxiliar</field>
+            <field name="model">fpa.auxiliar.taxes.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Opciones del informe" version="7.0">
+                    <label string=""/>
+                    <group col="4">
+                        <field name="chart_account_id" widget="selection"/>
+                        <field invisible="1" name="company_id"/>
+                        <field invisible="True" name="account_filter"/>
+                        <field invisible="True" name="partner_filter"/>
+                        <field invisible="True" name="analytic_filter"/>
+                    </group>
+                    <notebook colspan="4" tabpos="up">
+                        <page string="Parametros Principales">
+                            <group string="Fechas">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                        </page>
+                        <page string="Parametros Opcionales">
+                            <group attrs="{'invisible':[('account_filter', '!=', True)]}" string="Cuentas">
+                                <field name="account_ids"/>
+                            </group>
+                            <group attrs="{'invisible':[('partner_filter', '!=', True)]}" string="Terceros">
+                                <field name="partner_ids"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button class="oe_highlight" default_focus="1" name="generar" string="Generar" type="object"/>o
+
+                        <button class="oe_link" special="cancel" string="Cancelar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_fpa_auxiliar_taxes" model="ir.actions.act_window">
+            <field name="name">Asistente para generar Auxiliar de impuestos</field>
+            <field name="res_model">fpa.auxiliar.taxes.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="wizard_fpa_auxiliar_taxes_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_fpa_auxiliar_taxes_line_graph" model="ir.ui.view">
+            <field name="name">fpa.auxiliar.taxes.line.graph</field>
+            <field name="model">fpa.auxiliar.taxes.line</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph stacked="True" string="Informe auxiliar de impuestos" type="pivot">
+                    <field name="account_id" type="row"/>
+                    <!--<field name="partner_id" type="row"/>-->
+                    <field name="debit" type="measure"/>
+                    <field name="credit" type="measure"/>
+                    <field name="amount_final" type="measure"/>
+                    <field name="base_amount" type="measure"/>
+                    <field name="tax_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_auxiliar_taxes" model="ir.actions.act_window">
+            <field name="name">Auxiliar de impuestos</field>
+            <field name="res_model">fpa.auxiliar.taxes.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph, tree</field>
+            <field name="view_id" ref="view_fpa_auxiliar_taxes_line_graph"/>
+            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="usage">menu</field>
+            <field name="target">current</field>
+        </record>
+        <record id="fpa_auxiliar_taxes_line" model="ir.ui.view">
+            <field name="name">fpa.auxiliar.taxes.line.search</field>
+            <field name="model">fpa.auxiliar.taxes.line</field>
+            <!--<field name="type">search</field>-->
+            <field name="arch" type="xml">
+                <search string="Buscar">
+                    <field name="account_id"/>
+                    <field name="partner_id"/>
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'move_id'}" string="Movimiento"/>
+                        <filter context="{'group_by':'account_id'}" string="Cuentas"/>
+                        <filter context="{'group_by':'partner_id'}" string="Tercero"/>
+                        <filter context="{'group_by':'date'}" string="Fecha"/>
+                        <filter context="{'group_by':'account_analytic_id'}" string="Cuenta analitica"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</openerp>

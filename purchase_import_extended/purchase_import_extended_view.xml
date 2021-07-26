@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <record id="view_purchase_order_extended_form2_mp" model="ir.ui.view">
+            <field name="name">purchase.order.extended.form2.mp</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase_import.view_purchase_order_extended_form2"/>
+            <field name="arch" type="xml">
+                <field name='date_origen' position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name='date_origen' position="after">
+                    <field name="invoiced_import" invisible="1"/>
+                </field>
+                <field name='name' position="after">
+                    <div class="oe_subtotal_footer_separator oe_inline">
+                        <button string="Generar Factura" name="create_invoice_import" type="object" icon="terp-check" class="oe_inline" attrs="{'invisible': ['|','|',('invoiced_import','=',True),('import_id','=',False),('state','!=','approved')]}"/>
+                    </div>
+                </field>
+                
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="purchase_advance_supplier_mp_form_view">
+            <field name="name">purchase.advance.supplier.mp.form</field>
+            <field name="model">purchase.advance.supplier</field>
+            <field name="inherit_id" ref="advance_supplier.purchase_advance_supplier_form_view"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="before">                    
+                    <field name="fabricante_id" attrs="{'invisible': [('imp','!=',True)]}"/>
+                    <field name="imp" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="purchase_import_extended_form" model="ir.ui.view">
+            <field name="name">purchase.import.extended.form</field>
+            <field name="model">purchase.import</field>
+            <field name="inherit_id" ref="purchase_import.purchase_import_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <group>
+                        <button class="oe_inline oe_stat_button" name="view_invoice_fob" type="object" 
+                            icon="fa-bar-chart-o">
+                            <field string="Facturas FOB" name="invoice_count_fob" widget="statinfo"/>
+                        </button>
+                        <button class="oe_inline oe_stat_button" name="view_invoice" type="object" 
+                            icon="fa-bar-chart-o">
+                            <field string="Facturas Costos" name="invoice_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_inline oe_stat_button" name="view_advance" type="object" 
+                            icon="fa-paste">
+                            <field string="Anticipos" name="advance_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_inline oe_stat_button" name="view_picking" type="object" 
+                            icon="fa-truck">
+                            <field string="Recepciones" name="picking_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_inline oe_stat_button" name="view_purchase" type="object" 
+                            icon="fa-shopping-cart">
+                            <field string="Compras" name="purchase_count" widget="statinfo"/>
+                        </button>
+                        <button class="oe_inline oe_stat_button" name="view_contable" type="object" 
+                            icon="fa-chain-broken">
+                            <field string="Liquidacion" name="contable_count" widget="statinfo"/>
+                        </button>
+                    </group>
+                </xpath>                
+                <notebook position="inside">                    
+                    <page string='Anticipos de Proveedores'>
+                        <group>
+                            <field name="date_balance"/>
+                        </group>
+                        <group>
+                            <field name="pagada"/>
+                        </group>
+                        <group>
+                            <field name="amount_total"/>
+                            <field name="amount_advance"/>
+                            <field name="amount_balance"/>                            
+                        </group>
+                        <field name='advance_supplier_ids' context="{'default_partner_id': trading_id}"/>                        
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <record id="purchase_import_extended_search" model="ir.ui.view">
+            <field name="name">purchase.import.extended.search</field>
+            <field name="model">purchase.import</field>
+            <field name="inherit_id" ref="purchase_import.purchase_import_search"/>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="pagada"/>
+                    <separator/>
+                    <filter string="Pagada" name="pagada_true_filter" domain="[('pagada','=', 'pagada')]" />
+                    <filter string="No Pagada" name="pagada_false_filter" domain="[('pagada','=','no_pagada')]" />
+                    <separator/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Pagada" icon="terp-personal" domain="[]" context="{'group_by':'pagada'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_purchase_import_graph" model="ir.ui.view">
+            <field name="name">purchase.import.graph</field>
+            <field name="model">purchase.import</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Analisis de Impotacion" type="pivot" stacked="True">
+                    <field name="state" type="col"/>
+                    <field name="amount_total" type="measure"/>
+                    <field name="amount_advance" type="measure"/>
+                    <field name="amount_balance" type="measure"/>
+                    <field name="trading_id" type="row"/>
+                    <field name="name" type="row"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="purchase_import.action_purchase_import">
+            <field name="view_mode">tree,form,graph</field>
+        </record>
+
+    </data>
+</openerp>

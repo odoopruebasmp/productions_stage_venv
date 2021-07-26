@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report 
+        auto="False" 
+        id="voucher_report_egreso_id" 
+        model="account.voucher" 
+        name="account.voucher.egreso" 
+        rml="reportes_comprobantes/report/comprobante_egreso.rml" 
+        string="Comprobante Egreso"/>
+          
+    </data>
+</openerp>

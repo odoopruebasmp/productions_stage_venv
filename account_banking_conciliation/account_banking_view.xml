@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <report
+                id="report_banking_conciliation"
+                model="account.bank.statement"
+                string="Detalle Conciliación"
+                report_type="qweb-pdf"
+                name="account_banking_conciliation.banking_conciliation_report"
+                file="account_banking_conciliation.banking_conciliation"
+        />
+
+    </data>
+</openerp>

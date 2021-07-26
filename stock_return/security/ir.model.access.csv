@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_application_return_order_user,return.order.user,model_return_order,group_user_devolution,1,1,1,0
+access_application_return_order_line_user,return.order.line.user,model_return_order_line,group_user_devolution,1,1,1,0
+access_application_return_order_causal,return.order.causal,model_return_order_causal,group_user_devolution,1,1,0,0
+access_application_return_order_causal_manager,return.order.causal.manager,model_return_order_causal,group_coordinador_devolution,1,1,1,1

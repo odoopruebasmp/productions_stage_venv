@@ -1,0 +1,3 @@
+import purchase_requisition_extended
+import wizard
+import openerp.report

@@ -1,0 +1,3195 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* financial_reports
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-31 14:41+0000\n"
+"PO-Revision-Date: 2017-08-31 09:47-0500\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: en_US\n"
+"X-Generator: Poedit 2.0.1\n"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "% VARIACION"
+msgstr "% VARIATION"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,porc_variation:0
+#: field:fpa.pyg.c.line,porc_variation:0
+msgid "% Variaci?n"
+msgstr "% Variation"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "- Use '@may' para 'mayor'"
+msgstr "- Use '@may' for 'mayor'"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "- Use '@min' para 'menor'"
+msgstr "- Use '@min' para 'less'"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "- Use like '51@porc' para like '51%'"
+msgstr "- Use like '51@porc' para like '51%'"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "ABRIL"
+msgstr "APRIL"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "AGOSTO"
+msgstr "AUGUST"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_equity_changes
+msgid "AUMENTO"
+msgstr "INCREASE"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_04:0
+msgid "Abril"
+msgstr "April"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,action:0
+msgid "Accion"
+msgstr "Action"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,action:0
+msgid "Acci?n asociada a la generaci?n del informe."
+msgstr "Report action"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_account_account
+msgid "Account"
+msgstr "Account"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_08:0
+msgid "Agosto"
+msgstr "August"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,codigo:0
+msgid "Agrega el codigo de la cuenta en el nombre del Concepto"
+msgstr "Add the code of the account in the name of the concept"
+
+#. module: financial_reports
+#: field:account.account,alias:0
+msgid "Alias"
+msgstr "Alias"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,analyze:0
+msgid "Analizar"
+msgstr "Analyze"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts.columns,line_ids:0
+msgid "Aplicaci?n"
+msgstr "Apply"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: field:fpa.auxiliar.equivalente.line,asiento:0
+#: field:fpa.auxiliar.line,asiento:0 field:fpa.diario.line,asiento:0
+msgid "Asiento"
+msgstr "Move"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_auxiliar
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_auxiliar_equivalente
+msgid "Asistente para generar Auxiliary"
+msgstr "Auxiliaryy Generation Wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_balance_general
+msgid "Asistente para generar Balance General"
+msgstr "Balance Sheet Generation Wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_balance_pruebas
+msgid "Asistente para generar Balance de Pruebas"
+msgstr "Test Balance Generation Wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_diario
+msgid "Asistente para generar Diario"
+msgstr "Journal Generation Wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_pyg_cc
+msgid "Asistente para generar Estado de Resultados"
+msgstr "Wizard to Generate Income Statement"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_pyg
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_pyg_c
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_pyg_c_cc
+msgid "Asistente para generar Estado de Resultados (Comparativo)"
+msgstr "Wizard to Generate Income Statement (Comparative)"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_flujocaja
+msgid "Asistente para generar Flujo de caja"
+msgstr "Generate cash flow wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_inventario_balance
+msgid "Asistente para generar Inventario y Balance"
+msgstr "Inventory and Balance Generation Wizard"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_mayor_balance
+msgid "Asistente para generar Mayor y Balance"
+msgstr "Wizard to Generate Greater Balance"
+
+#. module: financial_reports
+#: field:fpa.equity.changes.line,aumentos:0
+msgid "Aumento"
+msgstr "Increase"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_auxiliar
+#: model:ir.actions.act_window,name:financial_reports.action_auxiliar_equivalente
+#: model:ir.actions.report.xml,name:financial_reports.report_auxiliar
+#: model:ir.actions.report.xml,name:financial_reports.report_auxiliar_equivalente
+msgid "Auxiliary"
+msgstr "Auxiliary"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Auxiliary"
+msgstr "Auxiliary"
+
+#. module: financial_reports
+#: field:fpa.niveles,help:0
+msgid "Ayuda"
+msgstr "Help"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.wizard,fiscalyear_id:0
+msgid "A?o fiscal"
+msgstr "Fiscal year"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_balance_general
+msgid "Balance General"
+msgstr "Balance Sheet"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_balance_pruebas
+#: model:ir.actions.report.xml,name:financial_reports.report_balance_pruebas
+msgid "Balance de pruebas"
+msgstr "Test balance"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports.concepts.columns.lines,type:0
+msgid "Base"
+msgstr "Base"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,bold:0 field:fpa.auxiliar.line,bold:0
+#: field:fpa.balance.general.line,bold:0 field:fpa.balance.pruebas.line,bold:0
+#: field:fpa.diario.line,bold:0 field:fpa.equity.changes.line,bold:0
+#: field:fpa.flujocaja.line,bold:0 field:fpa.inventario.balance.line,bold:0
+#: field:fpa.mayor.balance.line,bold:0 field:fpa.pyg.c.cc.line,bold:0
+#: field:fpa.pyg.c.line,bold:0 field:fpa.pyg.cc.line,bold:0
+#: field:fpa.pyg.line,bold:0
+msgid "Bold"
+msgstr "Bold"
+
+#. module: financial_reports
+#: selection:fpa.auxiliar,estado:0 selection:fpa.auxiliar.equivalente,estado:0
+#: selection:fpa.auxiliar.equivalente.wizard,estado:0
+#: selection:fpa.auxiliar.wizard,estado:0
+#: selection:fpa.balance.general,estado:0
+#: selection:fpa.balance.general.wizard,estado:0
+#: selection:fpa.balance.pruebas,estado:0
+#: selection:fpa.balance.pruebas.wizard,estado:0 selection:fpa.diario,estado:0
+#: selection:fpa.diario.wizard,estado:0 selection:fpa.equity.changes,estado:0
+#: selection:fpa.equity.changes.wizard,estado:0
+#: selection:fpa.flujocaja,estado:0 selection:fpa.flujocaja.wizard,estado:0
+#: selection:fpa.inventario.balance,estado:0
+#: selection:fpa.inventario.balance.wizard,estado:0
+#: selection:fpa.mayor.balance,estado:0
+#: selection:fpa.mayor.balance.wizard,estado:0 selection:fpa.pyg,estado:0
+#: selection:fpa.pyg.c,estado:0 selection:fpa.pyg.c.cc,estado:0
+#: selection:fpa.pyg.c.cc.wizard,estado:0 selection:fpa.pyg.c.wizard,estado:0
+#: selection:fpa.pyg.cc,estado:0 selection:fpa.pyg.cc.wizard,estado:0
+#: selection:fpa.pyg.wizard,estado:0
+msgid "Borrador"
+msgstr "Draft"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.general.line:financial_reports.fpa_balance_general_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+#: view:fpa.equity.changes.line:financial_reports.fpa_equity_changes_line
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_search
+#: view:fpa.flujocaja.line:financial_reports.fpa_flujocaja_line
+#: view:fpa.inventario.balance.line:financial_reports.fpa_inventario_balance_line
+#: view:fpa.mayor.balance.line:financial_reports.fpa_mayor_balance_line
+#: view:fpa.pyg.c.cc.line:financial_reports.fpa_pyg_c_cc_line
+#: view:fpa.pyg.c.line:financial_reports.fpa_pyg_c_line
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: view:fpa.pyg.line:financial_reports.fpa_pyg_line
+msgid "Buscar"
+msgstr "Search"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_equity_changes
+#: view:False:financial_reports.template_report_flujocaja
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "CONCEPTO"
+msgstr "CONCEPT"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "CONCEPTOS"
+msgstr "CONCEPTS"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "CUENTA"
+msgstr "ACCOUNT"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "CUENTA ANALITICA"
+msgstr "ANALYTICAL ACCOUNT"
+
+#. module: financial_reports
+#: model:ir.actions.report.xml,name:financial_reports.report_equity_changes
+msgid "Cambios en el patrimonio"
+msgstr "Changes in equity"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,fields:0
+msgid "Campos"
+msgstr "Fields"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,field_hidden:0
+msgid "Campos a ocultar"
+msgstr "Fields to hide"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Cancelar"
+msgstr "Cancel"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_search
+#: field:fpa.financial.reports,categ:0
+msgid "Categor?a"
+msgstr "Category"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,categ:0
+msgid "Categor?a asociada al informe, sirve para organizar la vista de los informes."
+msgstr "Category associated with the report, it serves to organize the view of the reports."
+
+#. module: financial_reports
+#: field:fpa.balance.general.wizard,cierre:0
+#: field:fpa.balance.pruebas.wizard,cierre:0
+#: field:fpa.equity.changes.wizard,cierre:0
+#: field:fpa.mayor.balance.wizard,cierre:0 field:fpa.pyg.c.cc.wizard,cierre:0
+#: field:fpa.pyg.c.wizard,cierre:0 field:fpa.pyg.cc.wizard,cierre:0
+#: field:fpa.pyg.wizard,cierre:0
+msgid "Cierre"
+msgstr "Closing"
+
+#. module: financial_reports
+#: field:fpa.balance.general.line,clase:0 field:fpa.financial.reports,clase:0
+#: selection:fpa.financial.reports,nivel:0
+msgid "Clase"
+msgstr "Class"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,codigo:0
+msgid "Codigo"
+msgstr "Code"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.columns,code:0
+#: field:fpa.financial.reports.concepts,code:0
+#: field:fpa.financial.reports.concepts.columns,code:0
+msgid "Codigo concepto"
+msgstr "Concept code"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,view_color:0
+msgid "Color resumen"
+msgstr "Color summary"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,title_color:0
+msgid "Color titulos"
+msgstr "Color titles"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts.columns.lines,col:0
+msgid "Columna"
+msgstr "Column"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,columns_ids:0
+msgid "Columnas"
+msgstr "Columns"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,porc:0
+msgid "Columnas % "
+msgstr "Columns % "
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Columnas (Inf. Exogenous)"
+msgstr "Columns (Inf. Exogenous)"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,numeric:0
+msgid "Columnas moneda "
+msgstr "Currency columns"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts.columns.lines,col:0
+msgid "Columnas para la hoja de calculo."
+msgstr "Columns for spreadsheet"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,company_id:0 field:fpa.auxiliar.equivalente,company_id:0
+#: field:fpa.auxiliar.equivalente.line,company_id:0
+#: field:fpa.auxiliar.equivalente.wizard,company_id:0
+#: field:fpa.auxiliar.line,company_id:0 field:fpa.auxiliar.wizard,company_id:0
+#: field:fpa.balance.general,company_id:0
+#: field:fpa.balance.general.line,company_id:0
+#: field:fpa.balance.pruebas,company_id:0
+#: field:fpa.balance.pruebas.line,company_id:0 field:fpa.diario,company_id:0
+#: field:fpa.diario.line,company_id:0 field:fpa.diario.wizard,company_id:0
+#: field:fpa.equity.changes,company_id:0
+#: field:fpa.equity.changes.line,company_id:0 field:fpa.flujocaja,company_id:0
+#: field:fpa.flujocaja.line,company_id:0
+#: field:fpa.inventario.balance,company_id:0
+#: field:fpa.inventario.balance.line,company_id:0
+#: field:fpa.mayor.balance,company_id:0
+#: field:fpa.mayor.balance.line,company_id:0 field:fpa.pyg,company_id:0
+#: field:fpa.pyg.c,company_id:0 field:fpa.pyg.c.cc,company_id:0
+#: field:fpa.pyg.c.cc.line,company_id:0 field:fpa.pyg.c.line,company_id:0
+#: field:fpa.pyg.cc,company_id:0 field:fpa.pyg.cc.line,company_id:0
+#: field:fpa.pyg.line,company_id:0
+msgid "Compa?ia"
+msgstr "Company"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,company_id:0
+#: help:fpa.auxiliar.wizard,company_id:0 help:fpa.diario.wizard,company_id:0
+msgid "Compa?ia asociada a los movimientos contables a consultar."
+msgstr "Company associated with the accounting movements to be consulted"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Compras"
+msgstr "Purchase"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.balance.general.line:financial_reports.fpa_balance_general_line
+#: view:fpa.equity.changes.line:financial_reports.fpa_equity_changes_line
+#: field:fpa.financial.reports.concepts,name:0
+#: field:fpa.financial.reports.concepts.columns,line_id:0
+#: field:fpa.financial.reports.concepts.columns,name:0
+#: view:fpa.flujocaja.line:financial_reports.fpa_flujocaja_line
+#: view:fpa.pyg.c.cc.line:financial_reports.fpa_pyg_c_cc_line
+#: view:fpa.pyg.c.line:financial_reports.fpa_pyg_c_line
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: view:fpa.pyg.line:financial_reports.fpa_pyg_line
+msgid "Concepto"
+msgstr "Concept"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,from_merge:0
+msgid "Concepto a mezclar"
+msgstr "Concept to mix"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,to_merge:0
+msgid "Concepto destino para mezclar"
+msgstr "Target concept to mix"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,concepts_id:0
+#: field:fpa.auxiliar.line,concepts_id:0
+#: field:fpa.balance.general.line,concepts_id:0
+#: field:fpa.balance.pruebas.line,concepts_id:0
+#: field:fpa.equity.changes.line,concepts_id:0
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+#: field:fpa.flujocaja.line,concepts_id:0
+#: view:fpa.inventario.balance.line:financial_reports.fpa_inventario_balance_line
+#: field:fpa.inventario.balance.line,concepts_id:0
+#: view:fpa.mayor.balance.line:financial_reports.fpa_mayor_balance_line
+#: field:fpa.mayor.balance.line,concepts_id:0
+#: field:fpa.pyg.c.cc.line,concepts_id:0 field:fpa.pyg.c.line,concepts_id:0
+#: field:fpa.pyg.cc.line,concepts_id:0 field:fpa.pyg.line,concepts_id:0
+msgid "Conceptos"
+msgstr "Concepts"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Conceptos (Inf. Exogenous)"
+msgstr "Concepts (Inf. Exogenous)"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,columns_ids:0
+#: help:fpa.financial.reports.concepts.columns,line_ids:0
+msgid "Conceptos (Inf. Exogenous)."
+msgstr "Concepts (Inf. Exogenous)."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,concepts_ids:0
+#: help:fpa.financial.reports.concepts.columns,line_id:0
+msgid "Conceptos del informe, sirve para organizar la informaci?n en los informes."
+msgstr "Concepts of the report, serves to organize the information in the reports."
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,name:0
+#: help:fpa.financial.reports.concepts.columns,name:0
+msgid "Conceptos para organizar el informe"
+msgstr "Concepts for organizing the report"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts.columns.lines,parent_id:0
+msgid "Conceptos(Inf. Exogenous)"
+msgstr "Concepts(Inf. Exogenous)"
+
+#. module: financial_reports
+#: model:ir.ui.menu,name:financial_reports.menu_fpa_financial_reports_conf
+msgid "Configuraci?n"
+msgstr "Configuration"
+
+#. module: financial_reports
+#: model:res.groups,name:financial_reports.group_conf_report_accounting_reports
+msgid "Configurar informes"
+msgstr "Set up reports"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,consulta:0
+msgid "Consulta PDF"
+msgstr "Query PDF"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,query:0
+msgid "Consulta SQL"
+msgstr "Query SQL"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,consulta_xlsx:0
+msgid "Consulta XLSX"
+msgstr "Query XLSX"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,query:0
+msgid "Consulta sql ejecutada para generar los formatos de exportacion."
+msgstr "Query sql executed to generate export formats"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,consulta_xlsx:0
+msgid "Consulta sql ejecutada para generar los formatos. Esta consulta se genera sobre la tabla temporal donde se analiza la informaci?n para el formato XLSX."
+msgstr "Query sql executed to generate the formats. This query is generated on the temporary table where the information for the XLSX format is analyzed"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,consulta:0
+msgid "Consulta sql ejecutada para generar los formatos. Esta consulta se genera sobre la tabla temporal donde se analiza la informaci?n."
+msgstr "Query sql executed to generate the formats. This query is generated on the temporary table where the information is analyzed"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Contables"
+msgstr "Accountants"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "Contador Publico."
+msgstr "Accountant"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_res_country
+msgid "Country"
+msgstr "Country"
+
+#. module: financial_reports
+#: field:account.account.estructure,create_uid:0
+#: field:fpa.auxiliar,create_uid:0 field:fpa.auxiliar.equivalente,create_uid:0
+#: field:fpa.auxiliar.equivalente.line,create_uid:0
+#: field:fpa.auxiliar.equivalente.wizard,create_uid:0
+#: field:fpa.auxiliar.line,create_uid:0 field:fpa.auxiliar.wizard,create_uid:0
+#: field:fpa.balance.general,create_uid:0
+#: field:fpa.balance.general.line,create_uid:0
+#: field:fpa.balance.general.wizard,create_uid:0
+#: field:fpa.balance.pruebas,create_uid:0
+#: field:fpa.balance.pruebas.line,create_uid:0
+#: field:fpa.balance.pruebas.wizard,create_uid:0 field:fpa.diario,create_uid:0
+#: field:fpa.diario.line,create_uid:0 field:fpa.diario.wizard,create_uid:0
+#: field:fpa.equity.changes,create_uid:0
+#: field:fpa.equity.changes.line,create_uid:0
+#: field:fpa.equity.changes.wizard,create_uid:0
+#: field:fpa.export.wizard.ept,create_uid:0
+#: field:fpa.financial.reports,create_uid:0
+#: field:fpa.financial.reports.columns,create_uid:0
+#: field:fpa.financial.reports.concepts,create_uid:0
+#: field:fpa.financial.reports.concepts.columns,create_uid:0
+#: field:fpa.financial.reports.concepts.columns.lines,create_uid:0
+#: field:fpa.financial.reports.period,create_uid:0
+#: field:fpa.financial.reports.period_range,create_uid:0
+#: field:fpa.flujocaja,create_uid:0 field:fpa.flujocaja.line,create_uid:0
+#: field:fpa.flujocaja.wizard,create_uid:0
+#: field:fpa.inventario.balance,create_uid:0
+#: field:fpa.inventario.balance.line,create_uid:0
+#: field:fpa.inventario.balance.wizard,create_uid:0
+#: field:fpa.mayor.balance,create_uid:0
+#: field:fpa.mayor.balance.line,create_uid:0
+#: field:fpa.mayor.balance.wizard,create_uid:0 field:fpa.niveles,create_uid:0
+#: field:fpa.pyg,create_uid:0 field:fpa.pyg.c,create_uid:0
+#: field:fpa.pyg.c.cc,create_uid:0 field:fpa.pyg.c.cc.line,create_uid:0
+#: field:fpa.pyg.c.cc.wizard,create_uid:0 field:fpa.pyg.c.line,create_uid:0
+#: field:fpa.pyg.c.wizard,create_uid:0 field:fpa.pyg.cc,create_uid:0
+#: field:fpa.pyg.cc.line,create_uid:0 field:fpa.pyg.cc.wizard,create_uid:0
+#: field:fpa.pyg.line,create_uid:0 field:fpa.pyg.wizard,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: financial_reports
+#: field:account.account.estructure,create_date:0
+#: field:fpa.auxiliar,create_date:0
+#: field:fpa.auxiliar.equivalente,create_date:0
+#: field:fpa.auxiliar.equivalente.line,create_date:0
+#: field:fpa.auxiliar.equivalente.wizard,create_date:0
+#: field:fpa.auxiliar.line,create_date:0
+#: field:fpa.auxiliar.wizard,create_date:0
+#: field:fpa.balance.general,create_date:0
+#: field:fpa.balance.general.line,create_date:0
+#: field:fpa.balance.general.wizard,create_date:0
+#: field:fpa.balance.pruebas,create_date:0
+#: field:fpa.balance.pruebas.line,create_date:0
+#: field:fpa.balance.pruebas.wizard,create_date:0
+#: field:fpa.diario,create_date:0 field:fpa.diario.line,create_date:0
+#: field:fpa.diario.wizard,create_date:0 field:fpa.equity.changes,create_date:0
+#: field:fpa.equity.changes.line,create_date:0
+#: field:fpa.equity.changes.wizard,create_date:0
+#: field:fpa.export.wizard.ept,create_date:0
+#: field:fpa.financial.reports,create_date:0
+#: field:fpa.financial.reports.columns,create_date:0
+#: field:fpa.financial.reports.concepts,create_date:0
+#: field:fpa.financial.reports.concepts.columns,create_date:0
+#: field:fpa.financial.reports.concepts.columns.lines,create_date:0
+#: field:fpa.financial.reports.period,create_date:0
+#: field:fpa.financial.reports.period_range,create_date:0
+#: field:fpa.flujocaja,create_date:0 field:fpa.flujocaja.line,create_date:0
+#: field:fpa.flujocaja.wizard,create_date:0
+#: field:fpa.inventario.balance,create_date:0
+#: field:fpa.inventario.balance.line,create_date:0
+#: field:fpa.inventario.balance.wizard,create_date:0
+#: field:fpa.mayor.balance,create_date:0
+#: field:fpa.mayor.balance.line,create_date:0
+#: field:fpa.mayor.balance.wizard,create_date:0 field:fpa.niveles,create_date:0
+#: field:fpa.pyg,create_date:0 field:fpa.pyg.c,create_date:0
+#: field:fpa.pyg.c.cc,create_date:0 field:fpa.pyg.c.cc.line,create_date:0
+#: field:fpa.pyg.c.cc.wizard,create_date:0 field:fpa.pyg.c.line,create_date:0
+#: field:fpa.pyg.c.wizard,create_date:0 field:fpa.pyg.cc,create_date:0
+#: field:fpa.pyg.cc.line,create_date:0 field:fpa.pyg.cc.wizard,create_date:0
+#: field:fpa.pyg.line,create_date:0 field:fpa.pyg.wizard,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_balance_pruebas
+#: field:fpa.auxiliar.equivalente.line,credit:0
+#: field:fpa.auxiliar.equivalente.line,credit_c:0
+#: field:fpa.auxiliar.line,credit:0 field:fpa.balance.general.line,credit:0
+#: field:fpa.balance.pruebas.line,credit:0 field:fpa.diario.line,credit:0
+#: field:fpa.equity.changes.line,credit:0
+#: selection:fpa.financial.reports.concepts.columns.lines,type:0
+#: field:fpa.inventario.balance.line,credit:0
+#: field:fpa.mayor.balance.line,credit:0 field:fpa.pyg.c.cc.line,credit:0
+#: field:fpa.pyg.c.line,credit:0 field:fpa.pyg.cc.line,credit:0
+#: field:fpa.pyg.line,credit:0
+msgid "Credito"
+msgstr "Credit"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_diario
+msgid "Cr?dito"
+msgstr "Credit"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+#: view:False:financial_reports.template_report_diario
+#: field:account.account.estructure,account_id:0
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: field:fpa.auxiliar.equivalente.line,cuenta:0
+#: field:fpa.auxiliar.line,account_id:0 field:fpa.auxiliar.line,cuenta:0
+#: view:fpa.balance.general.line:financial_reports.fpa_balance_general_line
+#: field:fpa.balance.general.line,account_id:0
+#: field:fpa.balance.general.line,cuenta:0
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+#: field:fpa.balance.pruebas.line,account_id:0
+#: field:fpa.balance.pruebas.line,cuenta:0
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+#: field:fpa.diario.line,account_id:0 field:fpa.diario.line,cuenta:0
+#: view:fpa.equity.changes.line:financial_reports.fpa_equity_changes_line
+#: field:fpa.equity.changes.line,account_id:0
+#: field:fpa.equity.changes.line,cuenta:0
+#: selection:fpa.financial.reports,nivel:0
+#: view:fpa.flujocaja.line:financial_reports.fpa_flujocaja_line
+#: field:fpa.flujocaja.line,account_id:0 field:fpa.flujocaja.line,cuenta:0
+#: view:fpa.inventario.balance.line:financial_reports.fpa_inventario_balance_line
+#: field:fpa.inventario.balance.line,account_id:0
+#: field:fpa.inventario.balance.line,cuenta:0
+#: view:fpa.mayor.balance.line:financial_reports.fpa_mayor_balance_line
+#: field:fpa.mayor.balance.line,account_id:0
+#: field:fpa.mayor.balance.line,cuenta:0
+#: view:fpa.pyg.c.cc.line:financial_reports.fpa_pyg_c_cc_line
+#: field:fpa.pyg.c.cc.line,account_id:0 field:fpa.pyg.c.cc.line,cuenta:0
+#: view:fpa.pyg.c.line:financial_reports.fpa_pyg_c_line
+#: field:fpa.pyg.c.line,account_id:0 field:fpa.pyg.c.line,cuenta:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,account_id:0 field:fpa.pyg.cc.line,cuenta:0
+#: view:fpa.pyg.line:financial_reports.fpa_pyg_line
+#: field:fpa.pyg.line,account_id:0 field:fpa.pyg.line,cuenta:0
+msgid "Cuenta"
+msgstr "Account"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,account_equivalente_id:0
+msgid "Cuenta Equiv. Colgaap"
+msgstr "Colgaap Equivalent Account"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,account_id:0
+#: field:fpa.auxiliar.line,account_niif_id:0
+msgid "Cuenta NIIF"
+msgstr "NIIF account"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: field:fpa.auxiliar.equivalente.line,account_analytic_id:0
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: field:fpa.auxiliar.line,account_analytic_id:0
+#: field:fpa.pyg.c.cc.line,analytic_account_id:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,analytic_account_id:0
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+msgid "Cuenta analitica"
+msgstr "Analytic account"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+msgid "Cuenta equivalente"
+msgstr "Equivalent account"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: field:fpa.auxiliar.equivalente.wizard,account_ids:0
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: field:fpa.auxiliar.wizard,account_ids:0
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: field:fpa.balance.general.wizard,account_ids:0
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: field:fpa.balance.pruebas.wizard,account_ids:0
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: field:fpa.diario.wizard,account_ids:0
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: field:fpa.equity.changes.wizard,account_ids:0
+#: field:fpa.financial.reports,account_ids:0
+#: field:fpa.financial.reports.concepts,account_ids:0
+#: field:fpa.financial.reports.concepts.columns.lines,account_ids:0
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: field:fpa.flujocaja.wizard,account_ids:0
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: field:fpa.inventario.balance.wizard,account_ids:0
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: field:fpa.mayor.balance.wizard,account_ids:0
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: field:fpa.pyg.c.cc.wizard,account_ids:0
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: field:fpa.pyg.c.wizard,account_ids:0
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: field:fpa.pyg.cc.wizard,account_ids:0
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+#: field:fpa.pyg.wizard,account_ids:0
+msgid "Cuentas"
+msgstr "Account"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.wizard,analytic_ids:0
+#: field:fpa.auxiliar.wizard,analytic_ids:0
+#: field:fpa.balance.pruebas.wizard,analytic_ids:0
+#: field:fpa.diario.wizard,analytic_ids:0
+#: field:fpa.pyg.c.cc.wizard,analytic_ids:0
+#: field:fpa.pyg.cc.wizard,analytic_ids:0
+msgid "Cuentas analiticas"
+msgstr "Analytic account"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,account_ids:0
+#: help:fpa.auxiliar.wizard,account_ids:0 help:fpa.diario.wizard,account_ids:0
+msgid "Cuentas contables asociadas a los movimientos a consultar."
+msgstr "Accounting accounts associated with the movements to be consulted"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,account_ids:0
+#: help:fpa.financial.reports.concepts.columns.lines,account_ids:0
+msgid "Cuentas que se desean filtrar en el informe, estas cuentas tienen prioridad sobre las indicadas en la ejecuci?n del informe."
+msgstr "Accounts that are to be filtered in the report, these accounts take precedence over those indicated in the execution of the report"
+
+#. module: financial_reports
+#: field:fpa.niveles,code:0
+msgid "C?digo"
+msgstr "Code"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "DICIEMBRE"
+msgstr "DECEMBER"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_equity_changes
+msgid "DISMINUSIONES"
+msgstr "DECREASES"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_balance_pruebas
+#: field:fpa.auxiliar.equivalente.line,debit:0
+#: field:fpa.auxiliar.equivalente.line,debit_c:0
+#: field:fpa.auxiliar.line,debit:0 field:fpa.balance.general.line,debit:0
+#: field:fpa.balance.pruebas.line,debit:0 field:fpa.diario.line,debit:0
+#: field:fpa.equity.changes.line,debit:0
+#: selection:fpa.financial.reports.concepts.columns.lines,type:0
+#: field:fpa.inventario.balance.line,debit:0
+#: field:fpa.mayor.balance.line,debit:0 field:fpa.pyg.c.cc.line,debit:0
+#: field:fpa.pyg.c.line,debit:0 field:fpa.pyg.cc.line,debit:0
+#: field:fpa.pyg.line,debit:0
+msgid "Debito"
+msgstr "Debit"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,niveles_ids:0
+msgid "Defina los niveles que desea ver en la generacion."
+msgstr "Define the levels you want to see in the generation"
+
+#. module: financial_reports
+#: view:fpa.export.wizard.ept:financial_reports.fpa_export_wizard_view_ept
+msgid "Descargar"
+msgstr "Download"
+
+#. module: financial_reports
+#: field:account.account.estructure,description:0
+#: field:fpa.financial.reports.concepts.columns.lines,name:0
+msgid "Descripcion"
+msgstr "Description"
+
+#. module: financial_reports
+#: field:fpa.balance.general.line,description:0
+#: field:fpa.flujocaja.line,description:0 field:fpa.niveles,name:0
+msgid "Descripci?n"
+msgstr "Description"
+
+#. module: financial_reports
+#: field:fpa.export.wizard.ept,date_from:0
+#: field:fpa.financial.reports.period,date_from:0
+msgid "Desde"
+msgstr "Date from"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+#: view:False:financial_reports.template_report_diario
+#: view:False:financial_reports.template_report_equity_changes
+#: view:False:financial_reports.template_report_flujocaja
+#: view:False:financial_reports.template_report_pyg
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "Desde:"
+msgstr "Date from"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+#: field:fpa.financial.reports,concepts_ids:0
+#: field:fpa.financial.reports,detalle:0
+msgid "Detalle"
+msgstr "Detail"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_diario
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+#: field:fpa.diario.line,journal_id:0
+#: model:ir.actions.act_window,name:financial_reports.action_diario
+#: model:ir.actions.report.xml,name:financial_reports.report_diario
+msgid "Diario"
+msgstr "Journal"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,journal_ids:0
+#: help:fpa.auxiliar.wizard,journal_ids:0 help:fpa.diario.wizard,journal_ids:0
+msgid "Diario asociado a los movimientos contables a consultar."
+msgstr "Journal associated to the accounting movements to be consulted"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: field:fpa.auxiliar.equivalente.wizard,journal_ids:0
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: field:fpa.auxiliar.wizard,journal_ids:0
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: field:fpa.balance.general.wizard,journal_ids:0
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: field:fpa.balance.pruebas.wizard,journal_ids:0
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: field:fpa.diario.wizard,journal_ids:0
+#: field:fpa.equity.changes.wizard,journal_ids:0
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: field:fpa.flujocaja.wizard,journal_ids:0
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: field:fpa.inventario.balance.wizard,journal_ids:0
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: field:fpa.mayor.balance.wizard,journal_ids:0
+#: field:fpa.pyg.c.cc.wizard,journal_ids:0 field:fpa.pyg.c.wizard,journal_ids:0
+#: field:fpa.pyg.cc.wizard,journal_ids:0 field:fpa.pyg.wizard,journal_ids:0
+msgid "Diarios"
+msgstr "Journals"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_12:0
+msgid "Diciembre"
+msgstr "December"
+
+#. module: financial_reports
+#: field:account.account.estructure,digits:0
+msgid "Digitos"
+msgstr "Digits"
+
+#. module: financial_reports
+#: field:fpa.equity.changes.line,disminuciones:0
+msgid "Disminuciones"
+msgstr "Decreases"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,domain:0
+msgid "Dominio para la vista lista. Se utiliza para que la consulta sea dinamica."
+msgstr "Domain for list view. Used to make the query dynamic."
+
+#. module: financial_reports
+#: field:fpa.financial.reports,domain:0
+msgid "Dominio vista tree"
+msgstr "View tree domain"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_diario
+msgid "D?bito"
+msgstr "Debit"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "ENERO"
+msgstr "JANUARY"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,view_color:0
+msgid "El color indicado en este campo, se mostrar? en el los res?menes contenido del xlsx."
+msgstr "The color indicated in this field will be displayed in the summaries content of xlsx"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,title_color:0
+msgid "El color indicado en este campo, se mostrar? en el titulo del xlsx."
+msgstr "The color indicated in this field will be displayed in the xlsx title"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,encabezado_id:0
+#: field:fpa.auxiliar.line,encabezado_id:0
+#: field:fpa.balance.general.line,encabezado_id:0
+#: field:fpa.balance.pruebas.line,encabezado_id:0
+#: field:fpa.diario.line,encabezado_id:0
+#: field:fpa.equity.changes.line,encabezado_id:0
+#: field:fpa.flujocaja.line,encabezado_id:0
+#: field:fpa.inventario.balance.line,encabezado_id:0
+#: field:fpa.mayor.balance.line,encabezado_id:0
+#: field:fpa.pyg.c.cc.line,encabezado_id:0 field:fpa.pyg.c.line,encabezado_id:0
+#: field:fpa.pyg.cc.line,encabezado_id:0 field:fpa.pyg.line,encabezado_id:0
+msgid "Encabezado"
+msgstr "Header"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_01:0
+msgid "Enero"
+msgstr "January"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_equity_changes
+msgid "Equity Changes"
+msgstr "Equity Changes"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,equivalente:0
+msgid "Equivalente NIIF"
+msgstr "NIIF Equivalent"
+
+#. module: financial_reports
+#: code:addons/financial_reports/accounting/model/auxiliar.py:90
+#: code:addons/financial_reports/accounting/model/auxiliar_equivalente.py:81
+#: code:addons/financial_reports/accounting/model/balance_general.py:96
+#: code:addons/financial_reports/accounting/model/balance_pruebas.py:104
+#: code:addons/financial_reports/accounting/model/diario.py:81
+#: code:addons/financial_reports/accounting/model/equity_changes.py:115
+#: code:addons/financial_reports/accounting/model/estado_resultados.py:91
+#: code:addons/financial_reports/accounting/model/estado_resultados_cc.py:110
+#: code:addons/financial_reports/accounting/model/estado_resultados_comparativo.py:117
+#: code:addons/financial_reports/accounting/model/estado_resultados_comparativo_cc.py:123
+#: code:addons/financial_reports/accounting/model/flujocaja.py:98
+#: code:addons/financial_reports/accounting/model/inventario_balance.py:82
+#: code:addons/financial_reports/accounting/model/mayor_balance.py:85
+#, python-format
+msgid "Error en las fechas!"
+msgstr "Error in dates!"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,indentacion:0
+msgid "Espacios por nivel"
+msgstr "Spaces per level"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,search_default:0
+msgid "Establecer search por defecto para cada informe."
+msgstr "Set default search for each report"
+
+#. module: financial_reports
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+msgid "Estado"
+msgstr "State"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_pyg
+#: model:ir.actions.act_window,name:financial_reports.action_pyg_cc
+msgid "Estado de Resultados"
+msgstr "Income Statement"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_pyg_c
+msgid "Estado de Resultados (Comparativo)"
+msgstr "Income Statement (Comparative)"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,estado:0
+#: help:fpa.auxiliar.wizard,estado:0 help:fpa.diario.wizard,estado:0
+msgid "Estado en el cual se desean consultar los movimientos contables."
+msgstr "State in which it is desired to consult accounting movements"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,estado:0 field:fpa.auxiliar.equivalente,estado:0
+#: field:fpa.auxiliar.equivalente.wizard,estado:0
+#: field:fpa.auxiliar.wizard,estado:0 field:fpa.balance.general,estado:0
+#: field:fpa.balance.general.wizard,estado:0 field:fpa.balance.pruebas,estado:0
+#: field:fpa.balance.pruebas.wizard,estado:0 field:fpa.diario,estado:0
+#: field:fpa.diario.wizard,estado:0 field:fpa.equity.changes,estado:0
+#: field:fpa.equity.changes.wizard,estado:0 field:fpa.flujocaja,estado:0
+#: field:fpa.flujocaja.wizard,estado:0 field:fpa.inventario.balance,estado:0
+#: field:fpa.inventario.balance.wizard,estado:0
+#: field:fpa.mayor.balance,estado:0 field:fpa.mayor.balance.wizard,estado:0
+#: field:fpa.pyg,estado:0 field:fpa.pyg.c,estado:0 field:fpa.pyg.c.cc,estado:0
+#: field:fpa.pyg.c.cc.wizard,estado:0 field:fpa.pyg.c.wizard,estado:0
+#: field:fpa.pyg.cc,estado:0 field:fpa.pyg.cc.wizard,estado:0
+#: field:fpa.pyg.wizard,estado:0
+msgid "Estados"
+msgstr "State"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,fields:0
+msgid "Estos son los campos agregados en la consulta sql. No se utiliza."
+msgstr "These are the fields added in the sql query. Not used"
+
+#. module: financial_reports
+#: field:account.account,structure_id:0
+msgid "Estructura"
+msgstr "Structure"
+
+#. module: financial_reports
+#: view:account.account:financial_reports.view_account_structure_form
+msgid "Estructura cuenta"
+msgstr "Structure of the account"
+
+#. module: financial_reports
+#: view:account.account:financial_reports.view_account_structure_form
+msgid "Estructura de la cuenta para informes"
+msgstr "Estructura de la cuenta para informes"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.period,name:0
+msgid "Etiqueta"
+msgstr "Tag"
+
+#. module: financial_reports
+#: field:fpa.equity.changes,amount_label_comparative:0
+#: field:fpa.pyg.c,amount_label_comparative:0
+#: field:fpa.pyg.c.cc,amount_label_comparative:0
+msgid "Etiqueta monto comparativo"
+msgstr "Comparative amount label"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,export:0
+msgid "Exportacion"
+msgstr "Export"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "FEBRERO"
+msgstr "FEBRUARY"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_02:0
+msgid "Febrero"
+msgstr "February"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_diario
+#: field:fpa.auxiliar,date:0 field:fpa.auxiliar.equivalente,date:0
+#: field:fpa.auxiliar.equivalente.line,fecha:0
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: field:fpa.auxiliar.line,fecha:0 field:fpa.balance.general,date:0
+#: field:fpa.balance.pruebas,date:0 field:fpa.diario,date:0
+#: field:fpa.diario.line,fecha:0 field:fpa.equity.changes,date:0
+#: field:fpa.flujocaja,date:0 field:fpa.inventario.balance,date:0
+#: field:fpa.mayor.balance,date:0 field:fpa.pyg,date:0 field:fpa.pyg.c,date:0
+#: field:fpa.pyg.c.cc,date:0 field:fpa.pyg.cc,date:0
+msgid "Fecha"
+msgstr "Date"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Fecha (dia)"
+msgstr "Date (day)"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,date_to:0 field:fpa.auxiliar.equivalente,date_to:0
+#: field:fpa.auxiliar.equivalente.wizard,date_to:0
+#: field:fpa.auxiliar.wizard,date_to:0 field:fpa.balance.general,date_to:0
+#: field:fpa.balance.general.wizard,date_to:0
+#: field:fpa.balance.pruebas,date_to:0
+#: field:fpa.balance.pruebas.wizard,date_to:0 field:fpa.diario,date_to:0
+#: field:fpa.diario.wizard,date_to:0 field:fpa.equity.changes,date_to:0
+#: field:fpa.equity.changes.wizard,date_to:0 field:fpa.flujocaja,date_to:0
+#: field:fpa.inventario.balance,date_to:0
+#: field:fpa.inventario.balance.wizard,date_to:0
+#: field:fpa.mayor.balance,date_to:0 field:fpa.mayor.balance.wizard,date_to:0
+#: field:fpa.pyg,date_to:0 field:fpa.pyg.c,date_to:0
+#: field:fpa.pyg.c.cc,date_to:0 field:fpa.pyg.c.cc.wizard,date_to:0
+#: field:fpa.pyg.c.wizard,date_to:0 field:fpa.pyg.cc,date_to:0
+#: field:fpa.pyg.cc.wizard,date_to:0 field:fpa.pyg.wizard,date_to:0
+msgid "Fecha Final"
+msgstr "End date"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,date_from:0 field:fpa.auxiliar.equivalente,date_from:0
+#: field:fpa.auxiliar.equivalente.wizard,date_from:0
+#: field:fpa.auxiliar.wizard,date_from:0 field:fpa.balance.general,date_from:0
+#: field:fpa.balance.general.wizard,date_from:0
+#: field:fpa.balance.pruebas,date_from:0
+#: field:fpa.balance.pruebas.wizard,date_from:0 field:fpa.diario,date_from:0
+#: field:fpa.diario.wizard,date_from:0 field:fpa.equity.changes,date_from:0
+#: field:fpa.equity.changes.wizard,date_from:0 field:fpa.flujocaja,date_from:0
+#: field:fpa.inventario.balance,date_from:0
+#: field:fpa.inventario.balance.wizard,date_from:0
+#: field:fpa.mayor.balance,date_from:0
+#: field:fpa.mayor.balance.wizard,date_from:0 field:fpa.pyg,date_from:0
+#: field:fpa.pyg.c,date_from:0 field:fpa.pyg.c.cc,date_from:0
+#: field:fpa.pyg.c.cc.wizard,date_from:0 field:fpa.pyg.c.wizard,date_from:0
+#: field:fpa.pyg.cc,date_from:0 field:fpa.pyg.cc.wizard,date_from:0
+#: field:fpa.pyg.wizard,date_from:0
+msgid "Fecha Inicial"
+msgstr "Start date"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+#: view:False:financial_reports.template_report_diario
+#: view:False:financial_reports.template_report_equity_changes
+#: view:False:financial_reports.template_report_flujocaja
+#: view:False:financial_reports.template_report_pyg
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "Fecha de Generacion:"
+msgstr "Date of Generation:"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,date_to:0
+#: help:fpa.auxiliar.wizard,date_to:0 help:fpa.diario.wizard,date_to:0
+msgid "Fecha final de consulta, el informe retornar? los movimientos contables hasta esta fecha."
+msgstr "Final consultation date, the report will return the accounting movements up to this date"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,date_from:0
+#: help:fpa.auxiliar.wizard,date_from:0 help:fpa.diario.wizard,date_from:0
+msgid "Fecha inicial de consulta, el informe retornar? los movimientos contables desde esta fecha."
+msgstr "Initial consultation date, the report will return accounting movements as of this date"
+
+#. module: financial_reports
+#: help:fpa.balance.pruebas.wizard,date_from:0
+msgid "Fecha inicial para el rango de consulta."
+msgstr "Initial date for the query range"
+
+#. module: financial_reports
+#: help:fpa.balance.pruebas.wizard,date_to:0
+msgid "Fecha limite final para el rango de consulta."
+msgstr "Final date for the query range"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Fechas"
+msgstr "Dates"
+
+#. module: financial_reports
+#: field:fpa.equity.changes.wizard,analytic_filter:0
+#: field:fpa.pyg.c.cc.wizard,analytic_filter:0
+#: field:fpa.pyg.c.wizard,analytic_filter:0
+#: field:fpa.pyg.cc.wizard,analytic_filter:0
+#: field:fpa.pyg.wizard,analytic_filter:0
+msgid "Filtro adicional de cuenta analitica"
+msgstr "Additional analytic account filter"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.wizard,account_filter:0
+#: field:fpa.auxiliar.wizard,account_filter:0
+#: field:fpa.balance.general.wizard,account_filter:0
+#: field:fpa.balance.pruebas.wizard,account_filter:0
+#: field:fpa.diario.wizard,account_filter:0
+#: field:fpa.equity.changes.wizard,account_filter:0
+#: field:fpa.financial.reports,account_filter:0
+#: field:fpa.flujocaja.wizard,account_filter:0
+#: field:fpa.inventario.balance.wizard,account_filter:0
+#: field:fpa.mayor.balance.wizard,account_filter:0
+#: field:fpa.pyg.c.cc.wizard,account_filter:0
+#: field:fpa.pyg.c.wizard,account_filter:0
+#: field:fpa.pyg.cc.wizard,account_filter:0
+#: field:fpa.pyg.wizard,account_filter:0
+msgid "Filtro adicional de cuentas"
+msgstr "Additional account Filter"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,analytic_filter:0
+msgid "Filtro adicional de cuentas analiticas"
+msgstr "Additional analytics account filter"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.wizard,journal_filter:0
+#: field:fpa.auxiliar.wizard,journal_filter:0
+#: field:fpa.balance.general.wizard,journal_filter:0
+#: field:fpa.balance.pruebas.wizard,journal_filter:0
+#: field:fpa.diario.wizard,journal_filter:0
+#: field:fpa.equity.changes.wizard,journal_filter:0
+#: field:fpa.financial.reports,journal_filter:0
+#: field:fpa.flujocaja.wizard,journal_filter:0
+#: field:fpa.inventario.balance.wizard,journal_filter:0
+#: field:fpa.mayor.balance.wizard,journal_filter:0
+#: field:fpa.pyg.c.cc.wizard,journal_filter:0
+#: field:fpa.pyg.c.wizard,journal_filter:0
+#: field:fpa.pyg.cc.wizard,journal_filter:0
+#: field:fpa.pyg.wizard,journal_filter:0
+msgid "Filtro adicional de diarios"
+msgstr "Additional journal filter"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.wizard,partner_filter:0
+#: field:fpa.auxiliar.wizard,partner_filter:0
+#: field:fpa.balance.general.wizard,partner_filter:0
+#: field:fpa.balance.pruebas.wizard,partner_filter:0
+#: field:fpa.equity.changes.wizard,partner_filter:0
+#: field:fpa.financial.reports,partner_filter:0
+#: field:fpa.flujocaja.wizard,partner_filter:0
+#: field:fpa.inventario.balance.wizard,partner_filter:0
+#: field:fpa.mayor.balance.wizard,partner_filter:0
+#: field:fpa.pyg.c.cc.wizard,partner_filter:0
+#: field:fpa.pyg.c.wizard,partner_filter:0
+#: field:fpa.pyg.cc.wizard,partner_filter:0
+#: field:fpa.pyg.wizard,partner_filter:0
+msgid "Filtro adicional de terceros"
+msgstr "Additional partner filter"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Filtros"
+msgstr "Filters"
+
+#. module: financial_reports
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+msgid "Filtros Opcionales"
+msgstr "Optional filters"
+
+#. module: financial_reports
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+msgid "Filtros Principales"
+msgstr "Main filters"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Filtros adicionales"
+msgstr "Additional filters"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Financieros"
+msgstr "Financial"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Otros"
+msgstr "Others"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Financieros (Comparativos)"
+msgstr "Financial (Comparative)"
+
+#. module: financial_reports
+#: model:ir.actions.report.xml,name:financial_reports.report_flujocaja
+msgid "Flujo de Caja"
+msgstr "Cash flow"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_flujocaja
+msgid "Flujo de caja"
+msgstr "Cash flow"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,form:0
+msgid "Form"
+msgstr "Form"
+
+#. module: financial_reports
+#: view:fpa.export.wizard.ept:financial_reports.fpa_export_wizard_view_ept
+#: field:fpa.export.wizard.ept,format_report:0
+#: field:fpa.financial.reports,formato:0
+msgid "Formato"
+msgstr "Format"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,format_money:0
+msgid "Formato Dinero"
+msgstr "Currency format"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,format_date:0
+msgid "Formato Fecha"
+msgstr "Date format"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Formatos"
+msgstr "Formats"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,formato:0
+msgid "Formatos disponibles parar generar los informes."
+msgstr "Formats available to generate reports"
+
+#. module: financial_reports
+#: model:ir.actions.report.xml,name:financial_reports.report_pyg
+msgid "Ganancias y p?rdidas"
+msgstr "Income Statement"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Generador de Conceptos"
+msgstr "Concept Generator"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.financial.reports:financial_reports.view_fpa_financial_reports_tree
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Generar"
+msgstr "Generate"
+
+#. module: financial_reports
+#: model:ir.ui.menu,name:financial_reports.menu_fpa_generate_financial_reports
+msgid "Generar/Consultar"
+msgstr "Generate/View"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.general.line:financial_reports.fpa_balance_general_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+#: view:fpa.equity.changes.line:financial_reports.fpa_equity_changes_line
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_search
+#: view:fpa.flujocaja.line:financial_reports.fpa_flujocaja_line
+#: view:fpa.inventario.balance.line:financial_reports.fpa_inventario_balance_line
+#: view:fpa.mayor.balance.line:financial_reports.fpa_mayor_balance_line
+#: view:fpa.pyg.c.cc.line:financial_reports.fpa_pyg_c_cc_line
+#: view:fpa.pyg.c.line:financial_reports.fpa_pyg_c_line
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: view:fpa.pyg.line:financial_reports.fpa_pyg_line
+msgid "Group By"
+msgstr "Group By"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,nivel:0
+msgid "Grupo"
+msgstr "Group"
+
+#. module: financial_reports
+#: field:fpa.export.wizard.ept,date_to:0
+#: field:fpa.financial.reports.period,date_to:0
+msgid "Hasta"
+msgstr "Date to"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+#: view:False:financial_reports.template_report_diario
+#: view:False:financial_reports.template_report_equity_changes
+#: view:False:financial_reports.template_report_flujocaja
+#: view:False:financial_reports.template_report_pyg
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "Hasta:"
+msgstr "Date to:"
+
+#. module: financial_reports
+#: field:account.account.estructure,id:0 field:fpa.auxiliar,id:0
+#: field:fpa.auxiliar.equivalente,id:0 field:fpa.auxiliar.equivalente.line,id:0
+#: field:fpa.auxiliar.equivalente.wizard,id:0 field:fpa.auxiliar.line,id:0
+#: field:fpa.auxiliar.wizard,id:0 field:fpa.balance.general,id:0
+#: field:fpa.balance.general.line,id:0 field:fpa.balance.general.wizard,id:0
+#: field:fpa.balance.pruebas,id:0 field:fpa.balance.pruebas.line,id:0
+#: field:fpa.balance.pruebas.wizard,id:0 field:fpa.diario,id:0
+#: field:fpa.diario.line,id:0 field:fpa.diario.wizard,id:0
+#: field:fpa.equity.changes,id:0 field:fpa.equity.changes.line,id:0
+#: field:fpa.equity.changes.wizard,id:0 field:fpa.export.wizard.ept,id:0
+#: field:fpa.financial.reports,id:0 field:fpa.financial.reports.columns,id:0
+#: field:fpa.financial.reports.concepts,id:0
+#: field:fpa.financial.reports.concepts.columns,id:0
+#: field:fpa.financial.reports.concepts.columns.lines,id:0
+#: field:fpa.financial.reports.period,id:0
+#: field:fpa.financial.reports.period_range,id:0 field:fpa.flujocaja,id:0
+#: field:fpa.flujocaja.line,id:0 field:fpa.flujocaja.wizard,id:0
+#: field:fpa.inventario.balance,id:0 field:fpa.inventario.balance.line,id:0
+#: field:fpa.inventario.balance.wizard,id:0 field:fpa.mayor.balance,id:0
+#: field:fpa.mayor.balance.line,id:0 field:fpa.mayor.balance.wizard,id:0
+#: field:fpa.niveles,id:0 field:fpa.pyg,id:0 field:fpa.pyg.c,id:0
+#: field:fpa.pyg.c.cc,id:0 field:fpa.pyg.c.cc.line,id:0
+#: field:fpa.pyg.c.cc.wizard,id:0 field:fpa.pyg.c.line,id:0
+#: field:fpa.pyg.c.wizard,id:0 field:fpa.pyg.cc,id:0 field:fpa.pyg.cc.line,id:0
+#: field:fpa.pyg.cc.wizard,id:0 field:fpa.pyg.line,id:0
+#: field:fpa.pyg.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: financial_reports
+#: view:fpa.export.wizard.ept:financial_reports.fpa_export_wizard_view_ept
+#: view:fpa.financial.reports:financial_reports.view_fpa_financial_reports_tree
+msgid "Imprimir"
+msgstr "Print"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,indentacion:0
+msgid "Indentacion"
+msgstr "Indentation"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,numeric:0
+msgid "Indicar las columnas que deben tener formato money en el xlsx, ejemplo: A,B,C,D."
+msgstr "Indicate the columns that must have format money in xlsx, example: A, B, C, D."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,porc:0
+msgid "Indicar las columnas que deben tener formato porcentaje en el xlsx, ejemplo: A,B,C,D."
+msgstr "Indicate the columns that must have format percent in the xlsx, example: A, B, C, D."
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Informaci?n Ex?gena"
+msgstr "Exogenous Information"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.line:financial_reports.view_fpa_auxiliar_equivalente_line_graph
+#: view:fpa.auxiliar.line:financial_reports.view_fpa_auxiliar_line_graph
+#: view:fpa.balance.general.line:financial_reports.view_fpa_balance_general_line_graph
+#: view:fpa.balance.pruebas.line:financial_reports.view_fpa_balance_pruebas_line_graph
+#: view:fpa.mayor.balance.line:financial_reports.view_fpa_mayor_balance_line_graph
+msgid "Informe Balance de Prueba"
+msgstr "Test Balance Report"
+
+#. module: financial_reports
+#: model:ir.actions.report.xml,name:financial_reports.report_pyg_c
+#: model:ir.actions.report.xml,name:financial_reports.report_pyg_c_cc
+msgid "Informe Comparativo"
+msgstr "Comparative Report"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.view_fpa_diario_line_graph
+msgid "Informe Diario"
+msgstr "Daily Report"
+
+#. module: financial_reports
+#: view:fpa.flujocaja.line:financial_reports.view_fpa_flujocaja_line_graph
+#: view:fpa.pyg.c.cc.line:financial_reports.view_fpa_pyg_c_cc_line_graph
+#: view:fpa.pyg.c.line:financial_reports.view_fpa_pyg_c_line_graph
+#: view:fpa.pyg.cc.line:financial_reports.view_fpa_pyg_cc_line_graph
+#: view:fpa.pyg.line:financial_reports.view_fpa_pyg_line_graph
+msgid "Informe Ganancias y P?rdidas"
+msgstr "Statement of income"
+
+#. module: financial_reports
+#: view:fpa.inventario.balance.line:financial_reports.view_fpa_inventario_balance_line_graph
+msgid "Informe Inventario y Balance"
+msgstr "Inventory and Balance Sheet Report"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts,financial_reports:0
+#: field:fpa.financial.reports.concepts.columns,financial_reports:0
+#: field:fpa.niveles,financial_reports:0
+msgid "Informe financiero"
+msgstr "Financial report"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_financial_reports
+#: model:ir.ui.menu,name:financial_reports.menu_fpa_financial_reports
+msgid "Informes"
+msgstr "report"
+
+#. module: financial_reports
+#: model:ir.module.category,name:financial_reports.module_category_financial_reports
+msgid "Informes Financieros"
+msgstr "Financial reports"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+#: view:fpa.financial.reports.period_range:financial_reports.view_fpa_financial_reports_period_range_form
+msgid "Informes financieros"
+msgstr "Financial reports"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Inventario"
+msgstr "Inventory"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: model:ir.actions.act_window,name:financial_reports.action_inventario_balance
+#: model:ir.actions.report.xml,name:financial_reports.report_inventario_balance
+msgid "Inventario y Balance"
+msgstr "Inventory and Balance"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Inventarios"
+msgstr "Inventory"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,sign:0
+msgid "Invertir signo"
+msgstr "Invest sign"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "JULIO"
+msgstr "July"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "JUNIO"
+msgstr "June"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_07:0
+msgid "Julio"
+msgstr "July"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_06:0
+msgid "Junio"
+msgstr "June"
+
+#. module: financial_reports
+#: code:addons/financial_reports/accounting/model/auxiliar.py:90
+#: code:addons/financial_reports/accounting/model/auxiliar_equivalente.py:81
+#: code:addons/financial_reports/accounting/model/balance_general.py:96
+#: code:addons/financial_reports/accounting/model/balance_pruebas.py:104
+#: code:addons/financial_reports/accounting/model/diario.py:81
+#: code:addons/financial_reports/accounting/model/equity_changes.py:115
+#: code:addons/financial_reports/accounting/model/estado_resultados.py:91
+#: code:addons/financial_reports/accounting/model/estado_resultados_cc.py:110
+#: code:addons/financial_reports/accounting/model/estado_resultados_comparativo.py:117
+#: code:addons/financial_reports/accounting/model/estado_resultados_comparativo_cc.py:123
+#: code:addons/financial_reports/accounting/model/flujocaja.py:98
+#: code:addons/financial_reports/accounting/model/inventario_balance.py:82
+#: code:addons/financial_reports/accounting/model/mayor_balance.py:85
+#, python-format
+msgid "Las fechas planificadas estan mal configuradas"
+msgstr "Planned dates are poorly configured"
+
+#. module: financial_reports
+#: field:account.account.estructure,write_uid:0 field:fpa.auxiliar,write_uid:0
+#: field:fpa.auxiliar.equivalente,write_uid:0
+#: field:fpa.auxiliar.equivalente.line,write_uid:0
+#: field:fpa.auxiliar.equivalente.wizard,write_uid:0
+#: field:fpa.auxiliar.line,write_uid:0 field:fpa.auxiliar.wizard,write_uid:0
+#: field:fpa.balance.general,write_uid:0
+#: field:fpa.balance.general.line,write_uid:0
+#: field:fpa.balance.general.wizard,write_uid:0
+#: field:fpa.balance.pruebas,write_uid:0
+#: field:fpa.balance.pruebas.line,write_uid:0
+#: field:fpa.balance.pruebas.wizard,write_uid:0 field:fpa.diario,write_uid:0
+#: field:fpa.diario.line,write_uid:0 field:fpa.diario.wizard,write_uid:0
+#: field:fpa.equity.changes,write_uid:0
+#: field:fpa.equity.changes.line,write_uid:0
+#: field:fpa.equity.changes.wizard,write_uid:0
+#: field:fpa.export.wizard.ept,write_uid:0
+#: field:fpa.financial.reports,write_uid:0
+#: field:fpa.financial.reports.columns,write_uid:0
+#: field:fpa.financial.reports.concepts,write_uid:0
+#: field:fpa.financial.reports.concepts.columns,write_uid:0
+#: field:fpa.financial.reports.concepts.columns.lines,write_uid:0
+#: field:fpa.financial.reports.period,write_uid:0
+#: field:fpa.financial.reports.period_range,write_uid:0
+#: field:fpa.flujocaja,write_uid:0 field:fpa.flujocaja.line,write_uid:0
+#: field:fpa.flujocaja.wizard,write_uid:0
+#: field:fpa.inventario.balance,write_uid:0
+#: field:fpa.inventario.balance.line,write_uid:0
+#: field:fpa.inventario.balance.wizard,write_uid:0
+#: field:fpa.mayor.balance,write_uid:0 field:fpa.mayor.balance.line,write_uid:0
+#: field:fpa.mayor.balance.wizard,write_uid:0 field:fpa.niveles,write_uid:0
+#: field:fpa.pyg,write_uid:0 field:fpa.pyg.c,write_uid:0
+#: field:fpa.pyg.c.cc,write_uid:0 field:fpa.pyg.c.cc.line,write_uid:0
+#: field:fpa.pyg.c.cc.wizard,write_uid:0 field:fpa.pyg.c.line,write_uid:0
+#: field:fpa.pyg.c.wizard,write_uid:0 field:fpa.pyg.cc,write_uid:0
+#: field:fpa.pyg.cc.line,write_uid:0 field:fpa.pyg.cc.wizard,write_uid:0
+#: field:fpa.pyg.line,write_uid:0 field:fpa.pyg.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: financial_reports
+#: field:account.account.estructure,write_date:0
+#: field:fpa.auxiliar,write_date:0 field:fpa.auxiliar.equivalente,write_date:0
+#: field:fpa.auxiliar.equivalente.line,write_date:0
+#: field:fpa.auxiliar.equivalente.wizard,write_date:0
+#: field:fpa.auxiliar.line,write_date:0 field:fpa.auxiliar.wizard,write_date:0
+#: field:fpa.balance.general,write_date:0
+#: field:fpa.balance.general.line,write_date:0
+#: field:fpa.balance.general.wizard,write_date:0
+#: field:fpa.balance.pruebas,write_date:0
+#: field:fpa.balance.pruebas.line,write_date:0
+#: field:fpa.balance.pruebas.wizard,write_date:0 field:fpa.diario,write_date:0
+#: field:fpa.diario.line,write_date:0 field:fpa.diario.wizard,write_date:0
+#: field:fpa.equity.changes,write_date:0
+#: field:fpa.equity.changes.line,write_date:0
+#: field:fpa.equity.changes.wizard,write_date:0
+#: field:fpa.export.wizard.ept,write_date:0
+#: field:fpa.financial.reports,write_date:0
+#: field:fpa.financial.reports.columns,write_date:0
+#: field:fpa.financial.reports.concepts,write_date:0
+#: field:fpa.financial.reports.concepts.columns,write_date:0
+#: field:fpa.financial.reports.concepts.columns.lines,write_date:0
+#: field:fpa.financial.reports.period,write_date:0
+#: field:fpa.financial.reports.period_range,write_date:0
+#: field:fpa.flujocaja,write_date:0 field:fpa.flujocaja.line,write_date:0
+#: field:fpa.flujocaja.wizard,write_date:0
+#: field:fpa.inventario.balance,write_date:0
+#: field:fpa.inventario.balance.line,write_date:0
+#: field:fpa.inventario.balance.wizard,write_date:0
+#: field:fpa.mayor.balance,write_date:0
+#: field:fpa.mayor.balance.line,write_date:0
+#: field:fpa.mayor.balance.wizard,write_date:0 field:fpa.niveles,write_date:0
+#: field:fpa.pyg,write_date:0 field:fpa.pyg.c,write_date:0
+#: field:fpa.pyg.c.cc,write_date:0 field:fpa.pyg.c.cc.line,write_date:0
+#: field:fpa.pyg.c.cc.wizard,write_date:0 field:fpa.pyg.c.line,write_date:0
+#: field:fpa.pyg.c.wizard,write_date:0 field:fpa.pyg.cc,write_date:0
+#: field:fpa.pyg.cc.line,write_date:0 field:fpa.pyg.cc.wizard,write_date:0
+#: field:fpa.pyg.line,write_date:0 field:fpa.pyg.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Leyenda"
+msgstr "Legend"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+msgid "Libro Auxiliary."
+msgstr "Libro Auxiliary."
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "MARZO"
+msgstr "MARCH"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "MAYO"
+msgstr "MAY"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,export:0
+msgid "Marque esta opcion si el reporte es solo de exportacion (Ejemplo: medios magneticos)"
+msgstr "Check this option if the report is export only (Example: magnetic media)"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,analyze:0
+msgid "Marque esta opci?n si desea analizar la informaci?n luego de generarla (se le mostrara la vista lista/gr?fica correspondiente al informe). Caso contrario se le mostrar? la pantalla donde podr? exportar o analizar."
+msgstr "Check this option if you want to analyze the information after generating it (the list / graphical view corresponding to the report will be shown). Otherwise you will be shown the screen where you can export or analyze"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,sign:0
+msgid "Marque esta opci?n si el informe debe invertir los signos."
+msgstr "Check this option if the report should reverse the signs"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,clase:0
+msgid "Marque esta opci?n si el informe debe mostrar la clase como una columna adicional. Aplica al Balance General."
+msgstr "Check this option if the report should show the class as an additional column. Applies to the Balance Sheet."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,equivalente:0
+msgid "Marque esta opci?n si el informe debe mostrar su equivalente en NIIF."
+msgstr "Check this option if the report should show its equivalent in NIIF"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,analytic_filter:0
+msgid "Marque esta opci?n si el informe debe tener disponible un filtro adicional por cuenta analitica."
+msgstr "Check this option if the report must have an additional filter available per analytical account."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,account_filter:0
+msgid "Marque esta opci?n si el informe debe tener disponible un filtro adicional por cuenta contable."
+msgstr "Check this option if the report must have an additional filter available per accounting account"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,journal_filter:0
+msgid "Marque esta opci?n si el informe debe tener disponible un filtro adicional por diarios."
+msgstr "Check this option if the report must have an additional filter per diary available"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,partner_filter:0
+msgid "Marque esta opci?n si el informe debe tener disponible un filtro adicional por terceros."
+msgstr "Check this option if the report must have an additional filter available by a third party"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,tipo:0
+msgid "Marque esta opci?n si se desea que el concepto contenga tipos de cuenta y no cuentas especificas.que este concepto solo se muestre en el resumen final de informe."
+msgstr "Check this option if you want the concept to contain account types and not specific accounts.that this concept is only shown in the final report summary."
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,before:0
+msgid "Marque esta opci?n si se desea que este concepto se muestre antes del detalle de cuentas con su respectivo total, caso contrario se mostrar? al final de los movimientos."
+msgstr "Check this option if you want this concept to be displayed before the account detail with its respective total, otherwise it will be displayed at the end of the movements"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,detail:0
+msgid "Marque esta opci?n si se desea que este concepto se muestre con detalle."
+msgstr "Check this option if you want this concept to be shown in detail"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,resume:0
+msgid "Marque esta opci?n si se desea que este concepto solo se muestre en el resumen final de informe. Solo aplica a informes con resumen al final."
+msgstr "Check this option if you want this concept to only be shown in the final report summary. Only applies to summary reports at the end"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,detalle:0
+msgid "Marque si desea que el ultimo nivel quede con detalle"
+msgstr "Check if you want the last level to be detailed"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_03:0
+msgid "Marzo"
+msgstr "March"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_05:0
+msgid "Mayo"
+msgstr "May"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+#: model:ir.actions.act_window,name:financial_reports.action_mayor_balance
+msgid "Mayor y Balance"
+msgstr "Major and Balance"
+
+#. module: financial_reports
+#: model:ir.actions.report.xml,name:financial_reports.report_mayor_balance
+msgid "Mayor y balance"
+msgstr "Major and Balance"
+
+#. module: financial_reports
+#: field:fpa.export.wizard.ept,export:0
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Medios"
+msgstr "Magnetic information"
+
+#. module: financial_reports
+#: field:fpa.export.wizard.ept,message:0
+msgid "Message"
+msgstr "Message"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,model:0
+msgid "Modelo"
+msgstr "Model"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,model_wzr:0
+msgid "Modelo Wizard"
+msgstr "Model Wizard"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,model:0 help:fpa.financial.reports,model_wzr:0
+msgid "Modelo asociado al wizard del informe. Se utiliza para que la generaci?n sea dinamica."
+msgstr "Modelo asociado al wizard del informe. Se utiliza para que la generaci?n sea dinamica."
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_total:0
+msgid "Monto total"
+msgstr "Total amount"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,move_line_id:0
+#: field:fpa.auxiliar.line,move_line_id:0
+msgid "Move line"
+msgstr "Move line"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Movimientos"
+msgstr "Move"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "NOVIEMBRE"
+msgstr "November"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,nivel:0 field:fpa.auxiliar.line,nivel:0
+#: field:fpa.balance.general.line,nivel:0
+#: field:fpa.balance.pruebas.line,nivel:0 field:fpa.diario.line,nivel:0
+#: field:fpa.equity.changes.line,nivel:0 field:fpa.financial.reports,nivel:0
+#: field:fpa.flujocaja.line,nivel:0 field:fpa.inventario.balance.line,nivel:0
+#: field:fpa.mayor.balance.line,nivel:0 field:fpa.pyg.c.cc.line,nivel:0
+#: field:fpa.pyg.c.line,nivel:0 field:fpa.pyg.cc.line,nivel:0
+#: field:fpa.pyg.line,nivel:0
+msgid "Nivel"
+msgstr "Level"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Auxiliares"
+msgstr "Auxiliaries"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 0"
+msgstr "Level 0"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 1"
+msgstr "Level 1"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 2"
+msgstr "Level 2"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 3"
+msgstr "Level 3"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 4"
+msgstr "Level 4"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 5"
+msgstr "Level 5"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 6"
+msgstr "Level 6"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 7"
+msgstr "Level 7"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+msgid "Nivel 8"
+msgstr "Level 8"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: field:fpa.auxiliar.wizard,niveles:0
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: field:fpa.balance.general.wizard,niveles:0
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: field:fpa.balance.pruebas.wizard,niveles:0
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: field:fpa.diario.wizard,niveles:0
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: field:fpa.equity.changes.wizard,niveles:0
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+#: field:fpa.financial.reports,niveles_ids:0
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: field:fpa.inventario.balance.wizard,niveles:0
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: field:fpa.mayor.balance.wizard,niveles:0
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: field:fpa.pyg.c.cc.wizard,niveles:0
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: field:fpa.pyg.c.wizard,niveles:0
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: field:fpa.pyg.cc.wizard,niveles:0
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+#: field:fpa.pyg.wizard,niveles:0
+msgid "Niveles"
+msgstr "Levels"
+
+#. module: financial_reports
+#: sql_constraint:account.account.estructure:0
+msgid "No puede crear niveles repetidas para una cuenta."
+msgstr "You can not create repeated levels for an account"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.period_range,name:0
+msgid "Nombre"
+msgstr "Name"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,name:0
+msgid "Nombre del informe, este se mostrar? en los formatos asociados."
+msgstr "Nombre del informe, este se mostrara en los formatos asociados"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,name:0
+msgid "Nombre del reporte"
+msgstr "Report Name"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_11:0
+msgid "Noviembre"
+msgstr "November"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,nivel:0
+msgid "Numero de niveles, el cual tendra en cuenta para la creacion de Conceptos."
+msgstr "Number of levels, which will take into account for the creation of Concepts"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "OCTUBRE"
+msgstr "OCTOBER"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_10:0
+msgid "Octubre"
+msgstr "October"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.diario.wizard:financial_reports.wizard_fpa_diario_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Opciones del informe"
+msgstr "Report Options"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Otros"
+msgstr "Others"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "PUC"
+msgstr "Chart account"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+msgid "PUC:"
+msgstr "Chart account:"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Parametros Opcionales"
+msgstr "Optional Parameters"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: view:fpa.balance.general.wizard:financial_reports.wizard_fpa_balance_general_view
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: view:fpa.inventario.balance.wizard:financial_reports.wizard_fpa_inventario_balance_view
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+msgid "Parametros Principales"
+msgstr "Main Parameters"
+
+#. module: financial_reports
+#: model:ir.ui.menu,name:financial_reports.menu_fpa_generate_financial_reports_period
+msgid "Periodo"
+msgstr "Period"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.wizard,period_balance_ids:0
+#: field:fpa.auxiliar.wizard,period_balance_ids:0
+#: field:fpa.balance.general.wizard,period_balance_ids:0
+#: field:fpa.balance.pruebas.wizard,period_balance_ids:0
+#: field:fpa.diario.wizard,period_balance_ids:0
+#: field:fpa.equity.changes.wizard,period_balance_ids:0
+#: view:fpa.financial.reports.period_range:financial_reports.view_fpa_financial_reports_period_range_form
+#: view:fpa.flujocaja.wizard:financial_reports.wizard_fpa_flujocaja_view
+#: field:fpa.flujocaja.wizard,period_balance_ids:0
+#: field:fpa.inventario.balance.wizard,period_balance_ids:0
+#: field:fpa.mayor.balance.wizard,period_balance_ids:0
+#: field:fpa.pyg.c.cc.wizard,period_balance_ids:0
+#: field:fpa.pyg.c.wizard,period_balance_ids:0
+#: field:fpa.pyg.cc.wizard,period_balance_ids:0
+#: field:fpa.pyg.wizard,period_balance_ids:0
+#: model:ir.actions.act_window,name:financial_reports.action_financial_reports_period
+msgid "Periodos"
+msgstr "Periods"
+
+#. module: financial_reports
+#: help:account.account,structure_id:0
+msgid "Permite definir la estructura de las cuentas de tipo vista para ser mostradas correctamente en los informes. La secuencia se debe definir en orden inverso, por ejemplo: secuencia 3 para las de nivel 1 (1 Activo), secuencia 2 para las de nivel 2 (11 Dispnible) y secuencia 1 para las de nivel 3 (1105 Caja)."
+msgstr "Permite definir la estructura de las cuentas de tipo vista para ser mostradas correctamente en los informes. La secuencia se debe definir en orden inverso, por ejemplo: secuencia 3 para las de nivel 1 (1 Activo), secuencia 2 para las de nivel 2 (11 Dispnible) y secuencia 1 para las de nivel 3 (1105 Caja)."
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,period_balance_ids:0
+#: help:fpa.auxiliar.wizard,period_balance_ids:0
+#: help:fpa.diario.wizard,period_balance_ids:0
+msgid "Per?odo asociado a los movimientos contables a consultar."
+msgstr "Period associated to the accounting movements to be consulted"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,chart_account_id:0
+#: field:fpa.auxiliar.equivalente,chart_account_id:0
+#: field:fpa.auxiliar.equivalente.wizard,chart_account_id:0
+#: field:fpa.auxiliar.wizard,chart_account_id:0
+#: field:fpa.balance.general,chart_account_id:0
+#: field:fpa.balance.general.wizard,chart_account_id:0
+#: field:fpa.balance.pruebas,chart_account_id:0
+#: field:fpa.balance.pruebas.wizard,chart_account_id:0
+#: field:fpa.diario,chart_account_id:0
+#: field:fpa.diario.wizard,chart_account_id:0
+#: field:fpa.equity.changes,chart_account_id:0
+#: field:fpa.equity.changes.wizard,chart_account_id:0
+#: field:fpa.flujocaja,chart_account_id:0
+#: field:fpa.flujocaja.wizard,chart_account_id:0
+#: field:fpa.inventario.balance,chart_account_id:0
+#: field:fpa.inventario.balance.wizard,chart_account_id:0
+#: field:fpa.mayor.balance,chart_account_id:0
+#: field:fpa.mayor.balance.wizard,chart_account_id:0
+#: field:fpa.pyg,chart_account_id:0 field:fpa.pyg.c,chart_account_id:0
+#: field:fpa.pyg.c.cc,chart_account_id:0
+#: field:fpa.pyg.c.cc.wizard,chart_account_id:0
+#: field:fpa.pyg.c.wizard,chart_account_id:0
+#: field:fpa.pyg.cc,chart_account_id:0
+#: field:fpa.pyg.cc.wizard,chart_account_id:0
+#: field:fpa.pyg.wizard,chart_account_id:0
+msgid "Plan Contable"
+msgstr "Chart acount"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,chart_account_id:0
+#: help:fpa.auxiliar.wizard,chart_account_id:0
+#: help:fpa.diario.wizard,chart_account_id:0
+msgid "Plan de cuentas asociado a las cuentas contables que se desean consultar."
+msgstr "Chart of accounts associated with the accounts that are to be consulted"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,template:0
+msgid "Plantilla QWEB"
+msgstr "Web template"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,template:0
+msgid "Plantilla qweb asociada al informe."
+msgstr "Qweb template associated with the report"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Producci?n"
+msgstr "Production"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.fpa_financial_reports_form_view
+msgid "Querys"
+msgstr "Querys"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "RESUMEN"
+msgstr "Summary"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.period_range,period_ids:0
+msgid "Rango de Periodos"
+msgstr "Range of Periods"
+
+#. module: financial_reports
+#: view:fpa.export.wizard.ept:financial_reports.fpa_export_wizard_view_ept
+msgid "Rango de fechas"
+msgstr "Date range"
+
+#. module: financial_reports
+#: field:fpa.equity.changes.wizard,period_range:0
+#: view:fpa.financial.reports.period_range:financial_reports.view_fpa_financial_reports_period_range_form
+#: field:fpa.pyg.c.cc.wizard,period_range:0
+#: field:fpa.pyg.c.wizard,period_range:0
+#: model:ir.actions.act_window,name:financial_reports.action_financial_reports_period_range
+#: model:ir.ui.menu,name:financial_reports.menu_fpa_generate_financial_reports_period_range
+msgid "Rango de periodos"
+msgstr "Range of periods"
+
+#. module: financial_reports
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+msgid "Rango de periodos (Informaci?n comparativa)"
+msgstr "Range of periods (Comparative information)"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,financial_id:0
+#: field:fpa.auxiliar.equivalente,financial_id:0
+#: field:fpa.auxiliar.equivalente.line,financial_id:0
+#: field:fpa.auxiliar.line,financial_id:0
+#: field:fpa.balance.general,financial_id:0
+#: field:fpa.balance.general.line,financial_id:0
+#: field:fpa.balance.pruebas,financial_id:0
+#: field:fpa.balance.pruebas.line,financial_id:0
+#: field:fpa.diario,financial_id:0 field:fpa.diario.line,financial_id:0
+#: field:fpa.equity.changes,financial_id:0
+#: field:fpa.equity.changes.line,financial_id:0
+#: field:fpa.flujocaja,financial_id:0 field:fpa.flujocaja.line,financial_id:0
+#: field:fpa.inventario.balance,financial_id:0
+#: field:fpa.inventario.balance.line,financial_id:0
+#: field:fpa.mayor.balance,financial_id:0
+#: field:fpa.mayor.balance.line,financial_id:0 field:fpa.pyg,financial_id:0
+#: field:fpa.pyg.c,financial_id:0 field:fpa.pyg.c.cc,financial_id:0
+#: field:fpa.pyg.c.cc.line,financial_id:0 field:fpa.pyg.c.line,financial_id:0
+#: field:fpa.pyg.cc,financial_id:0 field:fpa.pyg.cc.line,financial_id:0
+#: field:fpa.pyg.line,financial_id:0
+msgid "Reporte"
+msgstr "Report"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "Representante Legal."
+msgstr "Legal representative"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,resume:0
+#: field:fpa.auxiliar.line,resume:0 field:fpa.balance.general.line,resume:0
+#: field:fpa.balance.pruebas.line,resume:0
+#: field:fpa.balance.pruebas.wizard,resume:0 field:fpa.diario.line,resume:0
+#: field:fpa.equity.changes.line,resume:0 field:fpa.flujocaja.line,resume:0
+#: field:fpa.inventario.balance.line,resume:0
+#: field:fpa.mayor.balance.line,resume:0 field:fpa.pyg.c.cc.line,resume:0
+#: field:fpa.pyg.c.line,resume:0 field:fpa.pyg.cc.line,resume:0
+#: field:fpa.pyg.line,resume:0
+msgid "Resumen"
+msgstr "Summary"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "Revisor Fiscal."
+msgstr "Tax auditor"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "SALDO COMPARATIVO"
+msgstr "COMPARATIVE BALANCE"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_equity_changes
+#: view:False:financial_reports.template_report_pyg
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "SALDO FINAL"
+msgstr "FINAL BALANCE"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "SEPTIEMBRE"
+msgstr "SEPTEMBER"
+
+#. module: financial_reports
+#: field:fpa.inventario.balance.line,amount_inicial:0
+msgid "Saldo"
+msgstr "Balance"
+
+#. module: financial_reports
+#: field:fpa.pyg.cc.line,amount_1:0
+msgid "Saldo A?o 1"
+msgstr "Balance Year 1"
+
+#. module: financial_reports
+#: field:fpa.pyg.cc.line,amount_2:0
+msgid "Saldo A?o 2"
+msgstr "Balance Year 2"
+
+#. module: financial_reports
+#: field:fpa.pyg.cc.line,amount_3:0
+msgid "Saldo A?o 3"
+msgstr "Balance Year 3"
+
+#. module: financial_reports
+#: field:fpa.pyg.cc.line,amount_4:0
+msgid "Saldo A?o 4"
+msgstr "Balance Year 4"
+
+#. module: financial_reports
+#: field:fpa.pyg.cc.line,amount_5:0
+msgid "Saldo A?o 5"
+msgstr "Balance Year 5"
+
+#. module: financial_reports
+#: field:fpa.equity.changes.line,amount_comparative:0
+#: field:fpa.pyg.c.cc.line,amount_comparative:0
+#: field:fpa.pyg.c.line,amount_comparative:0 field:fpa.pyg.line,amount_1:0
+msgid "Saldo Comparativo"
+msgstr "Comparative Balance"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,amount_final:0
+#: field:fpa.auxiliar.line,amount_final:0
+#: field:fpa.balance.general.line,amount_final:0
+#: field:fpa.balance.pruebas.line,amount_final:0
+#: field:fpa.equity.changes.line,amount_final:0
+#: field:fpa.pyg.c.cc.line,amount_final:0 field:fpa.pyg.c.line,amount_final:0
+#: field:fpa.pyg.cc.line,amount_final:0 field:fpa.pyg.line,amount_final:0
+msgid "Saldo Final"
+msgstr "Final balance"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+msgid "Saldo Final Credito"
+msgstr "Final Balance Credit"
+
+#. module: financial_reports
+#: field:fpa.mayor.balance.line,amount_final_credit:0
+msgid "Saldo Final Cr?dito"
+msgstr "Final Balance Credit"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+msgid "Saldo Final Debito"
+msgstr "Final Debit Balance"
+
+#. module: financial_reports
+#: field:fpa.mayor.balance.line,amount_final_debit:0
+msgid "Saldo Final D?bito"
+msgstr "Final Debt Balance"
+
+#. module: financial_reports
+#: field:fpa.auxiliar.equivalente.line,amount_inicial:0
+#: field:fpa.auxiliar.line,amount_inicial:0
+#: field:fpa.balance.general.line,amount_inicial:0
+#: field:fpa.balance.pruebas.line,amount_inicial:0
+#: field:fpa.pyg.c.cc.line,amount_inicial:0
+#: field:fpa.pyg.c.line,amount_inicial:0 field:fpa.pyg.cc.line,amount_inicial:0
+#: field:fpa.pyg.line,amount_inicial:0
+msgid "Saldo Inicial"
+msgstr "Beginning balance"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+msgid "Saldo Inicial Credito"
+msgstr "Initial Balance Credit"
+
+#. module: financial_reports
+#: field:fpa.mayor.balance.line,amount_inicial_credit:0
+msgid "Saldo Inicial Cr?dito"
+msgstr "Opening Balance Credit"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+msgid "Saldo Inicial Debito"
+msgstr "Initial Debt Balance"
+
+#. module: financial_reports
+#: field:fpa.mayor.balance.line,amount_inicial_debit:0
+msgid "Saldo Inicial D?bito"
+msgstr "Initial Debt Balance"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+#: selection:fpa.financial.reports.concepts.columns.lines,type:0
+#: field:fpa.inventario.balance.line,amount_final:0
+msgid "Saldo final"
+msgstr "Closing Balance"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_inventario_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:False:financial_reports.template_report_balance_pruebas
+msgid "Saldo inicial"
+msgstr "Beginning balance"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,search_default:0
+msgid "Search por defecto (tree)"
+msgstr "Search by default (tree)"
+
+#. module: financial_reports
+#: field:account.account.estructure,sequence:0
+#: field:fpa.auxiliar.equivalente.line,sequence:0
+#: field:fpa.auxiliar.line,sequence:0 field:fpa.balance.general.line,sequence:0
+#: field:fpa.balance.pruebas.line,sequence:0 field:fpa.diario.line,sequence:0
+#: field:fpa.equity.changes.line,sequence:0
+#: field:fpa.financial.reports.concepts,sequence:0
+#: field:fpa.inventario.balance.line,sequence:0
+#: field:fpa.mayor.balance.line,sequence:0 field:fpa.pyg.c.cc.line,sequence:0
+#: field:fpa.pyg.c.line,sequence:0 field:fpa.pyg.cc.line,sequence:0
+#: field:fpa.pyg.line,sequence:0
+msgid "Secuencia"
+msgstr "Sequence"
+
+#. module: financial_reports
+#: help:fpa.financial.reports.concepts,sequence:0
+msgid "Secuencia en la cual se muestran en el pdf"
+msgstr "Sequence in which they are shown in the pdf"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.line,sequence:0
+#: help:fpa.auxiliar.line,sequence:0 help:fpa.balance.general.line,sequence:0
+#: help:fpa.balance.pruebas.line,sequence:0 help:fpa.diario.line,sequence:0
+#: help:fpa.equity.changes.line,sequence:0
+#: help:fpa.inventario.balance.line,sequence:0
+#: help:fpa.mayor.balance.line,sequence:0 help:fpa.pyg.c.cc.line,sequence:0
+#: help:fpa.pyg.c.line,sequence:0 help:fpa.pyg.cc.line,sequence:0
+#: help:fpa.pyg.line,sequence:0
+msgid "Secuencia en la cual se muestran en la vista"
+msgstr "Sequence in which they are displayed in the view"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,to_merge:0
+msgid "Seleccione el concepto destino que va a mezclar."
+msgstr "Select the target concept to be mixed."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,from_merge:0
+msgid "Seleccione el concepto que desea mezclar."
+msgstr "Select the concept you want to mix"
+
+#. module: financial_reports
+#: help:fpa.equity.changes.wizard,chart_account_id:0
+#: help:fpa.pyg.c.cc.wizard,chart_account_id:0
+#: help:fpa.pyg.c.wizard,chart_account_id:0
+#: help:fpa.pyg.wizard,chart_account_id:0
+msgid "Seleccione el plan de cuentas."
+msgstr "Select Chart of Accounts"
+
+#. module: financial_reports
+#: help:fpa.balance.pruebas.wizard,account_ids:0
+msgid "Seleccione las cuentas contables a consultar."
+msgstr "Select accounting accounts to consult"
+
+#. module: financial_reports
+#: help:fpa.balance.pruebas.wizard,journal_ids:0
+msgid "Seleccione los diarios a consultar."
+msgstr "Select the journals to consult"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.wizard,niveles:0 help:fpa.balance.general.wizard,niveles:0
+#: help:fpa.balance.pruebas.wizard,niveles:0 help:fpa.diario.wizard,niveles:0
+#: help:fpa.equity.changes.wizard,niveles:0
+#: help:fpa.inventario.balance.wizard,niveles:0
+#: help:fpa.mayor.balance.wizard,niveles:0 help:fpa.pyg.c.cc.wizard,niveles:0
+#: help:fpa.pyg.c.wizard,niveles:0 help:fpa.pyg.cc.wizard,niveles:0
+#: help:fpa.pyg.wizard,niveles:0
+msgid "Seleccione los niveles para la consulta."
+msgstr "Select the levels for the query"
+
+#. module: financial_reports
+#: help:fpa.balance.pruebas.wizard,partner_ids:0
+msgid "Seleccione los terceros que desee consultar."
+msgstr "Select the third parties you want to consult"
+
+#. module: financial_reports
+#: help:fpa.balance.general,chart_account_id:0
+#: help:fpa.balance.general.wizard,chart_account_id:0
+#: help:fpa.balance.pruebas,chart_account_id:0
+#: help:fpa.balance.pruebas.wizard,chart_account_id:0
+#: help:fpa.equity.changes,chart_account_id:0
+#: help:fpa.flujocaja,chart_account_id:0
+#: help:fpa.flujocaja.wizard,chart_account_id:0
+#: help:fpa.inventario.balance,chart_account_id:0
+#: help:fpa.inventario.balance.wizard,chart_account_id:0
+#: help:fpa.mayor.balance,chart_account_id:0
+#: help:fpa.mayor.balance.wizard,chart_account_id:0
+#: help:fpa.pyg,chart_account_id:0 help:fpa.pyg.c,chart_account_id:0
+#: help:fpa.pyg.c.cc,chart_account_id:0 help:fpa.pyg.cc,chart_account_id:0
+#: help:fpa.pyg.cc.wizard,chart_account_id:0
+msgid "Select Charts of Accounts"
+msgstr "Select Charts of Accounts"
+
+#. module: financial_reports
+#: field:fpa.flujocaja.line,amount_09:0
+msgid "Septiembre"
+msgstr "September"
+
+#. module: financial_reports
+#: view:fpa.balance.general.line:financial_reports.fpa_balance_general_line
+msgid "Sin Cuenta"
+msgstr "Whithout account"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,format_date:0
+msgid "Sirve para establecer el formato para los datos de tipo fecha, se mostrar? en el xlsx. Ejemplo: dd/mm/yy"
+msgstr "
+Is it used to set the format for date type data, to be displayed? In the xlsx. Example: yy-mm-dd"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,format_money:0
+msgid "Sirve para establecer el formato para los datos de tipo moneda, se mostrar? en el xlsx. Ejemplo: $#,##0"
+msgstr "Is it used to set the format for currency data, to be displayed? In the xlsx. Example: #,##0 $"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,nivel:0
+msgid "Subcuenta"
+msgstr "Subaccount"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_flujocaja
+msgid "TOTAL"
+msgstr "TOTAL"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_mayor_balance
+#: view:False:financial_reports.template_report_auxiliar
+#: view:False:financial_reports.template_report_auxiliar_equivalente
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: field:fpa.auxiliar.equivalente.line,partner_id:0
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: field:fpa.auxiliar.line,partner_id:0
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+#: field:fpa.balance.pruebas.line,partner_id:0
+#: view:fpa.mayor.balance.line:financial_reports.fpa_mayor_balance_line
+#: field:fpa.mayor.balance.line,partner_id:0
+msgid "Tercero"
+msgstr "Partner"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,partner_ids:0
+#: help:fpa.auxiliar.wizard,partner_ids:0
+msgid "Tercero asociado a los movimientos contables a consultar."
+msgstr "Third associated to the accounting movements to consult"
+
+#. module: financial_reports
+#: view:fpa.auxiliar.equivalente.line:financial_reports.fpa_auxiliar_equivalente_line
+#: view:fpa.auxiliar.equivalente.wizard:financial_reports.wizard_fpa_auxiliar_equivalente_view
+#: field:fpa.auxiliar.equivalente.wizard,partner_ids:0
+#: view:fpa.auxiliar.line:financial_reports.fpa_auxiliar_line
+#: view:fpa.auxiliar.wizard:financial_reports.wizard_fpa_auxiliar_view
+#: field:fpa.auxiliar.wizard,partner_ids:0
+#: view:fpa.balance.pruebas.line:financial_reports.fpa_balance_pruebas_line
+#: view:fpa.balance.pruebas.wizard:financial_reports.wizard_fpa_balance_pruebas_view
+#: field:fpa.balance.pruebas.wizard,partner_ids:0
+#: view:fpa.equity.changes.wizard:financial_reports.wizard_fpa_equity_changes_view
+#: field:fpa.equity.changes.wizard,partner_ids:0
+#: view:fpa.mayor.balance.wizard:financial_reports.wizard_fpa_mayor_balance_view
+#: field:fpa.mayor.balance.wizard,partner_ids:0
+#: view:fpa.pyg.c.cc.wizard:financial_reports.wizard_fpa_pyg_c_cc_view
+#: field:fpa.pyg.c.cc.wizard,partner_ids:0
+#: view:fpa.pyg.c.wizard:financial_reports.wizard_fpa_pyg_c_view
+#: field:fpa.pyg.c.wizard,partner_ids:0
+#: view:fpa.pyg.cc.wizard:financial_reports.wizard_fpa_pyg_cc_view
+#: field:fpa.pyg.cc.wizard,partner_ids:0
+#: view:fpa.pyg.wizard:financial_reports.wizard_fpa_pyg_view
+#: field:fpa.pyg.wizard,partner_ids:0
+msgid "Terceros"
+msgstr "Partners"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Tesorer?a"
+msgstr "treasury"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts.columns.lines,type:0
+msgid "Tipo de calculo"
+msgstr "Type of calculation"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,title:0
+msgid "Titulo"
+msgstr "Title"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,title:0
+msgid "Titulos mostrados en el xlsx."
+msgstr "Titles shown in xlsx"
+
+#. module: financial_reports
+#: selection:fpa.auxiliar,estado:0 selection:fpa.auxiliar.equivalente,estado:0
+#: selection:fpa.auxiliar.equivalente.wizard,estado:0
+#: selection:fpa.auxiliar.wizard,estado:0
+#: selection:fpa.balance.general,estado:0
+#: selection:fpa.balance.general.wizard,estado:0
+#: selection:fpa.balance.pruebas,estado:0
+#: selection:fpa.balance.pruebas.wizard,estado:0 selection:fpa.diario,estado:0
+#: selection:fpa.diario.wizard,estado:0 selection:fpa.equity.changes,estado:0
+#: selection:fpa.equity.changes.wizard,estado:0
+#: selection:fpa.flujocaja,estado:0 selection:fpa.flujocaja.wizard,estado:0
+#: selection:fpa.inventario.balance,estado:0
+#: selection:fpa.inventario.balance.wizard,estado:0
+#: selection:fpa.mayor.balance,estado:0
+#: selection:fpa.mayor.balance.wizard,estado:0 selection:fpa.pyg,estado:0
+#: selection:fpa.pyg.c,estado:0 selection:fpa.pyg.c.cc,estado:0
+#: selection:fpa.pyg.c.cc.wizard,estado:0 selection:fpa.pyg.c.wizard,estado:0
+#: selection:fpa.pyg.cc,estado:0 selection:fpa.pyg.cc.wizard,estado:0
+#: selection:fpa.pyg.wizard,estado:0
+msgid "Todos"
+msgstr "All"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,tope_min:0
+msgid "Tope minimo"
+msgstr "Minimum stop"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 1"
+msgstr "Total account and day - Level 1"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 2"
+msgstr "Total account and day - Level 2"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 3"
+msgstr "Total account and day - Level 3"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 4"
+msgstr "Total account and day - Level 4"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 5"
+msgstr "Total account and day - Level 5"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 6"
+msgstr "Total account and day - Level 6"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 7"
+msgstr "Total account and day - Level 7"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta y dia - Nivel 8"
+msgstr "Total account and day - Level 8"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 1"
+msgstr "Total account, daily and day - Level 1"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 2"
+msgstr "Total account, daily and day - Level 2"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 3"
+msgstr "Total account, daily and day - Level 3"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 4"
+msgstr "Total account, daily and day - Level 4"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 5"
+msgstr "Total account, daily and day - Level 5"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 6"
+msgstr "Total account, daily and day - Level 6"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 7"
+msgstr "Total account, daily and day - Level 7"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Total cuenta, diario y dia - Nivel 8"
+msgstr "Total account, daily and day - Level 8"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Totales por cuenta - Movimientos"
+msgstr "Totals per account - Movements"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Totales por dia"
+msgstr "Totals per day"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Totales por dia y diario"
+msgstr "Totals per day and daily"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Totales por diario - Movimientos"
+msgstr "Daily Totals - Movements"
+
+#. module: financial_reports
+#: view:fpa.diario.line:financial_reports.fpa_diario_line
+msgid "Totales por diario, cuenta y d?a - Movimientos"
+msgstr "Totals per journal, account and day - Movements"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,tree:0
+msgid "Tree"
+msgstr "Tree"
+
+#. module: financial_reports
+#: field:fpa.auxiliar,user_id:0 field:fpa.auxiliar.equivalente,user_id:0
+#: field:fpa.auxiliar.equivalente.line,user_id:0
+#: field:fpa.auxiliar.equivalente.wizard,user_id:0
+#: field:fpa.auxiliar.line,user_id:0 field:fpa.auxiliar.wizard,user_id:0
+#: field:fpa.balance.general,user_id:0 field:fpa.balance.general.line,user_id:0
+#: field:fpa.balance.pruebas,user_id:0 field:fpa.balance.pruebas.line,user_id:0
+#: field:fpa.diario,user_id:0 field:fpa.diario.line,user_id:0
+#: field:fpa.diario.wizard,user_id:0 field:fpa.equity.changes,user_id:0
+#: field:fpa.equity.changes.line,user_id:0 field:fpa.flujocaja,user_id:0
+#: field:fpa.flujocaja.line,user_id:0 field:fpa.inventario.balance,user_id:0
+#: field:fpa.inventario.balance.line,user_id:0
+#: field:fpa.mayor.balance,user_id:0 field:fpa.mayor.balance.line,user_id:0
+#: field:fpa.pyg,user_id:0 field:fpa.pyg.c,user_id:0
+#: field:fpa.pyg.c.cc,user_id:0 field:fpa.pyg.c.cc.line,user_id:0
+#: field:fpa.pyg.c.line,user_id:0 field:fpa.pyg.cc,user_id:0
+#: field:fpa.pyg.cc.line,user_id:0 field:fpa.pyg.line,user_id:0
+msgid "Usuario"
+msgstr "User"
+
+#. module: financial_reports
+#: help:fpa.auxiliar.equivalente.wizard,user_id:0
+#: help:fpa.auxiliar.wizard,user_id:0 help:fpa.diario.wizard,user_id:0
+msgid "Usuario que ejecuta la consulta."
+msgstr "User running query"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg_c
+#: view:False:financial_reports.template_report_pyg_c_cc
+msgid "VARIACION"
+msgstr "VARIATION"
+
+#. module: financial_reports
+#: selection:fpa.auxiliar,estado:0 selection:fpa.auxiliar.equivalente,estado:0
+#: selection:fpa.auxiliar.equivalente.wizard,estado:0
+#: selection:fpa.auxiliar.wizard,estado:0
+#: selection:fpa.balance.general,estado:0
+#: selection:fpa.balance.general.wizard,estado:0
+#: selection:fpa.balance.pruebas,estado:0
+#: selection:fpa.balance.pruebas.wizard,estado:0 selection:fpa.diario,estado:0
+#: selection:fpa.diario.wizard,estado:0 selection:fpa.equity.changes,estado:0
+#: selection:fpa.equity.changes.wizard,estado:0
+#: selection:fpa.flujocaja,estado:0 selection:fpa.flujocaja.wizard,estado:0
+#: selection:fpa.inventario.balance,estado:0
+#: selection:fpa.inventario.balance.wizard,estado:0
+#: selection:fpa.mayor.balance,estado:0
+#: selection:fpa.mayor.balance.wizard,estado:0 selection:fpa.pyg,estado:0
+#: selection:fpa.pyg.c,estado:0 selection:fpa.pyg.c.cc,estado:0
+#: selection:fpa.pyg.c.cc.wizard,estado:0 selection:fpa.pyg.c.wizard,estado:0
+#: selection:fpa.pyg.cc,estado:0 selection:fpa.pyg.cc.wizard,estado:0
+#: selection:fpa.pyg.wizard,estado:0
+msgid "Validados"
+msgstr "Validated"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,variation:0 field:fpa.pyg.c.line,variation:0
+msgid "Variaci?n"
+msgstr "Variation"
+
+#. module: financial_reports
+#: selection:fpa.financial.reports,categ:0
+msgid "Ventas"
+msgstr "Sales"
+
+#. module: financial_reports
+#: view:fpa.financial.reports:financial_reports.view_fpa_financial_reports_tree
+msgid "Ver"
+msgstr "View"
+
+#. module: financial_reports
+#: model:res.groups,name:financial_reports.group_user_report_accounting_reports
+msgid "Ver/Generar Informes"
+msgstr "View/Generate Reports"
+
+#. module: financial_reports
+#: field:fpa.financial.reports,view:0
+msgid "Vista"
+msgstr "View"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,view:0
+msgid "Vista del wizard asociada al informe. Se utiliza para que la generaci?n sea dinamica."
+msgstr "View of the wizard associated with the report. It is used to make the generation dynamic"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,form:0
+msgid "Vista formulario para la coniguraci?n del informe. No es ?til, porque cada informa tiene solo una vista formulario, por lo tanto el sistema lo abre automaticamente."
+msgstr "
+View form for the configuration of the report. It is not useful, because each report has only one form view, therefore the system opens it automatically."
+
+#. module: financial_reports
+#: help:fpa.financial.reports,tree:0
+msgid "Vista lista asociada al informe. Se utiliza para que la consulta sea dinamica."
+msgstr "List view associated with the report. It is used to make the query dynamic"
+
+#. module: financial_reports
+#: view:False:financial_reports.template_report_pyg
+msgid "____________________________"
+msgstr "____________________________"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_account_account_estructure
+msgid "account.account.estructure"
+msgstr "account.account.estructure"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,cc1:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,cc1:0
+msgid "cc1"
+msgstr "cc1"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,cc2:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,cc2:0
+msgid "cc2"
+msgstr "cc2"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,cc3:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,cc3:0
+msgid "cc3"
+msgstr "cc3"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,cc4:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,cc4:0
+msgid "cc4"
+msgstr "cc4"
+
+#. module: financial_reports
+#: field:fpa.pyg.c.cc.line,cc5:0
+#: view:fpa.pyg.cc.line:financial_reports.fpa_pyg_cc_line
+#: field:fpa.pyg.cc.line,cc5:0
+msgid "cc5"
+msgstr "cc5"
+
+#. module: financial_reports
+#: model:ir.actions.act_window,name:financial_reports.action_fpa_equity_changes
+msgid "equity Changes"
+msgstr "equity Changes"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar
+msgid "fpa.auxiliar"
+msgstr "fpa.auxiliar"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar_equivalente
+msgid "fpa.auxiliar.equivalente"
+msgstr "fpa.auxiliar.equivalente"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar_equivalente_line
+msgid "fpa.auxiliar.equivalente.line"
+msgstr "fpa.auxiliar.equivalente.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar_equivalente_wizard
+msgid "fpa.auxiliar.equivalente.wizard"
+msgstr "fpa.auxiliar.equivalente.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar_line
+msgid "fpa.auxiliar.line"
+msgstr "fpa.auxiliar.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_auxiliar_wizard
+msgid "fpa.auxiliar.wizard"
+msgstr "fpa.auxiliar.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_general
+msgid "fpa.balance.general"
+msgstr "fpa.balance.general"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_general_line
+msgid "fpa.balance.general.line"
+msgstr "fpa.balance.general.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_general_wizard
+msgid "fpa.balance.general.wizard"
+msgstr "fpa.balance.general.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_pruebas
+msgid "fpa.balance.pruebas"
+msgstr "fpa.balance.pruebas"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_pruebas_line
+msgid "fpa.balance.pruebas.line"
+msgstr "fpa.balance.pruebas.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_balance_pruebas_wizard
+msgid "fpa.balance.pruebas.wizard"
+msgstr "fpa.balance.pruebas.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_diario
+msgid "fpa.diario"
+msgstr "fpa.diario"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_diario_line
+msgid "fpa.diario.line"
+msgstr "fpa.diario.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_diario_wizard
+msgid "fpa.diario.wizard"
+msgstr "fpa.diario.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_equity_changes
+msgid "fpa.equity.changes"
+msgstr "fpa.equity.changes"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_equity_changes_line
+msgid "fpa.equity.changes.line"
+msgstr "fpa.equity.changes.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_equity_changes_wizard
+msgid "fpa.equity.changes.wizard"
+msgstr "fpa.equity.changes.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_export_wizard_ept
+msgid "fpa.export.wizard.ept"
+msgstr "fpa.export.wizard.ept"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports
+msgid "fpa.financial.reports"
+msgstr "fpa.financial.reports"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_columns
+msgid "fpa.financial.reports.columns"
+msgstr "fpa.financial.reports.columns"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_concepts
+msgid "fpa.financial.reports.concepts"
+msgstr "fpa.financial.reports.concepts"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_concepts_columns
+msgid "fpa.financial.reports.concepts.columns"
+msgstr "fpa.financial.reports.concepts.columns"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_concepts_columns_lines
+msgid "fpa.financial.reports.concepts.columns.lines"
+msgstr "fpa.financial.reports.concepts.columns.lines"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_period
+msgid "fpa.financial.reports.period"
+msgstr "fpa.financial.reports.period"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_financial_reports_period_range
+msgid "fpa.financial.reports.period_range"
+msgstr "fpa.financial.reports.period_range"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_flujocaja
+msgid "fpa.flujocaja"
+msgstr "fpa.flujocaja"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_flujocaja_line
+msgid "fpa.flujocaja.line"
+msgstr "fpa.flujocaja.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_flujocaja_wizard
+msgid "fpa.flujocaja.wizard"
+msgstr "fpa.flujocaja.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_inventario_balance
+msgid "fpa.inventario.balance"
+msgstr "fpa.inventario.balance"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_inventario_balance_line
+msgid "fpa.inventario.balance.line"
+msgstr "fpa.inventario.balance.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_inventario_balance_wizard
+msgid "fpa.inventario.balance.wizard"
+msgstr "fpa.inventario.balance.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_mayor_balance
+msgid "fpa.mayor.balance"
+msgstr "fpa.mayor.balance"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_mayor_balance_line
+msgid "fpa.mayor.balance.line"
+msgstr "fpa.mayor.balance.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_mayor_balance_wizard
+msgid "fpa.mayor.balance.wizard"
+msgstr "fpa.mayor.balance.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_niveles
+msgid "fpa.niveles"
+msgstr "fpa.niveles"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg
+msgid "fpa.pyg"
+msgstr "fpa.pyg"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c
+msgid "fpa.pyg.c"
+msgstr "fpa.pyg.c"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c_cc
+msgid "fpa.pyg.c.cc"
+msgstr "fpa.pyg.c.cc"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c_cc_line
+msgid "fpa.pyg.c.cc.line"
+msgstr "fpa.pyg.c.cc.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c_cc_wizard
+msgid "fpa.pyg.c.cc.wizard"
+msgstr "fpa.pyg.c.cc.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c_line
+msgid "fpa.pyg.c.line"
+msgstr "fpa.pyg.c.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_c_wizard
+msgid "fpa.pyg.c.wizard"
+msgstr "fpa.pyg.c.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_cc
+msgid "fpa.pyg.cc"
+msgstr "fpa.pyg.cc"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_cc_line
+msgid "fpa.pyg.cc.line"
+msgstr "fpa.pyg.cc.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_cc_wizard
+msgid "fpa.pyg.cc.wizard"
+msgstr "fpa.pyg.cc.wizard"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_line
+msgid "fpa.pyg.line"
+msgstr "fpa.pyg.line"
+
+#. module: financial_reports
+#: model:ir.model,name:financial_reports.model_fpa_pyg_wizard
+msgid "fpa.pyg.wizard"
+msgstr "fpa.pyg.wizard"
+
+#. module: financial_reports
+#: help:fpa.financial.reports,field_hidden:0
+msgid "indique las columnas de campos a ocultar."
+msgstr "Enter the columns of fields to hide"
+
+#. module: financial_reports
+#: help:fpa.equity.changes.wizard,period_range:0
+#: help:fpa.pyg.c.cc.wizard,period_range:0 help:fpa.pyg.c.wizard,period_range:0
+msgid "seleccione el rango de periodos para la informaci?n comparativa."
+msgstr "Select the range of periods for comparative information."
+
+#. module: financial_reports
+#: field:fpa.financial.reports,alias:0
+msgid "?Alias?"
+msgstr "Alias"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts,before:0
+msgid "?Antes del detalle?"
+msgstr "Before the detail?"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts,detail:0
+msgid "?Con detalle?"
+msgstr "With detail?"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts,tipo:0
+msgid "?Filtrar por tipo de cuenta?"
+msgstr "Filter by account type?"
+
+#. module: financial_reports
+#: field:fpa.financial.reports.concepts,resume:0
+msgid "?Solo en Resumen?"
+msgstr "Only in summary?"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:398
+#, python-format
+msgid "DATOS"
+msgstr "DATA"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:408
+#, python-format
+msgid "Plan de cuentas: "
+msgstr "Chart account: "
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:410
+#, python-format
+msgid "Desde: "
+msgstr "Date from: "
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:412
+#, python-format
+msgid "Hasta: "
+msgstr "Date to: "
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:414
+#, python-format
+msgid "Estado:"
+msgstr "State: "
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:416
+#, python-format
+msgid "Fecha de impresion"
+msgstr "Printing date: "
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:368
+#, python-format
+msgid "todos"
+msgstr "all"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:368
+#, python-format
+msgid "Expresado en unidades"
+msgstr "Expressed in units"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:371
+#, python-format
+msgid "Expresado en unidades de MILES"
+msgstr "Expressed in units of Thousands"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:373
+#, python-format
+msgid "Expresado en unidades de MILLONES"
+msgstr "Expressed in units of millions"
+
+#. module: financial_reports
+#: code:addons/financial_reports/financial_reports.py:373
+#, python-format
+msgid "Expresado en unidades de MILLARDOS"
+msgstr "Expressed in units of billions"

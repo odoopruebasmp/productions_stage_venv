@@ -1,0 +1,57 @@
+<openerp>
+    <data>
+        <record id="group_sftp" model="res.groups">
+            <field name="name">SFTP Blue Logistics</field>
+        </record>
+
+        <record id="stock_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='do_unreserve']" position="after">
+                    <button name="picking_send" string="Enviar sftp"
+                            groups="document_sftp_more.group_sftp" type="object"/>
+                    <button name="picking_receive" string="Recibir sftp"
+                            groups="document_sftp_more.group_sftp" type="object"/>
+                </xpath>
+                <xpath expr="//field[@name='date']" position="before">
+                    <field name="scheduled_time_ol"/>
+                </xpath>
+                <xpath expr="//page[@string='Additional Info']" position="after">
+                    <page string="SFTP Blu">
+                        <group string="Logs de transferencia">
+                            <group>
+                                <field name="log_sftp"/>
+                                <field name="log_sftp_send"/>
+                                <field name="log_sftp_receive"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+         <record id="stock_picking_type_form" model="ir.ui.view">
+            <field name="name">stock.picking.type.form</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="sftp_type"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="vpicktree" model="ir.ui.view">
+            <field name="name">stock.picking.inherit.view.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="colors">orange:state=='partially_available';green:state == 'assigned';blue:state == 'draft';grey:state == 'cancel';red:state not in ('cancel', 'done', 'assigned', 'partially_available') and min_date &lt; current_date</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="avancys_notification_form_view">
+            <field name="name">avancys.message.notificacion.form</field>
+            <field name="model">avancys.message.notificacion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Aviso Informativo" version="7.0">
+                    <header>
+                        <h1>
+                            <field name="title" nolabel="1"/>
+                        </h1>
+                    </header>
+                        <group>
+                            <field name="message" nolabel="1"/>
+                        </group>
+                    <footer>
+                        <button string="Cerrar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

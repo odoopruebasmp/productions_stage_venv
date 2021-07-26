@@ -1,0 +1,35 @@
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="leave_allocation_form_view">
+			<field name="name">leave.allocation.compute.form</field>
+			<field name="model">leave.allocation.compute</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Compute Leaves">
+					<label for="date_from"/>
+                    <field name="date_from"/>
+					<label for="date"/>
+                    <field name="date"/>                    
+					<button icon="gtk-cancel" special="cancel" string="Close" />
+					<button name="compute_sheet" string="Calcular"
+						type="object" icon="terp-stock_format-scientific" />
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window"
+            id="action_leave_allocation_wizard">
+            <field name="name">Compute Leaves</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">leave.allocation.compute</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <menuitem id="leave_allocation_menu" name="Calcular vacaciones"
+            parent="hr_payroll.menu_hr_root_payroll"
+            action="action_leave_allocation_wizard" />
+	</data>
+</openerp>

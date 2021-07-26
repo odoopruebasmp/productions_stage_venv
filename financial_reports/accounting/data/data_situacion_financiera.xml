@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_er_situacion_financiera_data" model="fpa.financial.reports">
+            <field name="name">CAMBIOS EN SITUACION FINANCIERA</field>
+            <field name="categ">fi</field>
+            <field name="action">action_fpa_pyg_c</field>
+            <field name="model_wzr">fpa.pyg.c.wizard</field>
+            <field name="model">fpa.pyg.c.line</field>
+            <field name="formato">pdf,xlsx</field>
+            <field name="tree">view_fpa_pyg_c_line_tree</field>
+            <field name="title_color">#2E86C1</field>
+            <field name="view_color">#2E86C1</field>
+            <field name="format_money">$#,##0</field>
+            <field name="numeric">D,E,F</field>
+            <field name="porc">G</field>
+            <field name="sign">True</field>
+            <field name="type">con</field>
+            <field name="partner_filter">True</field>
+            <field name="domain">[('user_id','=',%s),('company_id','=',%s),('account_id','!=',False),('financial_id','=',%s)]</field>
+            <field name="template">financial_reports.template_report_pyg_c</field>
+            <field name="view">wizard_fpa_pyg_c_view</field>
+            <field name="title">Concepto,Codigo,Cuenta,Saldo Final,Comparativo,Variacion,%Variacion</field>
+            <field name="fields">account_id,amount_final,amount_comparative,variation,porc_variation</field>
+            <field name="search_default">{'search_default_group_concepts_id': 1}</field>
+            <field name="consulta">select fbpl.id 
+                        from fpa_pyg_c_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            inner join fpa_pyg_c fbp on fbp.id = fbpl.encabezado_id
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id}
+                            ORDER BY aa.code asc</field>
+            <field name="consulta_xlsx">select COALESCE(itc.value,ffrc.name), aa.code, COALESCE(it.value,aa.name) as cuenta, round(COALESCE(fbpl.amount_final,0),2), fbpl.amount_comparative, fbpl.variation, round(fbpl.porc_variation,2),fbpl.bold from fpa_pyg_c_line fbpl
+                            left join account_account aa on aa.id = fbpl.account_id
+                            left join ir_translation it on it.name = 'account.account,name' and it.res_id = aa.id AND it.lang = '{lang}'
+                            inner join fpa_pyg_c fbp on fbp.id = fbpl.encabezado_id
+                            left join fpa_financial_reports_concepts ffrc on ffrc.id = fbpl.concepts_id
+                            left join ir_translation itc on itc.name = 'fpa.financial.reports.concepts,name' and itc.res_id = ffrc.id AND itc.lang = '{lang}'
+                            WHERE fbp.user_id = {user_id} AND fbp.company_id = {company_id}  AND fbpl.financial_id = {financial_id} ORDER BY ffrc.sequence,  aa.code NULLS FIRST, aa.code asc</field>
+        </record>
+        <!-- NIVELES -->
+        <record id="ersf_niveles_99" model="fpa.niveles">
+            <field name="code">99</field>
+            <field name="name">Auxiliares</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" /> 
+            <field name="help">Muestra totales por Auxiliares</field>
+        </record>
+        <record id="ersf_niveles_100" model="fpa.niveles">
+            <field name="code">100</field>
+            <field name="name">Total por concepto</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" /> 
+            <field name="help">Muestra totales por concepto</field>
+        </record>
+        <!-- CONCEPTOS -->
+        <record id="c_fpa_er_situacion_financiera_1" model="fpa.financial.reports.concepts">
+            <field name="name">Efectivo y equivalentes al efectivo</field>
+            <field name="sequence">1</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />             
+        </record>
+        <record id="c_fpa_er_situacion_financiera_2" model="fpa.financial.reports.concepts">
+            <field name="name">Activos corrientes distintos al efectivo pignorados como garantía</field>
+            <field name="sequence">2</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />             
+        </record>
+        <record id="c_fpa_er_situacion_financiera_3" model="fpa.financial.reports.concepts">
+            <field name="name">Cuentas comerciales por cobrar y otras cuentas por cobrar nacionales</field>
+            <field name="sequence">3</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_4" model="fpa.financial.reports.concepts">
+            <field name="name">Cuentas comerciales por cobrar y otras cuentas por cobrar del extranjero</field>
+            <field name="sequence">4</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_5" model="fpa.financial.reports.concepts">
+            <field name="name"> Otros activos financieros</field>
+            <field name="sequence">5</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_6" model="fpa.financial.reports.concepts">
+            <field name="name">Anticipos y avances</field>
+            <field name="sequence">6</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_7" model="fpa.financial.reports.concepts">
+            <field name="name">Inventarios corrientes</field>
+            <field name="sequence">7</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_8" model="fpa.financial.reports.concepts">
+            <field name="name">Activos por impuestos corrientes</field>
+            <field name="sequence">8</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+        <record id="c_fpa_er_situacion_financiera_9" model="fpa.financial.reports.concepts">
+            <field name="name">TOTAL ACTIVO CORRIENTE</field>
+            <field name="sequence">9</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_10" model="fpa.financial.reports.concepts">
+            <field name="name">Cuentas comerciales por cobrar y otras cuentas por cobrar no corrientes nacionales</field>
+            <field name="sequence">10</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_11" model="fpa.financial.reports.concepts">
+            <field name="name">Cuentas comerciales por cobrar y otras cuentas por cobrar no corrientes del extranjero</field>
+            <field name="sequence">11</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_12" model="fpa.financial.reports.concepts">
+            <field name="name">Otros activos financieros no corrientes "compañias Vinculadas</field>
+            <field name="sequence">12</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_13" model="fpa.financial.reports.concepts">
+            <field name="name">Propiedades, planta y equipo</field>
+            <field name="sequence">13</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_14" model="fpa.financial.reports.concepts">
+            <field name="name">Muebles y Enseres</field>
+            <field name="sequence">14</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_15" model="fpa.financial.reports.concepts">
+            <field name="name">Equipo de Computo</field>
+            <field name="sequence">15</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_16" model="fpa.financial.reports.concepts">
+            <field name="name">(-) Depreciación Acumulada</field>
+            <field name="sequence">16</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_17" model="fpa.financial.reports.concepts">
+            <field name="name">TOTAL ACTIVOS NO CORRIENTES</field>
+            <field name="sequence">17</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_18" model="fpa.financial.reports.concepts">
+            <field name="name">TOTAL ACTIVOS</field>
+            <field name="sequence">18</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_19" model="fpa.financial.reports.concepts">
+            <field name="name"> Operaciones de Financiamiento</field>
+            <field name="sequence">19</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_20" model="fpa.financial.reports.concepts">
+            <field name="name">Proveedores</field>
+            <field name="sequence">20</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_21" model="fpa.financial.reports.concepts">
+            <field name="name"> Cuentas por pagar comerciales y otras cuentas por pagar</field>
+            <field name="sequence">21</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_22" model="fpa.financial.reports.concepts">
+            <field name="name"> Dividendos o participacion por pagar</field>
+            <field name="sequence">22</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_23" model="fpa.financial.reports.concepts">
+            <field name="name"> Pasivos por impuestos corrientes, corriente</field>
+            <field name="sequence">23</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_24" model="fpa.financial.reports.concepts">
+            <field name="name">Obligaciones y aportes de nomina</field>
+            <field name="sequence">24</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_25" model="fpa.financial.reports.concepts">
+            <field name="name">Obligaciones laborales</field>
+            <field name="sequence">25</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_26" model="fpa.financial.reports.concepts">
+            <field name="name">Otros pasivos no financieros corrientes</field>
+            <field name="sequence">26</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_27" model="fpa.financial.reports.concepts">
+            <field name="name">TOTAL PASIVOS</field>
+            <field name="sequence">27</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_28" model="fpa.financial.reports.concepts">
+            <field name="name">Capital Social</field>
+            <field name="sequence">28</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_29" model="fpa.financial.reports.concepts">
+            <field name="name">Reserva legal</field>
+            <field name="sequence">29</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_30" model="fpa.financial.reports.concepts">
+            <field name="name">Revalorizacion del Patrimonio</field>
+            <field name="sequence">30</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_31" model="fpa.financial.reports.concepts">
+            <field name="name">Ganancias Retenidas</field>
+            <field name="sequence">31</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_32" model="fpa.financial.reports.concepts">
+            <field name="name">Resultado integral total</field>
+            <field name="sequence">32</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record> 
+        <record id="c_fpa_er_situacion_financiera_33" model="fpa.financial.reports.concepts">
+            <field name="name">TOTAL PATRIMONIO</field>
+            <field name="sequence">33</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_er_situacion_financiera_data')" />                 
+        </record>
+    </data>
+</openerp>

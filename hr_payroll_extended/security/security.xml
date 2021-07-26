@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <!-- <data noupdate="0"> -->
+    <data>
+        <!-- MENUS -->
+        <!-- <record model="ir.ui.menu" id="hr_expense.menu_expense_all">
+        <field eval="[(4, ref('base.group_user'))]" name="groups_id"/>
+        </record> -->
+
+        <!-- Grupo Nuevo -->
+        <record id="group_create_advance_expense_for_others" model="res.groups">
+            <field name="name">Creacion Anticipos y Legalizaciones Global</field>
+            <field name="category_id" ref="base.module_category_human_resources"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">puede crear anticipos y legalizaciones por otros empleados</field>
+        </record>
+
+        <record id="property_rule_horaextra_manager" model="ir.rule">
+            <field name="name">Manager Horas Extra</field>
+            <field name="model_id" ref="model_hr_payroll_extrahours"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <record id="property_rule_novedades_manager" model="ir.rule">
+            <field name="name">Manager Novedades</field>
+            <field name="model_id" ref="model_hr_payroll_novedades"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <record id="property_rule_payslip_days_manager" model="ir.rule">
+            <field name="name">Manager Payslips Days</field>
+            <field name="model_id" ref="model_hr_holidays_days"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <record id="property_rule_obligacion_tributaria_manager" model="ir.rule">
+            <field name="name">Manager Obligacion Tributaria</field>
+            <field name="model_id" ref="model_hr_payroll_obligacion_tributaria"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <record id="property_rule_prestamos_manager" model="ir.rule">
+            <field name="name">Manager Prestamos</field>
+            <field name="model_id" ref="model_hr_payroll_prestamo"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <!-- LEGALIZACIONES -->
+
+        <!-- DESACTIVAR -->
+        <!--<record id="hr_expense.property_rule_expense_manager" model="ir.rule">
+            <field name="active" eval="False" />
+        </record>-->
+        <!--<record id="hr_expense.property_rule_expense_employee" model="ir.rule">
+            <field name="active" eval="False" />
+        </record>-->
+
+        <!-- NUEVOS -->
+
+        <!-- restriccion para que solo pueda crear, leer y borrar, las que le pertenecen -->
+        <record id="property_rule_expense_all" model="ir.rule">
+            <field name="name">Empleado Legalizacion Restriccion</field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- da permiso para editar las que le pertenecen en estado borrador o rechazado -->
+        <record id="property_rule_expense_employee" model="ir.rule">
+            <field name="name">Empleado Legalizacion Permiso</field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="domain_force">[('state','in',['draft','refused']),('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- da permiso modificar los que son de un empleado del cual se es director -->
+        <record id="property_rule_expense_employee_2" model="ir.rule">
+            <field name="name">Empleado Legalizacion Permiso 2</field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="domain_force">[('employee_id.parent_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- pueden leer, modificar,borrar o crear para cualquier usuario en estado draft o refused -->
+        <record id="property_rule_expense_auxiliar" model="ir.rule">
+            <field name="name">Auxiliar Legalizacion Permiso </field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="domain_force">[('state','in',['draft','refused'])]</field>
+            <field name="groups" eval="[(4,ref('group_create_advance_expense_for_others'))]"/>
+        </record>
+
+        <!-- puede leer, todos los anticipos -->
+        <record id="property_rule_expense_auxiliar2" model="ir.rule">
+            <field name="name">Auxiliar Legalizacion Permiso 2</field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_create_advance_expense_for_others'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- pueden modificar todos los anticipos -->
+        <record id="property_rule_expense_manager" model="ir.rule">
+            <field name="name">Manager Legalizacion</field>
+            <field name="model_id" ref="model_hr_expense_expense"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <!-- ANTICIPOS -->
+        <!-- restriccion para que solo pueda crear, leer y borrar, las que le pertenecen -->
+        <record id="property_rule_advance_all" model="ir.rule">
+            <field name="name">Empleado Legalizacion Restriccion</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- da permiso para editar las que le pertenecen en estado borrador o rechazado -->
+        <record id="property_rule_advance_employee" model="ir.rule">
+            <field name="name">Empleado Anticipos Permiso</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="domain_force">[('state','in',['draft','refused']),('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- da permiso modificar los que son de un empleado del cual se es director -->
+        <record id="property_rule_advance_employee_2" model="ir.rule">
+            <field name="name">Empleado Anticipos Permiso 2</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="domain_force">[('employee_id.parent_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- pueden leer, modificar,borrar o crear para cualquier usuario en estado draft o refused -->
+        <record id="property_rule_advance_auxiliar" model="ir.rule">
+            <field name="name">Auxiliar Anticipos Permiso </field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="domain_force">[('state','in',['draft','refused'])]</field>
+            <field name="groups" eval="[(4,ref('group_create_advance_expense_for_others'))]"/>
+        </record>
+
+        <!-- puede leer, todos los anticipos -->
+        <record id="property_rule_advance_auxiliar2" model="ir.rule">
+            <field name="name">Auxiliar Anticipos Permiso 2</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_create_advance_expense_for_others'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- pueden modificar todos los anticipos -->
+        <record id="property_rule_advance_manager" model="ir.rule">
+            <field name="name">Manager Anticipos</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <!-- Contrato -->
+
+        <record id="property_rule_contract_manager" model="ir.rule">
+            <field name="name">Manager Contrato</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('base.group_hr_manager')), (4,ref('base.group_hr_user'))]"/>
+        </record>
+
+        <record id="property_rule_contract_auxiliar" model="ir.rule">
+            <field name="name">Auxiliar Contrato</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4,ref('group_create_advance_expense_for_others'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="property_rule_contract_employee_director" model="ir.rule">
+            <field name="name">Director de Empleado Contrato</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract"/>
+            <field name="domain_force">[('employee_id.parent_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Horas Extra -->
+
+        <record id="property_rule_extrahours_employee" model="ir.rule">
+            <field name="name">Empleado Horas Extra</field>
+            <field name="model_id" ref="model_hr_payroll_extrahours"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="property_rule_novedades_employee" model="ir.rule">
+            <field name="name">Empleado Novedades</field>
+            <field name="model_id" ref="model_hr_payroll_novedades"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="property_rule_obligacion_employee" model="ir.rule">
+            <field name="name">Empleado Obligacion Tributaria</field>
+            <field name="model_id" ref="model_hr_payroll_obligacion_tributaria"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="property_rule_prestamos_employee" model="ir.rule">
+            <field name="name">Empleado Prestamos</field>
+            <field name="model_id" ref="model_hr_payroll_prestamo"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="property_rule_contract_employee" model="ir.rule">
+            <field name="name">Empleado Contrato</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+        <record id="property_rule_holiday_days_employee" model="ir.rule">
+            <field name="name">Dias Payslip</field>
+            <field name="model_id" ref="model_hr_holidays_days"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Como crear esta regla? -->
+        <!-- <record id="property_rule_contract_type_employee" model="ir.rule">
+            <field name="name">Empleado Contrato Tipo</field>
+            <field name="model_id" ref="hr_contract.model_hr_contract_type"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
+        </record> -->
+
+        <record model="ir.rule" id="property_rule_advance_multicompany">
+            <field name="name">Advance multi-company rule</field>
+            <field name="model_id" ref="model_hr_payroll_advance"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+
+        <record id="hr_payslip_run_comp_rule" model="ir.rule">
+            <field name="name">Payslip Run multi-company rule</field>
+            <field name="model_id" ref="model_hr_payslip_run"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_payslip_comp_rule" model="ir.rule">
+            <field name="name">Payslip multi-company rule</field>
+            <field name="model_id" ref="model_hr_payslip"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_employee_comp_rule" model="ir.rule">
+            <field name="name">Empleado multi-company rule</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_contract_comp_rule" model="ir.rule">
+            <field name="name">Contrato multi-company rule</field>
+            <field name="model_id" ref="model_hr_contract"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_holidays_comp_rule" model="ir.rule">
+            <field name="name">Ausencias multi-company rule</field>
+            <field name="model_id" ref="model_hr_holidays"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+
+        <record id="hr_extrahours_comp_rule" model="ir.rule">
+            <field name="name">Extrahours multi-company rule</field>
+            <field name="model_id" ref="model_hr_payroll_extrahours"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_novedades_comp_rule" model="ir.rule">
+            <field name="name">Novedades multi-company rule</field>
+            <field name="model_id" ref="model_hr_payroll_novedades"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_obligaciones_comp_rule" model="ir.rule">
+            <field name="name">Obligacion Tributaria multi-company rule</field>
+            <field name="model_id" ref="model_hr_payroll_obligacion_tributaria"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+        <record id="hr_prestamos_comp_rule" model="ir.rule">
+            <field name="name">Prestamos multi-company rule</field>
+            <field name="model_id" ref="model_hr_payroll_prestamo"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+
+        <record model="ir.ui.menu" id="hr_payroll_extended.payroll_extrahours_type_menu"><field eval="[(4, ref('base.group_hr_user'))]" name="groups_id"/></record>
+        <record model="ir.ui.menu" id="hr_payroll_extended.payroll_novedades_category_menu"><field eval="[(4, ref('base.group_hr_user'))]" name="groups_id"/></record>
+        <record model="ir.ui.menu" id="hr_payroll_extended.payroll_prestamos_category_menu"><field eval="[(4, ref('base.group_hr_user'))]" name="groups_id"/></record>
+    </data>
+    <data noupdate="1">
+        <record id="group_mod_salary_rules" model="res.groups">
+            <field name="name">Modificacion de reglas salariales</field>
+        </record>
+    </data>
+
+</openerp>

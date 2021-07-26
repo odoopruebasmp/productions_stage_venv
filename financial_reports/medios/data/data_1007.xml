@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="fpa_medios_1007" model="fpa.financial.reports">
+            <field name="name">1007 - Ingresos Recibidos</field>
+            <field name="categ">ex</field>
+            <field name="export">TRUE</field>
+            <field name="type">ex</field>
+            <field name="export_type_date">range</field>
+            <field name="application_type">account</field>
+            <field name="formato">xlsx</field>
+            <field name="numeric">J,K</field>
+            <field name="title">Concepto,Tipo de documento,Número identificación,Primer apellido del informado,Segundo apellido del informado,Primer nombre del informado,Otros nombres del informado,Razón social informado,País de residencia o domicilio,Ingresos brutos recibidos,Devoluciones rebajas y descuentos</field>
+            <field name="query">
+                SELECT code,code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,
+                    CASE WHEN primer_nombre IS NULL THEN name ELSE '' END,rco_code,SUM(J),SUM(K)
+                FROM (
+                    SELECT ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='J' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit), 0) END), 0) J,
+                        COALESCE((CASE WHEN ffrccl.col='K' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit), 0) END), 0) K
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN account_period ap ON ap.id=aml.period_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id} AND ap.special != True AND aml.company_id={company_id}
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code,ffrccl.col,ffrccl.type,fpa.tope_min
+                    HAVING (ROUND(SUM(aml.debit),0) @may= COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.credit),0)=0) OR
+                           (ROUND(SUM(aml.credit),0) @may= COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.debit),0)=0)
+                UNION ALL
+                    SELECT ffrcc.code,'43' as code_dian,'222222222' as ref,NULL as primer_apellido,NULL as segundo_apellido,NULL primer_nombre,
+                        NULL as otros_nombres,'CUANTÍAS MENORES' as name,NULL as rco_code,
+                        COALESCE((CASE WHEN ffrccl.col='J' AND ffrccl.type='c' THEN ROUND(SUM(aml.credit), 0) END), 0) J,
+                        COALESCE((CASE WHEN ffrccl.col='K' AND ffrccl.type='d' THEN ROUND(SUM(aml.debit), 0) END), 0) K
+                    FROM account_move_line aml
+                        INNER JOIN fpa_financial_reports_concepts_col_account ffrcca ON ffrcca.account_account_id = aml.account_id --cuentas
+                        INNER JOIN fpa_financial_reports_concepts_columns_lines ffrccl ON ffrcca.fpa_financial_reports_concepts_columns_lines_id = ffrccl.id --aplicacion
+                        INNER JOIN fpa_financial_reports_concepts_columns ffrcc ON ffrcc.id = ffrccl.parent_id -- conceptos
+                        INNER JOIN fpa_financial_reports fpa ON fpa.id = ffrcc.financial_reports
+                        INNER JOIN account_account aa ON aa.id = ffrcca.account_account_id
+                        INNER JOIN account_period ap ON ap.id=aml.period_id
+                        INNER JOIN res_partner rp ON rp.id = aml.partner_id
+                        INNER JOIN res_document_type rdt ON rdt.id = rp.ref_type
+                        LEFT JOIN res_country rco ON rco.id = rp.country_id
+                    WHERE aml.date BETWEEN '{date_from}' AND '{date_to}' AND fpa.id={financial_id} AND ap.special != True AND aml.company_id={company_id}
+                    GROUP BY ffrcc.code,rdt.code_dian,rp.ref,rp.primer_apellido,rp.segundo_apellido,rp.primer_nombre,
+                            rp.otros_nombres,rp.name,rco.code,ffrccl.col,ffrccl.type,fpa.tope_min
+                    HAVING (ROUND(SUM(aml.debit),0) @min COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.credit),0)=0) OR
+                           (ROUND(SUM(aml.credit),0) @min COALESCE(fpa.tope_min,0) AND ROUND(SUM(aml.debit),0)=0))
+                as datos
+                GROUP BY code,code_dian,ref,primer_apellido,segundo_apellido,primer_nombre,otros_nombres,name,rco_code
+                ORDER BY ref;
+            </field>
+        </record>
+        <record id="c_1007_4001" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4001 - Ingresos brutos de actividades ordinarias</field>
+            <field name="code">4001</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />             
+        </record>
+        <record id="c_1007_4002" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4002 - Otros ingresos brutos</field>
+            <field name="code">4002</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />             
+        </record>
+        <record id="c_1007_4003" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4003 - Ingresos por intereses y rendimientos financieros</field>
+            <field name="code">4003</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />             
+        </record>
+        <record id="c_1007_4004" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4004 - Ingresos por intereses correspondientes a créditos hipotecarios</field>
+            <field name="code">4004</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4005" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4005 - Ingresos a traves de consorcio o uniones temporales</field>
+            <field name="code">4005</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4006" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4006 - Ingresos a traves de mandato o administracion delegada</field>
+            <field name="code">4006</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4007" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4007 - Ingresos a traves de exploracion y explotacion de hidrocarburos, gases y minerales</field>
+            <field name="code">4007</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4008" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4008 - Ingresos a traves de fiducia</field>
+            <field name="code">4008</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4009" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4009 - Ingresos a traves de terceros (Beneficiario)</field>
+            <field name="code">4009</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4011" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4011 - Ingresos a traves de joint venture</field>
+            <field name="code">4011</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4012" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4012 - Ingresos a traves de cuentas de participacion</field>
+            <field name="code">4012</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+        <record id="c_1007_4013" model="fpa.financial.reports.concepts.columns">
+            <field name="name">4013 - Ingresos a traves de convenios de cooperación con entidades publicas</field>
+            <field name="code">4013</field>
+            <field name="application_type">account</field>
+            <field name="financial_reports" eval="ref('financial_reports.fpa_medios_1007')" />
+        </record>
+    </data>
+</openerp>

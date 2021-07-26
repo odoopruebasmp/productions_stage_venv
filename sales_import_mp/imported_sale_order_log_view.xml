@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+<!-- Create new view on imported statement files -->
+        <record model="ir.ui.view" id="view_sale_order_imported_file_form">
+            <field name="name">sale.order.imported.file.form</field>
+            <field name="model">sale.order.imported.file</field>
+            <field name="arch" type="xml">
+                <form string="Imported Sale Order">
+                    <notebook colspan="4">
+                        <page string="Import Details">
+                            <field name="company_id" />
+                            <field name="date" />
+                            <field name="user_id" />
+                            <field name="state" />
+                            <field name="file"/>
+                            <field name="format" />
+                        </page>
+                        <page string="Import Log">
+                            <field name="log" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_banking_imported_file_tree">
+            <field name="name">sale.order.imported.file.tree</field>
+            <field name="model">sale.order.imported.file</field>
+            <field name="arch" type="xml">
+                <tree string="Sale Order Imported Files" colors="red:state=='error';blue:state=='unfinished'">
+                    <field name="company_id" />
+                    <field name="date" />
+                    <field name="user_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sale_order_imported_files">
+            <field name="name">Sale Order Imported File Files</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.imported.file</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Add a menu item for it -->
+        <!--<menuitem name="Imported Sale Order Files"
+            id="menu_action_sale_order_imported_files"
+            parent="base.menu_sales"
+            action="action_sale_order_imported_files"
+          />-->
+        
+    </data>
+</openerp>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+          
+        <record id="view_account_loan_niif_form" model="ir.ui.view">
+            <field name="name">account.loan.form</field>
+            <field name="model">account.loan</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_loan.view_account_loan_form"/>
+            <field name="arch" type="xml">
+                <field name='first_payment' position="after">                    
+                    <field name="tir" readonly="1"/>
+                    <field name="tir_contable" readonly="1"/>                    
+                </field>
+                <button name='borrador' position="after">                    
+                    <button name="compute_tir" icon="gtk-execute" string="TIR Contable" type="object" attrs="{'invisible':[('state','!=','in_progress')]}"/>                    
+                </button>
+                <!--<notebook position="inside">
+                    <page string="Pago Contable">
+                        <button name="compute_tir" icon="gtk-execute" string="TIR" type="object"/>
+                        <field name="loan_move_line_niif_ids" mode="tree" colspan="4">
+                            <tree string="Tabla Contable" editable="Bottom" delete="false">
+                                <field name="period" readonly="1"/>
+                                <field name="date" />
+                                <field name="initial_value" readonly="1"/>
+                                <field name="prepaid_id" />
+                                <field sum="Total" name="core_adjust" />
+                                <field sum="Total" name="val_to_capital" />
+                                <field sum="Total" name="payment" />
+                                <field sum="Total" name="capital_payment" />
+                                <field sum="Total" name="interest" />
+                                <field sum="Total" name="cote" readonly="1"/>
+                                <field name="final_bal" readonly="1"/>
+                                <field sum="Total" name="penality_interest" />
+                                <field sum="Total" name="bank_charges" />
+                                <field name="total_payment" />
+                                <field name="move_id" />
+                                <field name="state" invisible="1"/>
+                                <field name="paid" invisible="1"/>-->
+                                <!--<button name="create_move" icon="gtk-execute" string="Create Move" type="object" attrs="{'invisible': ['|',('state', 'in',['confirm']),('prepaid_id', '!=',False)]}"/>
+                                <button name="cancel_move" icon="gtk-cancel" string="Cancel Move" type="object" attrs="{'invisible': ['|','|',('state', 'in',['close', 'new']),('prepaid_id', '!=',False),('paid', '=',True)]}"/>
+                                <button name="new" attrs="{'invisible': [('paid', '=',False)]}" string="Pagado" icon="gtk-apply.png"/>-->
+                            <!--</tree>
+                        </field>
+                    <button type="object" name="compute_loan_board_niif" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','=','close')]}"/>
+                    </page>
+                </notebook>-->
+            </field>
+        </record>
+        
+        
+        
+    </data>
+</openerp>          
+		
+		          

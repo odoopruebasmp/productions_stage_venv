@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+		
+		<report id="account.account_account_balance"
+				string="Trial Balance"
+				model="account.account"
+				name="account.account.balance.inherit"
+				rml="addons/account_trial_balance/report/trial_balance_report.rml" auto="False" header="False" menu="False"/>
+
+		<record model="ir.values" id="account_account_balance_with_details">
+            <field name="model_id" ref="account.model_account_account" />
+            <field name="name">Trial Balance</field>
+            <field name="key2">client_print_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' +str(ref('action_account_balance_with_details_menu1'))" />
+            <field name="key">action</field>
+            <field name="model">account.account</field>
+        </record>
+
+    </data>
+</openerp>

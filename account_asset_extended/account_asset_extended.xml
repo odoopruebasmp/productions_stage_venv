@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--WIZARD-WIZARD-WIZARD-WIZARD-->
+        
+        <record id="account_asset_asset_close_wizard_view" model="ir.ui.view">
+            <field name="name">Cierre Activo</field>
+            <field name="model">account.asset.asset.close.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Options">
+                <group col="2">
+                    <field name="asset_id" readonly="1"/>
+                </group>
+                <group col="2">
+                    <field name="type"/>
+                </group>
+                <group col="2">
+                    <field name="cliente_id" attrs="{'invisible': [('type','!=', 'venta')], 'required': [('type','=', 'venta')]}" domain="[('customer','=',True)]"/> 
+                </group>
+                <group col="4">                    
+                    <field name="invoice_id" attrs="{'invisible': [('cliente_id','=', False)], 'required': [('type','=', 'venta')]}" domain="[('partner_id','=',cliente_id),('state','=','draft')]" context="{'group_out': True}"/>
+                </group>   
+                <group col="4">
+                    <field name="partner_id" attrs="{'invisible': [('type','!=', 'perdida')]}"/>
+                    <field name="date_maturity" attrs="{'invisible': [('partner_id','=', False)], 'required': [('partner_id','!=', False)]}"/>
+                </group> 
+                <footer>
+                    <button name="do_close" string="Ejecutar" type="object" default_focus="1" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_account_asset_asset_close_wizard" model="ir.actions.act_window">
+            <field name="name">Cierre Activo</field>
+            <field name="res_model">account.asset.asset.close.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account_asset_asset_close_wizard_view"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="view_tax_form" model="ir.ui.view">
+            <field name="name">account.tax.form</field>
+            <field name="model">account.tax</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <field name="price_include" position="after">
+                    <field name="en_activo"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_asset_asset_form2">
+            <field name="name">account.asset.asset.form2</field>
+            <field name="model">account.asset.asset</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='salvage_value']" position="attributes">
+                    <attribute name="required">[('method','=','reduction')]</attribute>
+                </xpath>
+                <field name="prorata" position="replace">
+                    <field name="prorata"/>
+                    <field name="period_prorate" attrs="{'invisible': [('prorata','=', False)]}"/>
+                </field>
+                <field name="currency_id" position="replace">
+                    <field name="currency_id" on_change="onchange_currency_id(purchase_date, currency_id, company_id, context)"/>
+                    <field name="multicurrency" invisible="True"/>
+                    <field name="tasa_moneda" attrs="{'invisible': [('multicurrency','=', False)]}"/>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="centrocosto_id" />
+                </field>
+                <field name="account_move_line_ids" position="before">
+                    <group cols="6" colspan="4">
+                        <field name="fecha_compra" />
+                        <field name="valor_compra" />
+                        <field name="depresiacion_historica" string="Depreciacion Acumulada" />
+                        <field name="local_depreciation"/>
+                        <field name="niif_depreciation"/>
+                        <button name="update_depreciations" string="Actualizar" type="object" class="oe_highlight"/>
+                    </group>
+                </field>
+                <notebook position="inside">
+                    <page string="Impuestos">
+                        <field name="tax_ids"/>
+                    </page>
+                    <page string="Baja de Activos" attrs="{'invisible': [('state','=', 'draft')]}">   
+                        <button name="set_eliminated" states="open" string="EJECUTAR" type="object" class="oe_highlight"/>
+                        <group col="4">   
+                            <field name="type_baja"  readonly="1"/>
+                            <field name="invoice_baja_id"  readonly="1" attrs="{'invisible': [('type_baja','!=', 'venta')]}"/>
+                        </group>
+                        <group col="4">   
+                            <field name="move_eliminated_id"  readonly="1"/>    
+                            <field name="move_eliminated_niif_id"  readonly="1"/>
+                        </group>                     
+                        <group col="4" attrs="{'invisible': [('type_baja','!=', 'venta')]}">                            
+                            <field name="amount_venta_fiscal"/>
+                            <field name="amount_venta_contable"/>
+                        </group>
+                    </page>
+                </notebook>
+                <field name="value_residual" position="before">
+                    <field name="tax_value" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="value_to_depreciate" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </field>
+                <xpath expr="//field[@name='depreciation_line_ids']/tree/field[@name='depreciated_value']" position="before">
+                    <field name="remaining_value_end"/>
+                </xpath>
+                <xpath expr="//button[@name='compute_depreciation_board']" position="replace"/>
+                <field name="depreciation_line_ids" position="before">
+                    <button type="object" name="compute_depreciation_board" string="Compute" icon="terp-stock_format-scientific" colspan="2" attrs="{'invisible':[('state','!=','draft')]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_asset_category_form_extended">
+            <field name="name">account.asset.category.form</field>
+            <field name="model">account.asset.category</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="before">
+                    <field name="create_date" string="Fecha" readonly="1"/>
+                    <label string="." colspan="2"/>
+                    <label for="journal_id" string="Configuracion Fiscal" colspan="2"/>
+                </field>
+                <field name="account_asset_id" position="after">
+                    <field name="account_asset_tax_id"/>                                      
+                </field>
+                <field name="account_expense_depreciation_id" position="after">
+                    <field name="property_account_cost_depreciation_id"/>
+                    <field name="property_account_gasto_de_venta_depreciation_id"/> 
+                    <field name="property_account_tax_expense_depreciation_id"/>
+                    <field name="property_account_tax_cost_depreciation_id" />
+                    <label string="." colspan="2"/>
+                    <label for="journal_eliminated_id" string="Configuracion Baja Fiscal" colspan="2"/>
+                    <field name="journal_eliminated_id"/>
+                    <field name="journal_eliminated_id1"/>
+                    <field name="journal_eliminated_id2"/>
+                    <field name="account_asset_ganancia_id"/>
+                    <field name="property_account_eliminated_id"/>                                        
+                </field>
+                <field name="prorata" position="after">
+                    <field name="period_prorate" attrs="{'invisible': [('prorata','=', False)]}"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_account_invoice_asset_form_109">
+            <field name="name">account.invoice.line.form.asset.extended.3</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account_asset.view_account_invoice_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="asset_category_id" position="attributes">
+                    <attribute name="on_change">onchange_asset_category_id(asset_category_id)</attribute>
+                </field>
+                <field name="asset_category_id" position="after">
+                    <field name="account_asset_id" attrs="{'invisible': [('account_asset_id','=', False)]}"/>
+                    <field name="type_asset_tax" attrs="{'invisible': [('asset_category_id','=', False)]}"/>
+                </field>
+            </field>
+        </record>
+    
+    </data>
+</openerp>

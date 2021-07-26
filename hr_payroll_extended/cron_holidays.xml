@@ -1,0 +1,13 @@
+<openerp>
+    <data noupdate="1">
+        <!--<record model="ir.cron" id="calculo_vacaciones_automatica">-->
+            <!--<field name="name">Vacaciones automaticas</field>-->
+            <!--<field name="interval_number">1</field>-->
+            <!--<field name="interval_type">days</field>-->
+            <!--<field name="numbercall">-1</field>-->
+            <!--<field name="doall" eval="False"/>-->
+            <!--<field name="model" eval="'hr.holidays.allocation.rule'"/>-->
+            <!--<field name="function" eval="'compute_allocation_leave()'"/>-->
+        <!--</record>-->
+    </data>
+</openerp>
