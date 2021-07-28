@@ -953,7 +953,7 @@ class AccountInvoice(models.Model):
                     raise Warning(u"Longitud máxima superada en campo Lugar de Entrega, longitud máxima permitida "
                                   u"100, longitud enviada %s. Factura %s. Por favor ajustar dirección tercero %s" %
                                   (len(ien_1), number, invp_shipping.name))
-                ien_12 = invp_shipping.city_id.code
+                ien_12 = invp_shipping.state_id.code + invp_shipping.city_id.code
                 lvals = [
                     ien_1,
                     invp_shipping.state_id.code,
@@ -964,7 +964,9 @@ class AccountInvoice(models.Model):
                     "",
                     (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
                     "", "", "",
-                    ien_12]
+                    ien_12,
+                    "","","","","","","","","",
+                    invp_shipping.state_id.name,]
                 self._add_sub_element(ien, 'IEN_', lvals)
 
                 # Tiempos de entrega
