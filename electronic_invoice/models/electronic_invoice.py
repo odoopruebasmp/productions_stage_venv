@@ -798,7 +798,7 @@ class AccountInvoice(models.Model):
                         imp_amt = (subtax.amount / subtax.base) * 100
                         if ei_code == '01':
                             imp_amt = round(imp_amt)
-                        tax_rounding += (round(imp_amt, 2) / 100) * subtax.base - abs(subtax.amount)
+                        tax_rounding += round((subtax.base * imp_amt)/100, 2)
                     lvals = [
                         tim_1,
                         total_amount_per_tax,
@@ -1129,22 +1129,24 @@ class AccountInvoice(models.Model):
                         calc = abs(
                             total_amount_per_tax * (line.price_subtotal)
                         )
+                        tii_4 = abs(total_amount_per_tax) * line.price_subtotal - calc
                         tii = ET.SubElement(ite, "TII")
                         lvals = [
                             calc,
                             currency_name,
                             'true' if self._is_withholding(ei_code) else 'false',
-                            abs(total_amount_per_tax) * line.price_subtotal - calc,
-                            currency_name
+                            tii_4,
+                            currency_name,
                         ]
                         self._add_sub_element(tii, 'TII_', lvals)
                         iim = ET.SubElement(tii, "IIM")
                         lvals = [
-                            ei_code, calc,
+                            ei_code,
+                            calc,
                             currency_name,
                             line.price_subtotal,
                             currency_name, abs(total_amount_per_tax * 100), "",
-                            "", "", ""
+                            "", "", "",
                         ]
                         self._add_sub_element(iim, 'IIM_', lvals)
 
