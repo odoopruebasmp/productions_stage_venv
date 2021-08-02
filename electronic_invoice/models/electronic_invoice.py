@@ -966,7 +966,8 @@ class AccountInvoice(models.Model):
                     "", "", "",
                     ien_12,
                     "","","","","","","","","",
-                    invp_shipping.state_id.name,]
+                    invp_shipping.state_id.name,
+                    invp_shipping.country_id.name,]
                 self._add_sub_element(ien, 'IEN_', lvals)
 
                 # Tiempos de entrega
