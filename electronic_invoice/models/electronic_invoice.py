@@ -491,11 +491,11 @@ class AccountInvoice(models.Model):
                 d_ovt = []
 
                 if tp == 'nc':
-                    enc_5_description = 'DIAN 2.1: Nota Credito de Factura Electronica de Venta'
+                    enc_5_description = u'DIAN 2.1: Nota Crédito de Factura Electrónica de Venta'
                 elif tp == 'nd':
-                    enc_5_description = 'DIAN 2.1: Nota Debito de Factura Electronica de Venta'
+                    enc_5_description = u'DIAN 2.1: Nota Débito de Factura Electrónica de Venta'
                 elif tp == 'ei':
-                    enc_5_description = 'DIAN 2.1: Factura Electronica de Venta'
+                    enc_5_description = u'DIAN 2.1: Factura Electrónica de Venta'
                 else:
                     enc_5_description = 'DIAN 2.1'
 
@@ -954,6 +954,7 @@ class AccountInvoice(models.Model):
                                   u"100, longitud enviada %s. Factura %s. Por favor ajustar dirección tercero %s" %
                                   (len(ien_1), number, invp_shipping.name))
                 ien_12 = invp_shipping.state_id.code + invp_shipping.city_id.code
+                ien_24 = 'es'
                 lvals = [
                     ien_1,
                     invp_shipping.state_id.code,
@@ -967,7 +968,9 @@ class AccountInvoice(models.Model):
                     ien_12,
                     "","","","","","","","","",
                     invp_shipping.state_id.name,
-                    invp_shipping.country_id.name,]
+                    invp_shipping.country_id.name,
+                    ien_24,
+                ]
                 self._add_sub_element(ien, 'IEN_', lvals)
 
                 # Tiempos de entrega
@@ -1141,12 +1144,15 @@ class AccountInvoice(models.Model):
                         ]
                         self._add_sub_element(tii, 'TII_', lvals)
                         iim = ET.SubElement(tii, "IIM")
+                        num_porc = '{:.2f}'.format(abs(total_amount_per_tax * 100))
                         lvals = [
                             ei_code,
                             calc,
                             currency_name,
                             line.price_subtotal,
-                            currency_name, abs(total_amount_per_tax * 100), "",
+                            currency_name,
+                            num_porc,
+                            "",
                             "", "", "",
                         ]
                         self._add_sub_element(iim, 'IIM_', lvals)
