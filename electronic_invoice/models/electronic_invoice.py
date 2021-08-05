@@ -1166,6 +1166,44 @@ class AccountInvoice(models.Model):
                         dit = ET.SubElement(ite, "NTI")
                         ET.SubElement(dit, "NTI_1").text = "Bienes Cubiertos"
 
+                    # Informacion Compañia de Transporte
+                    tde = ET.SubElement(invoice, "TDE")
+                    lvals = [
+                        co_partner.name,
+                        co_partner.country_id.code,
+                        "", "", "", "", "", "", "", "", "", "",
+                    ]
+                    self._add_sub_element(tde, 'TDE_', lvals)
+
+                    # Informacion del Transportista
+                    itt = ET.SubElement(invoice, "ITT")
+                    lvals = [
+                        co_partner.name,
+                        ';'.join(x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)),
+                        'No aplica',
+                        co_partner.ref,
+                        co_partner.ref_type.code_dian,
+                        co_partner.dev_ref,
+                    ]
+                    self._add_sub_element(itt, 'ITT_', lvals)
+
+                    # Informacion Tributo Transportador
+                    dft = ET.SubElement(invoice, "DFT")
+                    lvals = [
+                        "01",
+                        "IVA",
+                        co_partner.country_id.code,
+                        co_partner.state_id.code,
+                        "",
+                        co_partner.name,
+                        co_partner.city_id.name,
+                        co_partner.state_id.name,
+                        co_partner.country_id.name,
+                        "",
+                        co_partner.street,
+                    ]
+                    self._add_sub_element(dft, 'DFT_', lvals)
+
                 xml_file = ET.ElementTree(invoice)
                 # Para evitar problemas en ruta
                 inv_num = inv.number.replace('/', '').replace('-', '')
