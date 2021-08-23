@@ -15,6 +15,7 @@ from openerp.exceptions import Warning
 from itertools import groupby
 from contextlib import contextmanager
 
+
 class EiOrderLog(models.Model):
     _name = 'ei.order.log'
     _inherit = 'mail.thread'
@@ -67,8 +68,9 @@ class ResCompany(models.Model):
     #     return db_lst
 
     electronic_invoice = fields.Boolean('Gestión de Factura Electrónica', help='POLÍTICA A NIVEL DE COMPAÑÍA, '
-                                        'AFECTACIÓN EN PROCESOS DE FACTURACIÓN. Marque esta casilla si quiere '
-                                        'habilitar la Facturación Electrónica.', default=True)
+                                                                               'AFECTACIÓN EN PROCESOS DE FACTURACIÓN. Marque esta casilla si quiere '
+                                                                               'habilitar la Facturación Electrónica.',
+                                        default=True)
     ei_database = fields.Char(string='Base de Datos', default=lambda self: self.env.cr.dbname,
                               required=True, help='Base de Datos en la cual funcionará la Facturación Electrónica')
     ei_server_type = fields.Selection([('production', u'Producción'), ('test', 'Pruebas')],
@@ -76,11 +78,12 @@ class ResCompany(models.Model):
                                       help='Indicador del tipo de ambiente de Facturación Electrónica que se usará en '
                                            'esta Base de Datos')
     ei_automatic_gen = fields.Boolean('Tarea Automática Generación', help='Marque este check si quiere permitir la '
-                                      'ejecución de la tarea automática de generación de Factura Electrónica para '
-                                      'aquellas Facturas/Notas Crédito-Débito que apliquen.', default=True)
+                                                                          'ejecución de la tarea automática de generación de Factura Electrónica para '
+                                                                          'aquellas Facturas/Notas Crédito-Débito que apliquen.',
+                                      default=True)
     ei_automatic_read = fields.Boolean('Tarea Automática Lectura', help='Marque este check si quiere permitir la '
-                                       'ejecución de la tarea automática de lectura de archivos relacionados a la '
-                                       'Factura Electrónica.', default=True)
+                                                                        'ejecución de la tarea automática de lectura de archivos relacionados a la '
+                                                                        'Factura Electrónica.', default=True)
     # Servidor
     sftp_url = fields.Char('Dirección', size=25, help='Dirección IP servidor Facturación Electrónica')
     sftp_port = fields.Char('Puerto', size=4, help='Puerto para conexión SFTP en servidor de Facturación Electrónica')
@@ -96,41 +99,42 @@ class ResCompany(models.Model):
     ei_error_folder = fields.Char('Lectura Erróneos', help='Carpeta entrada de archivos error de documentos de '
                                                            'generación de la Factura Electrónica')
     ei_voucher_folder = fields.Char('Lectura Comprobantes', help='Carpeta entrada de comprobantes de Facturación '
-                                    'Electrónica necesarios para validar el Documento del sistema')
+                                                                 'Electrónica necesarios para validar el Documento del sistema')
     ei_dian_result_folder = fields.Char('Lectura Resultado DIAN', help='Carpeta entrada de resultado de validaciones '
-                                                                        'realizadas por la DIAN')
+                                                                       'realizadas por la DIAN')
     ei_ack_folder = fields.Char('Lectura Acuse Recibo', help='Carpeta entrada de archivos de Acuse Recibo de la '
                                                              'Factura Electrónica del cliente')
     ei_decision_folder = fields.Char('Lectura Aceptación/Rechazo', help='Carpeta entrada de archivos de Aceptación/'
                                                                         'Rechazo de la Factura Electrónica del cliente')
     xml_automatic_generation = fields.Boolean('Generación Automática XML', help='POLÍTICA A NIVEL DE COMPAÑÍA, '
-                                              'AFECTACIÓN EN EL PROCESO DE GENERACIÓN DEL XML DE FACTURACIÓN '
-                                              'ELECTRÓNICA. Marque esta casilla si quiere que el xml de factura '
-                                              'electrónica se genere automáticamente al validar las facturas. '
-                                              'Este proceso de generación es independiente al de validación de la '
-                                              'factura.')
+                                                                                'AFECTACIÓN EN EL PROCESO DE GENERACIÓN DEL XML DE FACTURACIÓN '
+                                                                                'ELECTRÓNICA. Marque esta casilla si quiere que el xml de factura '
+                                                                                'electrónica se genere automáticamente al validar las facturas. '
+                                                                                'Este proceso de generación es independiente al de validación de la '
+                                                                                'factura.')
     send_cus_po = fields.Boolean('Envío OC Cliente', help='Marque esta casilla si quiere permitir el envío del archivo '
                                                           'de órden de compra del cliente, adjunto en el XML de FE')
     send_remission = fields.Boolean('Envío Remisión', help='Marque esta casilla si quiere permitir el envío del '
                                                            'archivo de Remisíon, adjunto en el XML de FE')
     send_cus_att = fields.Boolean('Envío Adjuntos Factura', help='Marque esta casilla si quiere permitir el envío de '
-                                        'archivos adjunto de FE desde la vista formulario de las Facturas de Venta y '
-                                        'Notas Crédito/Débito de Cliente')
+                                                                 'archivos adjunto de FE desde la vista formulario de las Facturas de Venta y '
+                                                                 'Notas Crédito/Débito de Cliente')
     cts_one_xml = fields.Char('CTS_1', size=20, help='Diligencie este campo según los códigos pactados con Carvajal.'
                                                      'Primero indique el código cuando la factura es NACIONAL, después '
                                                      'separado por el caracter | y sin dejar espacios indique el '
                                                      'código cuando la factura es de EXPORTACIÓN')
     ei_operation_type = fields.Selection([('01', 'Combustibles'), ('02', 'Emisor es Autorretenedor'),
                                           ('03', 'Excluidos y Exentos'), ('04', 'Exportación'), ('05', 'Genérica'),
-                                          ('06', 'Genérica con pago anticipado'), ('07', 'Genérica con periodo de facturación'),
+                                          ('06', 'Genérica con pago anticipado'),
+                                          ('07', 'Genérica con periodo de facturación'),
                                           ('08', 'Consorcio'), ('09', 'Servicios AIU'), ('10', 'Estandar'),
                                           ('11', 'Mandatos bienes'), ('12', 'Mandatos servicios')],
                                          string='Operación Principal', required=True, default='05',
                                          help='Tipo de Operación principal de la compañía, información necesaria para '
                                               'campo ENC_21 en XML de Facturación Electrónica')
     attach_invoice_xml = fields.Boolean('Adjuntar XML Facturación', help='Marque esta casilla para adjuntar en el '
-                                        'documento factura del sistema, la representación en formato XML de la Factura '
-                                        'Electrónica.', default=True)
+                                                                         'documento factura del sistema, la representación en formato XML de la Factura '
+                                                                         'Electrónica.', default=True)
     ubl_upgrade_date = fields.Datetime(string='Fecha de actualuzación')
 
 
@@ -145,12 +149,12 @@ class ResPartner(models.Model):
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         res = super(ResPartner, self).fields_view_get(
-                view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+            view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         if view_type == 'form':
             if not self.env.user.company_id.electronic_invoice and 'nica" invisible="1" modifiers="{&quot;invisible&' \
                                                                    'quot;: true}"' not in res['arch']:
-                    res['arch'] = res['arch'].replace('Electr&#243;nica"', 'Electr&#243;nica" invisible="1" modifiers='
-                                                                           '"{&quot;invisible&quot;: true}" ')
+                res['arch'] = res['arch'].replace('Electr&#243;nica"', 'Electr&#243;nica" invisible="1" modifiers='
+                                                                       '"{&quot;invisible&quot;: true}" ')
         return res
 
     @api.model
@@ -323,7 +327,7 @@ class AccountInvoice(models.Model):
         return code in ['05', '06', '07', '01C', '02C', '03C']
 
     def valid_obligation(self, code):
-        return code in  ['O-13', 'O-15', 'O-23', 'O-47', 'R-99-PN', 'ZZ']
+        return code in ['O-13', 'O-15', 'O-23', 'O-47', 'R-99-PN', 'ZZ']
 
     @api.multi
     def _add_sub_element(self, var, tag, lvalue):
@@ -339,10 +343,10 @@ class AccountInvoice(models.Model):
                     ET.SubElement(var, tag + str(p + 1)).text = ""
                 for lv in v:
                     if lv:
-                        ET.SubElement(var, tag + str(p+1)).text = str(lv)
+                        ET.SubElement(var, tag + str(p + 1)).text = str(lv)
             else:
                 if v:
-                    ET.SubElement(var, tag + str(p+1)).text = str(v) if type(v).__name__ in ['float', 'int'] else v
+                    ET.SubElement(var, tag + str(p + 1)).text = str(v) if type(v).__name__ in ['float', 'int'] else v
 
     @api.multi
     def _create_ei_order_log(self, inv, fname, tl, td, dct, data, st, dst, ol_nam=''):
@@ -357,7 +361,7 @@ class AccountInvoice(models.Model):
             'state': st,
             'document_state': dst,
             'invoice_id': inv if inv and isinstance(inv, int) else None if not inv else inv.id
-            })
+        })
 
     # FE Nacional y de Exportación, Nota Crédito y Nota Débito
     @api.multi
@@ -389,13 +393,13 @@ class AccountInvoice(models.Model):
                 tp = 'ei' if (tp == 'out_invoice' and journal.type == 'sale') else 'nc' if tp == 'out_refund' else 'nd'
                 if not inv_partner.electronic_invoice:
                     dct = 'No es posible generar el XML de FE del documento ' + inv.number + '. Por favor revise la ' \
-                          u'parametrización del tercero asociado a la factura, verifique que está permitido para ' \
-                          u'generación de Factura Electrónica'
+                                                                                             u'parametrización del tercero asociado a la factura, verifique que está permitido para ' \
+                                                                                             u'generación de Factura Electrónica'
                     self._create_ei_order_log(inv, '', 'param', tp, dct, '', 'open', inv.ei_state)
                     continue
                 if not (journal.invoice_prefix and journal.ei_start_date):
                     dct = 'No es posible generar el XML de FE del documento ' + inv.number + '. Por favor revise la ' \
-                          u'parametrización de Facturación Electrónica del Comprobante relacionado'
+                                                                                             u'parametrización de Facturación Electrónica del Comprobante relacionado'
                     self._create_ei_order_log(inv, '', 'param', tp, dct, '', 'open', inv.ei_state)
                     continue
                 if not company.ei_server_type:
@@ -445,7 +449,7 @@ class AccountInvoice(models.Model):
                     enc_9 = '91'
                     # REF
                     self.env.cr.execute("SELECT date_invoice FROM account_invoice WHERE number='%s'" % (inv.origin or
-                                        inv.invoice_out_refund_id.number))
+                                                                                                        inv.invoice_out_refund_id.number))
                     ref_3 = self.env.cr.fetchone()
                     reference = inv.origin or inv.invoice_out_refund_id.number
                     if 'FE' in reference or 'SETT' in reference:
@@ -464,7 +468,7 @@ class AccountInvoice(models.Model):
                     enc_9 = '92'
                     # REF
                     self.env.cr.execute("SELECT date_invoice FROM account_invoice WHERE number='%s'" % (inv.origin or
-                                        inv.invoice_out_add_id.number))
+                                                                                                        inv.invoice_out_add_id.number))
                     ref_3 = self.env.cr.fetchone()
                     reference = inv.origin or inv.invoice_out_refund_id.number
                     if 'FE' in reference or 'SETT' in reference:
@@ -478,9 +482,8 @@ class AccountInvoice(models.Model):
                     lvals_ref = [ref_1, inv.origin or inv.invoice_out_add_id.number, ref_3]
 
                 invoice = ET.Element(tp_name.split(' ')[0])
-                
 
-                #hora = str(datetime.strptime(inv.create_date, "%Y-%m-%d %H:%M:%S") - timedelta(hours=5))[11:]
+                # hora = str(datetime.strptime(inv.create_date, "%Y-%m-%d %H:%M:%S") - timedelta(hours=5))[11:]
                 utc_adj = '-05:00'
                 hora = str(datetime.strptime(inv.create_date, "%Y-%m-%d %H:%M:%S"))[11:] + utc_adj
                 number = inv.number.replace('-', '')
@@ -488,17 +491,18 @@ class AccountInvoice(models.Model):
                 d_ovt = []
 
                 if tp == 'nc':
-                    enc_5_description = ': Nota Crédito de Factura Electrónica de Venta'
+                    enc_5_description = u'DIAN 2.1: Nota Crédito de Factura Electrónica de Venta'
                 elif tp == 'nd':
-                    enc_5_description = ': Nota Débito de Factura Electrónica de Venta'
+                    enc_5_description = u'DIAN 2.1: Nota Débito de Factura Electrónica de Venta'
                 elif tp == 'ei':
-                    enc_5_description = ': Factura Electrónica de Venta'
+                    enc_5_description = u'DIAN 2.1: Factura Electrónica de Venta'
                 else:
-                    enc_5_description = ''
+                    enc_5_description = 'DIAN 2.1'
 
                 # Informacion Cabecera
                 enc = ET.SubElement(invoice, "ENC")
-                lvals = [enc_1, co_partner.ref, inv_partner.ref, 'UBL 2.1', 'DIAN 2.1' + enc_5_description, number, inv.date_invoice, hora,
+                lvals = [enc_1, co_partner.ref, inv_partner.ref, 'UBL 2.1', enc_5_description, number, inv.date_invoice,
+                         hora,
                          enc_9, currency_name, "", "", "", "", str(len(inv.invoice_line)), inv.date_due, "", "",
                          "", enc_20, enc_21, ""]
                 self._add_sub_element(enc, 'ENC_', lvals)
@@ -516,7 +520,8 @@ class AccountInvoice(models.Model):
                 lvals = [f_typ, co_partner.ref, d_typ, 'No aplica', "", co_partner.name,
                          co_partner.name, "", "", co_partner.street, co_partner.state_id.code, "",
                          co_partner.city_id.name,
-                         co_partner.zip or co_partner.state_id.code + co_partner.city_id.code, co_partner.country_id.code, "", "", "",
+                         co_partner.zip or co_partner.state_id.code + co_partner.city_id.code,
+                         co_partner.country_id.code, "", "", "",
                          co_partner.state_id.name, "", co_partner.country_id.name, co_partner.dev_ref,
                          co_partner.state_id.code + co_partner.city_id.code, co_partner.name]
                 self._add_sub_element(emi, 'EMI_', lvals)
@@ -550,8 +555,8 @@ class AccountInvoice(models.Model):
                 if journal.invoice_resolution:
                     icc = ET.SubElement(emi, "ICC")
                     lvals = ["", "", "", "", "", "", "", "",
-                        journal.invoice_prefix
-                    ]
+                             journal.invoice_prefix
+                             ]
                     self._add_sub_element(icc, 'ICC_', lvals)
 
                 # Contacto Emisor
@@ -575,7 +580,7 @@ class AccountInvoice(models.Model):
                         inv.partner_id.state_id.code,
                         inv.partner_id.state_id.country_id.code,
                         inv.partner_id.zip,
-                        inv.partner_id.state_id.code +\
+                        inv.partner_id.state_id.code + \
                         inv.partner_id.city_id.code,
                         inv.partner_id.state_id.name,
                         inv.partner_id.state_id.country_id.name,
@@ -589,7 +594,7 @@ class AccountInvoice(models.Model):
                         inv.partner_shipping_id.state_id.country_id.code,
                         inv.partner_shipping_id.zip,
                         inv.partner_shipping_id.city_id.code,
-                        inv.partner_shipping_id.state_id.code +\
+                        inv.partner_shipping_id.state_id.code + \
                         inv.partner_shipping_id.state_id.name,
                         inv.partner_shipping_id.state_id.country_id.code,
                         inv.partner_shipping_id.ean_localizacion
@@ -601,7 +606,7 @@ class AccountInvoice(models.Model):
                         inv.partner_invoice_id.state_id.code,
                         inv.partner_invoice_id.state_id.country_id.code,
                         inv.partner_invoice_id.zip,
-                        inv.partner_invoice_id.state_id.code +\
+                        inv.partner_invoice_id.state_id.code + \
                         inv.partner_invoice_id.city_id.code,
                         inv.partner_invoice_id.state_id.name,
                         inv.partner_invoice_id.state_id.country_id.name,
@@ -613,12 +618,12 @@ class AccountInvoice(models.Model):
                     inv_partner.name or '',
                     (f_typ == '2' and _join_names(
                         [inv_partner.primer_nombre,
-                        inv_partner.otros_nombres,
-                        inv_partner.primer_apellido,
-                        inv_partner.segundo_apellido]
+                         inv_partner.otros_nombres,
+                         inv_partner.primer_apellido,
+                         inv_partner.segundo_apellido]
                     ) or ''),
                     "",
-                    adq_addr[0], #10
+                    adq_addr[0],  # 10
                     adq_addr[2],
                     "",
                     adq_addr[1],
@@ -628,13 +633,12 @@ class AccountInvoice(models.Model):
                     "", "",
                     adq_addr[6],
                     "",
-                    adq_addr[7], #21
-                    str(inv_partner.dev_ref) if type(inv_partner.dev_ref)\
-                        is not bool else '',
-                    adq_addr[5], inv_partner.ref,
-                    d_typ,
+                    adq_addr[7],
+                    str(inv_partner.dev_ref) if type(inv_partner.dev_ref) \
+                                                is not bool else '',
+                    adq_addr[5], inv_partner.ref, d_typ,
                     str(inv_partner.dev_ref) if type(inv_partner.dev_ref) is not bool else ''
-                ]
+                ]  # TODO enviarlo si tiene nit, ajustar el dev_ref
                 self._add_sub_element(adq, 'ADQ_', lvals)
 
                 # Informacion Tributaria, Aduanera y Cambiaria - Adquiriente
@@ -691,15 +695,15 @@ class AccountInvoice(models.Model):
                 valid_taxes = filter(
                     lambda t: t[ei_code_key],
                     map(
-                    lambda tax: (
-                        tax.base_code_id.ei_code or\
-                        self.env['account.tax'].search(
-                            [('name', '=', tax.name)]
-                        )[0].base_code_id.ei_code,
-                        tax
-                    ),
-                    inv.tax_line.filtered(lambda tax: tax.amount != 0)
-                ))
+                        lambda tax: (
+                            tax.base_code_id.ei_code or \
+                            self.env['account.tax'].search(
+                                [('name', '=', tax.name)]
+                            )[0].base_code_id.ei_code,
+                            tax
+                        ),
+                        inv.tax_line.filtered(lambda tax: tax.amount != 0)
+                    ))
 
                 # Dismiss withholdings report taxes only
                 reported_taxes = filter(
@@ -710,13 +714,13 @@ class AccountInvoice(models.Model):
                     lambda rt: rt[subtax_key].name,
                     reported_taxes
                 )
-                total_reported_taxes = sum(t[subtax_key].amount for t in\
-                    reported_taxes
-                )
+                total_reported_taxes = sum(t[subtax_key].amount for t in \
+                                           reported_taxes
+                                           )
                 taxed_lines = filter(
                     lambda line:
-                        set(map(lambda t: t.name, line.invoice_line_tax_id)) &\
-                        set(reported_taxes_name),
+                    set(map(lambda t: t.name, line.invoice_line_tax_id)) & \
+                    set(reported_taxes_name),
                     inv.invoice_line
                 )
                 ref_3 = round(sum(
@@ -739,7 +743,7 @@ class AccountInvoice(models.Model):
                     currency_name,
                     inv.amount_untaxed + total_reported_taxes,
                     currency_name,
-                    "", #'{:.3f}'.format(disc),
+                    "",  # '{:.3f}'.format(disc),
                     currency_name, "", "", "", "", "", ""]
                 self._add_sub_element(tot, 'TOT_', lvals)
 
@@ -749,8 +753,6 @@ class AccountInvoice(models.Model):
                     ei_code = tax.base_code_id.ei_code
                     if ei_code == '01':
                         total_taxes_iva += abs(tax.amount)
-
-
 
                 taxes_codes = sorted(filter(
                     lambda taxc: taxc[0],
@@ -764,8 +766,8 @@ class AccountInvoice(models.Model):
 
                 for ei_code, ltax in taxes:
                     tax = filter(
-                        lambda t: not self._is_withholding(ei_code) or\
-                            not 'auto' in t[subtax_key].name.lower(),
+                        lambda t: not self._is_withholding(ei_code) or \
+                                  not 'auto' in t[subtax_key].name.lower(),
                         ltax
                     )
                     total_amount_per_tax = abs(
@@ -773,8 +775,8 @@ class AccountInvoice(models.Model):
                     )
                     if total_amount_per_tax == 0.0:
                         continue
-                    if self._check_tax(ei_code) and not\
--                            self._is_withholding(ei_code):
+                    if self._check_tax(ei_code) and not \
+                            -                            self._is_withholding(ei_code):
                         d_ovt = [
                             ei_code,
                             total_amount_per_tax,
@@ -782,10 +784,10 @@ class AccountInvoice(models.Model):
                         ]
                         continue
                     # tim_1 = 'true' if 'rete' in\
-                        # ''.join(map(
-                            # lambda subtax: subtax[subtax_key].name.lower(),
-                            # tax))\
-                        # else 'false'
+                    # ''.join(map(
+                    # lambda subtax: subtax[subtax_key].name.lower(),
+                    # tax))\
+                    # else 'false'
                     if self._is_withholding(ei_code):
                         continue
                     tim = ET.SubElement(invoice, "TIM")
@@ -796,7 +798,7 @@ class AccountInvoice(models.Model):
                         imp_amt = (subtax.amount / subtax.base) * 100
                         if ei_code == '01':
                             imp_amt = round(imp_amt)
-                        tax_rounding += (round(imp_amt, 2)/ 100) * subtax.base - abs(subtax.amount)
+                        tax_rounding += round((subtax.base * imp_amt)/100, 2)
                     lvals = [
                         tim_1,
                         total_amount_per_tax,
@@ -821,8 +823,6 @@ class AccountInvoice(models.Model):
                             num_porc
                         ]
                         self._add_sub_element(imp, 'IMP_', lvals)
-
-
 
                 # Tipo de Cambio
                 tdc = ET.SubElement(invoice, "TDC")
@@ -865,42 +865,42 @@ class AccountInvoice(models.Model):
                              journal.ei_end_invoice]
                 self._add_sub_element(drf, 'DRF_', lvals)
 
-                # Quien Factura
-                qfa = ET.SubElement(invoice, "QFA")
-                d_typ = co_partner.ref_type.code_dian
-                f_typ = self._calc_partner_type(co_partner)
-                lvals = [co_partner.ref, d_typ, "2", co_partner.name, "", "", "", co_partner.street,
-                         co_partner.state_id.name, co_partner.city_id.name, co_partner.city_id.name, co_partner.zip,
-                         co_partner.state_id.country_id.code, "", "", f_typ]
-                self._add_sub_element(qfa, 'QFA_', lvals)
+                # Quien Factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # qfa = ET.SubElement(invoice, "QFA")
+                # d_typ = co_partner.ref_type.code_dian
+                # f_typ = self._calc_partner_type(co_partner)
+                # lvals = [co_partner.ref, d_typ, "2", co_partner.name, "", "", "", co_partner.street,
+                #          co_partner.state_id.name, co_partner.city_id.name, co_partner.city_id.name, co_partner.zip,
+                #          co_partner.state_id.country_id.code, "", "", f_typ]
+                # self._add_sub_element(qfa, 'QFA_', lvals)
 
-                # Informacion Tributaria, Aduanera y Cambiaria - Quien Factura
-                qta_1 = [x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)]
-                qta = ET.SubElement(qfa, "QTA")
-                lvals = [qta_1]
-                self._add_sub_element(qta, 'QTA_', lvals)
+                # Informacion Tributaria, Aduanera y Cambiaria - Quien Factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # qta_1 = [x.code for x in co_partner.tributary_obligations_ids if self.valid_obligation(x.code)]
+                # qta = ET.SubElement(qfa, "QTA")
+                # lvals = [qta_1]
+                # self._add_sub_element(qta, 'QTA_', lvals)
 
-                # A Quien se factura
-                aqf = ET.SubElement(invoice, "AQF")
-                f_typ = self._calc_partner_type(inv_partner)
-                d_typ = inv_partner.ref_type.code_dian
+                # A Quien se factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # aqf = ET.SubElement(invoice, "AQF")
+                # f_typ = self._calc_partner_type(inv_partner)
+                # d_typ = inv_partner.ref_type.code_dian
+                #
+                # lvals = [inv_partner.ref, d_typ, (f_typ == '1' and '2' or '0'),
+                #          (f_typ == '1' and inv_partner.name or ''), "", (f_typ == '2' and inv_partner.name or ''),
+                #          (f_typ == '2' and _join_names([inv_partner.primer_apellido, inv_partner.segundo_apellido]) or ''),
+                #          inv_partner.street, inv_partner.state_id.name, inv_partner.city_id.name,
+                #          inv_partner.city_id.name, "", inv_partner.state_id.country_id.code, "", "", f_typ]
+                # self._add_sub_element(aqf, 'AQF_', lvals)
 
-                lvals = [inv_partner.ref, d_typ, (f_typ == '1' and '2' or '0'),
-                         (f_typ == '1' and inv_partner.name or ''), "", (f_typ == '2' and inv_partner.name or ''),
-                         (f_typ == '2' and _join_names([inv_partner.primer_apellido, inv_partner.segundo_apellido]) or ''),
-                         inv_partner.street, inv_partner.state_id.name, inv_partner.city_id.name,
-                         inv_partner.city_id.name, "", inv_partner.state_id.country_id.code, "", "", f_typ]
-                self._add_sub_element(aqf, 'AQF_', lvals)
-
-                # Informacion Tributaria, Aduanera y Cambiaria - A Quien se Factura
-                ata = ET.SubElement(aqf, "ATA")
-                lr = []
-                for obl in inv_partner.tributary_obligations_ids:
-                    lr.append(obl.code)
-                for obl in inv_partner.customs_obligations_ids:
-                    lr.append(obl.code)
-                lvals = [lr or ['R-99-PN']]
-                self._add_sub_element(ata, 'ATA_', lvals)
+                # Informacion Tributaria, Aduanera y Cambiaria - A Quien se Factura -- Comentariado solicitud DIAN 26/07/2021 --
+                # ata = ET.SubElement(aqf, "ATA")
+                # lr = []
+                # for obl in inv_partner.tributary_obligations_ids:
+                #     lr.append(obl.code)
+                # for obl in inv_partner.customs_obligations_ids:
+                #     lr.append(obl.code)
+                # lvals = [lr or ['R-99-PN']]
+                # self._add_sub_element(ata, 'ATA_', lvals)
 
                 # Notas de la factura
                 if tp == 'ei' and journal.invoice_resolution:
@@ -953,7 +953,8 @@ class AccountInvoice(models.Model):
                     raise Warning(u"Longitud máxima superada en campo Lugar de Entrega, longitud máxima permitida "
                                   u"100, longitud enviada %s. Factura %s. Por favor ajustar dirección tercero %s" %
                                   (len(ien_1), number, invp_shipping.name))
-                ien_12 = invp_shipping.city_id.code
+                ien_12 = invp_shipping.state_id.code + invp_shipping.city_id.code
+                ien_24 = 'es'
                 lvals = [
                     ien_1,
                     invp_shipping.state_id.code,
@@ -964,7 +965,12 @@ class AccountInvoice(models.Model):
                     "",
                     (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
                     "", "", "",
-                    ien_12]
+                    ien_12,
+                    "","","","","","","","","",
+                    invp_shipping.state_id.name,
+                    invp_shipping.country_id.name,
+                    ien_24,
+                ]
                 self._add_sub_element(ien, 'IEN_', lvals)
 
                 # Tiempos de entrega
@@ -1022,17 +1028,17 @@ class AccountInvoice(models.Model):
                     vat_excemption_config = self.env['vat.excemption.products.config'].search(
                         [('products_ids', '=', line.product_id.id)]
                     ).filtered(
-                        lambda vat_conf: (self.date_invoice or today)  in [
+                        lambda vat_conf: (self.date_invoice or today) in [
                             conf.name for conf in vat_conf.excempted_days_ids]
                     )
                     ite_10 = "Bienes Cubiertos" if vat_excemption_config else ""
                     # Items del documento
                     ite = ET.SubElement(invoice, "ITE")
                     ite_11 = line.product_id.default_code
-                    lvals = [str(i+1), "", line.quantity,
+                    lvals = [str(i + 1), "", line.quantity,
                              line.uos_id.ei_uom_code,
                              line.price_subtotal,
-                             currency_name, 
+                             currency_name,
                              round(line.price_unit, 2),
                              currency_name, "", ite_10, ite_11, ite_10, "",
                              "", "", "", "", ite_11,
@@ -1075,10 +1081,10 @@ class AccountInvoice(models.Model):
                             self._add_sub_element(lot, 'LOT_', lvals)
 
                     # Identificación del Artículo o Servicio de acuerdo con un Estándar
-                    ref_code_val = getattr(line.product_id, 'ean_codigo', False) or\
-                        getattr(line.product_id , 'ean13' , False) or line.product_id.default_code
-                    ref_code = '010' if getattr(line.product_id, 'ean_codigo', False) or\
-                        getattr(line.product_id, 'ean13', False) else '999'
+                    ref_code_val = getattr(line.product_id, 'ean_codigo', False) or \
+                                   getattr(line.product_id, 'ean13', False) or line.product_id.default_code
+                    ref_code = '010' if getattr(line.product_id, 'ean_codigo', False) or \
+                                        getattr(line.product_id, 'ean13', False) else '999'
                     iae = ET.SubElement(ite, "IAE")
                     lvals = [ref_code_val, ref_code, "", ""]
                     if enc_9 == '02':
@@ -1111,11 +1117,11 @@ class AccountInvoice(models.Model):
 
                     for ei_code, ltax in per_line_taxes:
                         tax = filter(
-                            lambda t: not self._is_withholding(ei_code) or\
-                                not 'auto' in t.name.lower(),
+                            lambda t: not self._is_withholding(ei_code) or \
+                                      not 'auto' in t.name.lower(),
                             ltax
                         )
-                        total_amount_per_tax =\
+                        total_amount_per_tax = \
                             sum([subtax.amount for subtax in tax])
                         if total_amount_per_tax == 0:
                             continue
@@ -1127,29 +1133,34 @@ class AccountInvoice(models.Model):
                         calc = abs(
                             total_amount_per_tax * (line.price_subtotal)
                         )
+                        tii_4 = abs(total_amount_per_tax) * line.price_subtotal - calc
                         tii = ET.SubElement(ite, "TII")
                         lvals = [
                             calc,
                             currency_name,
                             'true' if self._is_withholding(ei_code) else 'false',
-                            abs(total_amount_per_tax) * line.price_subtotal - calc,
-                            currency_name
+                            tii_4,
+                            currency_name,
                         ]
                         self._add_sub_element(tii, 'TII_', lvals)
                         iim = ET.SubElement(tii, "IIM")
+                        num_porc = '{:.2f}'.format(abs(total_amount_per_tax * 100))
                         lvals = [
-                            ei_code, calc,
+                            ei_code,
+                            calc,
                             currency_name,
                             line.price_subtotal,
-                            currency_name, abs(total_amount_per_tax * 100), "",
-                            "", "", ""
+                            currency_name,
+                            num_porc,
+                            "",
+                            "", "", "",
                         ]
                         self._add_sub_element(iim, 'IIM_', lvals)
 
                     # DESCRIPCION DEL ITEM
                     dit = ET.SubElement(ite, "DIT")
-                    ET.SubElement(dit, "DIT_1").text = ' ' +\
-                        line.product_id.name if\
+                    ET.SubElement(dit, "DIT_1").text = ' ' + \
+                                                       line.product_id.name if \
                         line.product_id.name else ''
                     if vat_excemption_config:
                         dit = ET.SubElement(ite, "NTI")
@@ -1161,13 +1172,14 @@ class AccountInvoice(models.Model):
                 ei_file = inv_num + datetime.now().strftime('_%d%m%Y%H%M%S%f')[:-3] + '.xml'
 
                 sftp, transport = self._sftp_connect(company, '', company.ei_write_folder)
-                xml_file.write(ei_file, encoding='utf-8', xml_declaration=True)
+                xml_file.write(ei_file, encoding='UTF-8', xml_declaration=True)
 
                 inv.ei_state = 'done'
                 so_f = []
                 nf, tmp_file, att_msg = '', None, ''
                 att_doc = self.env['ir.attachment'].search([('res_model', '=', 'stock.picking'),
-                                        ('res_id', '=', self.stock_picking_id.id)]) if company.send_remission else []
+                                                            ('res_id', '=',
+                                                             self.stock_picking_id.id)]) if company.send_remission else []
                 zip_f1 = None
                 if company.send_cus_att and inv.customer_att:
                     tmp_file = open(inv.cus_att_name, 'w')
@@ -1246,7 +1258,7 @@ class AccountInvoice(models.Model):
                     'type_log': 'xml',
                     'document_state': 'done',
                     'description': 'Se genera el XML de la ' + tp_name + ' ' + inv.number + ' sin novedad.' + att_msg
-                    })
+                })
                 self.env.cr.commit()  # Por el movimiento de archivos
                 sftp.close()
                 transport.close()
@@ -1284,11 +1296,11 @@ class AccountInvoice(models.Model):
     contingency_invoice = fields.Boolean('Factura de Contingencia', help='Marque este check para indicar que la '
                                                                          'factura es de Contingencia')
     ci_transcription = fields.Char('Identificador Transcripción', size=15, help='Identificador de la transcripción '
-                                        'de datos, asignado por el OFE; prefijo, consecutivo')
+                                                                                'de datos, asignado por el OFE; prefijo, consecutivo')
     ci_start_date = fields.Datetime('Inicio Contingencia')
     ci_end_date = fields.Datetime('Fin Contingencia')
     ci_identifier = fields.Char('Identificador Contingencia', help='Idenficador de la contingencia asignado a la '
-                                'anotación hecha por el OFE en su bitacora de contigencias')
+                                                                   'anotación hecha por el OFE en su bitacora de contigencias')
     customer_att = fields.Binary('Adjuntos Cliente', help='Archivo adjunto de Facturación Electrónica', copy=False)
     cus_att_name = fields.Char('Nombre Adjunto Cliente', copy=False)
     pol_send_cus_att = fields.Boolean('Política Envío Adj', related='company_id.send_cus_att', readonly=True)
@@ -1373,11 +1385,11 @@ class AccountInvoice(models.Model):
                         'mimetype': 'application/' + fna[-1],
                         'file_type': 'application/' + fna[-1],
                         'type': 'binary'
-                        }
+                    }
                     attachment = self.env['ir.attachment'].sudo().create(data_attach)
                     url = self.env['ir.config_parameter'].get_param('web.base.url') + '/web/binary/saveas?model' \
-                                                            '=ir.attachment&field=datas&filename_field=name&id=' + \
-                                                            str(attachment.id)
+                                                                                      '=ir.attachment&field=datas&filename_field=name&id=' + \
+                          str(attachment.id)
                     file_path = attachment._get_path(url)[0].split("/")
                     folder = file_path[0]
                     doct = file_path[1]
@@ -1391,12 +1403,12 @@ class AccountInvoice(models.Model):
                         shutil.move(doct, final_path)
                         self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]).write({
                             'store_fname': attachment._get_path(url)[0]
-                            })
+                        })
                     else:
                         shutil.move(doct, final_path)
                         self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]).write({
                             'store_fname': attachment._get_path(url)[0]
-                            })
+                        })
 
                         dct = 'Se genera la lectura del archivo de error ' + fname + ' sin novedad.'
                         self._create_ei_order_log(inv[0][0], fname, 'logxml', 'lg', dct, info, 'open', inv[0][1],
@@ -1460,11 +1472,11 @@ class AccountInvoice(models.Model):
                         'mimetype': 'application/' + fna_type,
                         'file_type': 'application/' + fna_type,
                         'type': 'binary'
-                        }
+                    }
                     attachment = self.env['ir.attachment'].sudo().create(data_attach)
                     url = self.env['ir.config_parameter'].get_param('web.base.url') + '/web/binary/saveas?model' \
-                                                            '=ir.attachment&field=datas&filename_field=name&id=' + \
-                                                            str(attachment.id)
+                                                                                      '=ir.attachment&field=datas&filename_field=name&id=' + \
+                          str(attachment.id)
                     file_path = attachment._get_path(url)[0].split("/")
                     folder = file_path[0]
                     doc = file_path[1]
@@ -1478,7 +1490,7 @@ class AccountInvoice(models.Model):
 
                     shutil.move(doc, final_path)
                     sftp.remove(fname)
-                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]).\
+                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]). \
                         write({'store_fname': attachment._get_path(url)[0]})
                 else:
                     doc = fname
@@ -1504,7 +1516,8 @@ class AccountInvoice(models.Model):
 
                 dct = 'Se genera la lectura del archivo ' + fname + ' y se adjunta al documento %s, ' \
                                                                     'sin novedad.' % inv[0][1]
-                self._create_ei_order_log(inv[0][0], fname, 'log'+fna_type, t_doc, dct, info, 'close', 'supplier_accep',
+                self._create_ei_order_log(inv[0][0], fname, 'log' + fna_type, t_doc, dct, info, 'close',
+                                          'supplier_accep',
                                           ol_nam=inv[0][1])
                 if not i_n or add_set:
                     dinv[inv[0][1]] = inv
@@ -1515,7 +1528,6 @@ class AccountInvoice(models.Model):
                 self.env.cr.execute("UPDATE account_invoice SET ei_state='supplier_accep'%s WHERE id=%s"
                                     % (i[1], i[0]))
                 self.env.cr.commit()  # Por el movimiento de archivos
-
 
     @api.multi
     def ei_read_dian_result_folder(self):
@@ -1598,8 +1610,9 @@ class AccountInvoice(models.Model):
                 if i_n:
                     inv = dinv[i_n[0]]
                 else:
-                    self.env.cr.execute("SELECT id,number FROM account_invoice WHERE number in %s AND ei_state IN "  # TODO not secure about states
-                                        "('supplier_accep','dian_accep')" % str(tuple([str(x) for x in fna[:-1]])))
+                    self.env.cr.execute(
+                        "SELECT id,number FROM account_invoice WHERE number in %s AND ei_state IN "  # TODO not secure about states
+                        "('supplier_accep','dian_accep')" % str(tuple([str(x) for x in fna[:-1]])))
                     inv = self.env.cr.fetchall()
                     if len(inv) > 1:
                         raise Warning('Se encontró mas de una referencia para el documento %s, por favor validar'
@@ -1615,11 +1628,11 @@ class AccountInvoice(models.Model):
                         'mimetype': 'application/' + fna_type,
                         'file_type': 'application/' + fna_type,
                         'type': 'binary'
-                        }
+                    }
                     attachment = self.env['ir.attachment'].sudo().create(data_attach)
                     url = self.env['ir.config_parameter'].get_param('web.base.url') + '/web/binary/saveas?model' \
-                                                            '=ir.attachment&field=datas&filename_field=name&id=' + \
-                                                            str(attachment.id)
+                                                                                      '=ir.attachment&field=datas&filename_field=name&id=' + \
+                          str(attachment.id)
                     file_path = attachment._get_path(url)[0].split("/")
                     folder = file_path[0]
                     doc = file_path[1]
@@ -1633,7 +1646,7 @@ class AccountInvoice(models.Model):
 
                     shutil.move(doc, final_path)
                     sftp.remove(fname)
-                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]).\
+                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]). \
                         write({'store_fname': attachment._get_path(url)[0]})
                 else:
                     doc = fname
@@ -1643,7 +1656,7 @@ class AccountInvoice(models.Model):
 
                 dct = 'Se genera la lectura del archivo ' + fname + ' y se adjunta al documento %s, ' \
                                                                     'sin novedad.' % inv[0][1]
-                self._create_ei_order_log(inv[0][0], fname, 'log'+fna[-1], 'ak', dct, info, 'close', 'ack_cus',
+                self._create_ei_order_log(inv[0][0], fname, 'log' + fna[-1], 'ak', dct, info, 'close', 'ack_cus',
                                           ol_nam=inv[0][1])
                 self.env.cr.execute("UPDATE account_invoice SET ei_state='ack_cus' WHERE id=%s" % inv[0][0])
                 self.env.cr.commit()
@@ -1675,7 +1688,8 @@ class AccountInvoice(models.Model):
                     inv = dinv[i_n[0]]
                 else:
                     self.env.cr.execute("SELECT id,number FROM account_invoice WHERE number in %s AND ei_state in"
-                                        "('supplier_accep','dian_accep','ack_cus')" % str(tuple([str(x) for x in fna[:-1]])))
+                                        "('supplier_accep','dian_accep','ack_cus')" % str(
+                        tuple([str(x) for x in fna[:-1]])))
                     inv = self.env.cr.fetchall()
                     if len(inv) > 1:
                         raise Warning('Se encontró mas de una referencia para el documento %s, por favor validar'
@@ -1691,11 +1705,11 @@ class AccountInvoice(models.Model):
                         'mimetype': 'application/' + fna_type,
                         'file_type': 'application/' + fna_type,
                         'type': 'binary'
-                        }
+                    }
                     attachment = self.env['ir.attachment'].sudo().create(data_attach)
                     url = self.env['ir.config_parameter'].get_param('web.base.url') + '/web/binary/saveas?model' \
-                                                            '=ir.attachment&field=datas&filename_field=name&id=' + \
-                                                            str(attachment.id)
+                                                                                      '=ir.attachment&field=datas&filename_field=name&id=' + \
+                          str(attachment.id)
                     file_path = attachment._get_path(url)[0].split("/")
                     folder = file_path[0]
                     doc = file_path[1]
@@ -1709,7 +1723,7 @@ class AccountInvoice(models.Model):
 
                     shutil.move(doc, final_path)
                     sftp.remove(fname)
-                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]).\
+                    self.env['ir.attachment'].sudo().search([('id', '=', attachment.id)]). \
                         write({'store_fname': attachment._get_path(url)[0]})
                 else:
                     doc = fname
@@ -1720,7 +1734,7 @@ class AccountInvoice(models.Model):
                 inv_st = 'cus_rejec' if 'REJECTED' in info else 'cus_accep'
                 dct = 'Se genera la lectura del archivo ' + fname + ' y se adjunta al documento %s, ' \
                                                                     'sin novedad.' % inv[0][1]
-                self._create_ei_order_log(inv[0][0], fname, 'log'+fna[-1], 'ds', dct, info, 'close', inv_st,
+                self._create_ei_order_log(inv[0][0], fname, 'log' + fna[-1], 'ds', dct, info, 'close', inv_st,
                                           ol_nam=inv[0][1])
                 self.env.cr.execute("UPDATE account_invoice SET ei_state='%s' WHERE id=%s" % (inv_st,
                                                                                               inv[0][0]))
@@ -1744,8 +1758,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def action_cancel(self):
         if self.env.user.company_id.electronic_invoice and self.type != 'in_invoice' and \
-                self.state in ['open', 'paid'] and self.ei_state != 'pending' and\
-                    self.ei_order_log_ids and self.ei_state not in ['dian_rejec', 'supplier_rejec']:
+                self.state in ['open', 'paid'] and self.ei_state != 'pending' and \
+                self.ei_order_log_ids and self.ei_state not in ['dian_rejec', 'supplier_rejec']:
             raise Warning(u'Esta Factura No Puede ser Cancelada, debido a que el tercero %s tiene activa la politica '
                           u'de Facturacion Electrónica y la Factura %s ya tiene generado el archivo XML de Factura '
                           u'Electrónica.' % (self.partner_id.name, self.number))
@@ -1759,12 +1773,12 @@ class AccountInvoice(models.Model):
             vat_excemption_config = self.env['vat.excemption.products.config'].search(
                 [('products_ids', '=', line.product_id.id)]
             ).filtered(
-                lambda vat_conf: (self.date_invoice or today)  in [
+                lambda vat_conf: (self.date_invoice or today) in [
                     conf.name for conf in vat_conf.excempted_days_ids]
             )
             vat_tax = line.invoice_line_tax_id.filtered(
-                        lambda tax: 0.19 == tax.amount and 'iva' in tax.name.lower()
-                    )
+                lambda tax: 0.19 == tax.amount and 'iva' in tax.name.lower()
+            )
             if vat_excemption_config and vat_tax:
                 vat_excempted_products.append(line.product_id.name)
         if vat_excempted_products:
